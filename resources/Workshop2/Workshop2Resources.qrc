@@ -1,0 +1,24 @@
+<RCC>
+    <qresource prefix="/Workshop2">
+        <file>Icons/Paste.png</file>
+        <file>Icons/Copy.png</file>
+        <file>Icons/Cut.png</file>
+        <file>Icons/Redo.png</file>
+        <file>Icons/Undo.png</file>
+        <file>Icons/Save.png</file>
+        <file>Icons/Folder.png</file>
+        <file>Icons/File.png</file>
+        <file>Icons/Focus.png</file>
+        <file>Icons/SelectAll.png</file>
+        <file>Icons/Close.png</file>
+        <file>Icons/Duplicate.png</file>
+        <file>Icons/Delete.png</file>
+        <file>Icons/SaveAs.png</file>
+        <file>Shaders/stage.vert</file>
+        <file>Shaders/stage.frag</file>
+        <file>Images/uvtemplate.png</file>
+    </qresource>
+</RCC>
+
+<!-- vim: set syntax=xml: -->
+

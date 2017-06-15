@@ -1,0 +1,24 @@
+QTabWidget::tab-bar {
+    left: 0;
+}
+
+QToolBar {
+    border: none;
+    background-color: #212121;
+}
+
+QToolBar::separator:horizontal {
+    image: url(":/Styles/FlatDark/Icons/HSeparator.png");
+}
+
+QToolBar::separator:vertical {
+    image: url(":/Styles/FlatDark/Icons/VSeparator.png");
+}
+
+QToolBar::handle:horizontal {
+    image: url(":/Styles/FlatDark/Icons/HHandle.png");
+}
+
+QToolBar::handle:vertical {
+    image: url(":/Styles/FlatDark/Icons/VHandle.png");
+}
