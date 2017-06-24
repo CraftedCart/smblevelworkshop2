@@ -56,7 +56,7 @@ namespace WS2 {
             const aiScene *scene = importer.ReadFileFromMemory(
                     bytes.constData(),
                     bytes.size(),
-                    aiProcess_Triangulate | aiProcess_FlipUVs,
+                    aiProcess_Triangulate | aiProcess_FlipUVs | aiProcess_GenNormals,
                     hint
                     );
 
@@ -77,7 +77,7 @@ namespace WS2 {
             Assimp::Importer importer;
             const aiScene *scene = importer.ReadFile(
                     filePath,
-                    aiProcess_Triangulate | aiProcess_FlipUVs
+                    aiProcess_Triangulate | aiProcess_FlipUVs | aiProcess_GenNormals
                     );
 
             //Check if stuff went wrong
