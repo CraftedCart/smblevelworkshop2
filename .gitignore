@@ -12,6 +12,9 @@ CTestTestfile.cmake
 #Build dirs
 *build*
 
+#Doxygen
+doc
+
 #Qt
 *.moc
 moc_*.cpp
