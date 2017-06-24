@@ -1,7 +1,6 @@
 #include "widget/ViewportWidget.hpp"
 #include "GLManager.hpp"
 #include "MathUtils.hpp"
-#include <glm/gtx/string_cast.hpp>
 #include <glm/gtx/transform.hpp>
 #include <glm/gtc/constants.hpp>
 #include <Qt>
@@ -10,6 +9,7 @@
 #include <QCursor>
 #include <QPoint>
 #include <QMouseEvent>
+#include <QPainter>
 
 namespace WS2 {
     ViewportWidget::ViewportWidget(QWidget *parent) : QOpenGLWidget(parent) {
@@ -27,7 +27,7 @@ namespace WS2 {
         delete cameraRot;
 
         makeCurrent();
-        delete texID;
+        delete scene;
     }
 
     qint64 ViewportWidget::getDeltaNanoseconds() {
@@ -43,98 +43,9 @@ namespace WS2 {
         glewExperimental = GL_TRUE;
         glewInit();
 
-        glGenVertexArrays(1, &vertArrayID);
-        glBindVertexArray(vertArrayID);
-
-        //Our vertices. Three consecutive floats give a 3D vertex; Three consecutive vertices give a triangle.
-        //A cube has 6 faces with 2 triangles each, so this makes 6*2=12 triangles, and 12*3 vertices
-        static const GLfloat vertBufData[] = {
-            -1.0f,-1.0f,-1.0f, //triangle 1 : begin
-            -1.0f,-1.0f, 1.0f,
-            -1.0f, 1.0f, 1.0f, //triangle 1 : end
-            1.0f, 1.0f,-1.0f, //triangle 2 : begin
-            -1.0f,-1.0f,-1.0f,
-            -1.0f, 1.0f,-1.0f, //triangle 2 : end
-            1.0f,-1.0f, 1.0f,
-            -1.0f,-1.0f,-1.0f,
-            1.0f,-1.0f,-1.0f,
-            1.0f, 1.0f,-1.0f,
-            1.0f,-1.0f,-1.0f,
-            -1.0f,-1.0f,-1.0f,
-            -1.0f,-1.0f,-1.0f,
-            -1.0f, 1.0f, 1.0f,
-            -1.0f, 1.0f,-1.0f,
-            1.0f,-1.0f, 1.0f,
-            -1.0f,-1.0f, 1.0f,
-            -1.0f,-1.0f,-1.0f,
-            -1.0f, 1.0f, 1.0f,
-            -1.0f,-1.0f, 1.0f,
-            1.0f,-1.0f, 1.0f,
-            1.0f, 1.0f, 1.0f,
-            1.0f,-1.0f,-1.0f,
-            1.0f, 1.0f,-1.0f,
-            1.0f,-1.0f,-1.0f,
-            1.0f, 1.0f, 1.0f,
-            1.0f,-1.0f, 1.0f,
-            1.0f, 1.0f, 1.0f,
-            1.0f, 1.0f,-1.0f,
-            -1.0f, 1.0f,-1.0f,
-            1.0f, 1.0f, 1.0f,
-            -1.0f, 1.0f,-1.0f,
-            -1.0f, 1.0f, 1.0f,
-            1.0f, 1.0f, 1.0f,
-            -1.0f, 1.0f, 1.0f,
-            1.0f,-1.0f, 1.0f
-        };
-
-        //Two UV coordinates for each vertex. They were created with Blender. You'll learn shortly how to do this yourself.
-        static const GLfloat uvBufData[] = {
-            0.000059f, 1.0f-0.000004f,
-            0.000103f, 1.0f-0.336048f,
-            0.335973f, 1.0f-0.335903f,
-            1.000023f, 1.0f-0.000013f,
-            0.667979f, 1.0f-0.335851f,
-            0.999958f, 1.0f-0.336064f,
-            0.667979f, 1.0f-0.335851f,
-            0.336024f, 1.0f-0.671877f,
-            0.667969f, 1.0f-0.671889f,
-            1.000023f, 1.0f-0.000013f,
-            0.668104f, 1.0f-0.000013f,
-            0.667979f, 1.0f-0.335851f,
-            0.000059f, 1.0f-0.000004f,
-            0.335973f, 1.0f-0.335903f,
-            0.336098f, 1.0f-0.000071f,
-            0.667979f, 1.0f-0.335851f,
-            0.335973f, 1.0f-0.335903f,
-            0.336024f, 1.0f-0.671877f,
-            1.000004f, 1.0f-0.671847f,
-            0.999958f, 1.0f-0.336064f,
-            0.667979f, 1.0f-0.335851f,
-            0.668104f, 1.0f-0.000013f,
-            0.335973f, 1.0f-0.335903f,
-            0.667979f, 1.0f-0.335851f,
-            0.335973f, 1.0f-0.335903f,
-            0.668104f, 1.0f-0.000013f,
-            0.336098f, 1.0f-0.000071f,
-            0.000103f, 1.0f-0.336048f,
-            0.000004f, 1.0f-0.671870f,
-            0.336024f, 1.0f-0.671877f,
-            0.000103f, 1.0f-0.336048f,
-            0.336024f, 1.0f-0.671877f,
-            0.335973f, 1.0f-0.335903f,
-            0.667969f, 1.0f-0.671889f,
-            1.000004f, 1.0f-0.671847f,
-            0.667979f, 1.0f-0.335851f
-        };
-
-
-        glGenBuffers(1, &vbo);
-        glBindBuffer(GL_ARRAY_BUFFER, vbo);
-        glBufferData(GL_ARRAY_BUFFER, sizeof(vertBufData), vertBufData, GL_STATIC_DRAW);
-
-        glGenBuffers(1, &uvBuffer);
-        glBindBuffer(GL_ARRAY_BUFFER, uvBuffer);
-        glBufferData(GL_ARRAY_BUFFER, sizeof(uvBufData), uvBufData, GL_STATIC_DRAW);
+        //TODO: Load models from file picker
+        //QFile f("<File path goes here>");
+        //scene = new Model::Scene(f);
 
         //Set the clear color
         glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
@@ -149,18 +60,53 @@ namespace WS2 {
         //Load the shader
         QFile vertFile(":/Workshop2/Shaders/stage.vert");
         QFile fragFile(":/Workshop2/Shaders/stage.frag");
-        progID = GLManager::loadShaders(&vertFile, &fragFile);
+        GLManager::progID = GLManager::loadShaders(&vertFile, &fragFile);
 
         //Load texture
-        QImage bmpFile(":/Workshop2/Images/uvtemplate.png");
-        texID = GLManager::loadTexture(&bmpFile);
+        //QImage bmpFile(":/Workshop2/Images/uvtemplate.png");
+        //texID = GLManager::loadTexture(&bmpFile);
 
         //Get uniform IDs
-        shaderMvpID = glGetUniformLocation(progID, "mvp");
-        shaderTexID = glGetUniformLocation(progID, "texSampler");
+        GLManager::shaderMvpID = glGetUniformLocation(GLManager::progID, "mvp");
+        GLManager::shaderTexID = glGetUniformLocation(GLManager::progID, "texSampler");
 
         //Start the elapsed timer
         elapsedTimer.start();
+    }
+
+    /**
+     * @note This disables GL_DEPTH_TEST because of the usage of QPainter
+     * @todo This feels hacky as it's calling glm::project twice
+     */
+    void ViewportWidget::drawText(const glm::vec3 &pos, const QString &str, const QColor &col) {
+        //TODO Stop calling glm::project twice
+        //Projection matrix
+        glm::mat4 proj = glm::perspective(glm::radians(fov), (float) width() / (float) height(), 0.1f, 1000.0f);
+
+        //Camera matrix
+        glm::mat4 view = glm::lookAt(
+                *cameraPos,
+                *cameraPos + forward,
+                up
+                );
+
+        glm::mat4 view2 = glm::lookAt(
+                *cameraPos,
+                *cameraPos + forward,
+                -up
+                );
+
+        glm::vec4 viewport(0.0f, 0.0f, width(), height());
+        glm::vec3 projected = glm::project(pos, view, proj, viewport);
+        glm::vec3 projected2 = glm::project(pos, view2, proj, viewport);
+
+        if (projected.z < 1) {
+            QPainter painter(this);
+            painter.setPen(col);
+            painter.setFont(QFont());
+            painter.drawText(projected.x, projected2.y, str);
+            painter.end();
+        }
     }
 
     bool ViewportWidget::isKeyDown(int key) {
@@ -175,7 +121,7 @@ namespace WS2 {
 
         if (mouseLocked) {
             QVector2D cursorDiffQt = QVector2D(widgetCenter - cursorPos);
-            glm::vec2 cursorDiff = MathUtils::toGlmVec2(&cursorDiffQt);
+            glm::vec2 cursorDiff = MathUtils::toGlmVec2(cursorDiffQt);
 
             if (cameraNavMode == EnumCameraNav::NAV_FIRST_PERSON_FLY) {
                 *cameraRot += cursorDiff * rotSpeed;
@@ -266,6 +212,7 @@ namespace WS2 {
                 *cameraPos + forward,
                 up
                 );
+
         //Model matrix (Identity matrix - Model will be at origin)
         glm::mat4 model = glm::mat4(1.0f);
 
@@ -273,32 +220,20 @@ namespace WS2 {
         glm::mat4 mvp = proj * view * model;
 
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+        glEnable(GL_DEPTH_TEST);
+        glUseProgram(GLManager::progID);
 
-        glUseProgram(progID);
+        //Give the MVP matrix to the bound shader
+        glUniformMatrix4fv(GLManager::shaderMvpID, 1, GL_FALSE, &mvp[0][0]);
 
-        //Draw the magnificent cube
+        if (scene != nullptr) {
+            QVector<Model::Mesh> &meshes = scene->getMeshes();
+            for (int i = 0; i < meshes.size(); i++) {
+                GLManager::renderMesh(meshes.at(i), mvp);
+            }
+        }
 
-        //Textures
-        glActiveTexture(GL_TEXTURE0);
-        texID->bind();
-        glUniform1i(shaderTexID, 0);
-
-        //First attribute buffer: Verts
-        glEnableVertexAttribArray(0);
-        glBindBuffer(GL_ARRAY_BUFFER, vbo);
-        glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, (void*) 0);
-
-        //Second attribute buffer: UV
-        glEnableVertexAttribArray(1);
-        glBindBuffer(GL_ARRAY_BUFFER, uvBuffer);
-        glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 0, (void*) 0);
-
-        //Give the MVP matrix to the bound shader - Cube 1
-        glUniformMatrix4fv(shaderMvpID, 1, GL_FALSE, &mvp[0][0]);
-        glDrawArrays(GL_TRIANGLES, 0, 12 * 3); //Draw it
-
-        glDisableVertexAttribArray(0);
-        glDisableVertexAttribArray(1);
+        //drawText(glm::vec3(0.0f, 0.0f, 0.0f), QString("Origin"), QColor(255, 255, 255));
 
         //Check for errors
         checkGLErrors("End of ViewportWidget::paintGL()");

@@ -1,11 +1,15 @@
 #version 330 core
-in vec2 uv;
-out vec3 color;
+//%MAX_SHADER_TEXTURES% will be replaced by the C++ code with an unsigned int
+#define MAX_SHADER_TEXTURES %MAX_SHADER_TEXTURES%
 
-uniform sampler2D texSampler;
+in vec2 uv;
+
+out vec4 color;
+
+uniform sampler2D texSampler[MAX_SHADER_TEXTURES];
 
 void main() {
     //Output color = col of texture at UV
-    color = texture(texSampler, uv).rgb;
+    color = texture(texSampler[0], uv);
 }
 

@@ -3,26 +3,21 @@
 
 #include "glplatform.hpp"
 #include "EnumCameraNav.hpp"
+#include "model/Scene.hpp"
 #include <QOpenGLWidget>
 #include <QWidget>
 #include <QElapsedTimer>
 #include <QOpenGLTexture>
 #include <QSet>
+#include <QString>
+#include <QColor>
 
 namespace WS2 {
     class ViewportWidget : public QOpenGLWidget {
         Q_OBJECT
 
         protected:
-            GLuint vertArrayID;
-            GLuint vbo;
-            GLuint uvBuffer;
-
-            GLuint progID;
-            GLuint shaderMvpID;
-            GLuint shaderTexID;
-
-            QOpenGLTexture *texID;
+            Model::Scene *scene = nullptr;
 
             //Used to calculate delta time
             QElapsedTimer elapsedTimer;
@@ -74,6 +69,18 @@ namespace WS2 {
              * @brief Called before drawing with OpenGL
              */
             void preDraw();
+
+            /**
+             * @brief Draws 2D text at the 3D point
+             *
+             * This calls void drawText(const glm::vec4 pos, const QString &str, const QColor &col) - but converts the
+             * provided vec3 to a vec4
+             *
+             * @param pos The 3D pos to draw the text at
+             * @param str The string to draw
+             * @param col The color of the text
+             */
+            void drawText(const glm::vec3 &pos, const QString &str, const QColor &col);
 
             /**
              * @brief Calculates for forward vector

@@ -5,6 +5,11 @@
 namespace WS2 {
     namespace GLManager {
 
+        //Define the extern variables
+        GLuint progID;
+        GLuint shaderMvpID;
+        GLuint shaderTexID;
+
         /**
          * @brief Load, compile and link the shader files given
          *
@@ -29,6 +34,7 @@ namespace WS2 {
             }
             QString vertCode = vertFile->readAll();
             vertFile->close();
+            substituteShaderConstants(&vertCode);
 
             //Read the frag shader code
             if (!fragFile->open(QFile::ReadOnly)) {
@@ -39,6 +45,7 @@ namespace WS2 {
             }
             QString fragCode = fragFile->readAll();
             fragFile->close();
+            substituteShaderConstants(&fragCode);
 
             GLint result = GL_FALSE;
             int infoLogLength;
@@ -105,6 +112,10 @@ namespace WS2 {
             return programID;
         }
 
+        void substituteShaderConstants(QString *s) {
+            s->replace("%MAX_SHADER_TEXTURES%", QString::number(MAX_SHADER_TEXTURES));
+        }
+
         QOpenGLTexture* loadTexture(QImage *image) {
             QOpenGLTexture *tex = new QOpenGLTexture(image->mirrored());
             tex->setMinificationFilter(QOpenGLTexture::Linear);
@@ -112,6 +123,21 @@ namespace WS2 {
             tex->generateMipMaps();
 
             return tex;
+        }
+
+        void renderMesh(const Model::Mesh &mesh, const glm::mat4 &mvpMatrix) {
+            //Set up textures
+            for (unsigned int i = 0; i < mesh.getTextures().size(); i++) {
+                glActiveTexture(GL_TEXTURE0 + i);
+                mesh.getTextures().at(i).texture->bind();
+            }
+            static const int texIDs[32] = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31};
+            glUniform1iv(shaderTexID, MAX_SHADER_TEXTURES, texIDs);
+
+            //Draw the mesh
+            glBindVertexArray(mesh.getVao());
+            glDrawElements(GL_TRIANGLES, mesh.getIndices().size(), GL_UNSIGNED_INT, 0);
+            glBindVertexArray(0);
         }
 
     }

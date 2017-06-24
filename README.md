@@ -13,12 +13,13 @@ The original SMB Level Workshop has been quite the learning experience for me, i
 
 ### Dependencies
 
-- Qt 5
+- Qt 5.9
     - Qt Core
     - Qt Widgets
 - OpenGL
 - GLEW
 - GLM
+- Assimp
 
 ### Building
 
