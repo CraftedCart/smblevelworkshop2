@@ -22,7 +22,10 @@ namespace WS2 {
         const unsigned int MAX_SHADER_TEXTURES = 32;
 
         extern GLuint progID;
-        extern GLuint shaderMvpID;
+        extern GLuint shaderModelID;
+        extern GLuint shaderViewID;
+        extern GLuint shaderProjID;
+        extern GLuint shaderNormID;
         extern GLuint shaderTexID;
 
         /**
@@ -57,9 +60,8 @@ namespace WS2 {
          * This assumes the appropriate shader is already bound.
          *
          * @param mesh The mesh to render
-         * @param mvpMatrix The model-view-projection matrix to pass to the shader
          */
-        void renderMesh(const Model::Mesh &mesh, const glm::mat4 &mvpMatrix);
+        void renderMesh(const Model::Mesh &mesh);
     }
 }
 

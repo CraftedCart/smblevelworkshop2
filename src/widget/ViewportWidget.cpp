@@ -67,7 +67,10 @@ namespace WS2 {
         //texID = GLManager::loadTexture(&bmpFile);
 
         //Get uniform IDs
-        GLManager::shaderMvpID = glGetUniformLocation(GLManager::progID, "mvp");
+        GLManager::shaderModelID = glGetUniformLocation(GLManager::progID, "modelMat");
+        GLManager::shaderViewID = glGetUniformLocation(GLManager::progID, "viewMat");
+        GLManager::shaderProjID = glGetUniformLocation(GLManager::progID, "projMat");
+        GLManager::shaderNormID = glGetUniformLocation(GLManager::progID, "normMat");
         GLManager::shaderTexID = glGetUniformLocation(GLManager::progID, "texSampler");
 
         //Start the elapsed timer
@@ -216,20 +219,26 @@ namespace WS2 {
         //Model matrix (Identity matrix - Model will be at origin)
         glm::mat4 model = glm::mat4(1.0f);
 
+        //Normal matrix
+        glm::mat3 norm(glm::transpose(glm::inverse(model)));
+
         //The model-view-projection matrix (Matrix multiplication is the other way round)
-        glm::mat4 mvp = proj * view * model;
+        //glm::mat4 mvp = proj * view * model;
 
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
         glEnable(GL_DEPTH_TEST);
         glUseProgram(GLManager::progID);
 
-        //Give the MVP matrix to the bound shader
-        glUniformMatrix4fv(GLManager::shaderMvpID, 1, GL_FALSE, &mvp[0][0]);
+        //Give the matrices to the bound shader
+        glUniformMatrix4fv(GLManager::shaderModelID, 1, GL_FALSE, &model[0][0]);
+        glUniformMatrix4fv(GLManager::shaderViewID, 1, GL_FALSE, &view[0][0]);
+        glUniformMatrix4fv(GLManager::shaderProjID, 1, GL_FALSE, &proj[0][0]);
+        glUniformMatrix3fv(GLManager::shaderNormID, 1, GL_FALSE, &norm[0][0]);
 
         if (scene != nullptr) {
             QVector<Model::Mesh> &meshes = scene->getMeshes();
             for (int i = 0; i < meshes.size(); i++) {
-                GLManager::renderMesh(meshes.at(i), mvp);
+                GLManager::renderMesh(meshes.at(i));
             }
         }
 

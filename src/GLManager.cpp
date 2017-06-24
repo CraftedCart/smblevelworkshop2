@@ -7,7 +7,10 @@ namespace WS2 {
 
         //Define the extern variables
         GLuint progID;
-        GLuint shaderMvpID;
+        GLuint shaderModelID;
+        GLuint shaderViewID;
+        GLuint shaderProjID;
+        GLuint shaderNormID;
         GLuint shaderTexID;
 
         /**
@@ -125,7 +128,7 @@ namespace WS2 {
             return tex;
         }
 
-        void renderMesh(const Model::Mesh &mesh, const glm::mat4 &mvpMatrix) {
+        void renderMesh(const Model::Mesh &mesh) {
             //Set up textures
             for (unsigned int i = 0; i < mesh.getTextures().size(); i++) {
                 glActiveTexture(GL_TEXTURE0 + i);
