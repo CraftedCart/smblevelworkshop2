@@ -126,6 +126,9 @@ namespace WS2 {
             QVector2D cursorDiffQt = QVector2D(widgetCenter - cursorPos);
             glm::vec2 cursorDiff = MathUtils::toGlmVec2(cursorDiffQt);
 
+            //Hide cursor
+            setCursor(Qt::BlankCursor);
+
             if (cameraNavMode == EnumCameraNav::NAV_FIRST_PERSON_FLY) {
                 *cameraRot += cursorDiff * rotSpeed;
                 //Prevent camera from going whacko or upside down
@@ -155,6 +158,10 @@ namespace WS2 {
                 if (isKeyDown(Qt::Key_E)) *cameraPos += up * deltaSeconds * posSpeed;
                 if (isKeyDown(Qt::Key_Q)) *cameraPos -= up * deltaSeconds * posSpeed;
             }
+        } else {
+            //Mouse not locked
+            //Show cursor
+            setCursor(Qt::CrossCursor);
         }
 
         switch (cameraNavMode) {
