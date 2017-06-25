@@ -111,7 +111,7 @@ namespace WS2 {
         Mesh Scene::processMesh(const aiMesh *mesh, const aiScene *scene, const glm::mat4 globalTransform, const QDir *parentDir) {
             QVector<Vertex> vertices;
             QVector<unsigned int> indices;
-            QVector<Texture> textures;
+            QVector<Resource::ResourceTexture*> textures;
 
             static const int UV_CHANNEL = 0;
 
@@ -163,16 +163,16 @@ namespace WS2 {
 
             //Process material
             aiMaterial *material = scene->mMaterials[mesh->mMaterialIndex];
-            QVector<Texture> diffuseMaps = loadMaterialTextures(material, aiTextureType_DIFFUSE, parentDir);
+            QVector<Resource::ResourceTexture*> diffuseMaps = loadMaterialTextures(material, aiTextureType_DIFFUSE, parentDir);
             textures.append(diffuseMaps);
-            QVector<Texture> specularMaps = loadMaterialTextures(material, aiTextureType_SPECULAR, parentDir);
+            QVector<Resource::ResourceTexture*> specularMaps = loadMaterialTextures(material, aiTextureType_SPECULAR, parentDir);
             textures.append(specularMaps);
 
             return Mesh(vertices, indices, textures);
         }
 
-        QVector<Texture> Scene::loadMaterialTextures(aiMaterial *mat, aiTextureType type, const QDir *parentDir) {
-            QVector<Texture> textures;
+        QVector<Resource::ResourceTexture*> Scene::loadMaterialTextures(aiMaterial *mat, aiTextureType type, const QDir *parentDir) {
+            QVector<Resource::ResourceTexture*> textures;
 
             int maxI = mat->GetTextureCount(type);
             for (unsigned int i = 0; i < maxI; i++) {
@@ -192,13 +192,9 @@ namespace WS2 {
                     filePath = QString(str.C_Str());
                 }
 
-                qDebug() << "Loading texture:" << filePath;
-
-                Texture texture;
-                QImage *img = new QImage(filePath);
-                QOpenGLTexture *tex = GLManager::loadTexture(img);
-                delete img;
-                texture.texture = tex;
+                Resource::ResourceTexture *texture = new Resource::ResourceTexture();
+                texture->setFilePath(filePath);
+                texture->load();
 
                 textures.append(texture);
             }

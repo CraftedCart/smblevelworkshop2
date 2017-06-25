@@ -42,6 +42,9 @@ set(SOURCE_FILES
     ./src/exception/RuntimeException.cpp
     ./src/exception/IOException.cpp
     ./src/exception/ModelLoadingException.cpp
+    ./src/resource/ResourceManager.cpp
+    ./src/resource/AbstractResource.cpp
+    ./src/resource/ResourceTexture.cpp
     )
 
 set(HEADER_FILES
@@ -51,13 +54,15 @@ set(HEADER_FILES
     ./include/EnumCameraNav.hpp
     ./include/MathUtils.hpp
     ./include/model/Vertex.hpp
-    ./include/model/Texture.hpp
     ./include/model/Mesh.hpp
     ./include/model/Scene.hpp
     ./include/exception/Exception.hpp
     ./include/exception/RuntimeException.hpp
     ./include/exception/IOException.hpp
     ./include/exception/ModelLoadingException.hpp
+    ./include/resource/ResourceManager.hpp
+    ./include/resource/AbstractResource.hpp
+    ./include/resource/ResourceTexture.hpp
     )
 
 set(RESOURCE_FILES

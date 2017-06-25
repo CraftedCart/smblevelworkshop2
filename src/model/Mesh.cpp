@@ -8,7 +8,7 @@ namespace WS2 {
     namespace Model {
         Mesh::Mesh() {}
 
-        Mesh::Mesh(QVector<Vertex> vertices, QVector<unsigned int> indices, QVector<Texture> textures) {
+        Mesh::Mesh(QVector<Vertex> vertices, QVector<unsigned int> indices, QVector<Resource::ResourceTexture*> textures) {
             this->vertices = vertices;
             this->indices = indices;
             this->textures = textures;
@@ -52,7 +52,7 @@ namespace WS2 {
             return indices;
         }
 
-        const QVector<Texture>& Mesh::getTextures() const {
+        const QVector<Resource::ResourceTexture*>& Mesh::getTextures() const {
             return textures;
         }
 

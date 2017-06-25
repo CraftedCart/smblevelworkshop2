@@ -7,7 +7,7 @@
 #define SMBLEVELWORKSHOP2_MODEL_MESH_HPP
 
 #include "model/Vertex.hpp"
-#include "model/Texture.hpp"
+#include "resource/ResourceTexture.hpp"
 #include <QVector>
 
 namespace WS2 {
@@ -16,7 +16,7 @@ namespace WS2 {
             protected:
                 QVector<Vertex> vertices;
                 QVector<unsigned int> indices;
-                QVector<Texture> textures;
+                QVector<Resource::ResourceTexture*> textures;
 
                 GLuint vao;
                 GLuint vbo;
@@ -39,7 +39,7 @@ namespace WS2 {
                  *
                  * @note You should call WS2::Model::Mesh::generateGlBuffers() on the object before using it
                  */
-                Mesh(QVector<Vertex> vertices, QVector<unsigned int> indices, QVector<Texture> textures);
+                Mesh(QVector<Vertex> vertices, QVector<unsigned int> indices, QVector<Resource::ResourceTexture*> textures);
 
                 /**
                  * @brief Generates GL buffers
@@ -47,19 +47,19 @@ namespace WS2 {
                 void generateGlBuffers();
 
                 /**
-                 * @return The vertices vector
+                 * @return A reference to the vertices vector
                  */
                 const QVector<Vertex>& getVertices() const;
 
                 /**
-                 * @return The indices vector
+                 * @return A reference to the indices vector
                  */
                 const QVector<unsigned int>& getIndices() const;
 
                 /**
-                 * @return The textures vector
+                 * @return A reference to the textures vector
                  */
-                const QVector<Texture>& getTextures() const;
+                const QVector<Resource::ResourceTexture*>& getTextures() const;
 
                 /**
                  * @return The VAO ID of the mesh

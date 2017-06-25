@@ -94,7 +94,7 @@ namespace WS2 {
                  *
                  * @return A vector of textures
                  */
-                QVector<Texture> loadMaterialTextures(aiMaterial *material, aiTextureType type, const QDir *parentDir);
+                QVector<Resource::ResourceTexture*> loadMaterialTextures(aiMaterial *material, aiTextureType type, const QDir *parentDir);
         };
     }
 }
