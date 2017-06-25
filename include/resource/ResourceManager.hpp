@@ -21,7 +21,7 @@ namespace WS2 {
              *        It is preferable to use the functions to access the resources rather than by directly accessing
              *        them from this vector.
              */
-            QVector<AbstractResoruce*> resources;
+            extern QVector<AbstractResoruce*> resources;
 
             /**
              * @brief Adds a resource to the WS2::Resource::ResourceManager::resources vector
@@ -37,11 +37,26 @@ namespace WS2 {
              *
              * The resource is statically casted to the type T specified
              *
+             * @tparam T The type to cast the resource to. This should be a pointer type.
              * @param filePath The file path of the resource
              *
              * @return A pointer to the resource if it already exists, or nullptr otherwise
              */
-            template <class T> T* getResourceFromFilePath(QString filePath);
+            template <class T> T getResourceFromFilePath(QString filePath) {
+                auto res = std::find_if(
+                        resources.begin(),
+                        resources.end(),
+                        [&filePath](const AbstractResoruce *object) { return object->getFilePath() == filePath; }
+                        );
+
+                if (res != resources.end()) {
+                    //Resource found
+                    return static_cast<T>(*res);
+                } else {
+                    //Resource not found
+                    return nullptr;
+                }
+            }
         }
     }
 }

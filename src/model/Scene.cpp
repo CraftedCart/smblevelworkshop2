@@ -1,6 +1,7 @@
 #include "model/Scene.hpp"
 #include "MathUtils.hpp"
 #include "GLManager.hpp"
+#include "resource/ResourceManager.hpp"
 #include "exception/IOException.hpp"
 #include "exception/ModelLoadingException.hpp"
 #include <QByteArray>
@@ -192,11 +193,21 @@ namespace WS2 {
                     filePath = QString(str.C_Str());
                 }
 
-                Resource::ResourceTexture *texture = new Resource::ResourceTexture();
-                texture->setFilePath(filePath);
-                texture->load();
+                //Don't load another copy of the texture if it is already in the ResourceManager
+                Resource::ResourceTexture *texture = Resource::ResourceManager::getResourceFromFilePath<Resource::ResourceTexture*>(filePath);
 
-                textures.append(texture);
+                if (texture == nullptr) {
+                    texture = new Resource::ResourceTexture();
+                    texture->setFilePath(filePath);
+                    texture->load();
+                    Resource::ResourceManager::addResource(texture);
+                } else if (!texture->isLoaded()) {
+                    //Load the texture if one is found but not loaded
+                    texture->load();
+                }
+
+                //TODO: Replace the textures vector with a set
+                if (!textures.contains(texture)) textures.append(texture);
             }
 
             return textures;
