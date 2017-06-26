@@ -7,36 +7,46 @@
 #define SMBLEVELWORKSHOP2_MODEL_SCENE_HPP
 
 #include "model/Mesh.hpp"
+#include "resource/AbstractResource.hpp"
 #include <QFile>
 #include <QDir>
 #include <assimp/scene.h>
 
 namespace WS2 {
-    namespace Model {
-        class Scene {
+    namespace Resource {
+        /**
+         * @todo Load/unload the scene using the load()/unload() functions
+         */
+        class ResourceScene : public AbstractResoruce {
             protected:
                 /**
                  * @brief A vector of 3D Meshes in the Scene
                  */
-                QVector<Mesh> meshes;
+                QVector<Model::Mesh> meshes;
 
             public:
                 /**
-                 * @brief Construct a Scene from the file given
+                 * @brief Constructs an empty scene
+                 */
+                ResourceScene();
+
+                /**
+                 * @brief Construct a scene from the file given
                  *
                  * This just calls `addModel(file)` for you
                  *
                  * @param file The model file
                  */
-                Scene(QFile &file);
+                ResourceScene(QFile &file);
 
                 /**
                  * @return The meshes that belong to this scene
                  */
-                QVector<Mesh>& getMeshes();
+                QVector<Model::Mesh>& getMeshes();
 
                 /**
-                 * @brief Append a model to the scene from the file given
+                 * @brief Append a model to the scene from the file given, and adds the file path to the resource
+                 *        filePaths vector
                  *
                  * @param file The model file to append
                  */
@@ -83,7 +93,7 @@ namespace WS2 {
                  *
                  * @return The converted mesh
                  */
-                Mesh processMesh(const aiMesh *mesh, const aiScene *scene, const glm::mat4 globalTransform, const QDir *parentDir);
+                Model::Mesh processMesh(const aiMesh *mesh, const aiScene *scene, const glm::mat4 globalTransform, const QDir *parentDir);
 
                 /**
                  * @brief Loads textures for a material

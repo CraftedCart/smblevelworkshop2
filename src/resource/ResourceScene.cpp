@@ -1,4 +1,4 @@
-#include "model/Scene.hpp"
+#include "resource/ResourceScene.hpp"
 #include "MathUtils.hpp"
 #include "GLManager.hpp"
 #include "resource/ResourceManager.hpp"
@@ -11,17 +11,19 @@
 #include <assimp/postprocess.h>
 
 namespace WS2 {
-    namespace Model {
+    namespace Resource {
+
+        ResourceScene::ResourceScene() {}
 
         /**
          * @throws WS2::Exception::IOException When failing to read the file
          * @throws WS2::Exception::RuntimeException When Assimp fails to generate an aiScene
          */
-        Scene::Scene(QFile &file) {
+        ResourceScene::ResourceScene(QFile &file) {
             addModel(file);
         }
 
-        QVector<Mesh>& Scene::getMeshes() {
+        QVector<Model::Mesh>& ResourceScene::getMeshes() {
             return meshes;
         }
 
@@ -29,7 +31,9 @@ namespace WS2 {
          * @throws WS2::Exception::IOException When failing to read the file
          * @throws WS2::Exception::RuntimeException When Assimp fails to generate an aiScene
          */
-        void Scene::addModel(QFile &file) {
+        void ResourceScene::addModel(QFile &file) {
+            addFilePath(file.fileName());
+
             if (file.fileName().startsWith(":")) {
                 //The file is from the resources - Read the whole file and give the data to Assimp
 
@@ -52,7 +56,7 @@ namespace WS2 {
         /**
          * @throws WS2::Exception::ModelLoadingException When Assimp fails to generate an aiScene
          */
-        void Scene::addModelFromMemory(const QByteArray &bytes, const char *hint) {
+        void ResourceScene::addModelFromMemory(const QByteArray &bytes, const char *hint) {
             Assimp::Importer importer;
             const aiScene *scene = importer.ReadFileFromMemory(
                     bytes.constData(),
@@ -74,7 +78,7 @@ namespace WS2 {
         /**
          * @throws WS2::Exception::ModelLoadingException When Assimp fails to generate an aiScene
          */
-        void Scene::addModelFromFile(const char *filePath) {
+        void ResourceScene::addModelFromFile(const char *filePath) {
             Assimp::Importer importer;
             const aiScene *scene = importer.ReadFile(
                     filePath,
@@ -94,7 +98,7 @@ namespace WS2 {
             processNode(scene->mRootNode, scene, globalTransform, &parentDir);
         }
 
-        void Scene::processNode(const aiNode *node, const aiScene *scene, const glm::mat4 globalTransform, const QDir *parentDir) {
+        void ResourceScene::processNode(const aiNode *node, const aiScene *scene, const glm::mat4 globalTransform, const QDir *parentDir) {
             qDebug() << "Processing node" << node->mName.C_Str();
 
             //Process this node's messages
@@ -109,8 +113,8 @@ namespace WS2 {
             }
         }
 
-        Mesh Scene::processMesh(const aiMesh *mesh, const aiScene *scene, const glm::mat4 globalTransform, const QDir *parentDir) {
-            QVector<Vertex> vertices;
+        Model::Mesh ResourceScene::processMesh(const aiMesh *mesh, const aiScene *scene, const glm::mat4 globalTransform, const QDir *parentDir) {
+            QVector<Model::Vertex> vertices;
             QVector<unsigned int> indices;
             QVector<Resource::ResourceTexture*> textures;
 
@@ -122,7 +126,7 @@ namespace WS2 {
             }
 
             for (unsigned int i = 0; i < mesh->mNumVertices; i++) {
-                Vertex vertex;
+                Model::Vertex vertex;
                 glm::vec3 vec;
 
                 //Process vertex positions, normals, and texture coordinates
@@ -169,10 +173,10 @@ namespace WS2 {
             QVector<Resource::ResourceTexture*> specularMaps = loadMaterialTextures(material, aiTextureType_SPECULAR, parentDir);
             textures.append(specularMaps);
 
-            return Mesh(vertices, indices, textures);
+            return Model::Mesh(vertices, indices, textures);
         }
 
-        QVector<Resource::ResourceTexture*> Scene::loadMaterialTextures(aiMaterial *mat, aiTextureType type, const QDir *parentDir) {
+        QVector<Resource::ResourceTexture*> ResourceScene::loadMaterialTextures(aiMaterial *mat, aiTextureType type, const QDir *parentDir) {
             QVector<Resource::ResourceTexture*> textures;
 
             int maxI = mat->GetTextureCount(type);

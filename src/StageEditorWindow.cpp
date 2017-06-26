@@ -1,8 +1,11 @@
 #include "StageEditorWindow.hpp"
 #include "ui_StageEditorWindow.h"
+#include "project/ProjectManager.hpp"
 #include <QFontDatabase>
 #include <QPalette>
 #include <Qt>
+#include <QFileDialog>
+#include <QAction>
 
 namespace WS2 {
     StageEditorWindow::StageEditorWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::StageEditorWindow) {
@@ -15,6 +18,7 @@ namespace WS2 {
 
         connect(ui->actionQuit, SIGNAL(triggered()), QApplication::instance(), SLOT(quit()));
         connect(ui->viewportWidget, &ViewportWidget::frameRendered, this, &StageEditorWindow::viewportFrameRendered);
+        connect(ui->actionImport, &QAction::triggered, this, &StageEditorWindow::askImportFiles);
     }
 
     StageEditorWindow::~StageEditorWindow() {
@@ -51,6 +55,34 @@ namespace WS2 {
             fpsPalette.setColor(statusFramerateLabel->foregroundRole(), Qt::black);
         }
         statusFramerateLabel->setPalette(fpsPalette);
+    }
+
+    void StageEditorWindow::askImportFiles() {
+        QList<QUrl> urls = QFileDialog::getOpenFileUrls(
+                this,
+                tr("Import files"),
+                QUrl(),
+                tr("All supported file types (*.fbx *.dae *.gltf *.glb *.blend *.3ds *.ase *.obj *.ifc *.xgl "
+                    "*.zgl *.ply *.dxf *.lwo *.lws *.lxo *.stl *.x *.ac *ms3d *.cob *.scn *.mesh.xml *.irrmesh *.irr "
+                    "*.mdl *.md2 *.md3 *.pk3 *.mdc *.md5* *.smd *.vta *.ogex *.3d *.b3d *.q3d *.q3s *.nff *.off *.raw "
+                    "*.ter *.hmp *.ndo *.txt *.xml);;"
+
+                    "3D models (*.fbx *.dae *.gltf *.glb *.blend *.3ds *.ase *.obj *.ifc *.xgl *.zgl *.ply *.dxf *.lwo "
+                    "*.lws *.lxo *.stl *.x *.ac *ms3d *.cob *.scn *.mesh.xml *.irrmesh *.irr *.mdl *.md2 *.md3 *.pk3 "
+                    "*.mdc *.md5* *.smd *.vta *.ogex *.3d *.b3d *.q3d *.q3s *.nff *.off *.raw *.ter *.hmp *.ndo);;"
+
+                    "Stage configurations (*.txt *.xml);;"
+
+                    "All files (*)")
+                );
+
+        //Get outta here if no files were chosen
+        if (urls.isEmpty()) return;
+
+        for (int i = 0; i < urls.size(); i++) {
+            QFile f(urls.at(i).toLocalFile());
+            Project::ProjectManager::getActiveProject()->importFile(f);
+        }
     }
 }
 

@@ -37,7 +37,6 @@ set(SOURCE_FILES
     ./src/GLManager.cpp
     ./src/MathUtils.cpp
     ./src/model/Mesh.cpp
-    ./src/model/Scene.cpp
     ./src/exception/Exception.cpp
     ./src/exception/RuntimeException.cpp
     ./src/exception/IOException.cpp
@@ -45,6 +44,9 @@ set(SOURCE_FILES
     ./src/resource/ResourceManager.cpp
     ./src/resource/AbstractResource.cpp
     ./src/resource/ResourceTexture.cpp
+    ./src/resource/ResourceScene.cpp
+    ./src/project/Project.cpp
+    ./src/project/ProjectManager.cpp
     )
 
 set(HEADER_FILES
@@ -55,7 +57,6 @@ set(HEADER_FILES
     ./include/MathUtils.hpp
     ./include/model/Vertex.hpp
     ./include/model/Mesh.hpp
-    ./include/model/Scene.hpp
     ./include/exception/Exception.hpp
     ./include/exception/RuntimeException.hpp
     ./include/exception/IOException.hpp
@@ -63,6 +64,9 @@ set(HEADER_FILES
     ./include/resource/ResourceManager.hpp
     ./include/resource/AbstractResource.hpp
     ./include/resource/ResourceTexture.hpp
+    ./include/resource/ResourceScene.hpp
+    ./include/project/Project.hpp
+    ./include/project/ProjectManager.hpp
     )
 
 set(RESOURCE_FILES

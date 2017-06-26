@@ -1,6 +1,7 @@
 #include "widget/ViewportWidget.hpp"
 #include "GLManager.hpp"
 #include "MathUtils.hpp"
+#include "project/ProjectManager.hpp"
 #include <glm/gtx/transform.hpp>
 #include <glm/gtc/constants.hpp>
 #include <Qt>
@@ -27,7 +28,6 @@ namespace WS2 {
         delete cameraRot;
 
         makeCurrent();
-        delete scene;
     }
 
     qint64 ViewportWidget::getDeltaNanoseconds() {
@@ -42,10 +42,6 @@ namespace WS2 {
         //Uses default format which should use OpenGL 3.3 core
         glewExperimental = GL_TRUE;
         glewInit();
-
-        //TODO: Load models from file picker
-        //QFile f("<File path goes here>");
-        //scene = new Model::Scene(f);
 
         //Set the clear color
         glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
@@ -241,6 +237,8 @@ namespace WS2 {
         glUniformMatrix4fv(GLManager::shaderViewID, 1, GL_FALSE, &view[0][0]);
         glUniformMatrix4fv(GLManager::shaderProjID, 1, GL_FALSE, &proj[0][0]);
         glUniformMatrix3fv(GLManager::shaderNormID, 1, GL_FALSE, &norm[0][0]);
+
+        Resource::ResourceScene *scene = Project::ProjectManager::getActiveProject()->getScene();
 
         if (scene != nullptr) {
             QVector<Model::Mesh> &meshes = scene->getMeshes();

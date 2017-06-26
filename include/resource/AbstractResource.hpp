@@ -6,6 +6,7 @@
 #ifndef SMBLEVELWORKSHOP2_RESOURCE_ABSTRACTRESOURCE_HPP
 #define SMBLEVELWORKSHOP2_RESOURCE_ABSTRACTRESOURCE_HPP
 
+#include <QVector>
 #include <QString>
 
 namespace WS2 {
@@ -17,9 +18,9 @@ namespace WS2 {
         class AbstractResoruce {
             protected:
                 /**
-                 * @brief The file path of where the resource originated from
+                 * @brief The file paths of where the resource originated from
                  */
-                QString filePath;
+                QVector<QString> filePaths;
 
                 /**
                  * @brief Stores whether the resource is loaded or not
@@ -33,18 +34,34 @@ namespace WS2 {
                 virtual ~AbstractResoruce();
 
                 /**
-                 * @brief Setter for the file path
+                 * @brief Setter for the file paths
+                 *
+                 * This will clear all existing file paths and add the file path specified
                  *
                  * @param filePath The file path to set
                  */
-                void setFilePath(QString &filePath);
+                void setFilePath(const QString &filePath);
 
                 /**
-                 * @brief Getter for the file path
+                 * @brief Adds a file path to the filePaths vector
                  *
-                 * @return A reference to the file path
+                 * @param filePath The file path to add
                  */
-                const QString& getFilePath() const;
+                void addFilePath(const QString &filePath);
+
+                /**
+                 * @brief Getter for the first file path
+                 *
+                 * @return A poiner to the file path if it exists, nullptr otherwise
+                 */
+                const QString* getFirstFilePath() const;
+
+                /**
+                 * @brief Getter for the WS2::Resource::AbstractResource::filePaths vector
+                 *
+                 * @return A reference to the filePaths vector
+                 */
+                const QVector<QString>& getFilePaths() const;
 
                 /**
                  * @brief Loads the resource. The WS2::Resource::AbstractResource implementation sets loaded to true.

@@ -14,6 +14,8 @@
         <file>Icons/Duplicate.png</file>
         <file>Icons/Delete.png</file>
         <file>Icons/SaveAs.png</file>
+        <file>Icons/Export.png</file>
+        <file>Icons/Import.png</file>
         <file>Shaders/stage.vert</file>
         <file>Shaders/stage.frag</file>
         <file>Images/uvtemplate.png</file>

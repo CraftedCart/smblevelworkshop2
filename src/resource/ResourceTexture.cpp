@@ -6,6 +6,7 @@
 namespace WS2 {
     namespace Resource {
         void ResourceTexture::load() {
+            const QString filePath = *getFirstFilePath();
             qDebug() << "Loading texture:" << filePath;
 
             QImage img(filePath);
@@ -13,7 +14,7 @@ namespace WS2 {
         }
 
         void ResourceTexture::unload() {
-            qDebug() << "Unloading texture:" << filePath;
+            qDebug() << "Unloading texture:" << *getFirstFilePath();
 
             GLuint texID = texture->textureId();
             glDeleteTextures(1, &texID);

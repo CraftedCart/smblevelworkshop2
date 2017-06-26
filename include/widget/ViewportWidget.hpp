@@ -3,7 +3,7 @@
 
 #include "glplatform.hpp"
 #include "EnumCameraNav.hpp"
-#include "model/Scene.hpp"
+#include "resource/ResourceScene.hpp"
 #include <QOpenGLWidget>
 #include <QWidget>
 #include <QElapsedTimer>
@@ -17,8 +17,6 @@ namespace WS2 {
         Q_OBJECT
 
         protected:
-            Model::Scene *scene = nullptr;
-
             //Used to calculate delta time
             QElapsedTimer elapsedTimer;
             qint64 prevNanosecondsElapsed;

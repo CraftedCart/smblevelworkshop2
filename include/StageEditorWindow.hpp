@@ -18,11 +18,16 @@ namespace WS2 {
 
             QLabel *statusFramerateLabel = new QLabel();
 
-        private:
-            Ui::StageEditorWindow *ui;
-
         public slots:
             void viewportFrameRendered(qint64 deltaNanoseconds);
+
+            /**
+             * @brief Shows a file chooser to import files. If files are picked, the files will be imported.
+             */
+            void askImportFiles();
+
+        private:
+            Ui::StageEditorWindow *ui;
     };
 }
 

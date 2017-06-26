@@ -46,7 +46,7 @@ namespace WS2 {
                 auto res = std::find_if(
                         resources.begin(),
                         resources.end(),
-                        [&filePath](const AbstractResoruce *object) { return object->getFilePath() == filePath; }
+                        [&filePath](const AbstractResoruce *object) { return object->getFilePaths().contains(filePath); }
                         );
 
                 if (res != resources.end()) {

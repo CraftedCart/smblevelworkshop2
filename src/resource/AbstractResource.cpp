@@ -6,12 +6,25 @@ namespace WS2 {
             if (isLoaded()) unload();
         }
 
-        void AbstractResoruce::setFilePath(QString &filePath) {
-            this->filePath = filePath;
+        void AbstractResoruce::setFilePath(const QString &filePath) {
+            filePaths.clear();
+            filePaths.append(filePath);
         }
 
-        const QString& AbstractResoruce::getFilePath() const {
-            return filePath;
+        void AbstractResoruce::addFilePath(const QString &filePath) {
+            filePaths.append(filePath);
+        }
+
+        const QString* AbstractResoruce::getFirstFilePath() const {
+            if (filePaths.size() > 0) {
+                return &filePaths.at(0);
+            } else {
+                return nullptr;
+            }
+        }
+
+        const QVector<QString>& AbstractResoruce::getFilePaths() const {
+            return filePaths;
         }
 
         void AbstractResoruce::load() {}
