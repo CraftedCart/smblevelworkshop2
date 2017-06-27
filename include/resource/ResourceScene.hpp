@@ -3,8 +3,8 @@
  * @brief Header for the WS2::Model::Scene class
  */
 
-#ifndef SMBLEVELWORKSHOP2_MODEL_SCENE_HPP
-#define SMBLEVELWORKSHOP2_MODEL_SCENE_HPP
+#ifndef SMBLEVELWORKSHOP2_RESOURCE_RESOURCESCENE_HPP
+#define SMBLEVELWORKSHOP2_RESOURCE_RESOURCESCENE_HPP
 
 #include "model/Mesh.hpp"
 #include "resource/AbstractResource.hpp"
