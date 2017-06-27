@@ -1,6 +1,7 @@
 #include "StageEditorWindow.hpp"
 #include "ui_StageEditorWindow.h"
 #include "project/ProjectManager.hpp"
+#include "ui/ModelManager.hpp"
 #include <QFontDatabase>
 #include <QPalette>
 #include <Qt>
@@ -16,12 +17,18 @@ namespace WS2 {
         statusFramerateLabel->setAutoFillBackground(true); //Allow changing the background color
         ui->statusBar->addWidget(statusFramerateLabel);
 
+        ui->resourcesTableView->setModel(UI::ModelManager::modelResources);
+
+        //Hide the following dock widgets on start
+        ui->resourcesDockWidget->hide();
+
         connect(ui->actionQuit, SIGNAL(triggered()), QApplication::instance(), SLOT(quit()));
         connect(ui->viewportWidget, &ViewportWidget::frameRendered, this, &StageEditorWindow::viewportFrameRendered);
         connect(ui->actionImport, &QAction::triggered, this, &StageEditorWindow::askImportFiles);
     }
 
     StageEditorWindow::~StageEditorWindow() {
+        delete statusFramerateLabel;
         delete ui;
     }
 

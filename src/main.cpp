@@ -1,4 +1,5 @@
 #include "StageEditorWindow.hpp"
+#include "ui/ModelManager.hpp"
 #include <QApplication>
 #include <QFile>
 #include <QSurfaceFormat>
@@ -28,5 +29,10 @@ int main(int argc, char *argv[]) {
     WS2::StageEditorWindow w;
     w.show();
 
-    return app.exec();
+    int ret = app.exec();
+
+    //Free resources
+    WS2::UI::ModelManager::destruct();
+
+    return ret;
 }

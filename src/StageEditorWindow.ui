@@ -80,9 +80,16 @@
     <property name="title">
      <string>View</string>
     </property>
+    <widget class="QMenu" name="menuDebug">
+     <property name="title">
+      <string>Debug</string>
+     </property>
+     <addaction name="actionToggleViewResources"/>
+    </widget>
     <addaction name="actionToggleViewOutliner"/>
     <addaction name="actionToggleViewProperties"/>
     <addaction name="actionToggleViewTimeline"/>
+    <addaction name="menuDebug"/>
     <addaction name="separator"/>
     <addaction name="actionToggleViewToolbar"/>
    </widget>
@@ -170,6 +177,55 @@
     <number>8</number>
    </attribute>
    <widget class="QWidget" name="timelineContentsWidget"/>
+  </widget>
+  <widget class="QDockWidget" name="resourcesDockWidget">
+   <property name="floating">
+    <bool>false</bool>
+   </property>
+   <property name="windowTitle">
+    <string>Resources</string>
+   </property>
+   <attribute name="dockWidgetArea">
+    <number>1</number>
+   </attribute>
+   <widget class="QWidget" name="resourcesContentsWidget">
+    <layout class="QGridLayout" name="gridLayout_3">
+     <property name="leftMargin">
+      <number>0</number>
+     </property>
+     <property name="topMargin">
+      <number>0</number>
+     </property>
+     <property name="rightMargin">
+      <number>0</number>
+     </property>
+     <property name="bottomMargin">
+      <number>0</number>
+     </property>
+     <property name="spacing">
+      <number>0</number>
+     </property>
+     <item row="0" column="0">
+      <widget class="QTableView" name="resourcesTableView">
+       <property name="textElideMode">
+        <enum>Qt::ElideLeft</enum>
+       </property>
+       <property name="sortingEnabled">
+        <bool>false</bool>
+       </property>
+       <attribute name="horizontalHeaderStretchLastSection">
+        <bool>true</bool>
+       </attribute>
+       <attribute name="verticalHeaderVisible">
+        <bool>false</bool>
+       </attribute>
+       <attribute name="verticalHeaderDefaultSectionSize">
+        <number>16</number>
+       </attribute>
+      </widget>
+     </item>
+    </layout>
+   </widget>
   </widget>
   <action name="actionNew">
    <property name="icon">
@@ -401,6 +457,14 @@
     <string>Ctrl+E</string>
    </property>
   </action>
+  <action name="actionToggleViewResources">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Resources</string>
+   </property>
+  </action>
  </widget>
  <layoutdefault spacing="6" margin="11"/>
  <customwidgets>
@@ -539,6 +603,38 @@
     <hint type="destinationlabel">
      <x>639</x>
      <y>37</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>actionToggleViewResources</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>resourcesDockWidget</receiver>
+   <slot>setVisible(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>127</x>
+     <y>354</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>resourcesDockWidget</sender>
+   <signal>visibilityChanged(bool)</signal>
+   <receiver>actionToggleViewResources</receiver>
+   <slot>setChecked(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>127</x>
+     <y>354</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>127</x>
+     <y>354</y>
     </hint>
    </hints>
   </connection>

@@ -47,6 +47,8 @@ set(SOURCE_FILES
     ./src/resource/ResourceScene.cpp
     ./src/project/Project.cpp
     ./src/project/ProjectManager.cpp
+    ./src/ui/ModelManager.cpp
+    ./src/ui/ModelResources.cpp
     )
 
 set(HEADER_FILES
@@ -67,6 +69,8 @@ set(HEADER_FILES
     ./include/resource/ResourceScene.hpp
     ./include/project/Project.hpp
     ./include/project/ProjectManager.hpp
+    ./include/ui/ModelManager.hpp
+    ./include/ui/ModelResources.hpp
     )
 
 set(RESOURCE_FILES

@@ -24,6 +24,13 @@ namespace WS2 {
             extern QVector<AbstractResoruce*> resources;
 
             /**
+             * @brief Getter for the resources vector
+             *
+             * @return A reference to the resources vector
+             */
+            QVector<AbstractResoruce*>& getResources();
+
+            /**
              * @brief Adds a resource to the WS2::Resource::ResourceManager::resources vector
              * @note WS2::Resource::ResourceManager should be the owner of all resources, therefore **do not** delete
              *       the pointer after adding the resource.
