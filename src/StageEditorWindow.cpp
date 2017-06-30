@@ -3,7 +3,6 @@
 #include "project/ProjectManager.hpp"
 #include "ui/ModelManager.hpp"
 #include <QFontDatabase>
-#include <QPalette>
 #include <Qt>
 #include <QFileDialog>
 #include <QAction>
@@ -40,28 +39,6 @@ namespace WS2 {
                     QString::number(deltaMs, 'f', 2),
                     QString::number(fps, 'f', 2)
                     ));
-
-        QPalette fpsPalette = statusFramerateLabel->palette();
-        if (fps < 5.0f) {
-            fpsPalette.setColor(statusFramerateLabel->backgroundRole(), Qt::darkRed);
-            fpsPalette.setColor(statusFramerateLabel->foregroundRole(), Qt::white);
-        } else if (fps < 10.0f) {
-            fpsPalette.setColor(statusFramerateLabel->backgroundRole(), Qt::red);
-            fpsPalette.setColor(statusFramerateLabel->foregroundRole(), Qt::white);
-        } else if (fps < 15.0f) {
-            fpsPalette.setColor(statusFramerateLabel->backgroundRole(), Qt::darkYellow);
-            fpsPalette.setColor(statusFramerateLabel->foregroundRole(), Qt::white);
-        } else if (fps < 30.0f) {
-            fpsPalette.setColor(statusFramerateLabel->backgroundRole(), Qt::yellow);
-            fpsPalette.setColor(statusFramerateLabel->foregroundRole(), Qt::black);
-        } else if (fps < 40.0f) {
-            fpsPalette.setColor(statusFramerateLabel->backgroundRole(), Qt::darkGreen);
-            fpsPalette.setColor(statusFramerateLabel->foregroundRole(), Qt::white);
-        } else {
-            fpsPalette.setColor(statusFramerateLabel->backgroundRole(), Qt::green);
-            fpsPalette.setColor(statusFramerateLabel->foregroundRole(), Qt::black);
-        }
-        statusFramerateLabel->setPalette(fpsPalette);
     }
 
     void StageEditorWindow::askImportFiles() {
