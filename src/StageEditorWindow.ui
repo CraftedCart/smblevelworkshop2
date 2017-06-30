@@ -480,7 +480,7 @@
  <connections>
   <connection>
    <sender>actionToggleViewOutliner</sender>
-   <signal>toggled(bool)</signal>
+   <signal>triggered(bool)</signal>
    <receiver>outlinerDockWidget</receiver>
    <slot>setVisible(bool)</slot>
    <hints>
@@ -528,7 +528,7 @@
   </connection>
   <connection>
    <sender>actionToggleViewProperties</sender>
-   <signal>toggled(bool)</signal>
+   <signal>triggered(bool)</signal>
    <receiver>propertiesDockWidget</receiver>
    <slot>setVisible(bool)</slot>
    <hints>
@@ -560,7 +560,7 @@
   </connection>
   <connection>
    <sender>actionToggleViewTimeline</sender>
-   <signal>toggled(bool)</signal>
+   <signal>triggered(bool)</signal>
    <receiver>timelineDockWidget</receiver>
    <slot>setVisible(bool)</slot>
    <hints>
@@ -592,7 +592,7 @@
   </connection>
   <connection>
    <sender>actionToggleViewToolbar</sender>
-   <signal>toggled(bool)</signal>
+   <signal>triggered(bool)</signal>
    <receiver>mainToolBar</receiver>
    <slot>setVisible(bool)</slot>
    <hints>
@@ -608,7 +608,7 @@
   </connection>
   <connection>
    <sender>actionToggleViewResources</sender>
-   <signal>toggled(bool)</signal>
+   <signal>triggered(bool)</signal>
    <receiver>resourcesDockWidget</receiver>
    <slot>setVisible(bool)</slot>
    <hints>
@@ -633,8 +633,8 @@
      <y>354</y>
     </hint>
     <hint type="destinationlabel">
-     <x>127</x>
-     <y>354</y>
+     <x>-1</x>
+     <y>-1</y>
     </hint>
    </hints>
   </connection>
