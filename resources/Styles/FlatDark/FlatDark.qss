@@ -3,6 +3,27 @@
     background-color: #212121;
 }
 
+QMenu::item:selected {
+    background-color: #2196F3;
+}
+
+QMenu::separator {
+    height: 1px;
+    background: #616161;
+    margin-left: 2px;
+    margin-right: 2px;
+    margin-bottom: 2px;
+    margin-top: 2px;
+}
+
+QMenu::indicator:checked {
+    image: url(:/Styles/FlatDark/Icons/Check18.png);
+}
+
+QMenu::item {
+    padding: 1px 20px;
+}
+
 QDockWidget {
     titlebar-close-icon: url(:/Styles/FlatDark/Icons/Close.png);
     titlebar-normal-icon: url(:/Styles/FlatDark/Icons/Undock.png);
@@ -89,25 +110,29 @@ QAbstractScrollArea::corner {
     background: #424242;
 }
 
+QToolButton {
+    background: none;
+    padding: 2px;
+    margin: 2px;
+    border-radius: 2px;
+    border: none;
+}
+
 QPushButton {
     background: #424242;
-    padding: 4px 4px 4px 4px;
+    padding: 4px;
     min-width: 72px;
     border-radius: 2px;
+    border: none;
 }
 
-QPushButton:hover {
-    background: #757575;
+QPushButton:hover, QPushButton:focus,
+QToolButton:hover, QToolButton:focus {
+    background: #2196F3;
 }
 
-QPushButton:focus {
-    /*background: #2196F3;*/
-    background: qlineargradient(x1: 0, y1: 0, x2: 1, y2: 0,
-                                    stop: 0 #03A9F4,
-                                    stop: 1 #2196F3);
-}
-
-QPushButton:pressed {
+QPushButton:pressed,
+QToolButton:pressed {
     background: #616161;
 }
 

@@ -7,5 +7,9 @@
         <file>Icons/HHandle.png</file>
         <file>Icons/Close.png</file>
         <file>Icons/Undock.png</file>
+        <file>Icons/Check18.png</file>
     </qresource>
 </RCC>
+
+<!-- vim: set syntax=xml: -->
+
