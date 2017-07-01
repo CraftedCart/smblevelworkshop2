@@ -52,7 +52,7 @@ namespace WS2 {
                 /**
                  * @brief Getter for the first file path
                  *
-                 * @return A poiner to the file path if it exists, nullptr otherwise
+                 * @return A pointer to the file path if it exists, nullptr otherwise
                  */
                 const QString* getFirstFilePath() const;
 
