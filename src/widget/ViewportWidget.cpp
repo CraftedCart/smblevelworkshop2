@@ -2,6 +2,7 @@
 #include "GLManager.hpp"
 #include "MathUtils.hpp"
 #include "project/ProjectManager.hpp"
+#include "resource/ResourceManager.hpp"
 #include <glm/gtx/transform.hpp>
 #include <glm/gtc/constants.hpp>
 #include <Qt>
@@ -58,16 +59,15 @@ namespace WS2 {
         QFile fragFile(":/Workshop2/Shaders/stage.frag");
         GLManager::progID = GLManager::loadShaders(&vertFile, &fragFile);
 
-        //Load texture
-        //QImage bmpFile(":/Workshop2/Images/uvtemplate.png");
-        //texID = GLManager::loadTexture(&bmpFile);
-
         //Get uniform IDs
         GLManager::shaderModelID = glGetUniformLocation(GLManager::progID, "modelMat");
         GLManager::shaderViewID = glGetUniformLocation(GLManager::progID, "viewMat");
         GLManager::shaderProjID = glGetUniformLocation(GLManager::progID, "projMat");
         GLManager::shaderNormID = glGetUniformLocation(GLManager::progID, "normMat");
         GLManager::shaderTexID = glGetUniformLocation(GLManager::progID, "texSampler");
+
+        //Mark the initial project as loaded, so that models added to the scene are also loaded
+        Project::ProjectManager::getActiveProject()->getScene()->load();
 
         //Start the elapsed timer
         elapsedTimer.start();
@@ -241,7 +241,7 @@ namespace WS2 {
         Resource::ResourceScene *scene = Project::ProjectManager::getActiveProject()->getScene();
 
         if (scene != nullptr) {
-            QVector<Model::Mesh> &meshes = scene->getMeshes();
+            QVector<Resource::ResourceMesh*> &meshes = scene->getMeshes();
             for (int i = 0; i < meshes.size(); i++) {
                 GLManager::renderMesh(meshes.at(i));
             }

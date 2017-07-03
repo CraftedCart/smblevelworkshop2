@@ -11,6 +11,10 @@ namespace WS2 {
             Project* getActiveProject() {
                 return ProjectManagerInternal::activeProject;
             }
+
+            void newProject() {
+                ProjectManagerInternal::activeProject = new Project();
+            }
         }
     }
 }

@@ -1,5 +1,7 @@
+#include "ws2.hpp"
 #include "StageEditorWindow.hpp"
 #include "ui/ModelManager.hpp"
+#include "project/ProjectManager.hpp"
 #include <QApplication>
 #include <QFile>
 #include <QSurfaceFormat>
@@ -26,6 +28,10 @@ int main(int argc, char *argv[]) {
     styleFile.close();
     app.setStyleSheet(style);
 
+    //Create a new project
+    //WS2::Project::ProjectManager::newProject();
+
+    WS2::qAppRunning = true;
     WS2::StageEditorWindow w;
     w.show();
 

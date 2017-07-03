@@ -15,7 +15,7 @@ namespace WS2 {
         /**
          * @brief Base class for all resources
          */
-        class AbstractResoruce {
+        class AbstractResource {
             protected:
                 /**
                  * @brief The file paths of where the resource originated from
@@ -31,7 +31,7 @@ namespace WS2 {
                 /**
                  * @brief Calls `unload()` if `isLoaded() == true`
                  */
-                virtual ~AbstractResoruce();
+                virtual ~AbstractResource();
 
                 /**
                  * @brief Setter for the file paths

@@ -16,6 +16,11 @@ namespace WS2 {
 
             public:
                 /**
+                 * @brief Registers the ResourceScene with ResourceManager
+                 */
+                Project();
+
+                /**
                  * @brief Destructor for Project
                  *
                  * Frees up memory owned by this object

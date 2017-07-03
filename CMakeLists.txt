@@ -36,7 +36,6 @@ set(SOURCE_FILES
     ./src/widget/ViewportWidget.cpp
     ./src/GLManager.cpp
     ./src/MathUtils.cpp
-    ./src/model/Mesh.cpp
     ./src/exception/Exception.cpp
     ./src/exception/RuntimeException.cpp
     ./src/exception/IOException.cpp
@@ -45,10 +44,12 @@ set(SOURCE_FILES
     ./src/resource/AbstractResource.cpp
     ./src/resource/ResourceTexture.cpp
     ./src/resource/ResourceScene.cpp
+    ./src/resource/ResourceMesh.cpp
     ./src/project/Project.cpp
     ./src/project/ProjectManager.cpp
     ./src/ui/ModelManager.cpp
     ./src/ui/ModelResources.cpp
+    ./src/ws2.cpp
     )
 
 set(HEADER_FILES
@@ -58,7 +59,6 @@ set(HEADER_FILES
     ./include/EnumCameraNav.hpp
     ./include/MathUtils.hpp
     ./include/model/Vertex.hpp
-    ./include/model/Mesh.hpp
     ./include/exception/Exception.hpp
     ./include/exception/RuntimeException.hpp
     ./include/exception/IOException.hpp
@@ -67,10 +67,12 @@ set(HEADER_FILES
     ./include/resource/AbstractResource.hpp
     ./include/resource/ResourceTexture.hpp
     ./include/resource/ResourceScene.hpp
+    ./include/resource/ResourceMesh.hpp
     ./include/project/Project.hpp
     ./include/project/ProjectManager.hpp
     ./include/ui/ModelManager.hpp
     ./include/ui/ModelResources.hpp
+    ./include/ws2.hpp
     )
 
 set(RESOURCE_FILES

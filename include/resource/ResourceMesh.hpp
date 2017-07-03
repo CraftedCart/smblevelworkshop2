@@ -3,18 +3,21 @@
  * @brief Header for the WS2::Model::Mesh class
  */
 
-#ifndef SMBLEVELWORKSHOP2_MODEL_MESH_HPP
-#define SMBLEVELWORKSHOP2_MODEL_MESH_HPP
+#ifndef SMBLEVELWORKSHOP2_RESOURCE_RESOURCEMESH_HPP
+#define SMBLEVELWORKSHOP2_RESOURCE_RESOURCEMESH_HPP
 
 #include "model/Vertex.hpp"
 #include "resource/ResourceTexture.hpp"
 #include <QVector>
 
 namespace WS2 {
-    namespace Model {
-        class Mesh {
+    namespace Resource {
+        /**
+         * @todo Load and unload functions
+         */
+        class ResourceMesh : public AbstractResource {
             protected:
-                QVector<Vertex> vertices;
+                QVector<Model::Vertex> vertices;
                 QVector<unsigned int> indices;
                 QVector<Resource::ResourceTexture*> textures;
 
@@ -28,7 +31,7 @@ namespace WS2 {
                  *
                  * This exists only for the purpose of being able to use this in a QVector
                  */
-                Mesh();
+                ResourceMesh();
 
                 /**
                  * @brief Create a new Mesh object with the arguments given
@@ -36,10 +39,18 @@ namespace WS2 {
                  * @param vertices
                  * @param indices
                  * @param textures
-                 *
-                 * @note You should call WS2::Model::Mesh::generateGlBuffers() on the object before using it
                  */
-                Mesh(QVector<Vertex> vertices, QVector<unsigned int> indices, QVector<Resource::ResourceTexture*> textures);
+                ResourceMesh(QVector<Model::Vertex> vertices, QVector<unsigned int> indices, QVector<Resource::ResourceTexture*> textures);
+
+                /**
+                 * @brief Generates GL buffers for the mesh
+                 */
+                void load() override;
+
+                /**
+                 * @brief Deletes the GL buffers for the mesh
+                 */
+                void unload() override;
 
                 /**
                  * @brief Generates GL buffers
@@ -49,7 +60,7 @@ namespace WS2 {
                 /**
                  * @return A reference to the vertices vector
                  */
-                const QVector<Vertex>& getVertices() const;
+                const QVector<Model::Vertex>& getVertices() const;
 
                 /**
                  * @return A reference to the indices vector

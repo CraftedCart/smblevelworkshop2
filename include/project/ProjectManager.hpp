@@ -25,6 +25,11 @@ namespace WS2 {
              * @return A pointer to the active project
              */
             Project* getActiveProject();
+
+            /**
+             * @brief Creates a new empty project, and sets it as the active project
+             */
+            void newProject();
         }
     }
 }

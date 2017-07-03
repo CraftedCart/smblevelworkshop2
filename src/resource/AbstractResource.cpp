@@ -2,20 +2,20 @@
 
 namespace WS2 {
     namespace Resource {
-        AbstractResoruce::~AbstractResoruce() {
+        AbstractResource::~AbstractResource() {
             if (isLoaded()) unload();
         }
 
-        void AbstractResoruce::setFilePath(const QString &filePath) {
+        void AbstractResource::setFilePath(const QString &filePath) {
             filePaths.clear();
             filePaths.append(filePath);
         }
 
-        void AbstractResoruce::addFilePath(const QString &filePath) {
+        void AbstractResource::addFilePath(const QString &filePath) {
             filePaths.append(filePath);
         }
 
-        const QString* AbstractResoruce::getFirstFilePath() const {
+        const QString* AbstractResource::getFirstFilePath() const {
             if (filePaths.size() > 0) {
                 return &filePaths.at(0);
             } else {
@@ -23,15 +23,15 @@ namespace WS2 {
             }
         }
 
-        const QVector<QString>& AbstractResoruce::getFilePaths() const {
+        const QVector<QString>& AbstractResource::getFilePaths() const {
             return filePaths;
         }
 
-        void AbstractResoruce::load() {}
+        void AbstractResource::load() {}
 
-        void AbstractResoruce::unload() {}
+        void AbstractResource::unload() {}
 
-        bool AbstractResoruce::isLoaded() {
+        bool AbstractResource::isLoaded() {
             return loaded;
         }
     }

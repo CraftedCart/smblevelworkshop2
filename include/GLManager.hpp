@@ -2,7 +2,7 @@
 #define SMBLEVELWORKSHOP2_GLMANAGER_HPP
 
 #include "glplatform.hpp"
-#include "model/Mesh.hpp"
+#include "resource/ResourceMesh.hpp"
 #include <QFile>
 #include <QString>
 #include <QOpenGLTexture>
@@ -61,7 +61,7 @@ namespace WS2 {
          *
          * @param mesh The mesh to render
          */
-        void renderMesh(const Model::Mesh &mesh);
+        void renderMesh(const Resource::ResourceMesh *mesh);
     }
 }
 

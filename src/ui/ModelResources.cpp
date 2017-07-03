@@ -17,7 +17,7 @@ namespace WS2 {
         QVariant ModelResources::data(const QModelIndex &index, int role) const {
             if (role == Qt::DisplayRole) {
                 QStringList list;
-                Resource::AbstractResoruce* res = Resource::ResourceManager::resources.at(index.row());
+                Resource::AbstractResource* res = Resource::ResourceManager::getResources().at(index.row());
                 for (int i = 0; i < res->getFilePaths().size(); i++) {
                     list << res->getFilePaths().at(i);
                 }

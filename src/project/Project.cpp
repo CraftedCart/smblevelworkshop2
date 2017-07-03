@@ -1,7 +1,12 @@
 #include "project/Project.hpp"
+#include "resource/ResourceManager.hpp"
 
 namespace WS2 {
     namespace Project {
+        Project::Project() {
+            Resource::ResourceManager::addResource(scene);
+        }
+
         Project::~Project() {
             delete scene;
         }

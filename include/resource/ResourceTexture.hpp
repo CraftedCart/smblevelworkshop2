@@ -13,7 +13,7 @@
 
 namespace WS2 {
     namespace Resource {
-        class ResourceTexture : public AbstractResoruce {
+        class ResourceTexture : public AbstractResource {
             protected:
                 /**
                  * @brief The GL texture object
