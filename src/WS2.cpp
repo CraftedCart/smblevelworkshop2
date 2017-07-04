@@ -1,4 +1,4 @@
-#include "ws2.hpp"
+#include "WS2.hpp"
 
 namespace WS2 {
     //Define extern members

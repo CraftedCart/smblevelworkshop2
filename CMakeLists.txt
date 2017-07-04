@@ -49,7 +49,7 @@ set(SOURCE_FILES
     ./src/project/ProjectManager.cpp
     ./src/ui/ModelManager.cpp
     ./src/ui/ModelResources.cpp
-    ./src/ws2.cpp
+    ./src/WS2.cpp
     )
 
 set(HEADER_FILES
@@ -72,7 +72,7 @@ set(HEADER_FILES
     ./include/project/ProjectManager.hpp
     ./include/ui/ModelManager.hpp
     ./include/ui/ModelResources.hpp
-    ./include/ws2.hpp
+    ./include/WS2.hpp
     )
 
 set(RESOURCE_FILES

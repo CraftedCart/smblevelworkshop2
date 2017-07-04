@@ -1,4 +1,4 @@
-#include "ws2.hpp"
+#include "WS2.hpp"
 #include "StageEditorWindow.hpp"
 #include "ui/ModelManager.hpp"
 #include "resource/ResourceManager.hpp"
