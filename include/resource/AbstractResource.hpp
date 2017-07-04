@@ -18,6 +18,11 @@ namespace WS2 {
         class AbstractResource {
             protected:
                 /**
+                 * @brief A unique identifier for this resource
+                 */
+                QString id;
+
+                /**
                  * @brief The file paths of where the resource originated from
                  */
                 QVector<QString> filePaths;
@@ -32,6 +37,20 @@ namespace WS2 {
                  * @brief Calls `unload()` if `isLoaded() == true`
                  */
                 virtual ~AbstractResource();
+
+                /**
+                 * @brief Setter for the resource ID
+                 *
+                 * @param id A reference to the ID to set
+                 */
+                void setId(const QString &id);
+
+                /**
+                 * @brief Getter for the resource ID
+                 *
+                 * @return A reference to the resource ID
+                 */
+                QString& getId();
 
                 /**
                  * @brief Setter for the file paths

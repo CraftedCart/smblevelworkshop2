@@ -1,9 +1,11 @@
 #include "project/Project.hpp"
 #include "resource/ResourceManager.hpp"
+#include <QCoreApplication>
 
 namespace WS2 {
     namespace Project {
         Project::Project() {
+            scene->setId(Resource::ResourceManager::generateUniqueId(QCoreApplication::translate("Project", "Scene")));
             Resource::ResourceManager::addResource(scene);
         }
 

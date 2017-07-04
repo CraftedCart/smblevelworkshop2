@@ -161,6 +161,15 @@ namespace WS2 {
              * @return A vector of added meshes
              */
             QVector<ResourceMesh*> addModel(QFile &file, bool shouldLoad = false);
+
+            /**
+             * @brief Generates a unique resource ID prefixed with prefix
+             *
+             * @param prefix The prefix of the ID
+             *
+             * @return A unique resource ID, starting with prefix and ending with a number
+             */
+            QString generateUniqueId(QString prefix);
         }
     }
 }

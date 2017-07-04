@@ -8,6 +8,7 @@
 #include <assimp/Importer.hpp>
 #include <assimp/postprocess.h>
 #include <QDebug>
+#include <climits>
 
 namespace WS2 {
     namespace Resource {
@@ -146,6 +147,7 @@ namespace WS2 {
                     textures.append(specularMaps);
 
                     ResourceMesh *resMesh = new ResourceMesh(vertices, indices, textures);
+                    resMesh->setId(QString("%1@%2").arg(mesh->mName.C_Str()).arg(*filePath));
                     resMesh->setFilePath(*filePath);
                     resMesh->load();
 
@@ -178,6 +180,7 @@ namespace WS2 {
 
                         if (texture == nullptr) {
                             texture = new Resource::ResourceTexture();
+                            texture->setId(filePath);
                             texture->setFilePath(filePath);
                             if (shouldLoad) texture->load();
                             addResource(texture);
@@ -207,6 +210,34 @@ namespace WS2 {
              */
             QVector<ResourceMesh*> addModel(QFile &file, bool shouldLoad) {
                 return ResourceManagerInternal::loadModel(file, shouldLoad);
+            }
+
+            /**
+             * @throws WS2::Exception::RuntimeException When there are UINT_MAX taken names
+             */
+            QString generateUniqueId(QString prefix) {
+                //Create and populate vector of taken names
+                int size = getResources().size();
+                QVector<QString> takenNames(size);
+
+                for (int i = 0; i < size; i++) {
+                    takenNames[i] = getResources().at(i)->getId();
+                }
+
+                //Keep generating a new Id with an increacing suffix number until one isn't taken
+                unsigned int suffix = 0;
+                QString str; //No need to allocate str on each iteration of the loop
+
+                while (suffix < UINT_MAX) {
+                    str = QString("%1%2").arg(prefix).arg(suffix);
+                    if (!takenNames.contains(str)) return str;
+
+                    suffix++;
+                }
+
+                //Ok so someone had the idea of having UINT_MAX taken names
+                throw Exception::RuntimeException("There are UINT_MAX or more matching names in "
+                        "generateUniqueId(QString prefix)");
             }
         }
     }

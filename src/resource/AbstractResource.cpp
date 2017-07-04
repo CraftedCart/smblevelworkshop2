@@ -6,6 +6,14 @@ namespace WS2 {
             if (isLoaded()) unload();
         }
 
+        void AbstractResource::setId(const QString &id) {
+            this->id = id;
+        }
+
+        QString& AbstractResource::getId() {
+            return id;
+        }
+
         void AbstractResource::setFilePath(const QString &filePath) {
             filePaths.clear();
             filePaths.append(filePath);

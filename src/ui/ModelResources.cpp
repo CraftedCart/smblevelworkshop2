@@ -11,18 +11,29 @@ namespace WS2 {
         }
 
         int ModelResources::columnCount(const QModelIndex &parent) const {
-            return 1;
+            return 2;
         }
 
         QVariant ModelResources::data(const QModelIndex &index, int role) const {
             if (role == Qt::DisplayRole) {
-                QStringList list;
                 Resource::AbstractResource* res = Resource::ResourceManager::getResources().at(index.row());
-                for (int i = 0; i < res->getFilePaths().size(); i++) {
-                    list << res->getFilePaths().at(i);
+
+                switch (index.column()) {
+                    case 0:
+                        //Resource ID
+                        return res->getId();
+                    case 1:
+                        //Resource origin(s)
+                        QStringList list;
+                        for (int i = 0; i < res->getFilePaths().size(); i++) {
+                            list << res->getFilePaths().at(i);
+                        }
+
+                        return list.join(", ");
                 }
 
-                return list.join(", ");
+                //This shouldn't happen
+                return QVariant();
             } else {
                 return QVariant();
             }
@@ -33,7 +44,11 @@ namespace WS2 {
                 if (orientation == Qt::Horizontal) {
                     switch (section) {
                         case 0:
-                            return QString("Resource origin(s)");
+                            return tr("Resource ID");
+                            break;
+                        case 1:
+                            return tr("Resource origin(s)");
+                            break;
                     }
                 }
             }
