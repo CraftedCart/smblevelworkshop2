@@ -14,8 +14,6 @@ namespace WS2 {
         }
 
         void ResourceTexture::unload() {
-            qDebug() << "Unloading texture:" << *getFirstFilePath();
-
             GLuint texID = texture->textureId();
             glDeleteTextures(1, &texID);
 

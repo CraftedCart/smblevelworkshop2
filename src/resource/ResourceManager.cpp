@@ -204,6 +204,16 @@ namespace WS2 {
                 if (qAppRunning) UI::ModelManager::modelResources->onResourceAdded();
             }
 
+            void unloadAllResources() {
+                for (int i = 0; i < getResources().size(); i++) {
+                    AbstractResource *res = getResources().at(i);
+                    if (res->isLoaded()) {
+                        qDebug() << "Unloading:" << res->getId();
+                        res->unload();
+                    }
+                }
+            }
+
             /**
              * @throws WS2::Exception::IOException When failing to read the file
              * @throws WS2::Exception::RuntimeException When Assimp fails to generate an aiScene

@@ -127,6 +127,11 @@ namespace WS2 {
             void addResource(AbstractResource *res);
 
             /**
+             * @brief Unloads all registered resources if they are loaded
+             */
+            void unloadAllResources();
+
+            /**
              * @brief Gets a resource originating from the given file path
              *
              * The resource is statically casted to the type T specified

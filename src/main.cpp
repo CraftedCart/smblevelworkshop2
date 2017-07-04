@@ -1,7 +1,7 @@
 #include "ws2.hpp"
 #include "StageEditorWindow.hpp"
 #include "ui/ModelManager.hpp"
-#include "project/ProjectManager.hpp"
+#include "resource/ResourceManager.hpp"
 #include <QApplication>
 #include <QFile>
 #include <QSurfaceFormat>
@@ -31,11 +31,14 @@ int main(int argc, char *argv[]) {
     //Create a new project
     //WS2::Project::ProjectManager::newProject();
 
-    WS2::qAppRunning = true;
     WS2::StageEditorWindow w;
     w.show();
 
+    WS2::qAppRunning = true;
     int ret = app.exec();
+    WS2::qAppRunning = false;
+
+    WS2::Resource::ResourceManager::unloadAllResources();
 
     //Free resources
     WS2::UI::ModelManager::destruct();
