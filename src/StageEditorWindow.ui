@@ -186,7 +186,7 @@
     <string>Resources</string>
    </property>
    <attribute name="dockWidgetArea">
-    <number>1</number>
+    <number>4</number>
    </attribute>
    <widget class="QWidget" name="resourcesContentsWidget">
     <layout class="QGridLayout" name="gridLayout_3">
@@ -207,6 +207,9 @@
      </property>
      <item row="0" column="0">
       <widget class="QTableView" name="resourcesTableView">
+       <property name="selectionBehavior">
+        <enum>QAbstractItemView::SelectRows</enum>
+       </property>
        <property name="textElideMode">
         <enum>Qt::ElideLeft</enum>
        </property>
