@@ -1,5 +1,5 @@
 #include "WS2.hpp"
-#include "StageEditorWindow.hpp"
+#include "ui/StageEditorWindow.hpp"
 #include "ui/ModelManager.hpp"
 #include "resource/ResourceManager.hpp"
 #include <QApplication>
@@ -31,7 +31,7 @@ int main(int argc, char *argv[]) {
     //Create a new project
     //WS2::Project::ProjectManager::newProject();
 
-    WS2::StageEditorWindow w;
+    WS2::UI::StageEditorWindow w;
     w.show();
 
     WS2::qAppRunning = true;

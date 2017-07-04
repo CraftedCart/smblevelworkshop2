@@ -32,7 +32,7 @@ include_directories(./include)
 
 set(SOURCE_FILES
     ./src/main.cpp
-    ./src/StageEditorWindow.cpp
+    ./src/ui/StageEditorWindow.cpp
     ./src/widget/ViewportWidget.cpp
     ./src/GLManager.cpp
     ./src/MathUtils.cpp
@@ -53,7 +53,7 @@ set(SOURCE_FILES
     )
 
 set(HEADER_FILES
-    ./include/StageEditorWindow.hpp
+    ./include/ui/StageEditorWindow.hpp
     ./include/widget/ViewportWidget.hpp
     ./include/GLManager.hpp
     ./include/EnumCameraNav.hpp
