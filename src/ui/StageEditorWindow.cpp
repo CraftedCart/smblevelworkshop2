@@ -64,6 +64,8 @@ namespace WS2 {
             //Get outta here if no files were chosen
             if (urls.isEmpty()) return;
 
+            ui->viewportWidget->makeCurrentContext();
+
             for (int i = 0; i < urls.size(); i++) {
                 QFile f(urls.at(i).toLocalFile());
                 Project::ProjectManager::getActiveProject()->importFile(f);

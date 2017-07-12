@@ -39,6 +39,10 @@ namespace WS2 {
         return deltaSeconds;
     }
 
+    void ViewportWidget::makeCurrentContext() {
+        makeCurrent();
+    }
+
     void ViewportWidget::initializeGL() {
         //Uses default format which should use OpenGL 3.3 core
         glewExperimental = GL_TRUE;

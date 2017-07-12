@@ -53,16 +53,20 @@ namespace WS2 {
             GLint result = GL_FALSE;
             int infoLogLength;
 
+            QByteArray vertBytes = vertCode.toUtf8();
+            const char *cVertCode = vertBytes.constData();
+            QByteArray fragBytes = fragCode.toUtf8();
+            const char *cFragCode = fragBytes.constData();
+
             //Compile vert shader
             qDebug() << "Compiling vertex shader:" << vertFile->fileName();
-            const char *cVertCode = vertCode.toUtf8().constData();
             glShaderSource(vertID, 1, &cVertCode, NULL);
             glCompileShader(vertID);
 
             //Check vert shader
             glGetShaderiv(vertID, GL_COMPILE_STATUS, &result);
-            glGetShaderiv(vertID, GL_INFO_LOG_LENGTH, &infoLogLength);
-            if (infoLogLength > 0) {
+            if (result == GL_FALSE) {
+                glGetShaderiv(vertID, GL_INFO_LOG_LENGTH, &infoLogLength);
                 std::vector<char> vertShaderErrMsg(infoLogLength + 1);
                 glGetShaderInfoLog(vertID, infoLogLength, NULL, &vertShaderErrMsg[0]);
                 qWarning() << &vertShaderErrMsg[0];
@@ -72,14 +76,13 @@ namespace WS2 {
 
             //Compile frag shader
             qDebug() << "Compiling fragment shader:" << fragFile->fileName();
-            const char *cFragCode = fragCode.toUtf8().constData();
             glShaderSource(fragID, 1, &cFragCode, NULL);
             glCompileShader(fragID);
 
             //Check frag shader
             glGetShaderiv(fragID, GL_COMPILE_STATUS, &result);
-            glGetShaderiv(fragID, GL_INFO_LOG_LENGTH, &infoLogLength);
-            if (infoLogLength > 0) {
+            if (result == GL_FALSE) {
+                glGetShaderiv(fragID, GL_INFO_LOG_LENGTH, &infoLogLength);
                 std::vector<char> fragShaderErrMsg(infoLogLength + 1);
                 glGetShaderInfoLog(fragID, infoLogLength, NULL, &fragShaderErrMsg[0]);
                 qWarning() << &fragShaderErrMsg[0];
@@ -95,9 +98,9 @@ namespace WS2 {
             glLinkProgram(programID);
 
             //Check program
-            glGetShaderiv(programID, GL_LINK_STATUS, &result);
-            glGetShaderiv(programID, GL_INFO_LOG_LENGTH, &infoLogLength);
-            if (infoLogLength > 0) {
+            glGetProgramiv(programID, GL_LINK_STATUS, &result);
+            if (result == GL_FALSE) {
+                glGetProgramiv(programID, GL_INFO_LOG_LENGTH, &infoLogLength);
                 std::vector<char> progErrMsg(infoLogLength + 1);
                 glGetProgramInfoLog(programID, infoLogLength, NULL, &progErrMsg[0]);
                 qWarning() << &progErrMsg[0];
@@ -121,8 +124,8 @@ namespace WS2 {
 
         QOpenGLTexture* loadTexture(QImage *image) {
             QOpenGLTexture *tex = new QOpenGLTexture(image->mirrored());
-            tex->setMinificationFilter(QOpenGLTexture::Linear);
-            tex->setMagnificationFilter(QOpenGLTexture::LinearMipMapLinear);
+            tex->setMinificationFilter(QOpenGLTexture::LinearMipMapLinear);
+            tex->setMagnificationFilter(QOpenGLTexture::Linear);
             tex->generateMipMaps();
 
             return tex;

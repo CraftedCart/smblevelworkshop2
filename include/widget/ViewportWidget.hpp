@@ -44,6 +44,8 @@ namespace WS2 {
             qint64 getDeltaNanoseconds();
             float getDeltaSeconds();
 
+            void makeCurrentContext();
+
         protected:
             void initializeGL() override;
             //void resizeGL(int w, int h) override;
