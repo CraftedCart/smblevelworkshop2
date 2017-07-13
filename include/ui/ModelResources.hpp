@@ -1,6 +1,6 @@
 /**
  * @file
- * @brief Header for the WS2::UI::ResourceModel clas
+ * @brief Header for the WS2::UI::ModelResources clas
  */
 
 #ifndef SMBLEVELWORKSHOP2_UI_MODELRESOURCES_HPP
