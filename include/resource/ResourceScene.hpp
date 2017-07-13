@@ -18,11 +18,11 @@ namespace WS2 {
          */
         class ResourceScene : public AbstractResource {
             protected:
-                Scene::SceneNode *rootNode = new Scene::SceneNode();
+                Scene::SceneNode *rootNode;
 
             public:
                 /**
-                 * @brief Constructs an empty scene
+                 * @brief Constructs an empty scene with a SceneNode named `tr("Static")`
                  */
                 ResourceScene();
 

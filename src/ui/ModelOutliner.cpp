@@ -30,10 +30,7 @@ namespace WS2 {
             if (!index.isValid() || role != Qt::DisplayRole) return QVariant();
 
             Scene::SceneNode *node = static_cast<Scene::SceneNode*>(index.internalPointer());
-            if (Scene::MeshSceneNode *mesh = dynamic_cast<Scene::MeshSceneNode*>(node)) {
-                return mesh->getMesh()->getId();
-            }
-            return QString("NODE!");
+            return node->getName();
         }
 
         QModelIndex ModelOutliner::index(int row, int column, const QModelIndex &parent) const {

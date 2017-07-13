@@ -18,6 +18,8 @@ namespace WS2 {
          */
         class SceneNode {
             protected:
+                QString name;
+
                 QVector<SceneNode*> children;
                 SceneNode *parent;
 
@@ -27,9 +29,23 @@ namespace WS2 {
 
             public:
                 /**
+                 * @brief Constructs a new SceneNode with the name specified
+                 *
+                 * @param name the name of the new SceneNode
+                 */
+                SceneNode(const QString name);
+
+                /**
                  * @brief Deletes all children
                  */
                 virtual ~SceneNode();
+
+                /**
+                 * @brief Getter for WS2::Scene::SceneNode::name
+                 *
+                 * @return The name of this node
+                 */
+                const QString getName() const;
 
                 /**
                  * @brief Getter for WS2::Scene::SceneNode::children

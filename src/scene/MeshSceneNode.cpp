@@ -2,9 +2,9 @@
 
 namespace WS2 {
     namespace Scene {
-        MeshSceneNode::MeshSceneNode() {}
+        MeshSceneNode::MeshSceneNode(const QString name) : SceneNode(name) {}
 
-        MeshSceneNode::MeshSceneNode(Resource::ResourceMesh *mesh) {
+        MeshSceneNode::MeshSceneNode(const QString name, Resource::ResourceMesh *mesh) : SceneNode(name) {
             this->mesh = mesh;
         }
 

@@ -18,15 +18,18 @@ namespace WS2 {
             public:
                 /**
                  * @brief Constructs a MeshSceneNode with no mesh
+                 *
+                 * @param name The name of the node
                  */
-                MeshSceneNode();
+                MeshSceneNode(const QString name);
 
                 /**
                  * @brief Constructs a MeshSceneNode with a mesh
                  *
+                 * @param name The name of the node
                  * @param mesh A pointer to the mesh to set
                  */
-                MeshSceneNode(Resource::ResourceMesh *mesh);
+                MeshSceneNode(const QString name, Resource::ResourceMesh *mesh);
 
                 /**
                  * @brief Getter for WS2::Scene::MeshSceneNode::mesh

@@ -4,8 +4,16 @@
 
 namespace WS2 {
     namespace Scene {
+        SceneNode::SceneNode(const QString name) {
+            this->name = name;
+        }
+
         SceneNode::~SceneNode() {
             qDeleteAll(children);
+        }
+
+        const QString SceneNode::getName() const {
+            return name;
         }
 
         QVector<SceneNode*>& SceneNode::getChildren() {

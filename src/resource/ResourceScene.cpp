@@ -8,7 +8,9 @@
 
 namespace WS2 {
     namespace Resource {
-        ResourceScene::ResourceScene() {}
+        ResourceScene::ResourceScene() {
+            rootNode = new Scene::SceneNode("root");
+        }
 
         /**
          * @throws WS2::Exception::IOException When failing to read the file
@@ -31,7 +33,9 @@ namespace WS2 {
             QVector<ResourceMesh*> newMeshes = ResourceManager::addModel(file, isLoaded());
 
             for (int i = 0; i < newMeshes.size(); i++) {
-                Scene::MeshSceneNode *meshNode = new Scene::MeshSceneNode(newMeshes.at(i));
+                //The .split("@")[0] gets the part of the name before the @ symbol, which should be the name of the mesh
+                //TODO: Make ResourceMesh store the name of a mesh, instead of doing string manip to get the name
+                Scene::MeshSceneNode *meshNode = new Scene::MeshSceneNode(newMeshes.at(i)->getId().split("@")[0], newMeshes.at(i));
                 rootNode->addChild(meshNode);
             }
         }
