@@ -22,7 +22,7 @@ namespace WS2 {
 
             public:
                 /**
-                 * @brief Constructs an empty scene with a SceneNode named `tr("Static")`
+                 * @brief Constructs an empty scene with a SceneNode named `QCoreApplication::translate("SceneNode", "Static")`
                  */
                 ResourceScene();
 

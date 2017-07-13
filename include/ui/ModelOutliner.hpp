@@ -29,6 +29,7 @@ namespace WS2 {
                 QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const override;
                 QModelIndex index(int row, int column, const QModelIndex &parent = QModelIndex()) const override;
                 QModelIndex parent(const QModelIndex &parent = QModelIndex()) const override;
+                Qt::ItemFlags flags(const QModelIndex &index) const override;
                 //QVariant headerData(int section, Qt::Orientation orientation, int role = Qt::DisplayRole) const override;
 
                 void onNodeAdded(Scene::SceneNode *addedNode);

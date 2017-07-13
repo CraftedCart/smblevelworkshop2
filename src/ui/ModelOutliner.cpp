@@ -1,6 +1,7 @@
 #include "ui/ModelOutliner.hpp"
 #include "project/ProjectManager.hpp"
 #include "scene/MeshSceneNode.hpp"
+#include "WS2.hpp"
 #include <QDebug>
 
 namespace WS2 {
@@ -65,7 +66,14 @@ namespace WS2 {
             }
         }
 
+        Qt::ItemFlags ModelOutliner::flags(const QModelIndex &index) const {
+            if (!index.isValid()) return 0;
+            return QAbstractItemModel::flags(index);
+        }
+
         void ModelOutliner::onNodeAdded(Scene::SceneNode *addedNode) {
+            if (!WS2::qAppRunning) return; //Get outta here if the QApplication isn't running - This would crash otherwise
+
             QVector<int> indexPath;
             Scene::SceneNode *pathNode = addedNode;
             while (pathNode->getParent() != nullptr) {

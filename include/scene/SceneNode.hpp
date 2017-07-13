@@ -64,6 +64,15 @@ namespace WS2 {
                 SceneNode* getChildByIndex(int index);
 
                 /**
+                 * @brief Returns a child node with the given name
+                 *
+                 * @param name The name of the child node to find
+                 *
+                 * @return A pointer to the child node with the name specified, or nullptr if it doesn't exist
+                 */
+                SceneNode* getChildByName(QString name);
+
+                /**
                  * @brief Gets the index of this scene node in its parent's children vector
                  *
                  * @return The index of this child within the parent's children QVector, or 0 if there is no parent

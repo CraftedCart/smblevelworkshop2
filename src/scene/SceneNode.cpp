@@ -24,6 +24,22 @@ namespace WS2 {
             return children[index];
         }
 
+        SceneNode* SceneNode::getChildByName(QString name) {
+            auto node = std::find_if(
+                    children.begin(),
+                    children.end(),
+                    [&name](const SceneNode *object) { return object->getName() == name; }
+                    );
+
+            if (node != children.end()) {
+                //Node found
+                return static_cast<SceneNode*>(*node);
+            } else {
+                //Node not found
+                return nullptr;
+            }
+        }
+
         int SceneNode::getIndex() {
             if (parent) {
                 return parent->getChildren().indexOf(const_cast<SceneNode*>(this));
