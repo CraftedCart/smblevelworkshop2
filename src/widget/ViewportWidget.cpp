@@ -249,7 +249,7 @@ namespace WS2 {
             recursiveDrawSceneNode(scene->getRootNode(), glm::mat4(1.0f));
         }
 
-        drawText(glm::vec3(0.0f, 0.0f, 0.0f), QString("Origin"), QColor(255, 255, 255));
+        //drawText(glm::vec3(0.0f, 0.0f, 0.0f), QString("Origin"), QColor(255, 255, 255));
 
         //Check for errors
         checkGLErrors("End of ViewportWidget::paintGL()");
