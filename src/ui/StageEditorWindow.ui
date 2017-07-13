@@ -190,7 +190,7 @@
     <bool>false</bool>
    </property>
    <property name="windowTitle">
-    <string>Resources</string>
+    <string>Debug: Resources</string>
    </property>
    <attribute name="dockWidgetArea">
     <number>4</number>
