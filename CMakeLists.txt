@@ -50,6 +50,8 @@ set(SOURCE_FILES
     ./src/ui/ModelManager.cpp
     ./src/ui/ModelResources.cpp
     ./src/WS2.cpp
+    ./src/scene/SceneNode.cpp
+    ./src/scene/MeshSceneNode.cpp
     )
 
 set(HEADER_FILES
@@ -73,6 +75,8 @@ set(HEADER_FILES
     ./include/ui/ModelManager.hpp
     ./include/ui/ModelResources.hpp
     ./include/WS2.hpp
+    ./include/scene/SceneNode.hpp
+    ./include/scene/MeshSceneNode.hpp
     )
 
 set(RESOURCE_FILES
