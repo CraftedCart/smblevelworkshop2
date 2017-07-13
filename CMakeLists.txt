@@ -49,6 +49,7 @@ set(SOURCE_FILES
     ./src/project/ProjectManager.cpp
     ./src/ui/ModelManager.cpp
     ./src/ui/ModelResources.cpp
+    ./src/ui/ModelOutliner.cpp
     ./src/WS2.cpp
     ./src/scene/SceneNode.cpp
     ./src/scene/MeshSceneNode.cpp
@@ -74,6 +75,7 @@ set(HEADER_FILES
     ./include/project/ProjectManager.hpp
     ./include/ui/ModelManager.hpp
     ./include/ui/ModelResources.hpp
+    ./include/ui/ModelOutliner.hpp
     ./include/WS2.hpp
     ./include/scene/SceneNode.hpp
     ./include/scene/MeshSceneNode.hpp

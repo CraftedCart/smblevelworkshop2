@@ -50,7 +50,7 @@ namespace WS2 {
                  *
                  * @return A reference to the resource ID
                  */
-                QString& getId();
+                const QString& getId() const;
 
                 /**
                  * @brief Setter for the file paths

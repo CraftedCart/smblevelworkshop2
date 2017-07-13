@@ -18,6 +18,7 @@ namespace WS2 {
             ui->statusBar->addWidget(statusFramerateLabel);
 
             ui->resourcesTableView->setModel(UI::ModelManager::modelResources);
+            ui->outlinerTreeView->setModel(UI::ModelManager::modelOutliner);
 
             //Hide the following dock widgets on start
             ui->resourcesDockWidget->hide();

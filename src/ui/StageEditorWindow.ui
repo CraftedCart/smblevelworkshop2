@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>1280</width>
-    <height>720</height>
+    <height>721</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -155,7 +155,14 @@
       <number>0</number>
      </property>
      <item row="0" column="0">
-      <widget class="QTreeView" name="treeView"/>
+      <widget class="QTreeView" name="outlinerTreeView">
+       <property name="selectionMode">
+        <enum>QAbstractItemView::ExtendedSelection</enum>
+       </property>
+       <attribute name="headerVisible">
+        <bool>false</bool>
+       </attribute>
+      </widget>
      </item>
     </layout>
    </widget>
@@ -232,7 +239,7 @@
   </widget>
   <action name="actionNew">
    <property name="icon">
-    <iconset resource="../resources/Workshop2/Workshop2Resources.qrc">
+    <iconset resource="../../resources/Workshop2/Workshop2Resources.qrc">
      <normaloff>:/Workshop2/Icons/File.png</normaloff>:/Workshop2/Icons/File.png</iconset>
    </property>
    <property name="text">
@@ -244,7 +251,7 @@
   </action>
   <action name="actionOpen">
    <property name="icon">
-    <iconset resource="../resources/Workshop2/Workshop2Resources.qrc">
+    <iconset resource="../../resources/Workshop2/Workshop2Resources.qrc">
      <normaloff>:/Workshop2/Icons/Folder.png</normaloff>:/Workshop2/Icons/Folder.png</iconset>
    </property>
    <property name="text">
@@ -256,7 +263,7 @@
   </action>
   <action name="actionQuit">
    <property name="icon">
-    <iconset resource="../resources/Workshop2/Workshop2Resources.qrc">
+    <iconset resource="../../resources/Workshop2/Workshop2Resources.qrc">
      <normaloff>:/Workshop2/Icons/Close.png</normaloff>:/Workshop2/Icons/Close.png</iconset>
    </property>
    <property name="text">
@@ -268,7 +275,7 @@
   </action>
   <action name="actionUndo">
    <property name="icon">
-    <iconset resource="../resources/Workshop2/Workshop2Resources.qrc">
+    <iconset resource="../../resources/Workshop2/Workshop2Resources.qrc">
      <normaloff>:/Workshop2/Icons/Undo.png</normaloff>:/Workshop2/Icons/Undo.png</iconset>
    </property>
    <property name="text">
@@ -280,7 +287,7 @@
   </action>
   <action name="actionRedo">
    <property name="icon">
-    <iconset resource="../resources/Workshop2/Workshop2Resources.qrc">
+    <iconset resource="../../resources/Workshop2/Workshop2Resources.qrc">
      <normaloff>:/Workshop2/Icons/Redo.png</normaloff>:/Workshop2/Icons/Redo.png</iconset>
    </property>
    <property name="text">
@@ -292,7 +299,7 @@
   </action>
   <action name="actionCut">
    <property name="icon">
-    <iconset resource="../resources/Workshop2/Workshop2Resources.qrc">
+    <iconset resource="../../resources/Workshop2/Workshop2Resources.qrc">
      <normaloff>:/Workshop2/Icons/Cut.png</normaloff>:/Workshop2/Icons/Cut.png</iconset>
    </property>
    <property name="text">
@@ -304,7 +311,7 @@
   </action>
   <action name="actionCopy">
    <property name="icon">
-    <iconset resource="../resources/Workshop2/Workshop2Resources.qrc">
+    <iconset resource="../../resources/Workshop2/Workshop2Resources.qrc">
      <normaloff>:/Workshop2/Icons/Copy.png</normaloff>:/Workshop2/Icons/Copy.png</iconset>
    </property>
    <property name="text">
@@ -316,7 +323,7 @@
   </action>
   <action name="actionPaste">
    <property name="icon">
-    <iconset resource="../resources/Workshop2/Workshop2Resources.qrc">
+    <iconset resource="../../resources/Workshop2/Workshop2Resources.qrc">
      <normaloff>:/Workshop2/Icons/Paste.png</normaloff>:/Workshop2/Icons/Paste.png</iconset>
    </property>
    <property name="text">
@@ -328,7 +335,7 @@
   </action>
   <action name="actionSelectAll">
    <property name="icon">
-    <iconset resource="../resources/Workshop2/Workshop2Resources.qrc">
+    <iconset resource="../../resources/Workshop2/Workshop2Resources.qrc">
      <normaloff>:/Workshop2/Icons/SelectAll.png</normaloff>:/Workshop2/Icons/SelectAll.png</iconset>
    </property>
    <property name="text">
@@ -340,7 +347,7 @@
   </action>
   <action name="actionDuplicate">
    <property name="icon">
-    <iconset resource="../resources/Workshop2/Workshop2Resources.qrc">
+    <iconset resource="../../resources/Workshop2/Workshop2Resources.qrc">
      <normaloff>:/Workshop2/Icons/Duplicate.png</normaloff>:/Workshop2/Icons/Duplicate.png</iconset>
    </property>
    <property name="text">
@@ -352,7 +359,7 @@
   </action>
   <action name="actionDelete">
    <property name="icon">
-    <iconset resource="../resources/Workshop2/Workshop2Resources.qrc">
+    <iconset resource="../../resources/Workshop2/Workshop2Resources.qrc">
      <normaloff>:/Workshop2/Icons/Delete.png</normaloff>:/Workshop2/Icons/Delete.png</iconset>
    </property>
    <property name="text">
@@ -364,7 +371,7 @@
   </action>
   <action name="actionFocusSelected">
    <property name="icon">
-    <iconset resource="../resources/Workshop2/Workshop2Resources.qrc">
+    <iconset resource="../../resources/Workshop2/Workshop2Resources.qrc">
      <normaloff>:/Workshop2/Icons/Focus.png</normaloff>:/Workshop2/Icons/Focus.png</iconset>
    </property>
    <property name="text">
@@ -376,7 +383,7 @@
   </action>
   <action name="actionSave">
    <property name="icon">
-    <iconset resource="../resources/Workshop2/Workshop2Resources.qrc">
+    <iconset resource="../../resources/Workshop2/Workshop2Resources.qrc">
      <normaloff>:/Workshop2/Icons/Save.png</normaloff>:/Workshop2/Icons/Save.png</iconset>
    </property>
    <property name="text">
@@ -388,7 +395,7 @@
   </action>
   <action name="actionSaveAs">
    <property name="icon">
-    <iconset resource="../resources/Workshop2/Workshop2Resources.qrc">
+    <iconset resource="../../resources/Workshop2/Workshop2Resources.qrc">
      <normaloff>:/Workshop2/Icons/SaveAs.png</normaloff>:/Workshop2/Icons/SaveAs.png</iconset>
    </property>
    <property name="text">
@@ -432,7 +439,7 @@
   </action>
   <action name="actionImport">
    <property name="icon">
-    <iconset resource="../resources/Workshop2/Workshop2Resources.qrc">
+    <iconset resource="../../resources/Workshop2/Workshop2Resources.qrc">
      <normaloff>:/Workshop2/Icons/Import.png</normaloff>:/Workshop2/Icons/Import.png</iconset>
    </property>
    <property name="text">
@@ -447,7 +454,7 @@
   </action>
   <action name="actionExport">
    <property name="icon">
-    <iconset resource="../resources/Workshop2/Workshop2Resources.qrc">
+    <iconset resource="../../resources/Workshop2/Workshop2Resources.qrc">
      <normaloff>:/Workshop2/Icons/Export.png</normaloff>:/Workshop2/Icons/Export.png</iconset>
    </property>
    <property name="text">
@@ -478,7 +485,7 @@
   </customwidget>
  </customwidgets>
  <resources>
-  <include location="../resources/Workshop2/Workshop2Resources.qrc"/>
+  <include location="../../resources/Workshop2/Workshop2Resources.qrc"/>
  </resources>
  <connections>
   <connection>

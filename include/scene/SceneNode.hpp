@@ -19,6 +19,7 @@ namespace WS2 {
         class SceneNode {
             protected:
                 QVector<SceneNode*> children;
+                SceneNode *parent;
 
                 glm::vec3 position = glm::vec3(0.0f, 0.0f, 0.0f);
                 glm::vec3 rotation = glm::vec3(0.0f, 0.0f, 0.0f);
@@ -38,11 +39,48 @@ namespace WS2 {
                 QVector<SceneNode*>& getChildren();
 
                 /**
+                 * @brief Returns a child node by it's index position in the children QVector
+                 *
+                 * @param index The index of the child to retrieve
+                 *
+                 * @return A pointer to the child node at index
+                 */
+                SceneNode* getChildByIndex(int index);
+
+                /**
+                 * @brief Gets the index of this scene node in its parent's children vector
+                 *
+                 * @return The index of this child within the parent's children QVector, or 0 if there is no parent
+                 */
+                int getIndex();
+
+                /**
                  * @brief Adds a child node to this node
                  *
                  * @param child The child node to add
                  */
                 void addChild(SceneNode *child);
+
+                /**
+                 * @brief Gets the number of children that belong to this node
+                 *
+                 * @return The number of children that belong to this node
+                 */
+                int getChildCount();
+
+                /**
+                 * @brief Getter for WS2::Scene::SceneNode::parent
+                 *
+                 * @return This node's parent
+                 */
+                SceneNode* getParent();
+
+                /**
+                 * @brief Setter for WS2::Scene::SceneNode::parent
+                 *
+                 * @param parent The parent to set
+                 */
+                void setParent(SceneNode *parent);
 
                 /**
                  * @return The position of the node relative to its parent

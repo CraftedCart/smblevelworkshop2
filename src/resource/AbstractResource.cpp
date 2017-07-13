@@ -10,7 +10,7 @@ namespace WS2 {
             this->id = id;
         }
 
-        QString& AbstractResource::getId() {
+        const QString& AbstractResource::getId() const {
             return id;
         }
 
