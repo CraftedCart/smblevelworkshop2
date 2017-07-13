@@ -22,7 +22,7 @@ namespace WS2 {
 
                 glm::vec3 position = glm::vec3(0.0f, 0.0f, 0.0f);
                 glm::vec3 rotation = glm::vec3(0.0f, 0.0f, 0.0f);
-                glm::vec3 scale = glm::vec3(0.0f, 0.0f, 0.0f);
+                glm::vec3 scale = glm::vec3(1.0f, 1.0f, 1.0f);
 
             public:
                 /**
@@ -30,22 +30,34 @@ namespace WS2 {
                  */
                 virtual ~SceneNode();
 
+                /**
+                 * @brief Getter for WS2::Scene::SceneNode::children
+                 *
+                 * @return A reference to the children QVector
+                 */
                 QVector<SceneNode*>& getChildren();
+
+                /**
+                 * @brief Adds a child node to this node
+                 *
+                 * @param child The child node to add
+                 */
+                void addChild(SceneNode *child);
 
                 /**
                  * @return The position of the node relative to its parent
                  */
-                glm::vec3& getPosition();
+                glm::vec3 getPosition() const;
 
                 /**
                  * @return The rotation of the node relative to its parent
                  */
-                glm::vec3& getRotation();
+                glm::vec3 getRotation() const;
 
                 /**
                  * @return The position of the node relative to its parent
                  */
-                glm::vec3& getScale();
+                glm::vec3 getScale() const;
         };
     }
 }

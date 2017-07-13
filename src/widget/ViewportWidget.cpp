@@ -3,6 +3,7 @@
 #include "MathUtils.hpp"
 #include "project/ProjectManager.hpp"
 #include "resource/ResourceManager.hpp"
+#include "scene/MeshSceneNode.hpp"
 #include <glm/gtx/transform.hpp>
 #include <glm/gtc/constants.hpp>
 #include <Qt>
@@ -245,19 +246,39 @@ namespace WS2 {
         Resource::ResourceScene *scene = Project::ProjectManager::getActiveProject()->getScene();
 
         if (scene != nullptr) {
-            QVector<Resource::ResourceMesh*> &meshes = scene->getMeshes();
-            for (int i = 0; i < meshes.size(); i++) {
-                GLManager::renderMesh(meshes.at(i));
-            }
+            //QVector<Resource::ResourceMesh*> &meshes = scene->getMeshes();
+            //for (int i = 0; i < meshes.size(); i++) {
+                //GLManager::renderMesh(meshes.at(i));
+            //}
+
+            recursiveDrawSceneNode(scene->getRootNode(), glm::mat4(1.0f));
         }
 
-        //drawText(glm::vec3(0.0f, 0.0f, 0.0f), QString("Origin"), QColor(255, 255, 255));
+        drawText(glm::vec3(0.0f, 0.0f, 0.0f), QString("Origin"), QColor(255, 255, 255));
 
         //Check for errors
         checkGLErrors("End of ViewportWidget::paintGL()");
 
         //Emit the frameRendered Signal
         emit frameRendered(deltaNanoseconds);
+    }
+
+    void ViewportWidget::recursiveDrawSceneNode(Scene::SceneNode *node, const glm::mat4 parentTransform) const {
+        glm::mat4 transform = parentTransform;
+        transform = glm::translate(transform, node->getPosition());
+        transform = glm::rotate(transform, node->getRotation().x, glm::vec3(1.0f, 0.0f, 0.0f));
+        transform = glm::rotate(transform, node->getRotation().y, glm::vec3(0.0f, 1.0f, 0.0f));
+        transform = glm::rotate(transform, node->getRotation().z, glm::vec3(0.0f, 0.0f, 1.0f));
+        transform = glm::scale(transform, node->getScale());
+
+        if (const Scene::MeshSceneNode *mesh = dynamic_cast<const Scene::MeshSceneNode*>(node)) {
+            glUniformMatrix4fv(GLManager::shaderModelID, 1, GL_FALSE, &transform[0][0]);
+            GLManager::renderMesh(mesh->getMesh());
+        }
+
+        for (int i = 0; i < node->getChildren().size(); i++) {
+            recursiveDrawSceneNode(node->getChildren().at(i), transform);
+        }
     }
 
     void ViewportWidget::keyPressEvent(QKeyEvent *event) {

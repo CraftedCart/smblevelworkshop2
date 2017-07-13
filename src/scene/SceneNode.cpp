@@ -11,16 +11,20 @@ namespace WS2 {
             return children;
         }
 
-        glm::vec3& SceneNode::getPosition() {
+        void SceneNode::addChild(SceneNode *child) {
+            children.append(child);
+        }
+
+        glm::vec3 SceneNode::getPosition() const {
             return position;
         }
 
-        glm::vec3& SceneNode::getRotation() {
-            return position;
+        glm::vec3 SceneNode::getRotation() const {
+            return rotation;
         }
 
-        glm::vec3& SceneNode::getScale() {
-            return position;
+        glm::vec3 SceneNode::getScale() const {
+            return scale;
         }
     }
 }

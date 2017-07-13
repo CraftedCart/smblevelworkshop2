@@ -1,6 +1,7 @@
 #include "resource/ResourceScene.hpp"
 #include "GLManager.hpp"
 #include "resource/ResourceManager.hpp"
+#include "scene/MeshSceneNode.hpp"
 #include <QByteArray>
 #include <QFileInfo>
 #include <QDebug>
@@ -17,8 +18,8 @@ namespace WS2 {
             addModel(file);
         }
 
-        QVector<ResourceMesh*>& ResourceScene::getMeshes() {
-            return meshes;
+        Scene::SceneNode* ResourceScene::getRootNode() {
+            return rootNode;
         }
 
         /**
@@ -28,7 +29,11 @@ namespace WS2 {
         void ResourceScene::addModel(QFile &file) {
             addFilePath(file.fileName());
             QVector<ResourceMesh*> newMeshes = ResourceManager::addModel(file, isLoaded());
-            meshes.append(newMeshes);
+
+            for (int i = 0; i < newMeshes.size(); i++) {
+                Scene::MeshSceneNode *meshNode = new Scene::MeshSceneNode(newMeshes.at(i));
+                rootNode->addChild(meshNode);
+            }
         }
 
        /**

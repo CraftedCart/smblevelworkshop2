@@ -8,7 +8,7 @@ namespace WS2 {
             this->mesh = mesh;
         }
 
-        Resource::ResourceMesh* MeshSceneNode::getMesh() {
+        const Resource::ResourceMesh* MeshSceneNode::getMesh() const {
             return mesh;
         }
     }

@@ -8,6 +8,7 @@
 
 #include "resource/ResourceMesh.hpp"
 #include "resource/AbstractResource.hpp"
+#include "scene/SceneNode.hpp"
 #include <QFile>
 
 namespace WS2 {
@@ -17,10 +18,7 @@ namespace WS2 {
          */
         class ResourceScene : public AbstractResource {
             protected:
-                /**
-                 * @brief A vector of 3D Meshes in the Scene
-                 */
-                QVector<Resource::ResourceMesh*> meshes;
+                Scene::SceneNode *rootNode = new Scene::SceneNode();
 
             public:
                 /**
@@ -47,10 +45,7 @@ namespace WS2 {
                  */
                 void unload() override;
 
-                /**
-                 * @return The meshes that belong to this scene
-                 */
-                QVector<Resource::ResourceMesh*>& getMeshes();
+                Scene::SceneNode* getRootNode();
 
                 /**
                  * @brief Adds the file path to the resource filePaths vector, and append a model to the scene from the

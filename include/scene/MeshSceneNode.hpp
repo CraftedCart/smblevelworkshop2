@@ -33,7 +33,7 @@ namespace WS2 {
                  *
                  * @return A pointer to the mesh
                  */
-                Resource::ResourceMesh* getMesh();
+                const Resource::ResourceMesh* getMesh() const;
         };
     }
 }
