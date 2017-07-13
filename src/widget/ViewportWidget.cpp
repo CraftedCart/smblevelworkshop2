@@ -246,11 +246,6 @@ namespace WS2 {
         Resource::ResourceScene *scene = Project::ProjectManager::getActiveProject()->getScene();
 
         if (scene != nullptr) {
-            //QVector<Resource::ResourceMesh*> &meshes = scene->getMeshes();
-            //for (int i = 0; i < meshes.size(); i++) {
-                //GLManager::renderMesh(meshes.at(i));
-            //}
-
             recursiveDrawSceneNode(scene->getRootNode(), glm::mat4(1.0f));
         }
 
