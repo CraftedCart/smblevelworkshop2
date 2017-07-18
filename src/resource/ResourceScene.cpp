@@ -26,6 +26,7 @@ namespace WS2 {
         ResourceScene::~ResourceScene() {
             delete rootNode;
             delete physicsManager;
+            if (physicsDebugDrawer != nullptr) delete physicsDebugDrawer;
         }
 
         void ResourceScene::initPhysicsDebugDrawer() {
