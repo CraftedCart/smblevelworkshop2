@@ -1,5 +1,6 @@
 #include "scene/MeshSceneNode.hpp"
-#include "glm/gtc/quaternion.hpp"
+#include "MathUtils.hpp"
+#include <glm/gtc/quaternion.hpp>
 
 namespace WS2 {
     namespace Scene {
@@ -22,7 +23,17 @@ namespace WS2 {
         void MeshSceneNode::initPhysics() {
             glm::quat rotQuat = glm::quat(rotation);
 
-            physicsCollisionShape = new btBoxShape(btVector3(1.0f, 1.0f, 1.0f)); //TODO: Mesh shape
+            //Construct mesh collision shape
+            btTriangleMesh *triMesh = new btTriangleMesh();
+            for (int i = 0; i < mesh->getIndices().size(); i += 3) {
+                triMesh->addTriangle(
+                        MathUtils::toBtVector3(mesh->getVertices().at(mesh->getIndices().at(i)).position),
+                        MathUtils::toBtVector3(mesh->getVertices().at(mesh->getIndices().at(i + 1)).position),
+                        MathUtils::toBtVector3(mesh->getVertices().at(mesh->getIndices().at(i + 2)).position)
+                        );
+            }
+
+            physicsCollisionShape = new btBvhTriangleMeshShape(triMesh, true);
 
             physicsMotionState = new btDefaultMotionState(btTransform(
                         btQuaternion(rotQuat.x, rotQuat.y, rotQuat.z, rotQuat.w),
