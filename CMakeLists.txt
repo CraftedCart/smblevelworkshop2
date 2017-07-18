@@ -28,6 +28,9 @@ if(APPLE) #-lassimp doesn't seem to work with homebrew installed Assimp
     set(ASSIMP_LIBRARIES /usr/local/lib/libassimp.dylib)
 endif(APPLE)
 
+find_package(Bullet REQUIRED)
+include_directories(${BULLET_INCLUDE_DIRS})
+
 include_directories(./include)
 
 set(SOURCE_FILES
@@ -53,6 +56,8 @@ set(SOURCE_FILES
     ./src/WS2.cpp
     ./src/scene/SceneNode.cpp
     ./src/scene/MeshSceneNode.cpp
+    ./src/physics/PhysicsManager.cpp
+    ./src/PhysicsDebugDrawer.cpp
     )
 
 set(HEADER_FILES
@@ -79,6 +84,8 @@ set(HEADER_FILES
     ./include/WS2.hpp
     ./include/scene/SceneNode.hpp
     ./include/scene/MeshSceneNode.hpp
+    ./include/physics/PhysicsManger.hpp
+    ./include/PhysicsDebugDrawer.hpp
     )
 
 set(RESOURCE_FILES
@@ -95,5 +102,6 @@ target_link_libraries(${PROJECT_NAME}
     ${OPENGL_LIBRARIES}
     ${GLEW_LIBRARIES}
     ${ASSIMP_LIBRARIES}
+    ${BULLET_LIBRARIES}
     )
 

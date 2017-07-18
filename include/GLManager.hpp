@@ -28,6 +28,11 @@ namespace WS2 {
         extern GLuint shaderNormID;
         extern GLuint shaderTexID;
 
+        extern GLuint physicsDebugProgID;
+        extern GLuint physicsDebugShaderModelID;
+        extern GLuint physicsDebugShaderViewID;
+        extern GLuint physicsDebugShaderProjID;
+
         /**
          * @brief Loads GLSL shaders
          *

@@ -20,6 +20,7 @@ The original SMB Level Workshop has been quite the learning experience for me, i
 - GLEW
 - GLM
 - Assimp
+- Bullet Physics
 
 ### Building
 

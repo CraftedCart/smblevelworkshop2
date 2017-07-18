@@ -18,6 +18,8 @@
         <file>Icons/Import.png</file>
         <file>Shaders/stage.vert</file>
         <file>Shaders/stage.frag</file>
+        <file>Shaders/physicsDebug.vert</file>
+        <file>Shaders/physicsDebug.frag</file>
         <file>Images/uvtemplate.png</file>
     </qresource>
 </RCC>

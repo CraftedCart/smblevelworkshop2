@@ -13,6 +13,11 @@ namespace WS2 {
         GLuint shaderNormID;
         GLuint shaderTexID;
 
+        GLuint physicsDebugProgID;
+        GLuint physicsDebugShaderModelID;
+        GLuint physicsDebugShaderViewID;
+        GLuint physicsDebugShaderProjID;
+
         /**
          * @brief Load, compile and link the shader files given
          *

@@ -8,16 +8,28 @@
 
 #include "scene/SceneNode.hpp"
 #include "resource/ResourceMesh.hpp"
+#include <btBulletDynamicsCommon.h>
 
 namespace WS2 {
     namespace Scene {
         class MeshSceneNode : public SceneNode {
             protected:
                 Resource::ResourceMesh *mesh;
+                btCollisionShape *physicsCollisionShape;
+                btDefaultMotionState *physicsMotionState;
+                btRigidBody *physicsRigidBody;
+
+                /**
+                 * @brief Initializes physics for the mesh
+                 */
+                void initPhysics();
 
             public:
                 /**
                  * @brief Constructs a MeshSceneNode with no mesh
+                 *
+                 * @note This will init physics, but the rigid body is **not** added to any dynamics world.
+                 *       Use `getRigidBody()` to get the rigid body, and add it to a dynamics world.
                  *
                  * @param name The name of the node
                  */
@@ -26,10 +38,18 @@ namespace WS2 {
                 /**
                  * @brief Constructs a MeshSceneNode with a mesh
                  *
+                 * @note This will init physics, but the rigid body is **not** added to any dynamics world.
+                 *       Use `getRigidBody()` to get the rigid body, and add it to a dynamics world.
+                 *
                  * @param name The name of the node
                  * @param mesh A pointer to the mesh to set
                  */
                 MeshSceneNode(const QString name, Resource::ResourceMesh *mesh);
+
+                /**
+                 * @brief Frees up resources
+                 */
+                ~MeshSceneNode();
 
                 /**
                  * @brief Getter for WS2::Scene::MeshSceneNode::mesh
@@ -37,6 +57,13 @@ namespace WS2 {
                  * @return A pointer to the mesh
                  */
                 const Resource::ResourceMesh* getMesh() const;
+
+                /**
+                 * @brief Getter for WS2::Scene::MeshSceneNode::physicsRigidBody
+                 *
+                 * @return A pointer to this node's rigid body
+                 */
+                btRigidBody* getPhysicsRigidBody();
         };
     }
 }

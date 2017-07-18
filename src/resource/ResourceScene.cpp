@@ -12,6 +12,7 @@ namespace WS2 {
         ResourceScene::ResourceScene() {
             rootNode = new Scene::SceneNode("root");
             rootNode->addChild(new Scene::SceneNode(QCoreApplication::translate("SceneNode", "Static")));
+            physicsManager = new Physics::PhysicsManager();
         }
 
         /**
@@ -22,8 +23,27 @@ namespace WS2 {
             addModel(file);
         }
 
+        ResourceScene::~ResourceScene() {
+            delete rootNode;
+            delete physicsManager;
+        }
+
+        void ResourceScene::initPhysicsDebugDrawer() {
+            physicsDebugDrawer = new PhysicsDebugDrawer();
+            physicsDebugDrawer->setDebugMode(btIDebugDraw::DBG_DrawWireframe);
+            physicsManager->getDynamicsWorld()->setDebugDrawer(physicsDebugDrawer);
+        }
+
+        PhysicsDebugDrawer* ResourceScene::getPhysicsDebugDrawer() {
+            return physicsDebugDrawer;
+        }
+
         Scene::SceneNode* ResourceScene::getRootNode() {
             return rootNode;
+        }
+
+        Physics::PhysicsManager* ResourceScene::getPhysicsManager() {
+            return physicsManager;
         }
 
         /**
@@ -46,11 +66,12 @@ namespace WS2 {
                 //The .split("@")[0] gets the part of the name before the @ symbol, which should be the name of the mesh
                 //TODO: Make ResourceMesh store the name of a mesh, instead of doing string manip to get the name
                 Scene::MeshSceneNode *meshNode = new Scene::MeshSceneNode(newMeshes.at(i)->getId().split("@")[0], newMeshes.at(i));
+                physicsManager->addRigidBody(meshNode->getPhysicsRigidBody());
                 staticNode->addChild(meshNode);
             }
         }
 
-       /**
+        /**
          * @throws WS2::Exception::IOException When failing to read the file
          * @throws WS2::Exception::RuntimeException When Assimp fails to generate an aiScene
          */

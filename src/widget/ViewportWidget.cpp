@@ -4,6 +4,8 @@
 #include "project/ProjectManager.hpp"
 #include "resource/ResourceManager.hpp"
 #include "scene/MeshSceneNode.hpp"
+#include "physics/PhysicsManger.hpp"
+#include "PhysicsDebugDrawer.hpp"
 #include <glm/gtx/transform.hpp>
 #include <glm/gtc/constants.hpp>
 #include <Qt>
@@ -59,7 +61,7 @@ namespace WS2 {
         //Cull back faces
         glEnable(GL_CULL_FACE);
 
-        //Load the shader
+        //Load the shaders
         QFile vertFile(":/Workshop2/Shaders/stage.vert");
         QFile fragFile(":/Workshop2/Shaders/stage.frag");
         GLManager::progID = GLManager::loadShaders(&vertFile, &fragFile);
@@ -71,8 +73,21 @@ namespace WS2 {
         GLManager::shaderNormID = glGetUniformLocation(GLManager::progID, "normMat");
         GLManager::shaderTexID = glGetUniformLocation(GLManager::progID, "texSampler");
 
+        //Load the physics debug shaders
+        //TODO: Make loading this an option
+        QFile physVertFile(":/Workshop2/Shaders/physicsDebug.vert");
+        QFile physFragFile(":/Workshop2/Shaders/physicsDebug.frag");
+        GLManager::physicsDebugProgID = GLManager::loadShaders(&physVertFile, &physFragFile);
+
+        //Get uniform IDs
+        GLManager::physicsDebugShaderViewID = glGetUniformLocation(GLManager::physicsDebugProgID, "viewMat");
+        GLManager::physicsDebugShaderProjID = glGetUniformLocation(GLManager::physicsDebugProgID, "projMat");
+
         //Mark the initial project as loaded, so that models added to the scene are also loaded
         Project::ProjectManager::getActiveProject()->getScene()->load();
+
+        //TODO: Make the debug drawer an option, and if enabled, load for each scene
+        Project::ProjectManager::getActiveProject()->getScene()->initPhysicsDebugDrawer();
 
         //Start the elapsed timer
         elapsedTimer.start();
@@ -215,10 +230,10 @@ namespace WS2 {
         prevNanosecondsElapsed = elapsedNanoseconds;
 
         //Projection matrix
-        glm::mat4 proj = glm::perspective(glm::radians(fov), (float) width() / (float) height(), 0.1f, 1000.0f);
+        proj = glm::perspective(glm::radians(fov), (float) width() / (float) height(), 0.1f, 1000.0f);
 
         //Camera matrix
-        glm::mat4 view = glm::lookAt(
+        view = glm::lookAt(
                 *cameraPos,
                 *cameraPos + forward,
                 up
@@ -238,7 +253,7 @@ namespace WS2 {
         glUseProgram(GLManager::progID);
 
         //Give the matrices to the bound shader
-        glUniformMatrix4fv(GLManager::shaderModelID, 1, GL_FALSE, &model[0][0]);
+        //glUniformMatrix4fv(GLManager::shaderModelID, 1, GL_FALSE, &model[0][0]); //Model matrix set by recursiveDrawSceneNode
         glUniformMatrix4fv(GLManager::shaderViewID, 1, GL_FALSE, &view[0][0]);
         glUniformMatrix4fv(GLManager::shaderProjID, 1, GL_FALSE, &proj[0][0]);
         glUniformMatrix3fv(GLManager::shaderNormID, 1, GL_FALSE, &norm[0][0]);
@@ -250,6 +265,20 @@ namespace WS2 {
         }
 
         //drawText(glm::vec3(0.0f, 0.0f, 0.0f), QString("Origin"), QColor(255, 255, 255));
+
+        //Physics debug drawing
+        PhysicsDebugDrawer *physicsDebugDrawer = Project::ProjectManager::getActiveProject()->getScene()->getPhysicsDebugDrawer();
+        if (physicsDebugDrawer != nullptr) {
+            glUseProgram(GLManager::physicsDebugProgID);
+
+            //Give the matrices to the bound shader
+            glUniformMatrix4fv(GLManager::physicsDebugShaderModelID, 1, GL_FALSE, &model[0][0]);
+            glUniformMatrix4fv(GLManager::physicsDebugShaderViewID, 1, GL_FALSE, &view[0][0]);
+            glUniformMatrix4fv(GLManager::physicsDebugShaderProjID, 1, GL_FALSE, &proj[0][0]);
+
+            Project::ProjectManager::getActiveProject()->getScene()->getPhysicsManager()->getDynamicsWorld()->debugDrawWorld();
+            physicsDebugDrawer->drawAll();
+        }
 
         //Check for errors
         checkGLErrors("End of ViewportWidget::paintGL()");
@@ -287,6 +316,15 @@ namespace WS2 {
     void ViewportWidget::mousePressEvent(QMouseEvent *event) {
         //TODO: Rebindable mouse button
         switch (event->button()) {
+            case Qt::LeftButton:
+                {
+                    QPoint cursorPos = QCursor::pos();
+                    QPoint tlWidgetPos = mapToGlobal(pos()); //tl = Top Left
+                    QVector2D relCursorPosQt = QVector2D(cursorPos - tlWidgetPos); //rel = Relative
+                    glm::vec2 relCursorPos = MathUtils::toGlmVec2(relCursorPosQt);
+                    selectNodeAtScreenPos(relCursorPos);
+                    break;
+                }
             case Qt::RightButton:
                 cameraNavMode = EnumCameraNav::NAV_FIRST_PERSON_FLY;
                 break;
@@ -337,6 +375,57 @@ namespace WS2 {
             }
 
             qWarning() << "GL Error:" << err << "-" << errString << "- Found at:" << location;
+        }
+    }
+
+    void ViewportWidget::selectNodeAtScreenPos(const glm::vec2 pos) {
+        //NDC = Normalized device coordinates
+        glm::vec4 rayStartNdc(
+                (pos.x / width() - 0.5f) * 2.0f,
+                -(pos.y / height() - 0.5f) * 2.0f,
+                -1.0f, //The near clipping plane maps to -1 Z in NDC
+                1.0f
+                );
+
+        glm::vec4 rayEndNdc(
+                (pos.x / width() - 0.5f) * 2.0f,
+                -(pos.y / height() - 0.5f) * 2.0f,
+                0.0f,
+                1.0f
+                );
+
+        glm::mat4 inv = glm::inverse(proj * view);
+
+        glm::vec4 rayStartWorld = inv * rayStartNdc;
+        rayStartWorld /= rayStartWorld.w;
+
+        glm::vec4 rayEndWorld = inv * rayEndNdc;
+        rayEndWorld /= rayEndWorld.w;
+
+        //Get the ray direction
+        glm::vec3 rayDirWorld(rayStartWorld - rayEndWorld);
+        rayDirWorld = glm::normalize(rayDirWorld);
+
+        //Raycast
+        glm::vec3 raycastEnd = *cameraPos + rayDirWorld * 1000.0f;
+        raycastEnd *= -1.0f; //I have no idea why I need to negate everything here, but I do, and it works
+
+        btCollisionWorld::ClosestRayResultCallback rayCallback(
+                btVector3(MathUtils::toBtVector3(*cameraPos)),
+                btVector3(MathUtils::toBtVector3(raycastEnd))
+                );
+
+        Project::ProjectManager::getActiveProject()->getScene()->getPhysicsManager()->getDynamicsWorld()->rayTest(
+                btVector3(MathUtils::toBtVector3(*cameraPos)),
+                btVector3(MathUtils::toBtVector3(raycastEnd)),
+                rayCallback
+                );
+
+        if (rayCallback.hasHit()) {
+            QString nodeName = static_cast<Scene::SceneNode*>(rayCallback.m_collisionObject->getUserPointer())->getName();
+            qDebug() << "Hit!" << nodeName;
+        } else {
+            qDebug() << "Miss!";
         }
     }
 }

@@ -37,6 +37,9 @@ namespace WS2 {
             float rotSpeed = 0.01f;
             EnumCameraNav cameraNavMode = EnumCameraNav::NAV_FIXED;
 
+            glm::mat4 proj;
+            glm::mat4 view;
+
         public:
             explicit ViewportWidget(QWidget *parent = nullptr);
             ~ViewportWidget();
@@ -108,6 +111,8 @@ namespace WS2 {
              *                 down issues.
              */
             void checkGLErrors(QString location);
+
+            void selectNodeAtScreenPos(const glm::vec2 pos);
 
         signals:
             void frameRendered(qint64 deltaNanoseconds);

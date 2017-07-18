@@ -9,6 +9,8 @@
 #include "resource/ResourceMesh.hpp"
 #include "resource/AbstractResource.hpp"
 #include "scene/SceneNode.hpp"
+#include "physics/PhysicsManger.hpp"
+#include "PhysicsDebugDrawer.hpp"
 #include <QFile>
 
 namespace WS2 {
@@ -19,6 +21,8 @@ namespace WS2 {
         class ResourceScene : public AbstractResource {
             protected:
                 Scene::SceneNode *rootNode;
+                Physics::PhysicsManager *physicsManager;
+                PhysicsDebugDrawer *physicsDebugDrawer;
 
             public:
                 /**
@@ -36,6 +40,25 @@ namespace WS2 {
                 ResourceScene(QFile &file);
 
                 /**
+                 * @brief Frees up resources
+                 */
+                ~ResourceScene();
+
+                /**
+                 * @brief Creates and sets the physics debug drawer
+                 *
+                 * @note This needs to be done when the correct OpenGL context is bound
+                 */
+                void initPhysicsDebugDrawer();
+
+                /**
+                 * @brief Getter for physicsDebugDrawer
+                 *
+                 * @return A pointer to the physics debug drawer, or nullptr if it hasn't been initialized
+                 */
+                PhysicsDebugDrawer* getPhysicsDebugDrawer();
+
+                /**
                  * @brief Loads all models from the filePaths vector
                  */
                 void load() override;
@@ -45,7 +68,19 @@ namespace WS2 {
                  */
                 void unload() override;
 
+                /**
+                 * @brief Getter for rootNode
+                 *
+                 * @return This scene's root node of the scenegraph
+                 */
                 Scene::SceneNode* getRootNode();
+
+                /**
+                 * @brief Getter for physicsManager
+                 *
+                 * @return This scene's physics manager
+                 */
+                Physics::PhysicsManager* getPhysicsManager();
 
                 /**
                  * @brief Adds the file path to the resource filePaths vector, and append a model to the scene from the
