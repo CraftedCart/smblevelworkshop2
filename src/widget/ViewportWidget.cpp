@@ -100,7 +100,7 @@ namespace WS2 {
     void ViewportWidget::drawText(const glm::vec3 &pos, const QString &str, const QColor &col) {
         //TODO Stop calling glm::project twice
         //Projection matrix
-        glm::mat4 proj = glm::perspective(glm::radians(fov), (float) width() / (float) height(), 0.1f, 1000.0f);
+        glm::mat4 proj = glm::perspective(glm::radians(fov), (float) width() / (float) height(), 0.1f, 2000.0f);
 
         //Camera matrix
         glm::mat4 view = glm::lookAt(
@@ -230,7 +230,7 @@ namespace WS2 {
         prevNanosecondsElapsed = elapsedNanoseconds;
 
         //Projection matrix
-        proj = glm::perspective(glm::radians(fov), (float) width() / (float) height(), 0.1f, 1000.0f);
+        proj = glm::perspective(glm::radians(fov), (float) width() / (float) height(), 0.1f, 2000.0f);
 
         //Camera matrix
         view = glm::lookAt(
@@ -407,7 +407,7 @@ namespace WS2 {
         rayDirWorld = glm::normalize(rayDirWorld);
 
         //Raycast
-        glm::vec3 raycastEnd = *cameraPos + rayDirWorld * 1000.0f;
+        glm::vec3 raycastEnd = *cameraPos + rayDirWorld * 2000.0f;
         raycastEnd *= -1.0f; //I have no idea why I need to negate everything here, but I do, and it works
 
         btCollisionWorld::ClosestRayResultCallback rayCallback(
