@@ -1,19 +1,21 @@
 #include "widget/OutlinerWidget.hpp"
 
 namespace WS2 {
-    OutlinerWidget::OutlinerWidget(QWidget *parent) : QTreeView(parent) {}
+    namespace Widget {
+        OutlinerWidget::OutlinerWidget(QWidget *parent) : QTreeView(parent) {}
 
-    void OutlinerWidget::selectionChanged(QVector<QModelIndex> selectedObjects) {
-        //Deselect all first
-        clearSelection();
+        void OutlinerWidget::selectionChanged(QVector<QModelIndex> selectedObjects) {
+            //Deselect all first
+            clearSelection();
 
-        QItemSelectionModel *selModel = selectionModel();
+            QItemSelectionModel *selModel = selectionModel();
 
-        for (int i = 0; i < selectedObjects.size(); i++) {
-            selModel->select(QItemSelection(selectedObjects.at(i), selectedObjects.at(i)), QItemSelectionModel::Select);
+            for (int i = 0; i < selectedObjects.size(); i++) {
+                selModel->select(QItemSelection(selectedObjects.at(i), selectedObjects.at(i)), QItemSelectionModel::Select);
+            }
+
+            setSelectionModel(selModel);
         }
-
-        setSelectionModel(selModel);
     }
 }
 

@@ -15,23 +15,14 @@
   </property>
   <widget class="QWidget" name="centralWidget">
    <layout class="QGridLayout" name="gridLayout">
-    <property name="leftMargin">
-     <number>0</number>
-    </property>
-    <property name="topMargin">
-     <number>0</number>
-    </property>
-    <property name="rightMargin">
-     <number>0</number>
-    </property>
-    <property name="bottomMargin">
+    <property name="margin">
      <number>0</number>
     </property>
     <property name="spacing">
      <number>0</number>
     </property>
     <item row="0" column="0">
-     <widget class="WS2::ViewportWidget" name="viewportWidget"/>
+     <widget class="WS2::Widget::ViewportWidget" name="viewportWidget" native="true"/>
     </item>
    </layout>
   </widget>
@@ -139,23 +130,14 @@
    </attribute>
    <widget class="QWidget" name="outlinerContentsWidget">
     <layout class="QGridLayout" name="gridLayout_2">
-     <property name="leftMargin">
-      <number>0</number>
-     </property>
-     <property name="topMargin">
-      <number>0</number>
-     </property>
-     <property name="rightMargin">
-      <number>0</number>
-     </property>
-     <property name="bottomMargin">
+     <property name="margin">
       <number>0</number>
      </property>
      <property name="spacing">
       <number>0</number>
      </property>
      <item row="0" column="0">
-      <widget class="WS2::OutlinerWidget" name="outlinerTreeView">
+      <widget class="WS2::Widget::OutlinerWidget" name="outlinerTreeView">
        <property name="selectionMode">
         <enum>QAbstractItemView::ExtendedSelection</enum>
        </property>
@@ -197,16 +179,7 @@
    </attribute>
    <widget class="QWidget" name="resourcesContentsWidget">
     <layout class="QGridLayout" name="gridLayout_3">
-     <property name="leftMargin">
-      <number>0</number>
-     </property>
-     <property name="topMargin">
-      <number>0</number>
-     </property>
-     <property name="rightMargin">
-      <number>0</number>
-     </property>
-     <property name="bottomMargin">
+     <property name="margin">
       <number>0</number>
      </property>
      <property name="spacing">
@@ -479,14 +452,14 @@
  <layoutdefault spacing="6" margin="11"/>
  <customwidgets>
   <customwidget>
-   <class>WS2::ViewportWidget</class>
-   <extends>QOpenGLWidget</extends>
-   <header>widget/ViewportWidget.hpp</header>
-  </customwidget>
-  <customwidget>
-   <class>WS2::OutlinerWidget</class>
+   <class>WS2::Widget::OutlinerWidget</class>
    <extends>QTreeView</extends>
    <header>widget/OutlinerWidget.hpp</header>
+  </customwidget>
+  <customwidget>
+   <class>WS2::Widget::ViewportWidget</class>
+   <extends>QWidget</extends>
+   <header>widget/ViewportWidget.hpp</header>
   </customwidget>
  </customwidgets>
  <resources>

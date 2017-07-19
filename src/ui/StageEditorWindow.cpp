@@ -22,13 +22,13 @@ namespace WS2 {
 
             //If the selection is changed, update the outliner tree view
             connect(UI::ModelManager::modelOutliner, &UI::ModelOutliner::onSelectionChanged,
-                    ui->outlinerTreeView, &OutlinerWidget::selectionChanged);
+                    ui->outlinerTreeView, &Widget::OutlinerWidget::selectionChanged);
 
             //Hide the following dock widgets on start
             ui->resourcesDockWidget->hide();
 
             connect(ui->actionQuit, SIGNAL(triggered()), QApplication::instance(), SLOT(quit()));
-            connect(ui->viewportWidget, &ViewportWidget::frameRendered, this, &StageEditorWindow::viewportFrameRendered);
+            connect(ui->viewportWidget, &Widget::ViewportWidget::frameRendered, this, &StageEditorWindow::viewportFrameRendered);
             connect(ui->actionImport, &QAction::triggered, this, &StageEditorWindow::askImportFiles);
         }
 
