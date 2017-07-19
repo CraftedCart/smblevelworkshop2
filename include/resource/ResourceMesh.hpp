@@ -16,6 +16,8 @@ namespace WS2 {
          * @todo Load and unload functions
          */
         class ResourceMesh : public AbstractResource {
+            Q_OBJECT
+
             protected:
                 QVector<Model::Vertex> vertices;
                 QVector<unsigned int> indices;

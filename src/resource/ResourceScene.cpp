@@ -2,16 +2,20 @@
 #include "GLManager.hpp"
 #include "resource/ResourceManager.hpp"
 #include "scene/MeshSceneNode.hpp"
+#include "ui/ModelManager.hpp"
 #include <QByteArray>
 #include <QFileInfo>
-#include <QDebug>
-#include <QCoreApplication>
 
 namespace WS2 {
     namespace Resource {
         ResourceScene::ResourceScene() {
             rootNode = new Scene::SceneNode("root");
-            rootNode->addChild(new Scene::SceneNode(QCoreApplication::translate("SceneNode", "Static")));
+            rootNode->addChild(new Scene::SceneNode(tr("Static")));
+
+            selectionManager = new Scene::SceneSelectionManager();
+            connect(selectionManager, &Scene::SceneSelectionManager::onSelectionChanged,
+                    this, &ResourceScene::onSelectionChanged);
+
             physicsManager = new Physics::PhysicsManager();
         }
 
@@ -25,6 +29,7 @@ namespace WS2 {
 
         ResourceScene::~ResourceScene() {
             delete rootNode;
+            delete selectionManager;
             delete physicsManager;
             if (physicsDebugDrawer != nullptr) delete physicsDebugDrawer;
         }
@@ -43,6 +48,10 @@ namespace WS2 {
             return rootNode;
         }
 
+        Scene::SceneSelectionManager* ResourceScene::getSelectionManager() {
+            return selectionManager;
+        }
+
         Physics::PhysicsManager* ResourceScene::getPhysicsManager() {
             return physicsManager;
         }
@@ -56,10 +65,10 @@ namespace WS2 {
             QVector<ResourceMesh*> newMeshes = ResourceManager::addModel(file, isLoaded());
 
             //Get the static node
-            Scene::SceneNode *staticNode = rootNode->getChildByName(QCoreApplication::translate("SceneNode", "Static"));
+            Scene::SceneNode *staticNode = rootNode->getChildByName(tr("Static"));
             //Create the static node if it doesn't exist
             if (!staticNode) {
-                staticNode = new Scene::SceneNode(QCoreApplication::translate("SceneNode", "Static"));
+                staticNode = new Scene::SceneNode(tr("Static"));
                 rootNode->addChild(staticNode);
             }
 
@@ -87,6 +96,10 @@ namespace WS2 {
 
         void ResourceScene::unload() {
             loaded = false;
+        }
+
+        void ResourceScene::onSelectionChanged(QVector<Scene::SceneNode*>& selectedObjects) {
+            UI::ModelManager::modelOutliner->selectionChanged(selectedObjects);
         }
     }
 }

@@ -8,6 +8,7 @@
 
 #include <QVector>
 #include <QString>
+#include <QObject>
 
 namespace WS2 {
     namespace Resource {
@@ -15,7 +16,9 @@ namespace WS2 {
         /**
          * @brief Base class for all resources
          */
-        class AbstractResource {
+        class AbstractResource : public QObject {
+            Q_OBJECT
+
             protected:
                 /**
                  * @brief A unique identifier for this resource

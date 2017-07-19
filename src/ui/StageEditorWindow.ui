@@ -41,7 +41,7 @@
      <x>0</x>
      <y>0</y>
      <width>1280</width>
-     <height>22</height>
+     <height>23</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuFile">
@@ -155,7 +155,7 @@
       <number>0</number>
      </property>
      <item row="0" column="0">
-      <widget class="QTreeView" name="outlinerTreeView">
+      <widget class="WS2::OutlinerWidget" name="outlinerTreeView">
        <property name="selectionMode">
         <enum>QAbstractItemView::ExtendedSelection</enum>
        </property>
@@ -482,6 +482,11 @@
    <class>WS2::ViewportWidget</class>
    <extends>QOpenGLWidget</extends>
    <header>widget/ViewportWidget.hpp</header>
+  </customwidget>
+  <customwidget>
+   <class>WS2::OutlinerWidget</class>
+   <extends>QTreeView</extends>
+   <header>widget/OutlinerWidget.hpp</header>
   </customwidget>
  </customwidgets>
  <resources>

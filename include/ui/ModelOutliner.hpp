@@ -32,7 +32,36 @@ namespace WS2 {
                 Qt::ItemFlags flags(const QModelIndex &index) const override;
                 //QVariant headerData(int section, Qt::Orientation orientation, int role = Qt::DisplayRole) const override;
 
+                /**
+                 * @brief Returns the model index for a given node
+                 *
+                 * @param node The node to find the model index for
+                 *
+                 * @return A QModelIndex corresponding to the node
+                 */
+                QModelIndex findIndexFromNode(Scene::SceneNode *node);
+
+                /**
+                 * @brief Adds an entry for a new node
+                 *
+                 * @param addedNode The newly added node
+                 */
                 void onNodeAdded(Scene::SceneNode *addedNode);
+
+                /**
+                 * @brief Call this when the selection changes
+                 *
+                 * @param selectedObjects A vector of selected objects
+                 */
+                void selectionChanged(QVector<Scene::SceneNode*>& selectedObjects);
+
+            signals:
+                /**
+                 * @brief Emitted when the selection has been changed
+                 *
+                 * @param indices A vector of model indices
+                 */
+                void onSelectionChanged(QVector<QModelIndex> indices);
         };
     }
 }

@@ -14,6 +14,8 @@
 namespace WS2 {
     namespace Resource {
         class ResourceTexture : public AbstractResource {
+            Q_OBJECT
+
             protected:
                 /**
                  * @brief The GL texture object

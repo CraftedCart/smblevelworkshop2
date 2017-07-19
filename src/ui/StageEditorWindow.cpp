@@ -20,6 +20,10 @@ namespace WS2 {
             ui->resourcesTableView->setModel(UI::ModelManager::modelResources);
             ui->outlinerTreeView->setModel(UI::ModelManager::modelOutliner);
 
+            //If the selection is changed, update the outliner tree view
+            connect(UI::ModelManager::modelOutliner, &UI::ModelOutliner::onSelectionChanged,
+                    ui->outlinerTreeView, &OutlinerWidget::selectionChanged);
+
             //Hide the following dock widgets on start
             ui->resourcesDockWidget->hide();
 

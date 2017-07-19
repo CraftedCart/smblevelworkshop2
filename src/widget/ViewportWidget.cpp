@@ -422,10 +422,12 @@ namespace WS2 {
                 );
 
         if (rayCallback.hasHit()) {
-            QString nodeName = static_cast<Scene::SceneNode*>(rayCallback.m_collisionObject->getUserPointer())->getName();
-            qDebug() << "Hit!" << nodeName;
+            //Select the hit node
+            Scene::SceneNode *node = static_cast<Scene::SceneNode*>(rayCallback.m_collisionObject->getUserPointer());
+            Project::ProjectManager::getActiveProject()->getScene()->getSelectionManager()->selectOnly(node);
         } else {
-            qDebug() << "Miss!";
+            //Deselect all if nothing was hit
+            Project::ProjectManager::getActiveProject()->getScene()->getSelectionManager()->clearSelection();
         }
     }
 }

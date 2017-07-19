@@ -37,6 +37,7 @@ set(SOURCE_FILES
     ./src/main.cpp
     ./src/ui/StageEditorWindow.cpp
     ./src/widget/ViewportWidget.cpp
+    ./src/widget/OutlinerWidget.cpp
     ./src/GLManager.cpp
     ./src/MathUtils.cpp
     ./src/exception/Exception.cpp
@@ -56,6 +57,7 @@ set(SOURCE_FILES
     ./src/WS2.cpp
     ./src/scene/SceneNode.cpp
     ./src/scene/MeshSceneNode.cpp
+    ./src/scene/SceneSelectionManager.cpp
     ./src/physics/PhysicsManager.cpp
     ./src/PhysicsDebugDrawer.cpp
     )
@@ -63,6 +65,7 @@ set(SOURCE_FILES
 set(HEADER_FILES
     ./include/ui/StageEditorWindow.hpp
     ./include/widget/ViewportWidget.hpp
+    ./include/widget/OutlinerWidget.hpp
     ./include/GLManager.hpp
     ./include/EnumCameraNav.hpp
     ./include/MathUtils.hpp
@@ -84,6 +87,7 @@ set(HEADER_FILES
     ./include/WS2.hpp
     ./include/scene/SceneNode.hpp
     ./include/scene/MeshSceneNode.hpp
+    ./include/scene/SceneSelectionManager.hpp
     ./include/physics/PhysicsManger.hpp
     ./include/PhysicsDebugDrawer.hpp
     )

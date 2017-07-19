@@ -9,6 +9,7 @@
 #include "resource/ResourceMesh.hpp"
 #include "resource/AbstractResource.hpp"
 #include "scene/SceneNode.hpp"
+#include "scene/SceneSelectionManager.hpp"
 #include "physics/PhysicsManger.hpp"
 #include "PhysicsDebugDrawer.hpp"
 #include <QFile>
@@ -19,8 +20,11 @@ namespace WS2 {
          * @todo Meshes loaded should belong to ResourceManager, not ResourceScene
          */
         class ResourceScene : public AbstractResource {
+            Q_OBJECT
+
             protected:
                 Scene::SceneNode *rootNode;
+                Scene::SceneSelectionManager *selectionManager;
                 Physics::PhysicsManager *physicsManager;
                 PhysicsDebugDrawer *physicsDebugDrawer;
 
@@ -76,6 +80,13 @@ namespace WS2 {
                 Scene::SceneNode* getRootNode();
 
                 /**
+                 * @brief Getter for selectionManager
+                 *
+                 * @return This scene's selection manager
+                 */
+                Scene::SceneSelectionManager* getSelectionManager();
+
+                /**
                  * @brief Getter for physicsManager
                  *
                  * @return This scene's physics manager
@@ -89,6 +100,15 @@ namespace WS2 {
                  * @param file The model file to append
                  */
                 void addModel(QFile &file);
+
+            public slots:
+                /**
+                 * @brief Slot for when the selected nodes has been changed
+                 *
+                 * @param selectedObjects The new selected nodes vector
+                 */
+                void onSelectionChanged(QVector<Scene::SceneNode*>& selectedObjects);
+
         };
     }
 }
