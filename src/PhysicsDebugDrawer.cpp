@@ -87,7 +87,7 @@ namespace WS2 {
                 );
 
         //Draw the triangle !
-        glDrawArrays(GL_LINES, 0, lineData.size() / 4);
+        glDrawArrays(GL_LINES, 0, lineData.size() / 2);
 
         glDisableVertexAttribArray(0);
 
