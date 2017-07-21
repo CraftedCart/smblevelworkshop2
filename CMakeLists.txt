@@ -20,19 +20,19 @@ find_package(Qt5Core REQUIRED)
 find_package(Qt5Widgets REQUIRED)
 
 find_package(OpenGL REQUIRED)
-include_directories(${OPENGL_INCLUDE_DIRS})
+include_directories(SYSTEM ${OPENGL_INCLUDE_DIRS})
 
 find_package(GLEW REQUIRED)
-include_directories(${GLEW_INCLUDE_DIRS})
+include_directories(SYSTEM ${GLEW_INCLUDE_DIRS})
 
 find_package(assimp REQUIRED)
-include_directories(${ASSIMP_INCLUDE_DIRS})
+include_directories(SYSTEM ${ASSIMP_INCLUDE_DIRS})
 if(APPLE) #-lassimp doesn't seem to work with homebrew installed Assimp
     set(ASSIMP_LIBRARIES /usr/local/lib/libassimp.dylib)
 endif(APPLE)
 
 find_package(Bullet REQUIRED)
-include_directories(${BULLET_INCLUDE_DIRS})
+include_directories(SYSTEM ${BULLET_INCLUDE_DIRS})
 
 include_directories(./include)
 
