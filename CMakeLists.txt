@@ -7,6 +7,9 @@ set(CMAKE_CXX_STANDARD 11)
 #Export compile commands for editor autocomplete
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
+#Be really pedantic!
+add_definitions(-Wall -Wextra -pedantic)
+
 #Automatically run moc, uic and rcc when needed
 set(CMAKE_AUTOMOC ON)
 set(CMAKE_AUTOUIC ON)
