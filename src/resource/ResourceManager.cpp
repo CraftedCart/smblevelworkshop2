@@ -63,7 +63,7 @@ namespace WS2 {
                         QVector<ResourceMesh*> &meshVector,
                         bool shouldLoad
                         ) {
-                    qDebug() << "Processing node" << node->mName.C_Str();
+                    qDebug() << "Processing node" << node->mName.C_Str() << node->mNumMeshes;
 
                     //Process this node's messages
                     for (unsigned int i = 0; i < node->mNumMeshes; i++) {
@@ -158,7 +158,7 @@ namespace WS2 {
                     QVector<Resource::ResourceTexture*> textures;
 
                     int maxI = mat->GetTextureCount(type);
-                    for (unsigned int i = 0; i < maxI; i++) {
+                    for (int i = 0; i < maxI; i++) {
                         aiString str;
                         mat->GetTexture(type, i, &str);
                         const QFileInfo fileInfo = QFileInfo(str.C_Str());

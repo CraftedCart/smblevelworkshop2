@@ -30,14 +30,33 @@ namespace WS2 {
     }
 
     void PhysicsDebugDrawer::drawSphere(const btVector3& p, btScalar radius, const btVector3& color) {
+        //Suppress compiler warnings
+        Q_UNUSED(p);
+        Q_UNUSED(radius);
+        Q_UNUSED(color);
+
         qDebug() << "PhysicsDebugDrawer: drawSphere not yet implemented!";
     }
 
     void PhysicsDebugDrawer::drawTriangle(const btVector3& a, const btVector3& b, const btVector3& c, const btVector3& color, btScalar alpha) {
+        //Suppress compiler warnings
+        Q_UNUSED(a);
+        Q_UNUSED(b);
+        Q_UNUSED(c);
+        Q_UNUSED(color);
+        Q_UNUSED(alpha);
+
         qDebug() << "PhysicsDebugDrawer: drawTriangle not yet implemented!";
     }
 
     void PhysicsDebugDrawer::drawContactPoint(const btVector3& pointOnB, const btVector3& normalOnB, btScalar distance, int lifeTime, const btVector3& color) {
+        //Suppress compiler warnings
+        Q_UNUSED(pointOnB);
+        Q_UNUSED(normalOnB);
+        Q_UNUSED(distance);
+        Q_UNUSED(lifeTime);
+        Q_UNUSED(color);
+
         qDebug() << "PhysicsDebugDrawer: drawContactPoint not yet implemented!";
     }
 
@@ -47,6 +66,10 @@ namespace WS2 {
     }
 
     void PhysicsDebugDrawer::draw3dText(const btVector3& location, const char* textString) {
+        //Suppress compiler warnings
+        Q_UNUSED(location);
+        Q_UNUSED(textString);
+
         qDebug() << "PhysicsDebugDrawer: draw3dText not yet implemented!";
     }
 

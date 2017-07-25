@@ -23,6 +23,9 @@ namespace WS2 {
         }
 
         int ModelOutliner::columnCount(const QModelIndex &parent) const {
+            //Suppress compiler warnings
+            Q_UNUSED(parent);
+
             return 1;
         }
 

@@ -7,10 +7,16 @@ namespace WS2 {
         ModelResources::ModelResources(QObject *parent) : QAbstractTableModel(parent) {}
 
         int ModelResources::rowCount(const QModelIndex &parent) const {
+            //Suppress compiler warnings
+            Q_UNUSED(parent);
+
             return Resource::ResourceManager::getResources().size();
         }
 
         int ModelResources::columnCount(const QModelIndex &parent) const {
+            //Suppress compiler warnings
+            Q_UNUSED(parent);
+
             return 2;
         }
 

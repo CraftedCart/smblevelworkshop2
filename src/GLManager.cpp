@@ -138,7 +138,7 @@ namespace WS2 {
 
         void renderMesh(const Resource::ResourceMesh *mesh) {
             //Set up textures
-            for (unsigned int i = 0; i < mesh->getTextures().size(); i++) {
+            for (int i = 0; i < mesh->getTextures().size(); i++) {
                 glActiveTexture(GL_TEXTURE0 + i);
                 mesh->getTextures().at(i)->getTexture()->bind();
             }
