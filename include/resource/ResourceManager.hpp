@@ -25,13 +25,6 @@ namespace WS2 {
              */
             namespace ResourceManagerInternal {
                 /**
-                 * @brief Vector of all resources<br>
-                 *        It is preferable to use the functions to access the resources rather than by directly accessing
-                 *        them from this vector.
-                 */
-                extern QVector<AbstractResource*> resources;
-
-                /**
                  * @brief Loads a model into the scene.
                  *
                  * @param file The model file to append
@@ -143,12 +136,12 @@ namespace WS2 {
              */
             template <class T> T getResourceFromFilePath(QString filePath) {
                 auto res = std::find_if(
-                        ResourceManagerInternal::resources.begin(),
-                        ResourceManagerInternal::resources.end(),
+                        getResources().begin(),
+                        getResources().end(),
                         [&filePath](const AbstractResource *object) { return object->getFilePaths().contains(filePath); }
                         );
 
-                if (res != ResourceManagerInternal::resources.end()) {
+                if (res != getResources().end()) {
                     //Resource found
                     return static_cast<T>(*res);
                 } else {

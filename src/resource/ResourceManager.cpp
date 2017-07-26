@@ -14,9 +14,6 @@ namespace WS2 {
     namespace Resource {
         namespace ResourceManager {
             namespace ResourceManagerInternal {
-                //Declare extern variables
-                QVector<AbstractResource*> resources;
-
                 /**
                  * @throws WS2::Exception::IOException When failing to read the file
                  * @throws WS2::Exception::RuntimeException When Assimp fails to generate an aiScene
@@ -195,12 +192,14 @@ namespace WS2 {
                     return textures;
                 }
             } //End of ResourceManagerInternal
+
             QVector<AbstractResource*>& getResources() {
-                return ResourceManagerInternal::resources;
+                static QVector<AbstractResource*> resources;
+                return resources;
             }
 
             void addResource(AbstractResource *res) {
-                ResourceManagerInternal::resources.append(res);
+                getResources().append(res);
                 if (qAppRunning) UI::ModelManager::modelResources->onResourceAdded();
             }
 
