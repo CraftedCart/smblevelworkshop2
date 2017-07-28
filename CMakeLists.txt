@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.8.1)
+cmake_minimum_required(VERSION 3.6.2)
 project(smblevelworkshop2)
 
 #Use C++ 11
@@ -35,6 +35,7 @@ find_package(Bullet REQUIRED)
 include_directories(SYSTEM ${BULLET_INCLUDE_DIRS})
 
 include_directories(./include)
+include_directories(${CMAKE_BINARY_DIR})
 
 set(SOURCE_FILES
     ./src/main.cpp
