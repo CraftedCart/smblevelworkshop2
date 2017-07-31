@@ -28,9 +28,6 @@ int main(int argc, char *argv[]) {
     styleFile.close();
     app.setStyleSheet(style);
 
-    //Create a new project
-    //WS2::Project::ProjectManager::newProject();
-
     WS2::UI::StageEditorWindow w;
     w.show();
 
