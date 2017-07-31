@@ -1,5 +1,10 @@
-#ifndef SMBLEVELWORKSHOP2_MAINWINDOW_HPP
-#define SMBLEVELWORKSHOP2_MAINWINDOW_HPP
+/**
+ * @file
+ * @brief Header for the StageEditorWindow class
+ */
+
+#ifndef SMBLEVELWORKSHOP2_UI_MAINWINDOW_HPP
+#define SMBLEVELWORKSHOP2_UI_MAINWINDOW_HPP
 
 #include <QMainWindow>
 #include <QLabel>
