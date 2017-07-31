@@ -76,19 +76,19 @@ namespace WS2 {
 
             //Load the physics debug shaders
             //TODO: Make loading this an option
-            QFile physVertFile(":/Workshop2/Shaders/physicsDebug.vert");
-            QFile physFragFile(":/Workshop2/Shaders/physicsDebug.frag");
-            GLManager::physicsDebugProgID = GLManager::loadShaders(&physVertFile, &physFragFile);
+            //QFile physVertFile(":/Workshop2/Shaders/physicsDebug.vert");
+            //QFile physFragFile(":/Workshop2/Shaders/physicsDebug.frag");
+            //GLManager::physicsDebugProgID = GLManager::loadShaders(&physVertFile, &physFragFile);
 
             //Get uniform IDs
-            GLManager::physicsDebugShaderViewID = glGetUniformLocation(GLManager::physicsDebugProgID, "viewMat");
-            GLManager::physicsDebugShaderProjID = glGetUniformLocation(GLManager::physicsDebugProgID, "projMat");
+            //GLManager::physicsDebugShaderViewID = glGetUniformLocation(GLManager::physicsDebugProgID, "viewMat");
+            //GLManager::physicsDebugShaderProjID = glGetUniformLocation(GLManager::physicsDebugProgID, "projMat");
 
             //Mark the initial project as loaded, so that models added to the scene are also loaded
             Project::ProjectManager::getActiveProject()->getScene()->load();
 
             //TODO: Make the debug drawer an option, and if enabled, load for each scene
-            Project::ProjectManager::getActiveProject()->getScene()->initPhysicsDebugDrawer();
+            //Project::ProjectManager::getActiveProject()->getScene()->initPhysicsDebugDrawer();
 
             //Start the elapsed timer
             elapsedTimer.start();
