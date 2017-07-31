@@ -6,8 +6,8 @@
 #ifndef SMBLEVELWORKSHOP2_RESOURCE_RESOURCEMESH_HPP
 #define SMBLEVELWORKSHOP2_RESOURCE_RESOURCEMESH_HPP
 
-#include "model/Vertex.hpp"
-#include "resource/ResourceTexture.hpp"
+#include "model/MeshSegment.hpp"
+#include "resource/AbstractResource.hpp"
 #include <QVector>
 
 namespace WS2 {
@@ -19,13 +19,10 @@ namespace WS2 {
             Q_OBJECT
 
             protected:
-                QVector<Model::Vertex> vertices;
-                QVector<unsigned int> indices;
-                QVector<Resource::ResourceTexture*> textures;
-
-                GLuint vao;
-                GLuint vbo;
-                GLuint ebo;
+                /**
+                 * @brief A vector containing pointers to MeshSegments owned by this ResourceMesh
+                 */
+                QVector<Model::MeshSegment*> meshSegments;
 
             public:
                 /**
@@ -36,13 +33,9 @@ namespace WS2 {
                 ResourceMesh();
 
                 /**
-                 * @brief Create a new Mesh object with the arguments given
-                 *
-                 * @param vertices
-                 * @param indices
-                 * @param textures
+                 * @brief Unloads and deletes all mesh segments
                  */
-                ResourceMesh(QVector<Model::Vertex> vertices, QVector<unsigned int> indices, QVector<Resource::ResourceTexture*> textures);
+                ~ResourceMesh();
 
                 /**
                  * @brief Generates GL buffers for the mesh
@@ -55,29 +48,19 @@ namespace WS2 {
                 void unload() override;
 
                 /**
-                 * @brief Generates GL buffers
+                 * @brief Getter for meshSegments
+                 *
+                 * @return A reference to the meshSegments vector, with each segment containing info for one material
+                 *         of the ResourceMesh
                  */
-                void generateGlBuffers();
+                const QVector<Model::MeshSegment*>& getMeshSegments() const;
 
                 /**
-                 * @return A reference to the vertices vector
+                 * @brief Adds a mesh segment that belongs to this ResourceMesh
+                 *
+                 * @param segment The segment to add
                  */
-                const QVector<Model::Vertex>& getVertices() const;
-
-                /**
-                 * @return A reference to the indices vector
-                 */
-                const QVector<unsigned int>& getIndices() const;
-
-                /**
-                 * @return A reference to the textures vector
-                 */
-                const QVector<Resource::ResourceTexture*>& getTextures() const;
-
-                /**
-                 * @return The VAO ID of the mesh
-                 */
-                const GLuint& getVao() const;
+                void addMeshSegment(Model::MeshSegment *segment);
         };
 
     }

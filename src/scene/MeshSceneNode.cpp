@@ -25,12 +25,20 @@ namespace WS2 {
 
             //Construct mesh collision shape
             btTriangleMesh *triMesh = new btTriangleMesh();
-            for (int i = 0; i < mesh->getIndices().size(); i += 3) {
-                triMesh->addTriangle(
-                        MathUtils::toBtVector3(mesh->getVertices().at(mesh->getIndices().at(i)).position),
-                        MathUtils::toBtVector3(mesh->getVertices().at(mesh->getIndices().at(i + 1)).position),
-                        MathUtils::toBtVector3(mesh->getVertices().at(mesh->getIndices().at(i + 2)).position)
-                        );
+
+            const QVector<Model::MeshSegment*>& segments = mesh->getMeshSegments();
+
+            //Loop over all segments in the mesh
+            for (int i = 0; i < segments.size(); i++) {
+                const Model::MeshSegment *segment = segments.at(i);
+
+                for (int j = 0; j < segment->getIndices().size(); j += 3) {
+                    triMesh->addTriangle(
+                            MathUtils::toBtVector3(segment->getVertices().at(segment->getIndices().at(j)).position),
+                            MathUtils::toBtVector3(segment->getVertices().at(segment->getIndices().at(j + 1)).position),
+                            MathUtils::toBtVector3(segment->getVertices().at(segment->getIndices().at(j + 2)).position)
+                            );
+                }
             }
 
             physicsCollisionShape = new btBvhTriangleMeshShape(triMesh, true);

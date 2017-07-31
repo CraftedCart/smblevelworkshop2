@@ -44,6 +44,7 @@ set(SOURCE_FILES
     ./src/widget/OutlinerWidget.cpp
     ./src/GLManager.cpp
     ./src/MathUtils.cpp
+    ./src/model/MeshSegment.cpp
     ./src/exception/Exception.cpp
     ./src/exception/RuntimeException.cpp
     ./src/exception/IOException.cpp
@@ -74,6 +75,7 @@ set(HEADER_FILES
     ./include/EnumCameraNav.hpp
     ./include/MathUtils.hpp
     ./include/model/Vertex.hpp
+    ./include/model/MeshSegment.hpp
     ./include/exception/Exception.hpp
     ./include/exception/RuntimeException.hpp
     ./include/exception/IOException.hpp

@@ -143,7 +143,8 @@ namespace WS2 {
                     QVector<Resource::ResourceTexture*> specularMaps = loadMaterialTextures(material, aiTextureType_SPECULAR, parentDir, shouldLoad);
                     textures.append(specularMaps);
 
-                    ResourceMesh *resMesh = new ResourceMesh(vertices, indices, textures);
+                    ResourceMesh *resMesh = new ResourceMesh();
+                    resMesh->addMeshSegment(new Model::MeshSegment(vertices, indices, textures)); //TODO: Tempoary - Group materials belonging to the same object into the same ResourceMesh
                     resMesh->setId(QString("%1@%2").arg(mesh->mName.C_Str()).arg(*filePath));
                     resMesh->setFilePath(*filePath);
                     resMesh->load();
