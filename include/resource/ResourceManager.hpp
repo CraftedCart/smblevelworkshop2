@@ -76,11 +76,10 @@ namespace WS2 {
                  *
                  * @return The converted mesh
                  */
-                ResourceMesh* processMesh(
+                Model::MeshSegment* processMeshSegment(
                         const aiMesh *mesh,
                         const aiScene *scene,
                         const glm::mat4 globalTransform,
-                        const QString *filePath,
                         const QDir *parentDir,
                         bool shouldLoad = false
                         );

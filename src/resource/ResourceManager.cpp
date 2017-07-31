@@ -62,10 +62,26 @@ namespace WS2 {
                         ) {
                     qDebug() << "Processing node" << node->mName.C_Str() << node->mNumMeshes;
 
-                    //Process this node's messages
+                    QVector<Model::MeshSegment*> segments; //Will contain all mesh segments for each material of this node's mesh
+                    //Process this node's mesh segments
                     for (unsigned int i = 0; i < node->mNumMeshes; i++) {
                         aiMesh *mesh = scene->mMeshes[node->mMeshes[i]];
-                        ResourceMesh *resMesh = processMesh(mesh, scene, globalTransform, filePath, parentDir, shouldLoad);
+                        Model::MeshSegment *segment = processMeshSegment(mesh, scene, globalTransform, parentDir, shouldLoad);
+                        segments.append(segment);
+                    }
+
+                    //Gather all segments of the mesh into a single ResourceMesh
+                    if (segments.size() > 0) {
+                        ResourceMesh *resMesh = new ResourceMesh();
+                        resMesh->setId(node->mName.C_Str());
+                        resMesh->setFilePath(*filePath);
+
+                        for (int j = 0; j < segments.size(); j++) {
+                            resMesh->addMeshSegment(segments.at(j));
+                        }
+
+                        if (shouldLoad) resMesh->load();
+
                         addResource(resMesh);
                         meshVector.append(resMesh);
                     }
@@ -76,11 +92,10 @@ namespace WS2 {
                     }
                 }
 
-                ResourceMesh* processMesh(
+                Model::MeshSegment* processMeshSegment(
                         const aiMesh *mesh,
                         const aiScene *scene,
                         const glm::mat4 globalTransform,
-                        const QString *filePath,
                         const QDir *parentDir,
                         bool shouldLoad
                         ) {
@@ -143,13 +158,9 @@ namespace WS2 {
                     QVector<Resource::ResourceTexture*> specularMaps = loadMaterialTextures(material, aiTextureType_SPECULAR, parentDir, shouldLoad);
                     textures.append(specularMaps);
 
-                    ResourceMesh *resMesh = new ResourceMesh();
-                    resMesh->addMeshSegment(new Model::MeshSegment(vertices, indices, textures)); //TODO: Tempoary - Group materials belonging to the same object into the same ResourceMesh
-                    resMesh->setId(QString("%1@%2").arg(mesh->mName.C_Str()).arg(*filePath));
-                    resMesh->setFilePath(*filePath);
-                    resMesh->load();
+                    Model::MeshSegment *segment = new Model::MeshSegment(vertices, indices, textures);
 
-                    return resMesh;
+                    return segment;
                 }
 
                 QVector<Resource::ResourceTexture*> loadMaterialTextures(aiMaterial *mat, aiTextureType type, const QDir *parentDir, bool shouldLoad) {
