@@ -32,6 +32,11 @@ namespace WS2 {
                  */
                 void askImportFiles();
 
+                /**
+                 * @brief Adds an empty scene node to the currently active project
+                 */
+                void addSceneNode();
+
             private:
                 Ui::StageEditorWindow *ui;
         };

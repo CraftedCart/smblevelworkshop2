@@ -15,7 +15,16 @@
   </property>
   <widget class="QWidget" name="centralWidget">
    <layout class="QGridLayout" name="gridLayout">
-    <property name="margin">
+    <property name="leftMargin">
+     <number>0</number>
+    </property>
+    <property name="topMargin">
+     <number>0</number>
+    </property>
+    <property name="rightMargin">
+     <number>0</number>
+    </property>
+    <property name="bottomMargin">
      <number>0</number>
     </property>
     <property name="spacing">
@@ -66,6 +75,8 @@
     <addaction name="separator"/>
     <addaction name="actionSelectAll"/>
     <addaction name="actionFocusSelected"/>
+    <addaction name="separator"/>
+    <addaction name="actionNewNode"/>
    </widget>
    <widget class="QMenu" name="menuView">
     <property name="title">
@@ -130,7 +141,16 @@
    </attribute>
    <widget class="QWidget" name="outlinerContentsWidget">
     <layout class="QGridLayout" name="gridLayout_2">
-     <property name="margin">
+     <property name="leftMargin">
+      <number>0</number>
+     </property>
+     <property name="topMargin">
+      <number>0</number>
+     </property>
+     <property name="rightMargin">
+      <number>0</number>
+     </property>
+     <property name="bottomMargin">
       <number>0</number>
      </property>
      <property name="spacing">
@@ -179,7 +199,16 @@
    </attribute>
    <widget class="QWidget" name="resourcesContentsWidget">
     <layout class="QGridLayout" name="gridLayout_3">
-     <property name="margin">
+     <property name="leftMargin">
+      <number>0</number>
+     </property>
+     <property name="topMargin">
+      <number>0</number>
+     </property>
+     <property name="rightMargin">
+      <number>0</number>
+     </property>
+     <property name="bottomMargin">
       <number>0</number>
      </property>
      <property name="spacing">
@@ -446,6 +475,21 @@
    </property>
    <property name="text">
     <string>Resources</string>
+   </property>
+  </action>
+  <action name="actionNewNode">
+   <property name="icon">
+    <iconset resource="../../resources/Workshop2/Workshop2Resources.qrc">
+     <normaloff>:/Workshop2/Icons/Add.png</normaloff>:/Workshop2/Icons/Add.png</iconset>
+   </property>
+   <property name="text">
+    <string>New Node</string>
+   </property>
+   <property name="toolTip">
+    <string>Adds a new empty node to the scene</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+B</string>
    </property>
   </action>
  </widget>

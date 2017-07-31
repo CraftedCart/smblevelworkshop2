@@ -30,6 +30,7 @@ namespace WS2 {
             connect(ui->actionQuit, SIGNAL(triggered()), QApplication::instance(), SLOT(quit()));
             connect(ui->viewportWidget, &Widget::ViewportWidget::frameRendered, this, &StageEditorWindow::viewportFrameRendered);
             connect(ui->actionImport, &QAction::triggered, this, &StageEditorWindow::askImportFiles);
+            connect(ui->actionNewNode, &QAction::triggered, this, &StageEditorWindow::addSceneNode);
         }
 
         StageEditorWindow::~StageEditorWindow() {
@@ -75,6 +76,10 @@ namespace WS2 {
                 QFile f(urls.at(i).toLocalFile());
                 Project::ProjectManager::getActiveProject()->importFile(f);
             }
+        }
+
+        void StageEditorWindow::addSceneNode() {
+            Project::ProjectManager::getActiveProject()->getScene()->getRootNode()->addChild(new Scene::SceneNode(tr("New Node")));
         }
     }
 }
