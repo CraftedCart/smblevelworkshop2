@@ -184,6 +184,11 @@ namespace WS2 {
                             filePath = QString(str.C_Str());
                         }
 
+                        //Check if the file doesn't exist, and load the uvtemplate texture instead
+                        if (!QFileInfo(filePath).exists()) {
+                            filePath = ":/Workshop2/Images/uvtemplate.png";
+                        }
+
                         //Don't load another copy of the texture if it is already in the ResourceManager
                         Resource::ResourceTexture *texture = Resource::ResourceManager::getResourceFromFilePath<Resource::ResourceTexture*>(filePath);
 
