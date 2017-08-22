@@ -5,8 +5,19 @@
 #include <QApplication>
 #include <QFile>
 #include <QSurfaceFormat>
+#include <QSplashScreen>
 
 int main(int argc, char *argv[]) {
+    //Construct the application
+    QApplication app(argc, argv);
+
+    //Splash screen
+    QPixmap pixmap(":/Workshop2/Images/banner.png");
+    QSplashScreen splash(pixmap);
+    splash.show();
+    splash.showMessage(app.tr("Setting default OpenGL format"), Qt::AlignRight | Qt::AlignBottom, Qt::white);
+    app.processEvents();
+
     //Set default format
     QSurfaceFormat fmt;
 
@@ -19,8 +30,9 @@ int main(int argc, char *argv[]) {
 
     QSurfaceFormat::setDefaultFormat(fmt);
 
-    //Construct the application
-    QApplication app(argc, argv);
+    //Splash message
+    splash.showMessage(app.tr("Setting style"), Qt::AlignRight | Qt::AlignBottom, Qt::white);
+    app.processEvents();
 
     QFile styleFile(":/Styles/FlatDark/FlatDark.qss");
     styleFile.open(QFile::ReadOnly);
@@ -28,8 +40,13 @@ int main(int argc, char *argv[]) {
     styleFile.close();
     app.setStyleSheet(style);
 
+    //Splash message
+    splash.showMessage(app.tr("Initializing Stage Editor"), Qt::AlignRight | Qt::AlignBottom, Qt::white);
+    app.processEvents();
+
     WS2::UI::StageEditorWindow w;
     w.show();
+    splash.finish(&w);
 
     WS2::qAppRunning = true;
     int ret = app.exec();
