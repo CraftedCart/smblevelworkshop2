@@ -10,6 +10,10 @@ set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 #Be really pedantic!
 add_definitions(-Wall -Wextra -pedantic)
 
+#Add compile time proprocessor macro
+string(TIMESTAMP COMPILE_TIMESTAMP UTC)
+add_definitions(-DCOMPILE_TIMESTAMP=${COMPILE_TIMESTAMP})
+
 #Automatically run moc, uic and rcc when needed
 set(CMAKE_AUTOMOC ON)
 set(CMAKE_AUTOUIC ON)
@@ -40,6 +44,7 @@ include_directories(${CMAKE_BINARY_DIR})
 set(SOURCE_FILES
     ./src/main.cpp
     ./src/ui/StageEditorWindow.cpp
+    ./src/ui/AboutWindow.cpp
     ./src/widget/ViewportWidget.cpp
     ./src/widget/OutlinerWidget.cpp
     ./src/GLManager.cpp
@@ -69,6 +74,7 @@ set(SOURCE_FILES
 
 set(HEADER_FILES
     ./include/ui/StageEditorWindow.hpp
+    ./include/ui/AboutWindow.hpp
     ./include/widget/ViewportWidget.hpp
     ./include/widget/OutlinerWidget.hpp
     ./include/GLManager.hpp

@@ -22,6 +22,7 @@
         <file>Shaders/physicsDebug.vert</file>
         <file>Shaders/physicsDebug.frag</file>
         <file>Images/uvtemplate.png</file>
+        <file>Images/banner.png</file>
     </qresource>
 </RCC>
 

@@ -2,6 +2,7 @@
 #include "ui_StageEditorWindow.h"
 #include "project/ProjectManager.hpp"
 #include "ui/ModelManager.hpp"
+#include "ui/AboutWindow.hpp"
 #include <QFontDatabase>
 #include <Qt>
 #include <QFileDialog>
@@ -31,6 +32,7 @@ namespace WS2 {
             connect(ui->viewportWidget, &Widget::ViewportWidget::frameRendered, this, &StageEditorWindow::viewportFrameRendered);
             connect(ui->actionImport, &QAction::triggered, this, &StageEditorWindow::askImportFiles);
             connect(ui->actionNewNode, &QAction::triggered, this, &StageEditorWindow::addSceneNode);
+            connect(ui->actionAbout, &QAction::triggered, this, &StageEditorWindow::showAbout);
         }
 
         StageEditorWindow::~StageEditorWindow() {
@@ -80,6 +82,11 @@ namespace WS2 {
 
         void StageEditorWindow::addSceneNode() {
             Project::ProjectManager::getActiveProject()->getScene()->getRootNode()->addChild(new Scene::SceneNode(tr("New Node")));
+        }
+
+        void StageEditorWindow::showAbout() {
+            AboutWindow *win = new AboutWindow();
+            win->show();
         }
     }
 }

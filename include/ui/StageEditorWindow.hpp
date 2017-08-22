@@ -37,6 +37,11 @@ namespace WS2 {
                  */
                 void addSceneNode();
 
+                /**
+                 * @brief Shows the about dialog
+                 */
+                void showAbout();
+
             private:
                 Ui::StageEditorWindow *ui;
         };
