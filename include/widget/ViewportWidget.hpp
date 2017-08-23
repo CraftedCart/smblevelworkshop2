@@ -41,6 +41,11 @@ namespace WS2 {
                 glm::mat4 proj;
                 glm::mat4 view;
 
+                /**
+                 * @brief Tip of the day string
+                 */
+                QString tip;
+
             public:
                 explicit ViewportWidget(QWidget *parent = nullptr);
                 ~ViewportWidget();
@@ -93,6 +98,14 @@ namespace WS2 {
                  * @param transform The world transform of the parent node
                  */
                 void recursiveDrawSceneNode(Scene::SceneNode *node, const glm::mat4 parentTransform) const;
+
+                /**
+                 * @brief Draws info on the viewport (such as a tip of the day)
+                 *
+                 * For use when the scene is empty, such as before a project is opened or before any models have been
+                 * imported.
+                 */
+                void drawEmptySceneInfo();
 
                 /**
                  * @brief Calculates for forward vector

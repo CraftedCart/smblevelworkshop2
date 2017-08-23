@@ -15,6 +15,12 @@ int main(int argc, char *argv[]) {
     QPixmap pixmap(":/Workshop2/Images/banner.png");
     QSplashScreen splash(pixmap);
     splash.show();
+    splash.showMessage(app.tr("Initializing WS2"), Qt::AlignRight | Qt::AlignBottom, Qt::white);
+    app.processEvents();
+
+    //Init WS2
+    WS2::ws2Init();
+
     splash.showMessage(app.tr("Setting default OpenGL format"), Qt::AlignRight | Qt::AlignBottom, Qt::white);
     app.processEvents();
 

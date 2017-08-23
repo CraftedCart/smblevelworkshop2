@@ -24,6 +24,21 @@ namespace WS2 {
             updateTimer->start(1000.0f / 60.0f); //Cap the framerate at 60FPS TODO: Make this adjustable
 
             setFocusPolicy(Qt::StrongFocus); //Accept keyboard input
+
+            //Read all tips of the days
+            QStringList tips;
+            QFile tipFile(tr(":/Workshop2/Lang/tips-en_US.txt"));
+            if (tipFile.open(QIODevice::ReadOnly)) {
+                QTextStream in(&tipFile);
+
+                while (!in.atEnd()) {
+                    QString line = in.readLine();
+                    tips.append(line);
+                }
+            }
+
+            //Pick a random tip of the day
+            tip = tips.at(MathUtils::randInt(0, tips.size() - 1));
         }
 
         ViewportWidget::~ViewportWidget() {
@@ -265,6 +280,12 @@ namespace WS2 {
                 recursiveDrawSceneNode(scene->getRootNode(), glm::mat4(1.0f));
             }
 
+            //Draw empty scene info (Like a tip of the day) if the scene is empty (The root node had only 1 child "Static" with 0 children)
+            if (scene->getRootNode()->getChildCount() == 1 &&
+                    scene->getRootNode()->getChildByIndex(0)->getChildCount() == 0) {
+                drawEmptySceneInfo();
+            }
+
             //drawText(glm::vec3(0.0f, 0.0f, 0.0f), QString("Origin"), QColor(255, 255, 255));
 
             //Physics debug drawing
@@ -304,6 +325,24 @@ namespace WS2 {
             for (int i = 0; i < node->getChildren().size(); i++) {
                 recursiveDrawSceneNode(node->getChildren().at(i), transform);
             }
+        }
+
+        void ViewportWidget::drawEmptySceneInfo() {
+            QPainter p(this);
+            p.setPen(Qt::white);
+            QFont f;
+
+            f.setPixelSize(24);
+            p.setFont(f);
+            p.drawText(24, 48, tr("SMB Level Workshop 2"));
+            p.drawText(24, 120, tr("Tip of the day"));
+
+            f.setPixelSize(14);
+            p.setFont(f);
+            p.drawText(24, 66, tr("Open a project or import models to get started"));
+            p.drawText(QRectF(24, 124, width() - 48, height() - 124 - 24), tip);
+
+            p.end();
         }
 
         void ViewportWidget::keyPressEvent(QKeyEvent *event) {

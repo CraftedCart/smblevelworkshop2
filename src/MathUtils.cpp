@@ -1,4 +1,5 @@
 #include "MathUtils.hpp"
+#include "WS2.hpp"
 #include <QDebug>
 
 namespace WS2 {
@@ -30,6 +31,11 @@ namespace WS2 {
 
         btVector3 toBtVector3(const glm::vec3 &vec) {
             return btVector3(vec.x, vec.y, vec.z);
+        }
+
+        int randInt(const int a, const int b) {
+            std::uniform_int_distribution<> distr(a, b);
+            return distr(*WS2::randGen);
         }
     }
 }

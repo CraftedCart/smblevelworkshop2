@@ -23,6 +23,7 @@
         <file>Shaders/physicsDebug.frag</file>
         <file>Images/uvtemplate.png</file>
         <file>Images/banner.png</file>
+        <file>Lang/tips-en_US.txt</file>
     </qresource>
 </RCC>
 

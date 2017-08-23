@@ -15,6 +15,7 @@ namespace WS2 {
         glm::vec2 toGlmVec2(const QVector2D &vec);
         glm::mat4 toGlmMat4(const aiMatrix4x4 &mat);
         btVector3 toBtVector3(const glm::vec3 &vec);
+        int randInt(const int a, const int b);
     }
 }
 

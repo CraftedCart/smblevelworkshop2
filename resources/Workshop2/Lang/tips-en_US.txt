@@ -1,0 +1,26 @@
+／人◕ ‿‿ ◕人＼ Wanna make a contract?
+Paper is generally not strong enough to withstand impacts of many miles per hour.
+Wormhole frames do not have collision.
+Wormholes require objects named WORMHOLE (The frame) and WORM_SURFACE (The teleportation surface) to be present in only the GMA and TPL.
+Flat colored textures make it hard to judge distance and spot edges.
+Checkers in the vanilla game are 0.5 x 0.5 units per square.
+If your stage suffers from the Rmac glitch, try to eliminate all zero area faces in your model.
+It is easy to see the edges on box shaped skyboxes.
+Reducing texture size, the number of mipmaps per texture, or the polygon count can help in the event that there is not enough memory for your stage. You may opt to have a more complicated display model, but have the collision model have fewer polygons.
+When using custom goal models with multiple goal colors, the blue goal must be listed first in the GMA.
+When using custom goal models, make sure to mark the center part as double sided in the GMA, or duplicate that part and flip to normals, so that it isn't invisible from the back of the goal.
+When animating stages, try to avoid making players wait obnoxious amounts of time at the beginning of a stage.
+Skyboxes can add a lot to a stage. Bonus points if they're more than just a box/cylinder/sphere.
+Aim to make custom music loop seamlessly.
+Custom bumper models may have several levels of detail (LODs). Make sure you provide enough for the world the stage goes over.
+Retextured or remade stages from the vanilla games are generally boring.
+Scaling bumpers or jamabars does not scale their collision.
+You can add fake shadows by baking them into textures, however you should be wary of memory limits.
+Unlike SMB 1, bonus stages in SMB 2 don't end when you collect all of the bananas.
+Certain textures in some world can be modified to change or remove the world effects, such as the lines and glow in world 2.
+Neither Beginner 1 nor World 1-1 have the stage ID 001. Stage 001 is actually World 1-5.
+The debug menu can be useful for navigating stages, unlocking all stages, and more.
+If your stage crashes and you're playing on an emulator, check the emulator logs.
+Make sure there's a good contrast between your stage and the background.
+Stages can be reordered to avoid duplicate stages. Totalitarianism and Nintendo cannot be replaced so changing the stage IDs can be used as a workaround.
+Too many goals can sometimes cause a variation of the points glitch where the game incorrectly registers goals (Eg: You get green points text when going through a blue goal, and other quirks).
