@@ -47,6 +47,7 @@ set(SOURCE_FILES
     ./src/main.cpp
     ./src/ui/StageEditorWindow.cpp
     ./src/ui/AboutWindow.cpp
+    ./src/ui/SettingsDialog.cpp
     ./src/widget/ViewportWidget.cpp
     ./src/widget/OutlinerWidget.cpp
     ./src/GLManager.cpp
@@ -72,11 +73,13 @@ set(SOURCE_FILES
     ./src/scene/SceneSelectionManager.cpp
     ./src/physics/PhysicsManager.cpp
     ./src/PhysicsDebugDrawer.cpp
+    ./src/Config.cpp
     )
 
 set(HEADER_FILES
     ./include/ui/StageEditorWindow.hpp
     ./include/ui/AboutWindow.hpp
+    ./include/ui/SettingsDialog.hpp
     ./include/widget/ViewportWidget.hpp
     ./include/widget/OutlinerWidget.hpp
     ./include/GLManager.hpp
@@ -104,6 +107,7 @@ set(HEADER_FILES
     ./include/scene/SceneSelectionManager.hpp
     ./include/physics/PhysicsManger.hpp
     ./include/PhysicsDebugDrawer.hpp
+    ./include/Config.hpp
     )
 
 set(RESOURCE_FILES

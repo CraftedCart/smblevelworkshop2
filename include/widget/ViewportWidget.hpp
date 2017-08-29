@@ -27,7 +27,6 @@ namespace WS2 {
                 QSet<int> *keysDown = new QSet<int>();
                 bool mouseLocked = false;
 
-                float fov = 90.0f;
                 glm::vec3 *targetCameraPos = new glm::vec3(10.0f, 10.0f, 10.0f);
                 glm::vec3 *cameraPos = new glm::vec3(10.0f, 10.0f, 10.0f);
                 glm::vec2 *cameraRot = new glm::vec2(0.0f, 0.0f);
@@ -35,8 +34,6 @@ namespace WS2 {
                 glm::vec3 forward;
                 glm::vec3 right;
                 glm::vec3 up;
-                float posSpeed = 48.0f;
-                float rotSpeed = 0.01f;
                 EnumCameraNav cameraNavMode = EnumCameraNav::NAV_FIXED;
 
                 glm::mat4 proj;

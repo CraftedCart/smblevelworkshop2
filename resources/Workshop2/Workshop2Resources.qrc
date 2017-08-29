@@ -17,6 +17,7 @@
         <file>Icons/Export.png</file>
         <file>Icons/Import.png</file>
         <file>Icons/Add.png</file>
+        <file>Icons/Settings.png</file>
         <file>Shaders/stage.vert</file>
         <file>Shaders/stage.frag</file>
         <file>Shaders/physicsDebug.vert</file>

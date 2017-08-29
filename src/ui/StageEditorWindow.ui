@@ -77,6 +77,8 @@
     <addaction name="actionFocusSelected"/>
     <addaction name="separator"/>
     <addaction name="actionNewNode"/>
+    <addaction name="separator"/>
+    <addaction name="actionSettings"/>
    </widget>
    <widget class="QMenu" name="menuView">
     <property name="title">
@@ -502,6 +504,15 @@
   <action name="actionAbout">
    <property name="text">
     <string>About</string>
+   </property>
+  </action>
+  <action name="actionSettings">
+   <property name="icon">
+    <iconset resource="../../resources/Workshop2/Workshop2Resources.qrc">
+     <normaloff>:/Workshop2/Icons/Settings.png</normaloff>:/Workshop2/Icons/Settings.png</iconset>
+   </property>
+   <property name="text">
+    <string>Settings</string>
    </property>
   </action>
  </widget>

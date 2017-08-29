@@ -38,6 +38,11 @@ namespace WS2 {
                 void addSceneNode();
 
                 /**
+                 * @brief Shows the settings dialog
+                 */
+                void showSettings();
+
+                /**
                  * @brief Shows the about dialog
                  */
                 void showAbout();

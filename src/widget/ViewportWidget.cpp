@@ -6,6 +6,7 @@
 #include "scene/MeshSceneNode.hpp"
 #include "physics/PhysicsManger.hpp"
 #include "PhysicsDebugDrawer.hpp"
+#include "Config.hpp"
 #include <glm/gtx/transform.hpp>
 #include <glm/gtc/constants.hpp>
 #include <Qt>
@@ -117,14 +118,14 @@ namespace WS2 {
         void ViewportWidget::drawText(const glm::vec3 &pos, const QString &str, const QColor &col) {
             //TODO Stop calling glm::project twice
             //Projection matrix
-            glm::mat4 proj = glm::perspective(glm::radians(fov), (float) width() / (float) height(), 0.1f, 2000.0f);
+            //glm::mat4 proj = glm::perspective(glm::radians(Config::cameraFov), (float) width() / (float) height(), 0.1f, 2000.0f);
 
-            //Camera matrix
-            glm::mat4 view = glm::lookAt(
-                    *targetCameraPos,
-                    *targetCameraPos + forward,
-                    up
-                    );
+            ////Camera matrix
+            //glm::mat4 view = glm::lookAt(
+                    //*targetCameraPos,
+                    //*targetCameraPos + forward,
+                    //up
+                    //);
 
             glm::mat4 view2 = glm::lookAt(
                     *targetCameraPos,
@@ -163,7 +164,7 @@ namespace WS2 {
                 setCursor(Qt::BlankCursor);
 
                 if (cameraNavMode == EnumCameraNav::NAV_FIRST_PERSON_FLY) {
-                    *cameraRot += cursorDiff * rotSpeed;
+                    *cameraRot += cursorDiff * Config::cameraRotSpeed;
                     //Prevent camera from going whacko or upside down
                     cameraRot->y = glm::clamp(cameraRot->y, -glm::half_pi<float>(), glm::half_pi<float>());
                 } else if (cameraNavMode == EnumCameraNav::NAV_ORBIT) {
@@ -173,7 +174,7 @@ namespace WS2 {
                     //End calculate pivot center
 
                     //Rotate camera and calculate new camera position
-                    *cameraRot += cursorDiff * rotSpeed;
+                    *cameraRot += cursorDiff * Config::cameraRotSpeed;
                     //Prevent camera from going whacko or upside down
                     cameraRot->y = glm::clamp(cameraRot->y, -glm::half_pi<float>(), glm::half_pi<float>());
 
@@ -185,10 +186,10 @@ namespace WS2 {
 
                 if (cameraNavMode == EnumCameraNav::NAV_FIRST_PERSON_FLY || cameraNavMode == EnumCameraNav::NAV_ORBIT) {
                     //Camera pos
-                    float locPosSpeed = posSpeed;
+                    float locPosSpeed = Config::cameraPosSpeed;
                     //TODO: Rebindable keys
-                    if (isKeyDown(Qt::Key_Shift)) locPosSpeed *= 8;
-                    if (isKeyDown(Qt::Key_Control)) locPosSpeed *= 0.25;
+                    if (isKeyDown(Qt::Key_Shift)) locPosSpeed *= Config::cameraPosSpeedUpMultiplier;
+                    if (isKeyDown(Qt::Key_Alt)) locPosSpeed *= Config::cameraPosSlowDownMultiplier;
                     if (isKeyDown(Qt::Key_W)) *targetCameraPos += forward * deltaSeconds * locPosSpeed;
                     if (isKeyDown(Qt::Key_S)) *targetCameraPos -= forward * deltaSeconds * locPosSpeed;
                     if (isKeyDown(Qt::Key_D)) *targetCameraPos += right * deltaSeconds * locPosSpeed;
@@ -217,8 +218,7 @@ namespace WS2 {
             }
 
             //Camera inertia
-            //TODO: Make the inertia amount configurable
-            *cameraPos = glm::mix(*cameraPos, *targetCameraPos, qBound(0.0f, 16.0f * deltaSeconds, 1.0f));
+            *cameraPos = glm::mix(*cameraPos, *targetCameraPos, qBound(0.0f, Config::cameraInertia * deltaSeconds, 1.0f));
 
             calcVectors();
         }
@@ -256,7 +256,7 @@ namespace WS2 {
             prevNanosecondsElapsed = elapsedNanoseconds;
 
             //Projection matrix
-            proj = glm::perspective(glm::radians(fov), (float) width() / (float) height(), 0.1f, 2000.0f);
+            proj = glm::perspective(glm::radians(Config::cameraFov), (float) width() / (float) height(), Config::cameraNear, Config::cameraFar);
 
             //Camera matrix
             view = glm::lookAt(
