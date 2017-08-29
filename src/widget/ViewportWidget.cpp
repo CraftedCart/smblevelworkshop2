@@ -45,6 +45,7 @@ namespace WS2 {
             //Cleanup
             delete keysDown;
             delete cameraPos;
+            delete targetCameraPos;
             delete cameraRot;
 
             makeCurrent();
@@ -120,14 +121,14 @@ namespace WS2 {
 
             //Camera matrix
             glm::mat4 view = glm::lookAt(
-                    *cameraPos,
-                    *cameraPos + forward,
+                    *targetCameraPos,
+                    *targetCameraPos + forward,
                     up
                     );
 
             glm::mat4 view2 = glm::lookAt(
-                    *cameraPos,
-                    *cameraPos + forward,
+                    *targetCameraPos,
+                    *targetCameraPos + forward,
                     -up
                     );
 
@@ -168,7 +169,7 @@ namespace WS2 {
                 } else if (cameraNavMode == EnumCameraNav::NAV_ORBIT) {
                     //Calculate pivot center
                     glm::vec3 orbitForward = calcForwardVector(*cameraRot);
-                    glm::vec3 pivotCenter = *cameraPos + (orbitForward * cameraPivotDistance);
+                    glm::vec3 pivotCenter = *targetCameraPos + (orbitForward * cameraPivotDistance);
                     //End calculate pivot center
 
                     //Rotate camera and calculate new camera position
@@ -177,6 +178,8 @@ namespace WS2 {
                     cameraRot->y = glm::clamp(cameraRot->y, -glm::half_pi<float>(), glm::half_pi<float>());
 
                     orbitForward = calcForwardVector(*cameraRot);
+                    //Set both the target camera pos and the actual pos so weirdness doesn't happen
+                    *targetCameraPos = pivotCenter + (orbitForward * -cameraPivotDistance);
                     *cameraPos = pivotCenter + (orbitForward * -cameraPivotDistance);
                 }
 
@@ -186,12 +189,12 @@ namespace WS2 {
                     //TODO: Rebindable keys
                     if (isKeyDown(Qt::Key_Shift)) locPosSpeed *= 8;
                     if (isKeyDown(Qt::Key_Control)) locPosSpeed *= 0.25;
-                    if (isKeyDown(Qt::Key_W)) *cameraPos += forward * deltaSeconds * locPosSpeed;
-                    if (isKeyDown(Qt::Key_S)) *cameraPos -= forward * deltaSeconds * locPosSpeed;
-                    if (isKeyDown(Qt::Key_D)) *cameraPos += right * deltaSeconds * locPosSpeed;
-                    if (isKeyDown(Qt::Key_A)) *cameraPos -= right * deltaSeconds * locPosSpeed;
-                    if (isKeyDown(Qt::Key_E)) *cameraPos += up * deltaSeconds * locPosSpeed;
-                    if (isKeyDown(Qt::Key_Q)) *cameraPos -= up * deltaSeconds * locPosSpeed;
+                    if (isKeyDown(Qt::Key_W)) *targetCameraPos += forward * deltaSeconds * locPosSpeed;
+                    if (isKeyDown(Qt::Key_S)) *targetCameraPos -= forward * deltaSeconds * locPosSpeed;
+                    if (isKeyDown(Qt::Key_D)) *targetCameraPos += right * deltaSeconds * locPosSpeed;
+                    if (isKeyDown(Qt::Key_A)) *targetCameraPos -= right * deltaSeconds * locPosSpeed;
+                    if (isKeyDown(Qt::Key_E)) *targetCameraPos += up * deltaSeconds * locPosSpeed;
+                    if (isKeyDown(Qt::Key_Q)) *targetCameraPos -= up * deltaSeconds * locPosSpeed;
                 }
             } else {
                 //Mouse not locked
@@ -212,6 +215,10 @@ namespace WS2 {
             if (mouseLocked) {
                 QCursor::setPos(widgetCenter);
             }
+
+            //Camera inertia
+            //TODO: Make the inertia amount configurable
+            *cameraPos = glm::mix(*cameraPos, *targetCameraPos, qBound(0.0f, 16.0f * deltaSeconds, 1.0f));
 
             calcVectors();
         }
@@ -388,7 +395,7 @@ namespace WS2 {
 
             //TODO: Relocate zooming code elsewhere
             float dy = event->angleDelta().y() / 30.0f;
-            *cameraPos += forward * (float) dy;
+            *targetCameraPos += forward * (float) dy;
             cameraPivotDistance -= dy;
             cameraPivotDistance = glm::max(cameraPivotDistance, 1.0f);
         }
