@@ -182,13 +182,16 @@ namespace WS2 {
 
                 if (cameraNavMode == EnumCameraNav::NAV_FIRST_PERSON_FLY || cameraNavMode == EnumCameraNav::NAV_ORBIT) {
                     //Camera pos
+                    float locPosSpeed = posSpeed;
                     //TODO: Rebindable keys
-                    if (isKeyDown(Qt::Key_W)) *cameraPos += forward * deltaSeconds * posSpeed;
-                    if (isKeyDown(Qt::Key_S)) *cameraPos -= forward * deltaSeconds * posSpeed;
-                    if (isKeyDown(Qt::Key_D)) *cameraPos += right * deltaSeconds * posSpeed;
-                    if (isKeyDown(Qt::Key_A)) *cameraPos -= right * deltaSeconds * posSpeed;
-                    if (isKeyDown(Qt::Key_E)) *cameraPos += up * deltaSeconds * posSpeed;
-                    if (isKeyDown(Qt::Key_Q)) *cameraPos -= up * deltaSeconds * posSpeed;
+                    if (isKeyDown(Qt::Key_Shift)) locPosSpeed *= 8;
+                    if (isKeyDown(Qt::Key_Control)) locPosSpeed *= 0.25;
+                    if (isKeyDown(Qt::Key_W)) *cameraPos += forward * deltaSeconds * locPosSpeed;
+                    if (isKeyDown(Qt::Key_S)) *cameraPos -= forward * deltaSeconds * locPosSpeed;
+                    if (isKeyDown(Qt::Key_D)) *cameraPos += right * deltaSeconds * locPosSpeed;
+                    if (isKeyDown(Qt::Key_A)) *cameraPos -= right * deltaSeconds * locPosSpeed;
+                    if (isKeyDown(Qt::Key_E)) *cameraPos += up * deltaSeconds * locPosSpeed;
+                    if (isKeyDown(Qt::Key_Q)) *cameraPos -= up * deltaSeconds * locPosSpeed;
                 }
             } else {
                 //Mouse not locked
