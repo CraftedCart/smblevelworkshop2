@@ -393,8 +393,8 @@ namespace WS2 {
         void ViewportWidget::wheelEvent(QWheelEvent *event) {
             event->accept();
 
-            //TODO: Relocate zooming code elsewhere
-            float dy = event->angleDelta().y() / 30.0f;
+            //Zoom
+            float dy = event->angleDelta().y() / 10.0f; //TODO:Make zoom around configurable
             *targetCameraPos += forward * (float) dy;
             cameraPivotDistance -= dy;
             cameraPivotDistance = glm::max(cameraPivotDistance, 1.0f);
