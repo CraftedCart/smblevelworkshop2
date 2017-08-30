@@ -4,7 +4,7 @@ namespace WS2 {
     namespace Widget {
         OutlinerWidget::OutlinerWidget(QWidget *parent) : QTreeView(parent) {}
 
-        void OutlinerWidget::selectionChanged(QVector<QModelIndex> selectedObjects) {
+        void OutlinerWidget::onSelectionChanged(QVector<QModelIndex> selectedObjects) {
             //Deselect all first
             clearSelection();
 

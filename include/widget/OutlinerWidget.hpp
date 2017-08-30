@@ -23,7 +23,7 @@ namespace WS2 {
                  *
                  * @param selectedObjects A vector of the model indices for the selected objects
                  */
-                void selectionChanged(QVector<QModelIndex> selectedObjects);
+                void onSelectionChanged(QVector<QModelIndex> selectedObjects);
         };
     }
 }

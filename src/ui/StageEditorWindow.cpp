@@ -27,7 +27,7 @@ namespace WS2 {
 
             //If the selection is changed, update the outliner tree view
             connect(UI::ModelManager::modelOutliner, &UI::ModelOutliner::onSelectionChanged,
-                    ui->outlinerTreeView, &Widget::OutlinerWidget::selectionChanged);
+                    ui->outlinerTreeView, &Widget::OutlinerWidget::onSelectionChanged);
 
             //Hide the following dock widgets on start
             ui->resourcesDockWidget->hide();
