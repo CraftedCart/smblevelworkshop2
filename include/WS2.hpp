@@ -6,6 +6,7 @@
 #ifndef SMBLEVELWORKSHOP2_WS2_HPP
 #define SMBLEVELWORKSHOP2_WS2_HPP
 
+#include <QApplication>
 #include <random>
 
 /**
@@ -14,6 +15,7 @@
  * WS2 is short for Workshop 2
  */
 namespace WS2 {
+    extern QApplication *ws2App;
     extern bool qAppRunning;
     extern std::mt19937 *randGen;
 

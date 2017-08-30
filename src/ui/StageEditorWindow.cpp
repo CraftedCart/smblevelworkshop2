@@ -4,10 +4,13 @@
 #include "ui/ModelManager.hpp"
 #include "ui/SettingsDialog.hpp"
 #include "ui/AboutWindow.hpp"
+#include "Progress.hpp"
+#include "WS2.hpp"
 #include <QFontDatabase>
 #include <Qt>
 #include <QFileDialog>
 #include <QAction>
+#include <QProgressDialog>
 
 namespace WS2 {
     namespace UI {
@@ -74,12 +77,28 @@ namespace WS2 {
             //Get outta here if no files were chosen
             if (urls.isEmpty()) return;
 
-            ui->viewportWidget->makeCurrentContext();
+            //Model loading for SMB stages shouldn't take long enough to require a progress dialog
+            //but here's one anyway!
+            QProgressDialog progDialog(this);
+            progDialog.setCancelButton(nullptr); //Disable cancel option
+            progDialog.setMinimumDuration(1000);
+            progDialog.setModal(true);
+
+            Progress prog;
+            connect(&prog, &Progress::valueChanged, &progDialog, &QProgressDialog::setValue);
+            connect(&prog, &Progress::maxChanged, &progDialog, &QProgressDialog::setMaximum);
+            prog.begin(urls.size());
 
             for (int i = 0; i < urls.size(); i++) {
                 QFile f(urls.at(i).toLocalFile());
+                progDialog.setLabelText(tr("Importing files\n%1").arg(urls.at(i).fileName()));
+                ui->viewportWidget->makeCurrentContext();
                 Project::ProjectManager::getActiveProject()->importFile(f);
+
+                prog.inc();
             }
+
+            prog.end();
         }
 
         void StageEditorWindow::addSceneNode() {

@@ -2,6 +2,7 @@
 
 namespace WS2 {
     //Define extern members
+    QApplication *ws2App;
     bool qAppRunning = false;
     std::mt19937 *randGen;
 

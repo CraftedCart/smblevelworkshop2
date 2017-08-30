@@ -74,6 +74,7 @@ set(SOURCE_FILES
     ./src/physics/PhysicsManager.cpp
     ./src/PhysicsDebugDrawer.cpp
     ./src/Config.cpp
+    ./src/Progress.cpp
     )
 
 set(HEADER_FILES
@@ -108,6 +109,7 @@ set(HEADER_FILES
     ./include/physics/PhysicsManger.hpp
     ./include/PhysicsDebugDrawer.hpp
     ./include/Config.hpp
+    ./include/Progress.hpp
     )
 
 set(RESOURCE_FILES

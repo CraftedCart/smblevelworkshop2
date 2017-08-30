@@ -2,27 +2,26 @@
 #include "ui/StageEditorWindow.hpp"
 #include "ui/ModelManager.hpp"
 #include "resource/ResourceManager.hpp"
-#include <QApplication>
 #include <QFile>
 #include <QSurfaceFormat>
 #include <QSplashScreen>
 
 int main(int argc, char *argv[]) {
-    //Construct the application
-    QApplication app(argc, argv);
+    //Construct the Application
+    WS2::ws2App = new QApplication(argc, argv);
 
     //Splash screen
     QPixmap pixmap(":/Workshop2/Images/banner.png");
     QSplashScreen splash(pixmap);
     splash.show();
-    splash.showMessage(app.tr("Initializing WS2"), Qt::AlignRight | Qt::AlignBottom, Qt::white);
-    app.processEvents();
+    splash.showMessage(WS2::ws2App->tr("Initializing WS2"), Qt::AlignRight | Qt::AlignBottom, Qt::white);
+    WS2::ws2App->processEvents();
 
     //Init WS2
     WS2::ws2Init();
 
-    splash.showMessage(app.tr("Setting default OpenGL format"), Qt::AlignRight | Qt::AlignBottom, Qt::white);
-    app.processEvents();
+    splash.showMessage(WS2::ws2App->tr("Setting default OpenGL format"), Qt::AlignRight | Qt::AlignBottom, Qt::white);
+    WS2::ws2App->processEvents();
 
     //Set default format
     QSurfaceFormat fmt;
@@ -37,31 +36,33 @@ int main(int argc, char *argv[]) {
     QSurfaceFormat::setDefaultFormat(fmt);
 
     //Splash message
-    splash.showMessage(app.tr("Setting style"), Qt::AlignRight | Qt::AlignBottom, Qt::white);
-    app.processEvents();
+    splash.showMessage(WS2::ws2App->tr("Setting style"), Qt::AlignRight | Qt::AlignBottom, Qt::white);
+    WS2::ws2App->processEvents();
 
     QFile styleFile(":/Styles/FlatDark/FlatDark.qss");
     styleFile.open(QFile::ReadOnly);
     QString style(styleFile.readAll());
     styleFile.close();
-    app.setStyleSheet(style);
+    WS2::ws2App->setStyleSheet(style);
 
     //Splash message
-    splash.showMessage(app.tr("Initializing Stage Editor"), Qt::AlignRight | Qt::AlignBottom, Qt::white);
-    app.processEvents();
+    splash.showMessage(WS2::ws2App->tr("Initializing Stage Editor"), Qt::AlignRight | Qt::AlignBottom, Qt::white);
+    WS2::ws2App->processEvents();
 
-    WS2::UI::StageEditorWindow w;
-    w.show();
-    splash.finish(&w);
+    WS2::UI::StageEditorWindow *w = new WS2::UI::StageEditorWindow();
+    w->show();
+    splash.finish(w);
 
     WS2::qAppRunning = true;
-    int ret = app.exec();
+    int ret = WS2::ws2App->exec();
     WS2::qAppRunning = false;
 
     WS2::Resource::ResourceManager::unloadAllResources();
 
     //Free resources
     WS2::UI::ModelManager::destruct();
+    delete w;
+    delete WS2::ws2App;
 
     return ret;
 }
