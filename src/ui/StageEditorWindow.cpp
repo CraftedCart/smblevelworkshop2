@@ -4,23 +4,40 @@
 #include "ui/ModelManager.hpp"
 #include "ui/SettingsDialog.hpp"
 #include "ui/AboutWindow.hpp"
-#include "Progress.hpp"
+#include "task/ImportFileTask.hpp"
 #include "WS2.hpp"
 #include <QFontDatabase>
 #include <Qt>
 #include <QFileDialog>
 #include <QAction>
-#include <QProgressDialog>
+#include <QDebug>
 
 namespace WS2 {
     namespace UI {
         StageEditorWindow::StageEditorWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::StageEditorWindow) {
             ui->setupUi(this);
 
+            statusTaskProgressBar->hide();
+            statusTaskProgressBar->setMinimumWidth(128); //Prevent the progress bar size from fluctuating
+            statusTaskProgressBar->setMaximumWidth(128);
+            ui->statusBar->addWidget(statusTaskProgressBar);
+            connect(ws2TaskManager->getProgress(), &Progress::valueChanged, statusTaskProgressBar, &QProgressBar::setValue);
+            connect(ws2TaskManager->getProgress(), &Progress::maxChanged, [=](unsigned int max) {
+                        if (max == 0) {
+                            statusTaskProgressBar->hide();
+                        } else {
+                            statusTaskProgressBar->setMaximum(max);
+                            statusTaskProgressBar->show();
+                        }
+                    });
+
+            ui->statusBar->addWidget(statusTaskLabel);
+            connect(ws2TaskManager, &Task::TaskManager::messageChanged, statusTaskLabel, &QLabel::setText);
+
             const QFont fixedFont = QFontDatabase::systemFont(QFontDatabase::FixedFont);
             statusFramerateLabel->setFont(fixedFont);
             statusFramerateLabel->setAutoFillBackground(true); //Allow changing the background color
-            ui->statusBar->addWidget(statusFramerateLabel);
+            ui->statusBar->addPermanentWidget(statusFramerateLabel); //addPermanentWidget right aligns this
 
             ui->resourcesTableView->setModel(UI::ModelManager::modelResources);
             ui->outlinerTreeView->setModel(UI::ModelManager::modelOutliner);
@@ -32,8 +49,8 @@ namespace WS2 {
             //Hide the following dock widgets on start
             ui->resourcesDockWidget->hide();
 
-            connect(ui->actionQuit, SIGNAL(triggered()), QApplication::instance(), SLOT(quit()));
             connect(ui->viewportWidget, &Widget::ViewportWidget::frameRendered, this, &StageEditorWindow::viewportFrameRendered);
+            connect(ui->actionQuit, &QAction::triggered, QApplication::instance(), QApplication::quit);
             connect(ui->actionImport, &QAction::triggered, this, &StageEditorWindow::askImportFiles);
             connect(ui->actionNewNode, &QAction::triggered, this, &StageEditorWindow::addSceneNode);
             connect(ui->actionSettings, &QAction::triggered, this, &StageEditorWindow::showSettings);
@@ -77,28 +94,16 @@ namespace WS2 {
             //Get outta here if no files were chosen
             if (urls.isEmpty()) return;
 
-            //Model loading for SMB stages shouldn't take long enough to require a progress dialog
-            //but here's one anyway!
-            QProgressDialog progDialog(this);
-            progDialog.setCancelButton(nullptr); //Disable cancel option
-            progDialog.setMinimumDuration(1000);
-            progDialog.setModal(true);
-
-            Progress prog;
-            connect(&prog, &Progress::valueChanged, &progDialog, &QProgressDialog::setValue);
-            connect(&prog, &Progress::maxChanged, &progDialog, &QProgressDialog::setMaximum);
-            prog.begin(urls.size());
+            QVector<Task::Task*> tasks;
 
             for (int i = 0; i < urls.size(); i++) {
-                QFile f(urls.at(i).toLocalFile());
-                progDialog.setLabelText(tr("Importing files\n%1").arg(urls.at(i).fileName()));
-                ui->viewportWidget->makeCurrentContext();
-                Project::ProjectManager::getActiveProject()->importFile(f);
-
-                prog.inc();
+                QFile *f = new QFile(urls.at(i).toLocalFile());
+                std::function<void()> *func = new std::function<void()>([=]() {ui->viewportWidget->makeCurrentContext();});
+                tasks.append(new Task::ImportFileTask(f, func));
+                qDebug() << "Max-APP" << tasks.front();
             }
 
-            prog.end();
+            ws2TaskManager->enqueueTasks(tasks);
         }
 
         void StageEditorWindow::addSceneNode() {

@@ -15,7 +15,7 @@ namespace WS2 {
     class Progress : public QObject {
         Q_OBJECT
 
-        protected:
+        public:
             /**
              * @brief Class for use in the progress operation stack
              */
@@ -23,6 +23,8 @@ namespace WS2 {
                 unsigned int stepCount;
                 unsigned int currentStep = 0;
             };
+
+        protected:
 
             /**
              * @brief opStack, short for Operation Stack
@@ -49,6 +51,7 @@ namespace WS2 {
 
             unsigned int getValue();
             unsigned int getMax();
+            QStack<ProgressOperation*>& getOpStack();
 
         signals:
             void valueChanged(unsigned int value);

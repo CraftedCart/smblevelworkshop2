@@ -75,6 +75,8 @@ set(SOURCE_FILES
     ./src/PhysicsDebugDrawer.cpp
     ./src/Config.cpp
     ./src/Progress.cpp
+    ./src/task/TaskManager.cpp
+    ./src/task/ImportFileTask.cpp
     )
 
 set(HEADER_FILES
@@ -110,6 +112,9 @@ set(HEADER_FILES
     ./include/PhysicsDebugDrawer.hpp
     ./include/Config.hpp
     ./include/Progress.hpp
+    ./include/task/Task.hpp
+    ./include/task/TaskManager.hpp
+    ./include/task/ImportFileTask.hpp
     )
 
 set(RESOURCE_FILES

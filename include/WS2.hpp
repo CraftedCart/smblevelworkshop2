@@ -6,6 +6,7 @@
 #ifndef SMBLEVELWORKSHOP2_WS2_HPP
 #define SMBLEVELWORKSHOP2_WS2_HPP
 
+#include "task/TaskManager.hpp"
 #include <QApplication>
 #include <random>
 
@@ -15,12 +16,13 @@
  * WS2 is short for Workshop 2
  */
 namespace WS2 {
+    extern Task::TaskManager *ws2TaskManager;
     extern QApplication *ws2App;
     extern bool qAppRunning;
     extern std::mt19937 *randGen;
 
     //Prefixed with ws2 to avoid confusion with other functions that are within the WS2 namespace
-    void ws2Init();
+    void ws2Init(int &argc, char *argv[]);
     void ws2Destroy();
 }
 

@@ -20,21 +20,25 @@ namespace WS2 {
     }
 
     void Progress::inc() {
-        opStack.top()->currentStep += 1;
+        opStack.top()->currentStep++;
 
         emit valueChanged(getValue());
     }
 
     unsigned int Progress::getValue() {
         //TODO: Represent entire progress
-        if (opStack.size() == 0) return 1;
+        if (opStack.size() == 0) return 0;
         return opStack.top()->currentStep;
     }
 
     unsigned int Progress::getMax() {
         //TODO: Represent entire progress
-        if (opStack.size() == 0) return 1;
+        if (opStack.size() == 0) return 0;
         return opStack.top()->stepCount;
+    }
+
+    QStack<Progress::ProgressOperation*>& Progress::getOpStack() {
+        return opStack;
     }
 }
 

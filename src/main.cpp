@@ -7,8 +7,8 @@
 #include <QSplashScreen>
 
 int main(int argc, char *argv[]) {
-    //Construct the Application
-    WS2::ws2App = new QApplication(argc, argv);
+    //Init WS2
+    WS2::ws2Init(argc, argv);
 
     //Splash screen
     QPixmap pixmap(":/Workshop2/Images/banner.png");
@@ -16,9 +16,6 @@ int main(int argc, char *argv[]) {
     splash.show();
     splash.showMessage(WS2::ws2App->tr("Initializing WS2"), Qt::AlignRight | Qt::AlignBottom, Qt::white);
     WS2::ws2App->processEvents();
-
-    //Init WS2
-    WS2::ws2Init();
 
     splash.showMessage(WS2::ws2App->tr("Setting default OpenGL format"), Qt::AlignRight | Qt::AlignBottom, Qt::white);
     WS2::ws2App->processEvents();
@@ -62,7 +59,8 @@ int main(int argc, char *argv[]) {
     //Free resources
     WS2::UI::ModelManager::destruct();
     delete w;
-    delete WS2::ws2App;
+
+    WS2::ws2Destroy();
 
     return ret;
 }

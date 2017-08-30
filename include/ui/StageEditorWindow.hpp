@@ -8,6 +8,7 @@
 
 #include <QMainWindow>
 #include <QLabel>
+#include <QProgressBar>
 
 namespace Ui {
     class StageEditorWindow;
@@ -22,6 +23,8 @@ namespace WS2 {
                 explicit StageEditorWindow(QWidget *parent = 0);
                 ~StageEditorWindow();
 
+                QProgressBar *statusTaskProgressBar = new QProgressBar();
+                QLabel *statusTaskLabel = new QLabel();
                 QLabel *statusFramerateLabel = new QLabel();
 
             public slots:
