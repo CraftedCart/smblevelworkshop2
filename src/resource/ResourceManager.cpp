@@ -30,7 +30,7 @@ namespace WS2 {
                     Assimp::Importer importer;
                     const aiScene *scene = importer.ReadFile(
                             filePath,
-                            aiProcess_Triangulate | aiProcess_FlipUVs | aiProcess_GenNormals
+                            aiProcess_Triangulate | aiProcess_GenNormals
                             );
 
                     //Check if stuff went wrong
