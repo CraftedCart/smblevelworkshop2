@@ -20,7 +20,7 @@ namespace WS2 {
                  *
                  * @return A pointer to the root SceneNode of the active project
                  */
-                Scene::SceneNode* getRootNode() const;
+                Common::Scene::SceneNode* getRootNode() const;
 
             public:
                 ModelOutliner(QObject *parent);
@@ -39,21 +39,21 @@ namespace WS2 {
                  *
                  * @return A QModelIndex corresponding to the node
                  */
-                QModelIndex findIndexFromNode(Scene::SceneNode *node);
+                QModelIndex findIndexFromNode(Common::Scene::SceneNode *node);
 
                 /**
                  * @brief Adds an entry for a new node
                  *
                  * @param addedNode The newly added node
                  */
-                void onNodeAdded(Scene::SceneNode *addedNode);
+                void onNodeAdded(Common::Scene::SceneNode *addedNode);
 
                 /**
                  * @brief Call this when the selection changes
                  *
                  * @param selectedObjects A vector of selected objects
                  */
-                void selectionChanged(QVector<Scene::SceneNode*>& selectedObjects);
+                void selectionChanged(QVector<Common::Scene::SceneNode*>& selectedObjects);
 
             signals:
                 /**

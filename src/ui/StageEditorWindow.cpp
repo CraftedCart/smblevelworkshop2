@@ -107,7 +107,9 @@ namespace WS2 {
         }
 
         void StageEditorWindow::addSceneNode() {
-            Project::ProjectManager::getActiveProject()->getScene()->getRootNode()->addChild(new Scene::SceneNode(tr("New Node")));
+            Common::Scene::SceneNode *newNode = new Common::Scene::SceneNode(tr("New Node"));
+            Project::ProjectManager::getActiveProject()->getScene()->getRootNode()->addChild(newNode);
+            ModelManager::modelOutliner->onNodeAdded(newNode); //TODO: This feels hacky
         }
 
         void StageEditorWindow::showSettings() {

@@ -40,6 +40,9 @@ endif(APPLE)
 find_package(Bullet REQUIRED)
 include_directories(SYSTEM ${BULLET_INCLUDE_DIRS})
 
+add_subdirectory(./ws2common)
+include_directories(./ws2common/include)
+
 include_directories(./include)
 include_directories(${CMAKE_BINARY_DIR})
 
@@ -68,7 +71,6 @@ set(SOURCE_FILES
     ./src/ui/ModelResources.cpp
     ./src/ui/ModelOutliner.cpp
     ./src/WS2.cpp
-    ./src/scene/SceneNode.cpp
     ./src/scene/MeshSceneNode.cpp
     ./src/scene/SceneSelectionManager.cpp
     ./src/physics/PhysicsManager.cpp
@@ -105,7 +107,6 @@ set(HEADER_FILES
     ./include/ui/ModelResources.hpp
     ./include/ui/ModelOutliner.hpp
     ./include/WS2.hpp
-    ./include/scene/SceneNode.hpp
     ./include/scene/MeshSceneNode.hpp
     ./include/scene/SceneSelectionManager.hpp
     ./include/physics/PhysicsManger.hpp
@@ -132,5 +133,6 @@ target_link_libraries(${PROJECT_NAME}
     ${GLEW_LIBRARIES}
     ${ASSIMP_LIBRARIES}
     ${BULLET_LIBRARIES}
+    ws2common
     )
 

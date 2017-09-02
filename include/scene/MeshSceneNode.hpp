@@ -12,7 +12,7 @@
 
 namespace WS2 {
     namespace Scene {
-        class MeshSceneNode : public SceneNode {
+        class MeshSceneNode : public Common::Scene::SceneNode {
             protected:
                 Resource::ResourceMesh *mesh;
                 btCollisionShape *physicsCollisionShape;

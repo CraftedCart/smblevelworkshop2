@@ -23,7 +23,7 @@ namespace WS2 {
             Q_OBJECT
 
             protected:
-                Scene::SceneNode *rootNode;
+                Common::Scene::SceneNode *rootNode;
                 Scene::SceneSelectionManager *selectionManager;
                 Physics::PhysicsManager *physicsManager;
                 PhysicsDebugDrawer *physicsDebugDrawer;
@@ -77,7 +77,7 @@ namespace WS2 {
                  *
                  * @return This scene's root node of the scenegraph
                  */
-                Scene::SceneNode* getRootNode();
+                Common::Scene::SceneNode* getRootNode();
 
                 /**
                  * @brief Getter for selectionManager
@@ -107,7 +107,7 @@ namespace WS2 {
                  *
                  * @param selectedObjects The new selected nodes vector
                  */
-                void onSelectionChanged(QVector<Scene::SceneNode*>& selectedObjects);
+                void onSelectionChanged(QVector<Common::Scene::SceneNode*>& selectedObjects);
 
         };
     }

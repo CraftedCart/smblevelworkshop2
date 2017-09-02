@@ -9,8 +9,10 @@
 namespace WS2 {
     namespace Resource {
         ResourceScene::ResourceScene() {
-            rootNode = new Scene::SceneNode("root");
-            rootNode->addChild(new Scene::SceneNode(tr("Static")));
+            rootNode = new Common::Scene::SceneNode("root");
+            Common::Scene::SceneNode *staticNode = new Common::Scene::SceneNode(tr("Static"));
+            rootNode->addChild(staticNode);
+            UI::ModelManager::modelOutliner->onNodeAdded(staticNode); //TODO: This feels hacky
 
             selectionManager = new Scene::SceneSelectionManager();
             connect(selectionManager, &Scene::SceneSelectionManager::onSelectionChanged,
@@ -44,7 +46,7 @@ namespace WS2 {
             return physicsDebugDrawer;
         }
 
-        Scene::SceneNode* ResourceScene::getRootNode() {
+        Common::Scene::SceneNode* ResourceScene::getRootNode() {
             return rootNode;
         }
 
@@ -65,11 +67,12 @@ namespace WS2 {
             QVector<ResourceMesh*> newMeshes = ResourceManager::addModel(file, isLoaded());
 
             //Get the static node
-            Scene::SceneNode *staticNode = rootNode->getChildByName(tr("Static"));
+            Common::Scene::SceneNode *staticNode = rootNode->getChildByName(tr("Static"));
             //Create the static node if it doesn't exist
             if (!staticNode) {
-                staticNode = new Scene::SceneNode(tr("Static"));
+                staticNode = new Common::Scene::SceneNode(tr("Static"));
                 rootNode->addChild(staticNode);
+                UI::ModelManager::modelOutliner->onNodeAdded(staticNode); //TODO: This feels hacky
             }
 
             for (int i = 0; i < newMeshes.size(); i++) {
@@ -78,6 +81,7 @@ namespace WS2 {
                 Scene::MeshSceneNode *meshNode = new Scene::MeshSceneNode(newMeshes.at(i)->getId().split("@")[0], newMeshes.at(i));
                 physicsManager->addRigidBody(meshNode->getPhysicsRigidBody());
                 staticNode->addChild(meshNode);
+                UI::ModelManager::modelOutliner->onNodeAdded(meshNode); //TODO: This feels hacky
             }
         }
 
@@ -98,7 +102,7 @@ namespace WS2 {
             loaded = false;
         }
 
-        void ResourceScene::onSelectionChanged(QVector<Scene::SceneNode*>& selectedObjects) {
+        void ResourceScene::onSelectionChanged(QVector<Common::Scene::SceneNode*>& selectedObjects) {
             UI::ModelManager::modelOutliner->selectionChanged(selectedObjects);
         }
     }

@@ -319,7 +319,7 @@ namespace WS2 {
             emit frameRendered(deltaNanoseconds);
         }
 
-        void ViewportWidget::recursiveDrawSceneNode(Scene::SceneNode *node, const glm::mat4 parentTransform) const {
+        void ViewportWidget::recursiveDrawSceneNode(Common::Scene::SceneNode *node, const glm::mat4 parentTransform) const {
             glm::mat4 transform = parentTransform;
             transform = glm::translate(transform, node->getPosition());
             transform = glm::rotate(transform, node->getRotation().x, glm::vec3(1.0f, 0.0f, 0.0f));
@@ -473,7 +473,7 @@ namespace WS2 {
 
             if (rayCallback.hasHit()) {
                 //Select the hit node
-                Scene::SceneNode *node = static_cast<Scene::SceneNode*>(rayCallback.m_collisionObject->getUserPointer());
+                Common::Scene::SceneNode *node = static_cast<Common::Scene::SceneNode*>(rayCallback.m_collisionObject->getUserPointer());
                 Project::ProjectManager::getActiveProject()->getScene()->getSelectionManager()->selectOnly(node);
             } else {
                 //Deselect all if nothing was hit

@@ -95,7 +95,7 @@ namespace WS2 {
                  * @param node The node to draw and/or recursively iterate over its children to draw
                  * @param transform The world transform of the parent node
                  */
-                void recursiveDrawSceneNode(Scene::SceneNode *node, const glm::mat4 parentTransform) const;
+                void recursiveDrawSceneNode(Common::Scene::SceneNode *node, const glm::mat4 parentTransform) const;
 
                 /**
                  * @brief Draws info on the viewport (such as a tip of the day)

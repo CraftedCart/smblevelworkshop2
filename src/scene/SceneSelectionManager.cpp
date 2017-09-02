@@ -2,24 +2,24 @@
 
 namespace WS2 {
     namespace Scene {
-        QVector<SceneNode*>& SceneSelectionManager::getSelectedObjects() {
+        QVector<Common::Scene::SceneNode*>& SceneSelectionManager::getSelectedObjects() {
             return selectedObjects;
         }
 
-        void SceneSelectionManager::selectOnly(SceneNode *obj) {
+        void SceneSelectionManager::selectOnly(Common::Scene::SceneNode *obj) {
             selectedObjects.clear();
             selectedObjects.append(obj);
 
             emit onSelectionChanged(selectedObjects);
         }
 
-        void SceneSelectionManager::select(SceneNode *obj) {
+        void SceneSelectionManager::select(Common::Scene::SceneNode *obj) {
             selectedObjects.append(obj);
 
             emit onSelectionChanged(selectedObjects);
         }
 
-        void SceneSelectionManager::deselect(SceneNode *obj) {
+        void SceneSelectionManager::deselect(Common::Scene::SceneNode *obj) {
             selectedObjects.removeOne(obj);
 
             emit onSelectionChanged(selectedObjects);
