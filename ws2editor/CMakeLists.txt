@@ -136,3 +136,10 @@ target_link_libraries(${PROJECT_NAME}
     ws2common
     )
 
+install(TARGETS ${PROJECT_NAME} DESTINATION bin)
+
+if(UNIX AND NOT APPLE)
+    install(FILES ./resources/Raw/ws2editor.desktop DESTINATION share/applications)
+    install(FILES ./resources/Raw/ws2editor.png DESTINATION share/icons)
+endif(UNIX AND NOT APPLE)
+

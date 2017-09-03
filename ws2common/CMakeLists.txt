@@ -38,3 +38,5 @@ target_include_directories(${PROJECT_NAME} PUBLIC
     $<INSTALL_INTERFACE:include>
     PRIVATE src)
 
+install(TARGETS ${PROJECT_NAME} DESTINATION lib)
+
