@@ -2,7 +2,7 @@
 #include <QDebug>
 #include <QDataStream>
 
-namespace WS2 {
+namespace WS2Editor {
     namespace GLManager {
 
         //Define the extern variables

@@ -1,6 +1,6 @@
 /**
  * @file
- * @brief Header for the WS2::Resource::AbstractResource class
+ * @brief Header for the WS2Editor::Resource::AbstractResource class
  */
 
 #ifndef SMBLEVELWORKSHOP2_RESOURCE_ABSTRACTRESOURCE_HPP
@@ -10,7 +10,7 @@
 #include <QString>
 #include <QObject>
 
-namespace WS2 {
+namespace WS2Editor {
     namespace Resource {
 
         /**
@@ -79,24 +79,24 @@ namespace WS2 {
                 const QString* getFirstFilePath() const;
 
                 /**
-                 * @brief Getter for the WS2::Resource::AbstractResource::filePaths vector
+                 * @brief Getter for the WS2Editor::Resource::AbstractResource::filePaths vector
                  *
                  * @return A reference to the filePaths vector
                  */
                 const QVector<QString>& getFilePaths() const;
 
                 /**
-                 * @brief Loads the resource. The WS2::Resource::AbstractResource implementation sets loaded to true.
+                 * @brief Loads the resource. The WS2Editor::Resource::AbstractResource implementation sets loaded to true.
                  */
                 virtual void load();
 
                 /**
-                 * @brief Unloads the resource. The WS2::Resource::AbstractResource implementation sets loaded to false.
+                 * @brief Unloads the resource. The WS2Editor::Resource::AbstractResource implementation sets loaded to false.
                  */
                 virtual void unload();
 
                 /**
-                 * @brief Getter for WS2::Resource::AbstractResource::loaded
+                 * @brief Getter for WS2Editor::Resource::AbstractResource::loaded
                  *
                  * @return Whether the resource is loaded
                  */

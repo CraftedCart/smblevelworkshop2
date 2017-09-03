@@ -2,7 +2,7 @@
 #include "MathUtils.hpp"
 #include <glm/gtc/quaternion.hpp>
 
-namespace WS2 {
+namespace WS2Editor {
     namespace Scene {
         MeshSceneNode::MeshSceneNode(const QString name) : SceneNode(name) {
             initPhysics();

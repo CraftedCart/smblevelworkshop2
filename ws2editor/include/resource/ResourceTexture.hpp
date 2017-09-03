@@ -1,6 +1,6 @@
 /**
  * @file
- * @brief Header for the WS2::Model::Texture struct
+ * @brief Header for the WS2Editor::Model::Texture struct
  */
 
 #ifndef SMBLEVELWORKSHOP2_MODEL_TEXTURE_HPP
@@ -11,7 +11,7 @@
 #include <QOpenGLTexture>
 #include <QFile>
 
-namespace WS2 {
+namespace WS2Editor {
     namespace Resource {
         class ResourceTexture : public AbstractResource {
             Q_OBJECT

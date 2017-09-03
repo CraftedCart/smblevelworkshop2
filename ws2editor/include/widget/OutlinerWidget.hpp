@@ -9,7 +9,7 @@
 #include "scene/SceneNode.hpp"
 #include <QTreeView>
 
-namespace WS2 {
+namespace WS2Editor {
     namespace Widget {
         class OutlinerWidget : public QTreeView {
             Q_OBJECT

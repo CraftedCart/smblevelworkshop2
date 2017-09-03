@@ -14,7 +14,7 @@ namespace Ui {
     class StageEditorWindow;
 }
 
-namespace WS2 {
+namespace WS2Editor {
     namespace UI {
         class StageEditorWindow : public QMainWindow {
             Q_OBJECT

@@ -1,6 +1,6 @@
 /**
  * @file
- * @brief Header for the WS2::Progress class
+ * @brief Header for the WS2Editor::Progress class
  */
 
 #ifndef SMBLEVELWORKSHOP2_PROGRESS_HPP
@@ -11,7 +11,7 @@
 
 //Based off of the push design from https://softwareengineering.stackexchange.com/a/305833
 
-namespace WS2 {
+namespace WS2Editor {
     class Progress : public QObject {
         Q_OBJECT
 

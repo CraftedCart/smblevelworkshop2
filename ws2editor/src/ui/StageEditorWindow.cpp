@@ -12,7 +12,7 @@
 #include <QAction>
 #include <QDebug>
 
-namespace WS2 {
+namespace WS2Editor {
     namespace UI {
         StageEditorWindow::StageEditorWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::StageEditorWindow) {
             ui->setupUi(this);
@@ -107,7 +107,7 @@ namespace WS2 {
         }
 
         void StageEditorWindow::addSceneNode() {
-            Common::Scene::SceneNode *newNode = new Common::Scene::SceneNode(tr("New Node"));
+            WS2Common::Scene::SceneNode *newNode = new WS2Common::Scene::SceneNode(tr("New Node"));
             Project::ProjectManager::getActiveProject()->getScene()->getRootNode()->addChild(newNode);
             ModelManager::modelOutliner->onNodeAdded(newNode); //TODO: This feels hacky
         }

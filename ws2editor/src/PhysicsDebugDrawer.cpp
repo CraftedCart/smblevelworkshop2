@@ -2,7 +2,7 @@
 #include "GLManager.hpp"
 #include <QDebug>
 
-namespace WS2 {
+namespace WS2Editor {
     PhysicsDebugDrawer::PhysicsDebugDrawer() {
         glGenVertexArrays(1, &vao);
         glBindVertexArray(vao);

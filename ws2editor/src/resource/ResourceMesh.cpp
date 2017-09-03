@@ -4,7 +4,7 @@
 #include "model/Vertex.hpp"
 #include <QtAlgorithms>
 
-namespace WS2 {
+namespace WS2Editor {
     namespace Resource {
         ResourceMesh::ResourceMesh() {}
 

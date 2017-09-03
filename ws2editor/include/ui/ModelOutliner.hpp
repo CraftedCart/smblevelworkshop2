@@ -1,6 +1,6 @@
 /**
  * @file
- * @brief Header for the WS2::UI::ModelOutliner clas
+ * @brief Header for the WS2Editor::UI::ModelOutliner clas
  */
 
 #ifndef SMBLEVELWORKSHOP2_UI_MODELOUTLINER_HPP
@@ -9,7 +9,7 @@
 #include "scene/SceneNode.hpp"
 #include <QAbstractTableModel>
 
-namespace WS2 {
+namespace WS2Editor {
     namespace UI {
         class ModelOutliner : public QAbstractTableModel {
             Q_OBJECT
@@ -20,7 +20,7 @@ namespace WS2 {
                  *
                  * @return A pointer to the root SceneNode of the active project
                  */
-                Common::Scene::SceneNode* getRootNode() const;
+                WS2Common::Scene::SceneNode* getRootNode() const;
 
             public:
                 ModelOutliner(QObject *parent);
@@ -39,21 +39,21 @@ namespace WS2 {
                  *
                  * @return A QModelIndex corresponding to the node
                  */
-                QModelIndex findIndexFromNode(Common::Scene::SceneNode *node);
+                QModelIndex findIndexFromNode(WS2Common::Scene::SceneNode *node);
 
                 /**
                  * @brief Adds an entry for a new node
                  *
                  * @param addedNode The newly added node
                  */
-                void onNodeAdded(Common::Scene::SceneNode *addedNode);
+                void onNodeAdded(WS2Common::Scene::SceneNode *addedNode);
 
                 /**
                  * @brief Call this when the selection changes
                  *
                  * @param selectedObjects A vector of selected objects
                  */
-                void selectionChanged(QVector<Common::Scene::SceneNode*>& selectedObjects);
+                void selectionChanged(QVector<WS2Common::Scene::SceneNode*>& selectedObjects);
 
             signals:
                 /**

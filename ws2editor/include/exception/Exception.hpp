@@ -1,6 +1,6 @@
 /**
  * @file
- * @brief Header for the WS2::Exception::Exception class
+ * @brief Header for the WS2Editor::Exception::Exception class
  */
 
 #ifndef SMBLEVELWORKSHOP2_EXCEPTION_EXCEPTION_HPP
@@ -9,7 +9,7 @@
 #include <QException>
 #include <QString>
 
-namespace WS2 {
+namespace WS2Editor {
     namespace Exception {
 
         /**

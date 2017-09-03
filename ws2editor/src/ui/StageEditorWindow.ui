@@ -31,7 +31,7 @@
      <number>0</number>
     </property>
     <item row="0" column="0">
-     <widget class="WS2::Widget::ViewportWidget" name="viewportWidget" native="true"/>
+     <widget class="WS2Editor::Widget::ViewportWidget" name="viewportWidget" native="true"/>
     </item>
    </layout>
   </widget>
@@ -166,7 +166,7 @@
       <number>0</number>
      </property>
      <item row="0" column="0">
-      <widget class="WS2::Widget::OutlinerWidget" name="outlinerTreeView">
+      <widget class="WS2Editor::Widget::OutlinerWidget" name="outlinerTreeView">
        <property name="selectionMode">
         <enum>QAbstractItemView::ExtendedSelection</enum>
        </property>
@@ -519,12 +519,12 @@
  <layoutdefault spacing="6" margin="11"/>
  <customwidgets>
   <customwidget>
-   <class>WS2::Widget::OutlinerWidget</class>
+   <class>WS2Editor::Widget::OutlinerWidget</class>
    <extends>QTreeView</extends>
    <header>widget/OutlinerWidget.hpp</header>
   </customwidget>
   <customwidget>
-   <class>WS2::Widget::ViewportWidget</class>
+   <class>WS2Editor::Widget::ViewportWidget</class>
    <extends>QWidget</extends>
    <header>widget/ViewportWidget.hpp</header>
   </customwidget>

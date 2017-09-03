@@ -10,13 +10,13 @@
 #include <QDebug>
 #include <climits>
 
-namespace WS2 {
+namespace WS2Editor {
     namespace Resource {
         namespace ResourceManager {
             namespace ResourceManagerInternal {
                 /**
-                 * @throws WS2::Exception::IOException When failing to read the file
-                 * @throws WS2::Exception::RuntimeException When Assimp fails to generate an aiScene
+                 * @throws WS2Editor::Exception::IOException When failing to read the file
+                 * @throws WS2Editor::Exception::RuntimeException When Assimp fails to generate an aiScene
                  */
                 QVector<ResourceMesh*> loadModel(QFile &file, bool shouldLoad) {
                     //The file is from elsewhere - Assume it's from the local filesystem, and pass it to Assimp
@@ -24,7 +24,7 @@ namespace WS2 {
                 }
 
                 /**
-                 * @throws WS2::Exception::ModelLoadingException When Assimp fails to generate an aiScene
+                 * @throws WS2Editor::Exception::ModelLoadingException When Assimp fails to generate an aiScene
                  */
                 QVector<ResourceMesh*> addModelFromFile(const char *filePath, bool shouldLoad) {
                     Assimp::Importer importer;
@@ -231,15 +231,15 @@ namespace WS2 {
             }
 
             /**
-             * @throws WS2::Exception::IOException When failing to read the file
-             * @throws WS2::Exception::RuntimeException When Assimp fails to generate an aiScene
+             * @throws WS2Editor::Exception::IOException When failing to read the file
+             * @throws WS2Editor::Exception::RuntimeException When Assimp fails to generate an aiScene
              */
             QVector<ResourceMesh*> addModel(QFile &file, bool shouldLoad) {
                 return ResourceManagerInternal::loadModel(file, shouldLoad);
             }
 
             /**
-             * @throws WS2::Exception::RuntimeException When there are UINT_MAX taken names
+             * @throws WS2Editor::Exception::RuntimeException When there are UINT_MAX taken names
              */
             QString generateUniqueId(QString prefix) {
                 //Create and populate vector of taken names

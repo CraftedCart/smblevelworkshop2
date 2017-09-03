@@ -9,121 +9,119 @@
 #include <glm/glm.hpp>
 #include <QVector>
 
-namespace WS2 {
-    namespace Common {
-        namespace Scene {
-            /**
-             * @brief A node in a scene graph
-             *
-             * A node contains a transform, as well as various children which inherit the transform.
-             */
-            class SceneNode {
-                protected:
-                    QString name;
+namespace WS2Common {
+    namespace Scene {
+        /**
+         * @brief A node in a scene graph
+         *
+         * A node contains a transform, as well as various children which inherit the transform.
+         */
+        class SceneNode {
+            protected:
+                QString name;
 
-                    QVector<SceneNode*> children;
-                    SceneNode *parent;
+                QVector<SceneNode*> children;
+                SceneNode *parent;
 
-                    glm::vec3 position = glm::vec3(0.0f, 0.0f, 0.0f);
-                    glm::vec3 rotation = glm::vec3(0.0f, 0.0f, 0.0f);
-                    glm::vec3 scale = glm::vec3(1.0f, 1.0f, 1.0f);
+                glm::vec3 position = glm::vec3(0.0f, 0.0f, 0.0f);
+                glm::vec3 rotation = glm::vec3(0.0f, 0.0f, 0.0f);
+                glm::vec3 scale = glm::vec3(1.0f, 1.0f, 1.0f);
 
-                public:
-                    /**
-                     * @brief Constructs a new SceneNode with the name specified
-                     *
-                     * @param name the name of the new SceneNode
-                     */
-                    SceneNode(const QString name);
+            public:
+                /**
+                 * @brief Constructs a new SceneNode with the name specified
+                 *
+                 * @param name the name of the new SceneNode
+                 */
+                SceneNode(const QString name);
 
-                    /**
-                     * @brief Deletes all children
-                     */
-                    virtual ~SceneNode();
+                /**
+                 * @brief Deletes all children
+                 */
+                virtual ~SceneNode();
 
-                    /**
-                     * @brief Getter for WS2::Scene::SceneNode::name
-                     *
-                     * @return The name of this node
-                     */
-                    const QString getName() const;
+                /**
+                 * @brief Getter for WS2::Scene::SceneNode::name
+                 *
+                 * @return The name of this node
+                 */
+                const QString getName() const;
 
-                    /**
-                     * @brief Getter for WS2::Scene::SceneNode::children
-                     *
-                     * @return A reference to the children QVector
-                     */
-                    QVector<SceneNode*>& getChildren();
+                /**
+                 * @brief Getter for WS2::Scene::SceneNode::children
+                 *
+                 * @return A reference to the children QVector
+                 */
+                QVector<SceneNode*>& getChildren();
 
-                    /**
-                     * @brief Returns a child node by it's index position in the children QVector
-                     *
-                     * @param index The index of the child to retrieve
-                     *
-                     * @return A pointer to the child node at index
-                     */
-                    SceneNode* getChildByIndex(int index);
+                /**
+                 * @brief Returns a child node by it's index position in the children QVector
+                 *
+                 * @param index The index of the child to retrieve
+                 *
+                 * @return A pointer to the child node at index
+                 */
+                SceneNode* getChildByIndex(int index);
 
-                    /**
-                     * @brief Returns a child node with the given name
-                     *
-                     * @param name The name of the child node to find
-                     *
-                     * @return A pointer to the child node with the name specified, or nullptr if it doesn't exist
-                     */
-                    SceneNode* getChildByName(QString name);
+                /**
+                 * @brief Returns a child node with the given name
+                 *
+                 * @param name The name of the child node to find
+                 *
+                 * @return A pointer to the child node with the name specified, or nullptr if it doesn't exist
+                 */
+                SceneNode* getChildByName(QString name);
 
-                    /**
-                     * @brief Gets the index of this scene node in its parent's children vector
-                     *
-                     * @return The index of this child within the parent's children QVector, or 0 if there is no parent
-                     */
-                    int getIndex();
+                /**
+                 * @brief Gets the index of this scene node in its parent's children vector
+                 *
+                 * @return The index of this child within the parent's children QVector, or 0 if there is no parent
+                 */
+                int getIndex();
 
-                    /**
-                     * @brief Adds a child node to this node
-                     *
-                     * @param child The child node to add
-                     */
-                    virtual void addChild(SceneNode *child);
+                /**
+                 * @brief Adds a child node to this node
+                 *
+                 * @param child The child node to add
+                 */
+                virtual void addChild(SceneNode *child);
 
-                    /**
-                     * @brief Gets the number of children that belong to this node
-                     *
-                     * @return The number of children that belong to this node
-                     */
-                    int getChildCount();
+                /**
+                 * @brief Gets the number of children that belong to this node
+                 *
+                 * @return The number of children that belong to this node
+                 */
+                int getChildCount();
 
-                    /**
-                     * @brief Getter for WS2::Scene::SceneNode::parent
-                     *
-                     * @return This node's parent
-                     */
-                    SceneNode* getParent();
+                /**
+                 * @brief Getter for WS2::Scene::SceneNode::parent
+                 *
+                 * @return This node's parent
+                 */
+                SceneNode* getParent();
 
-                    /**
-                     * @brief Setter for WS2::Scene::SceneNode::parent
-                     *
-                     * @param parent The parent to set
-                     */
-                    virtual void setParent(SceneNode *parent);
+                /**
+                 * @brief Setter for WS2::Scene::SceneNode::parent
+                 *
+                 * @param parent The parent to set
+                 */
+                virtual void setParent(SceneNode *parent);
 
-                    /**
-                     * @return The position of the node relative to its parent
-                     */
-                    glm::vec3 getPosition() const;
+                /**
+                 * @return The position of the node relative to its parent
+                 */
+                glm::vec3 getPosition() const;
 
-                    /**
-                     * @return The rotation of the node relative to its parent
-                     */
-                    glm::vec3 getRotation() const;
+                /**
+                 * @return The rotation of the node relative to its parent
+                 */
+                glm::vec3 getRotation() const;
 
-                    /**
-                     * @return The position of the node relative to its parent
-                     */
-                    glm::vec3 getScale() const;
-            };
-        }
+                /**
+                 * @return The position of the node relative to its parent
+                 */
+                glm::vec3 getScale() const;
+        };
     }
 }
 

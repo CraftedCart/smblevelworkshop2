@@ -5,7 +5,7 @@
 #define STRINGIFY(x) #x
 #define TO_STRING(x) STRINGIFY(x)
 
-namespace WS2 {
+namespace WS2Editor {
     namespace UI {
         AboutWindow::AboutWindow(QWidget *parent) : QDialog(parent), ui(new Ui::AboutWindow) {
             ui->setupUi(this);

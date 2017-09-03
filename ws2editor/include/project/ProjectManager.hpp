@@ -1,6 +1,6 @@
 /**
  * @file
- * @brief Header for the WS2::Project::ProjectManager namespace
+ * @brief Header for the WS2Editor::Project::ProjectManager namespace
  */
 
 #ifndef SMBLEVELWORKSHOP2_PROJECT_PROJECTMANAGER_HPP
@@ -8,7 +8,7 @@
 
 #include "project/Project.hpp"
 
-namespace WS2 {
+namespace WS2Editor {
     namespace Project {
         namespace ProjectManager {
             /**
@@ -20,7 +20,7 @@ namespace WS2 {
             }
 
             /**
-             * @brief Getter for WS2::Project::ProjectManager::ProjectManagerInternal::activeProject
+             * @brief Getter for WS2Editor::Project::ProjectManager::ProjectManagerInternal::activeProject
              *
              * @return A pointer to the active project
              */

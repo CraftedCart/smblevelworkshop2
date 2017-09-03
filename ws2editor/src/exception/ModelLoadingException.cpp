@@ -1,6 +1,6 @@
 #include "exception/ModelLoadingException.hpp"
 
-namespace WS2 {
+namespace WS2Editor {
     namespace Exception {
         ModelLoadingException::ModelLoadingException() {
             message = "No ModelLoadingException message given";

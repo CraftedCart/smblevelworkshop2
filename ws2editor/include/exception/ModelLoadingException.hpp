@@ -1,6 +1,6 @@
 /**
  * @file
- * @brief Header for the WS2::Exception::ModelLoadingException class
+ * @brief Header for the WS2Editor::Exception::ModelLoadingException class
  */
 
 #ifndef SMBLEVELWORKSHOP2_EXCEPTION_MODELLOADINGEXCEPTION_HPP
@@ -8,7 +8,7 @@
 
 #include "exception/RuntimeException.hpp"
 
-namespace WS2 {
+namespace WS2Editor {
     namespace Exception {
 
         /**

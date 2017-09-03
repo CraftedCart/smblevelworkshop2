@@ -1,6 +1,6 @@
 /**
  * @file
- * @brief Header for the WS2::UI::ModelResources clas
+ * @brief Header for the WS2Editor::UI::ModelResources clas
  */
 
 #ifndef SMBLEVELWORKSHOP2_UI_MODELRESOURCES_HPP
@@ -9,7 +9,7 @@
 #include "resource/AbstractResource.hpp"
 #include <QAbstractTableModel>
 
-namespace WS2 {
+namespace WS2Editor {
     namespace UI {
         class ModelResources : public QAbstractTableModel {
             Q_OBJECT

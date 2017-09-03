@@ -15,7 +15,7 @@
  *
  * WS2 is short for Workshop 2
  */
-namespace WS2 {
+namespace WS2Editor {
     extern Task::TaskManager *ws2TaskManager;
     extern QApplication *ws2App;
     extern bool qAppRunning;

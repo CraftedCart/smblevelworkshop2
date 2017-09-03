@@ -1,6 +1,6 @@
 /**
  * @file
- * @brief Header for the WS2::Model::Scene class
+ * @brief Header for the WS2Editor::Model::Scene class
  */
 
 #ifndef SMBLEVELWORKSHOP2_RESOURCE_RESOURCESCENE_HPP
@@ -14,7 +14,7 @@
 #include "PhysicsDebugDrawer.hpp"
 #include <QFile>
 
-namespace WS2 {
+namespace WS2Editor {
     namespace Resource {
         /**
          * @todo Meshes loaded should belong to ResourceManager, not ResourceScene
@@ -23,7 +23,7 @@ namespace WS2 {
             Q_OBJECT
 
             protected:
-                Common::Scene::SceneNode *rootNode;
+                WS2Common::Scene::SceneNode *rootNode;
                 Scene::SceneSelectionManager *selectionManager;
                 Physics::PhysicsManager *physicsManager;
                 PhysicsDebugDrawer *physicsDebugDrawer;
@@ -77,7 +77,7 @@ namespace WS2 {
                  *
                  * @return This scene's root node of the scenegraph
                  */
-                Common::Scene::SceneNode* getRootNode();
+                WS2Common::Scene::SceneNode* getRootNode();
 
                 /**
                  * @brief Getter for selectionManager
@@ -107,7 +107,7 @@ namespace WS2 {
                  *
                  * @param selectedObjects The new selected nodes vector
                  */
-                void onSelectionChanged(QVector<Common::Scene::SceneNode*>& selectedObjects);
+                void onSelectionChanged(QVector<WS2Common::Scene::SceneNode*>& selectedObjects);
 
         };
     }

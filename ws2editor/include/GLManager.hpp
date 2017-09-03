@@ -8,7 +8,7 @@
 #include <QOpenGLTexture>
 #include <QImage>
 
-namespace WS2 {
+namespace WS2Editor {
     namespace GLManager {
         enum VertexAttribs {
             VERTEX_POSITION = 0,

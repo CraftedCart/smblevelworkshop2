@@ -6,11 +6,11 @@
 #include <QByteArray>
 #include <QFileInfo>
 
-namespace WS2 {
+namespace WS2Editor {
     namespace Resource {
         ResourceScene::ResourceScene() {
-            rootNode = new Common::Scene::SceneNode("root");
-            Common::Scene::SceneNode *staticNode = new Common::Scene::SceneNode(tr("Static"));
+            rootNode = new WS2Common::Scene::SceneNode("root");
+            WS2Common::Scene::SceneNode *staticNode = new WS2Common::Scene::SceneNode(tr("Static"));
             rootNode->addChild(staticNode);
             UI::ModelManager::modelOutliner->onNodeAdded(staticNode); //TODO: This feels hacky
 
@@ -22,8 +22,8 @@ namespace WS2 {
         }
 
         /**
-         * @throws WS2::Exception::IOException When failing to read the file
-         * @throws WS2::Exception::RuntimeException When Assimp fails to generate an aiScene
+         * @throws WS2Editor::Exception::IOException When failing to read the file
+         * @throws WS2Editor::Exception::RuntimeException When Assimp fails to generate an aiScene
          */
         ResourceScene::ResourceScene(QFile &file) {
             addModel(file);
@@ -46,7 +46,7 @@ namespace WS2 {
             return physicsDebugDrawer;
         }
 
-        Common::Scene::SceneNode* ResourceScene::getRootNode() {
+        WS2Common::Scene::SceneNode* ResourceScene::getRootNode() {
             return rootNode;
         }
 
@@ -59,18 +59,18 @@ namespace WS2 {
         }
 
         /**
-         * @throws WS2::Exception::IOException When failing to read the file
-         * @throws WS2::Exception::RuntimeException When Assimp fails to generate an aiScene
+         * @throws WS2Editor::Exception::IOException When failing to read the file
+         * @throws WS2Editor::Exception::RuntimeException When Assimp fails to generate an aiScene
          */
         void ResourceScene::addModel(QFile &file) {
             addFilePath(file.fileName());
             QVector<ResourceMesh*> newMeshes = ResourceManager::addModel(file, isLoaded());
 
             //Get the static node
-            Common::Scene::SceneNode *staticNode = rootNode->getChildByName(tr("Static"));
+            WS2Common::Scene::SceneNode *staticNode = rootNode->getChildByName(tr("Static"));
             //Create the static node if it doesn't exist
             if (!staticNode) {
-                staticNode = new Common::Scene::SceneNode(tr("Static"));
+                staticNode = new WS2Common::Scene::SceneNode(tr("Static"));
                 rootNode->addChild(staticNode);
                 UI::ModelManager::modelOutliner->onNodeAdded(staticNode); //TODO: This feels hacky
             }
@@ -86,8 +86,8 @@ namespace WS2 {
         }
 
         /**
-         * @throws WS2::Exception::IOException When failing to read the file
-         * @throws WS2::Exception::RuntimeException When Assimp fails to generate an aiScene
+         * @throws WS2Editor::Exception::IOException When failing to read the file
+         * @throws WS2Editor::Exception::RuntimeException When Assimp fails to generate an aiScene
          */
         void ResourceScene::load() {
             loaded = true;
@@ -102,7 +102,7 @@ namespace WS2 {
             loaded = false;
         }
 
-        void ResourceScene::onSelectionChanged(QVector<Common::Scene::SceneNode*>& selectedObjects) {
+        void ResourceScene::onSelectionChanged(QVector<WS2Common::Scene::SceneNode*>& selectedObjects) {
             UI::ModelManager::modelOutliner->selectionChanged(selectedObjects);
         }
     }

@@ -1,6 +1,6 @@
 /**
  * @file
- * @brief Header for the WS2::Task::TaskManager class
+ * @brief Header for the WS2Editor::Task::TaskManager class
  */
 
 #ifndef SMBLEVELWORKSHOP2_TASK_TASKMANAGER_HPP
@@ -9,7 +9,7 @@
 #include "Task.hpp"
 #include <QQueue>
 
-namespace WS2 {
+namespace WS2Editor {
     namespace Task {
         class TaskManager : public QObject {
             Q_OBJECT

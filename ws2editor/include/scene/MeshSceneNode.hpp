@@ -1,6 +1,6 @@
 /**
  * @file
- * @brief Header for the WS2::Scene::MeshSceneNode class
+ * @brief Header for the WS2Editor::Scene::MeshSceneNode class
  */
 
 #ifndef SMBLEVELWORKSHOP2_SCENE_MESHSCEHENODE_HPP
@@ -10,9 +10,9 @@
 #include "resource/ResourceMesh.hpp"
 #include <btBulletDynamicsCommon.h>
 
-namespace WS2 {
+namespace WS2Editor {
     namespace Scene {
-        class MeshSceneNode : public Common::Scene::SceneNode {
+        class MeshSceneNode : public WS2Common::Scene::SceneNode {
             protected:
                 Resource::ResourceMesh *mesh;
                 btCollisionShape *physicsCollisionShape;
@@ -52,14 +52,14 @@ namespace WS2 {
                 ~MeshSceneNode();
 
                 /**
-                 * @brief Getter for WS2::Scene::MeshSceneNode::mesh
+                 * @brief Getter for WS2Editor::Scene::MeshSceneNode::mesh
                  *
                  * @return A pointer to the mesh
                  */
                 const Resource::ResourceMesh* getMesh() const;
 
                 /**
-                 * @brief Getter for WS2::Scene::MeshSceneNode::physicsRigidBody
+                 * @brief Getter for WS2Editor::Scene::MeshSceneNode::physicsRigidBody
                  *
                  * @return A pointer to this node's rigid body
                  */

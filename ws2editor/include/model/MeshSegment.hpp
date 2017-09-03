@@ -11,7 +11,7 @@
 #include "glplatform.hpp"
 #include <QVector>
 
-namespace WS2 {
+namespace WS2Editor {
     namespace Model {
         /**
          * @brief Contains the data for one material in a 3D model

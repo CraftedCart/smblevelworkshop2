@@ -2,7 +2,7 @@
 #include "task/TaskManager.hpp"
 #include "project/ProjectManager.hpp"
 
-namespace WS2 {
+namespace WS2Editor {
     namespace Task {
         /**
          * @brief Constructor for ImportFileTask

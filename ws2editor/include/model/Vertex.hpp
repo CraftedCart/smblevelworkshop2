@@ -1,6 +1,6 @@
 /**
  * @file
- * @brief Header for the WS2::Model::Vertex struct
+ * @brief Header for the WS2Editor::Model::Vertex struct
  */
 
 #ifndef SMBLEVELWORKSHOP2_MODEL_VERTEX_HPP
@@ -8,7 +8,7 @@
 
 #include "glplatform.hpp"
 
-namespace WS2 {
+namespace WS2Editor {
     namespace Model {
         struct Vertex {
             glm::vec3 position;

@@ -1,6 +1,6 @@
 #include "WS2.hpp"
 
-namespace WS2 {
+namespace WS2Editor {
     //Define extern members
     Task::TaskManager *ws2TaskManager;
     QApplication *ws2App;

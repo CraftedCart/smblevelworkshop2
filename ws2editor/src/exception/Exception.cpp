@@ -1,6 +1,6 @@
 #include "exception/Exception.hpp"
 
-namespace WS2 {
+namespace WS2Editor {
     namespace Exception {
         Exception::Exception() {
             message = "No Exception message given";

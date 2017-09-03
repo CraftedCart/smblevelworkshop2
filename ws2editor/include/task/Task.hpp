@@ -1,6 +1,6 @@
 /**
  * @file
- * @brief Header for the WS2::Task::Task class
+ * @brief Header for the WS2Editor::Task::Task class
  */
 
 #ifndef SMBLEVELWORKSHOP2_TASK_TASK_HPP
@@ -9,7 +9,7 @@
 #include "Progress.hpp"
 #include <QString>
 
-namespace WS2 {
+namespace WS2Editor {
     namespace Task {
         class Task {
             public:

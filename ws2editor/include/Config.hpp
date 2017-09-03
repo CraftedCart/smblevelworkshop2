@@ -6,7 +6,7 @@
 #ifndef SMBLEVELWORKSHOP2_CONFIG_HPP
 #define SMBLEVELWORKSHOP2_CONFIG_HPP
 
-namespace WS2 {
+namespace WS2Editor {
     /**
      * @brief Stores user configurable variables
      */

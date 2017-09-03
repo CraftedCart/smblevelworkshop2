@@ -1,6 +1,6 @@
 #include "Progress.hpp"
 
-namespace WS2 {
+namespace WS2Editor {
     void Progress::begin(unsigned int stepCount) {
         ProgressOperation *op = new ProgressOperation();
         op->stepCount = stepCount;

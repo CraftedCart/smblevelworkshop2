@@ -1,6 +1,6 @@
 /**
  * @file
- * @brief Header for the WS2::Task::ImportFileTask class
+ * @brief Header for the WS2Editor::Task::ImportFileTask class
  */
 
 #ifndef SMBLEVELWORKSHOP2_TASK_IMPORTFILETASK_HPP
@@ -10,7 +10,7 @@
 #include <QFile>
 #include <functional>
 
-namespace WS2 {
+namespace WS2Editor {
     namespace Task {
         class ImportFileTask : public Task {
             protected:

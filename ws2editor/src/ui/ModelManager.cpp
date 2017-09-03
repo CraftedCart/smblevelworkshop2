@@ -1,6 +1,6 @@
 #include "ui/ModelManager.hpp"
 
-namespace WS2 {
+namespace WS2Editor {
     namespace UI {
         namespace ModelManager {
             //Define the extern members

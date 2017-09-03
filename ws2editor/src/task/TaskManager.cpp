@@ -1,7 +1,7 @@
 #include "task/TaskManager.hpp"
 #include "WS2.hpp"
 
-namespace WS2 {
+namespace WS2Editor {
     namespace Task {
         TaskManager::TaskManager() {
             //When signalExecTasks is emitted, run execTasks on the main thread

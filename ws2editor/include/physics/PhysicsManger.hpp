@@ -8,7 +8,7 @@
 
 #include <btBulletDynamicsCommon.h>
 
-namespace WS2 {
+namespace WS2Editor {
     namespace Physics {
         class PhysicsManager {
             protected:

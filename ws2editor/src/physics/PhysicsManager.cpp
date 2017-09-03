@@ -1,6 +1,6 @@
 #include "physics/PhysicsManger.hpp"
 
-namespace WS2 {
+namespace WS2Editor {
     namespace Physics {
         PhysicsManager::PhysicsManager() {
             broadphase = new btDbvtBroadphase();

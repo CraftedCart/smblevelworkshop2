@@ -3,7 +3,7 @@
 #include "GLManager.hpp"
 #include <QDebug>
 
-namespace WS2 {
+namespace WS2Editor {
     namespace Resource {
         void ResourceTexture::load() {
             const QString filePath = *getFirstFilePath();

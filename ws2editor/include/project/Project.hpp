@@ -1,6 +1,6 @@
 /**
  * @file
- * @brief Header for the WS2::Project::Project
+ * @brief Header for the WS2Editor::Project::Project
  */
 
 #ifndef SMBLEVELWORKSHOP2_PROJECT_PROJECT_HPP
@@ -8,7 +8,7 @@
 
 #include "resource/ResourceScene.hpp"
 
-namespace WS2 {
+namespace WS2Editor {
     namespace Project {
         class Project {
             protected:
@@ -28,7 +28,7 @@ namespace WS2 {
                 ~Project();
 
                 /**
-                 * @brief Getter for WS2::Project::Project::scene
+                 * @brief Getter for WS2Editor::Project::Project::scene
                  *
                  * @return A pointer to the scene
                  */

@@ -12,7 +12,7 @@ namespace Ui {
     class SettingsDialog;
 }
 
-namespace WS2 {
+namespace WS2Editor {
     namespace UI {
         class SettingsDialog : public QDialog {
             Q_OBJECT

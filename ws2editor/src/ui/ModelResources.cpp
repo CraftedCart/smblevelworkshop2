@@ -2,7 +2,7 @@
 #include "resource/ResourceManager.hpp"
 #include <QStringList>
 
-namespace WS2 {
+namespace WS2Editor {
     namespace UI {
         ModelResources::ModelResources(QObject *parent) : QAbstractTableModel(parent) {}
 

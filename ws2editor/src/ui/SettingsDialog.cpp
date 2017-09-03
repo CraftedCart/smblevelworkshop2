@@ -2,7 +2,7 @@
 #include "ui_SettingsDialog.h"
 #include "Config.hpp"
 
-namespace WS2 {
+namespace WS2Editor {
     namespace UI {
         SettingsDialog::SettingsDialog(QWidget *parent) : QDialog(parent), ui(new Ui::SettingsDialog) {
             ui->setupUi(this);

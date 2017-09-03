@@ -12,7 +12,7 @@ namespace Ui {
     class AboutWindow;
 }
 
-namespace WS2 {
+namespace WS2Editor {
     namespace UI {
         class AboutWindow : public QDialog {
             Q_OBJECT

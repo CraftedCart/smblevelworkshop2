@@ -1,6 +1,6 @@
 /**
  * @file
- * @brief Header for the WS2::Exception::RuntimeException class
+ * @brief Header for the WS2Editor::Exception::RuntimeException class
  */
 
 #ifndef SMBLEVELWORKSHOP2_EXCEPTION_RUNTIMEEXCEPTION_HPP
@@ -8,7 +8,7 @@
 
 #include "exception/Exception.hpp"
 
-namespace WS2 {
+namespace WS2Editor {
     namespace Exception {
 
         /**

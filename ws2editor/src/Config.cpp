@@ -1,6 +1,6 @@
 #include "Config.hpp"
 
-namespace WS2 {
+namespace WS2Editor {
     namespace Config {
         float cameraPosSpeed = 48.0f;
         float cameraPosSpeedUpMultiplier = 8.0f;

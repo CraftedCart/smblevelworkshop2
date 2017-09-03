@@ -1,7 +1,7 @@
 #include "model/MeshSegment.hpp"
 #include "GLManager.hpp"
 
-namespace WS2 {
+namespace WS2Editor {
     namespace Model {
         MeshSegment::MeshSegment(QVector<Model::Vertex> vertices, QVector<unsigned int> indices, QVector<Resource::ResourceTexture*> textures) {
             this->vertices = vertices;

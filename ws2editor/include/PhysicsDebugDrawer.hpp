@@ -11,7 +11,7 @@
 #include <btBulletDynamicsCommon.h>
 #include <QVector>
 
-namespace WS2 {
+namespace WS2Editor {
     class PhysicsDebugDrawer : public btIDebugDraw {
         protected:
             int debugMode;

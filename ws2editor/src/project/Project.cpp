@@ -2,7 +2,7 @@
 #include "resource/ResourceManager.hpp"
 #include <QCoreApplication>
 
-namespace WS2 {
+namespace WS2Editor {
     namespace Project {
         Project::Project() {
             scene->setId(Resource::ResourceManager::generateUniqueId(QCoreApplication::translate("Project", "Scene")));

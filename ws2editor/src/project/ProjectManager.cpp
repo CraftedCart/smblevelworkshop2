@@ -1,6 +1,6 @@
 #include "project/ProjectManager.hpp"
 
-namespace WS2 {
+namespace WS2Editor {
     namespace Project {
         namespace ProjectManager {
             namespace ProjectManagerInternal {

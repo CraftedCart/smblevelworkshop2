@@ -12,7 +12,7 @@
 #include <QString>
 #include <QColor>
 
-namespace WS2 {
+namespace WS2Editor {
     namespace Widget {
         class ViewportWidget : public QOpenGLWidget {
             Q_OBJECT
@@ -95,7 +95,7 @@ namespace WS2 {
                  * @param node The node to draw and/or recursively iterate over its children to draw
                  * @param transform The world transform of the parent node
                  */
-                void recursiveDrawSceneNode(Common::Scene::SceneNode *node, const glm::mat4 parentTransform) const;
+                void recursiveDrawSceneNode(WS2Common::Scene::SceneNode *node, const glm::mat4 parentTransform) const;
 
                 /**
                  * @brief Draws info on the viewport (such as a tip of the day)

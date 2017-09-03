@@ -7,7 +7,7 @@
 #include <assimp/matrix4x4.h>
 #include <btBulletDynamicsCommon.h>
 
-namespace WS2 {
+namespace WS2Editor {
     namespace MathUtils {
         glm::vec3 toGlmVec3(const QVector3D &vec);
         glm::vec3 toGlmVec3(const QVector2D &vec);

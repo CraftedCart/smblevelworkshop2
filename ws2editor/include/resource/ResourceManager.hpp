@@ -1,6 +1,6 @@
 /**
  * @file
- * @brief Header for the WS2::Resource::ResourceManager namespace
+ * @brief Header for the WS2Editor::Resource::ResourceManager namespace
  */
 
 #ifndef SMBLEVELWORKSHOP2_RESOURCEMANAGER_HPP
@@ -13,7 +13,7 @@
 #include <QDir>
 #include <assimp/scene.h>
 
-namespace WS2 {
+namespace WS2Editor {
     namespace Resource {
 
         /**
@@ -66,7 +66,7 @@ namespace WS2 {
                         );
 
                 /**
-                 * @brief Converts an aiMesh into a WS2::Model::Mesh
+                 * @brief Converts an aiMesh into a WS2Editor::Model::Mesh
                  *
                  * @param mesh The aiMesh to convert
                  * @param scene The scene that the aiMesh belongs to
@@ -110,8 +110,8 @@ namespace WS2 {
             QVector<AbstractResource*>& getResources();
 
             /**
-             * @brief Adds a resource to the WS2::Resource::ResourceManager::resources vector
-             * @note WS2::Resource::ResourceManager should be the owner of all resources, therefore **do not** delete
+             * @brief Adds a resource to the WS2Editor::Resource::ResourceManager::resources vector
+             * @note WS2Editor::Resource::ResourceManager should be the owner of all resources, therefore **do not** delete
              *       the pointer after adding the resource.
              *
              * @param res The resource to add

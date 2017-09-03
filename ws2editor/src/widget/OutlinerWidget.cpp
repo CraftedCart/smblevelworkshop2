@@ -1,6 +1,6 @@
 #include "widget/OutlinerWidget.hpp"
 
-namespace WS2 {
+namespace WS2Editor {
     namespace Widget {
         OutlinerWidget::OutlinerWidget(QWidget *parent) : QTreeView(parent) {}
 

@@ -1,6 +1,6 @@
 #include "resource/AbstractResource.hpp"
 
-namespace WS2 {
+namespace WS2Editor {
     namespace Resource {
         AbstractResource::~AbstractResource() {
             if (isLoaded()) unload();

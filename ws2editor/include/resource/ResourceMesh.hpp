@@ -1,6 +1,6 @@
 /**
  * @file
- * @brief Header for the WS2::Model::Mesh class
+ * @brief Header for the WS2Editor::Model::Mesh class
  */
 
 #ifndef SMBLEVELWORKSHOP2_RESOURCE_RESOURCEMESH_HPP
@@ -10,7 +10,7 @@
 #include "resource/AbstractResource.hpp"
 #include <QVector>
 
-namespace WS2 {
+namespace WS2Editor {
     namespace Resource {
         /**
          * @todo Load and unload functions

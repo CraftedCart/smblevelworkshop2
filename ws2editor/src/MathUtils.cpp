@@ -2,7 +2,7 @@
 #include "WS2.hpp"
 #include <QDebug>
 
-namespace WS2 {
+namespace WS2Editor {
     namespace MathUtils {
         glm::vec3 toGlmVec3(const QVector3D &vec) {
             return glm::vec3(vec.x(), vec.y(), vec.z());
@@ -35,7 +35,7 @@ namespace WS2 {
 
         int randInt(const int a, const int b) {
             std::uniform_int_distribution<> distr(a, b);
-            return distr(*WS2::randGen);
+            return distr(*WS2Editor::randGen);
         }
     }
 }
