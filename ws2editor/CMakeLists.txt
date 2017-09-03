@@ -40,9 +40,6 @@ endif(APPLE)
 find_package(Bullet REQUIRED)
 include_directories(SYSTEM ${BULLET_INCLUDE_DIRS})
 
-#find_package(ws2common REQUIRED)
-#include_directories(SYSTEM ${WS2COMMON_INCLUDE_DIRS})
-
 include_directories(./include)
 include_directories(${CMAKE_BINARY_DIR})
 
