@@ -78,7 +78,9 @@ namespace WS2Editor {
             for (int i = 0; i < newMeshes.size(); i++) {
                 //The .split("@")[0] gets the part of the name before the @ symbol, which should be the name of the mesh
                 //TODO: Make ResourceMesh store the name of a mesh, instead of doing string manip to get the name
-                Scene::EditorMeshSceneNode *meshNode = new Scene::EditorMeshSceneNode(newMeshes.at(i)->getId().split("@")[0], newMeshes.at(i));
+                QString meshName = newMeshes.at(i)->getId().split("@")[0];
+                Scene::EditorMeshSceneNode *meshNode = new Scene::EditorMeshSceneNode(meshName, newMeshes.at(i));
+                meshNode->setMeshName(meshName);
                 physicsManager->addRigidBody(meshNode->getPhysicsRigidBody());
                 staticNode->addChild(meshNode);
                 UI::ModelManager::modelOutliner->onNodeAdded(meshNode); //TODO: This feels hacky

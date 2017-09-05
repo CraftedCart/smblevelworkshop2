@@ -21,10 +21,12 @@ include_directories(${CMAKE_BINARY_DIR})
 
 set(SOURCE_FILES
     ./src/scene/SceneNode.cpp
+    ./src/scene/MeshSceneNode.cpp
     )
 
 set(HEADER_FILES
     ./include/scene/SceneNode.hpp
+    ./include/scene/MeshSceneNode.hpp
     )
 
 add_library(${PROJECT_NAME} SHARED ${SOURCE_FILES} ${HEADER_FILES})

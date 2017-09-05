@@ -4,11 +4,11 @@
 
 namespace WS2Editor {
     namespace Scene {
-        EditorMeshSceneNode::EditorMeshSceneNode(const QString name) : SceneNode(name) {
+        EditorMeshSceneNode::EditorMeshSceneNode(const QString name) : MeshSceneNode(name) {
             initPhysics();
         }
 
-        EditorMeshSceneNode::EditorMeshSceneNode(const QString name, Resource::ResourceMesh *mesh) : SceneNode(name) {
+        EditorMeshSceneNode::EditorMeshSceneNode(const QString name, Resource::ResourceMesh *mesh) : MeshSceneNode(name) {
             this->mesh = mesh;
             initPhysics();
         }

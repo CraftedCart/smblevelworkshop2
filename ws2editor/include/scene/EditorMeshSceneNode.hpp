@@ -6,13 +6,13 @@
 #ifndef SMBLEVELWORKSHOP2_SCENE_MESHSCEHENODE_HPP
 #define SMBLEVELWORKSHOP2_SCENE_MESHSCEHENODE_HPP
 
-#include "scene/SceneNode.hpp"
+#include "scene/MeshSceneNode.hpp"
 #include "resource/ResourceMesh.hpp"
 #include <btBulletDynamicsCommon.h>
 
 namespace WS2Editor {
     namespace Scene {
-        class EditorMeshSceneNode : public WS2Common::Scene::SceneNode {
+        class EditorMeshSceneNode : public WS2Common::Scene::MeshSceneNode {
             protected:
                 Resource::ResourceMesh *mesh;
                 btCollisionShape *physicsCollisionShape;
