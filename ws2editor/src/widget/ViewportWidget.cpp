@@ -3,7 +3,7 @@
 #include "MathUtils.hpp"
 #include "project/ProjectManager.hpp"
 #include "resource/ResourceManager.hpp"
-#include "scene/MeshSceneNode.hpp"
+#include "scene/EditorMeshSceneNode.hpp"
 #include "physics/PhysicsManger.hpp"
 #include "PhysicsDebugDrawer.hpp"
 #include "Config.hpp"
@@ -327,7 +327,7 @@ namespace WS2Editor {
             transform = glm::rotate(transform, node->getRotation().z, glm::vec3(0.0f, 0.0f, 1.0f));
             transform = glm::scale(transform, node->getScale());
 
-            if (const Scene::MeshSceneNode *mesh = dynamic_cast<const Scene::MeshSceneNode*>(node)) {
+            if (const Scene::EditorMeshSceneNode *mesh = dynamic_cast<const Scene::EditorMeshSceneNode*>(node)) {
                 glUniformMatrix4fv(GLManager::shaderModelID, 1, GL_FALSE, &transform[0][0]);
                 GLManager::renderMesh(mesh->getMesh());
             }

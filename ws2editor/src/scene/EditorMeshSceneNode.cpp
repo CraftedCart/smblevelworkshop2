@@ -1,26 +1,26 @@
-#include "scene/MeshSceneNode.hpp"
+#include "scene/EditorMeshSceneNode.hpp"
 #include "MathUtils.hpp"
 #include <glm/gtc/quaternion.hpp>
 
 namespace WS2Editor {
     namespace Scene {
-        MeshSceneNode::MeshSceneNode(const QString name) : SceneNode(name) {
+        EditorMeshSceneNode::EditorMeshSceneNode(const QString name) : SceneNode(name) {
             initPhysics();
         }
 
-        MeshSceneNode::MeshSceneNode(const QString name, Resource::ResourceMesh *mesh) : SceneNode(name) {
+        EditorMeshSceneNode::EditorMeshSceneNode(const QString name, Resource::ResourceMesh *mesh) : SceneNode(name) {
             this->mesh = mesh;
             initPhysics();
         }
 
-        MeshSceneNode::~MeshSceneNode() {
+        EditorMeshSceneNode::~EditorMeshSceneNode() {
             //mesh is not deleted as ResourceManager owns ResourceMeshs
             delete physicsCollisionShape;
             delete physicsMotionState;
             delete physicsRigidBody;
         }
 
-        void MeshSceneNode::initPhysics() {
+        void EditorMeshSceneNode::initPhysics() {
             glm::quat rotQuat = glm::quat(rotation);
 
             //Construct mesh collision shape
@@ -57,14 +57,14 @@ namespace WS2Editor {
 
             physicsRigidBody = new btRigidBody(constructionInfo);
 
-            physicsRigidBody->setUserPointer(this); //The rigid body is bound to this MeshSceneNode
+            physicsRigidBody->setUserPointer(this); //The rigid body is bound to this EditorMeshSceneNode
         }
 
-        const Resource::ResourceMesh* MeshSceneNode::getMesh() const {
+        const Resource::ResourceMesh* EditorMeshSceneNode::getMesh() const {
             return mesh;
         }
 
-        btRigidBody* MeshSceneNode::getPhysicsRigidBody() {
+        btRigidBody* EditorMeshSceneNode::getPhysicsRigidBody() {
             return physicsRigidBody;
         }
     }

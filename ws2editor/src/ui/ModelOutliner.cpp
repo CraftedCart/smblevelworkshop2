@@ -1,6 +1,6 @@
 #include "ui/ModelOutliner.hpp"
 #include "project/ProjectManager.hpp"
-#include "scene/MeshSceneNode.hpp"
+#include "scene/EditorMeshSceneNode.hpp"
 #include "WS2.hpp"
 
 namespace WS2Editor {

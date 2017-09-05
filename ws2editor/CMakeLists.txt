@@ -68,7 +68,7 @@ set(SOURCE_FILES
     ./src/ui/ModelResources.cpp
     ./src/ui/ModelOutliner.cpp
     ./src/WS2.cpp
-    ./src/scene/MeshSceneNode.cpp
+    ./src/scene/EditorMeshSceneNode.cpp
     ./src/scene/SceneSelectionManager.cpp
     ./src/physics/PhysicsManager.cpp
     ./src/PhysicsDebugDrawer.cpp
@@ -104,7 +104,7 @@ set(HEADER_FILES
     ./include/ui/ModelResources.hpp
     ./include/ui/ModelOutliner.hpp
     ./include/WS2.hpp
-    ./include/scene/MeshSceneNode.hpp
+    ./include/scene/EditorMeshSceneNode.hpp
     ./include/scene/SceneSelectionManager.hpp
     ./include/physics/PhysicsManger.hpp
     ./include/PhysicsDebugDrawer.hpp

@@ -1,6 +1,6 @@
 /**
  * @file
- * @brief Header for the WS2Editor::Scene::MeshSceneNode class
+ * @brief Header for the WS2Editor::Scene::EditorMeshSceneNode class
  */
 
 #ifndef SMBLEVELWORKSHOP2_SCENE_MESHSCEHENODE_HPP
@@ -12,7 +12,7 @@
 
 namespace WS2Editor {
     namespace Scene {
-        class MeshSceneNode : public WS2Common::Scene::SceneNode {
+        class EditorMeshSceneNode : public WS2Common::Scene::SceneNode {
             protected:
                 Resource::ResourceMesh *mesh;
                 btCollisionShape *physicsCollisionShape;
@@ -26,17 +26,17 @@ namespace WS2Editor {
 
             public:
                 /**
-                 * @brief Constructs a MeshSceneNode with no mesh
+                 * @brief Constructs a EditorMeshSceneNode with no mesh
                  *
                  * @note This will init physics, but the rigid body is **not** added to any dynamics world.
                  *       Use `getRigidBody()` to get the rigid body, and add it to a dynamics world.
                  *
                  * @param name The name of the node
                  */
-                MeshSceneNode(const QString name);
+                EditorMeshSceneNode(const QString name);
 
                 /**
-                 * @brief Constructs a MeshSceneNode with a mesh
+                 * @brief Constructs a EditorMeshSceneNode with a mesh
                  *
                  * @note This will init physics, but the rigid body is **not** added to any dynamics world.
                  *       Use `getRigidBody()` to get the rigid body, and add it to a dynamics world.
@@ -44,22 +44,22 @@ namespace WS2Editor {
                  * @param name The name of the node
                  * @param mesh A pointer to the mesh to set
                  */
-                MeshSceneNode(const QString name, Resource::ResourceMesh *mesh);
+                EditorMeshSceneNode(const QString name, Resource::ResourceMesh *mesh);
 
                 /**
                  * @brief Frees up resources
                  */
-                ~MeshSceneNode();
+                ~EditorMeshSceneNode();
 
                 /**
-                 * @brief Getter for WS2Editor::Scene::MeshSceneNode::mesh
+                 * @brief Getter for WS2Editor::Scene::EditorMeshSceneNode::mesh
                  *
                  * @return A pointer to the mesh
                  */
                 const Resource::ResourceMesh* getMesh() const;
 
                 /**
-                 * @brief Getter for WS2Editor::Scene::MeshSceneNode::physicsRigidBody
+                 * @brief Getter for WS2Editor::Scene::EditorMeshSceneNode::physicsRigidBody
                  *
                  * @return A pointer to this node's rigid body
                  */
