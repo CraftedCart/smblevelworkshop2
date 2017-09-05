@@ -128,9 +128,12 @@ You can find the DLLs in C:\msys64\mingw64\bin (Assuming you installed MSYS2 to 
 - libgraphite2.dll
 - libharfbuzz-0.dll
 - libiconv-2.dll
-- libicudtd58.dll
-- libicuind58.dll
-- libicuucd58.dll
+- libicudtd58.dll (Debug builds only)
+- libicudt58.dll (Non-debug builds only)
+- libicuind58.dll (Debug builds only)
+- libicuin58.dll (Non-debug builds only)
+- libicuucd58.dll (Debug builds only)
+- libicuuc58.dll (Non-debug builds only)
 - libintl-8.dll
 - libLinearMath.dll
 - libminizip-1.dll
