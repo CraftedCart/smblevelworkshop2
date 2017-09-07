@@ -11,7 +11,7 @@ When using custom goal models with multiple goal colors, the blue goal must be l
 When using custom goal models, make sure to mark the center part as double sided in the GMA, or duplicate that part and flip to normals, so that it isn't invisible from the back of the goal.
 When animating stages, try to avoid making players wait obnoxious amounts of time at the beginning of a stage.
 Skyboxes can add a lot to a stage. Bonus points if they're more than just a box/cylinder/sphere.
-Aim to make custom music loop seamlessly.
+Place the fallout position slightly below the lowest point a player can bounce up from. Nobody wants to wait long periods of time to fallout, nor fall out when they could have bounced back onto the stage.
 Custom bumper models may have several levels of detail (LODs). Make sure you provide enough for the world the stage goes over.
 Retextured or remade stages from the vanilla games are generally boring.
 Scaling bumpers or jamabars does not scale their collision.
