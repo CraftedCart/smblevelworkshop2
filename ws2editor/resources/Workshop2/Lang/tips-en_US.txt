@@ -2,7 +2,7 @@
 Paper is generally not strong enough to withstand impacts of many miles per hour.
 Wormhole frames do not have collision.
 Wormholes require objects named WORMHOLE (The frame) and WORM_SURFACE (The teleportation surface) to be present in only the GMA and TPL.
-Flat colored textures make it hard to judge distance and spot edges.
+Checkerboard textures make it easier to see edges and judge distance - flat colored textures should generally be avoided.
 Checkers in the vanilla game are 0.5 x 0.5 units per square.
 If your stage suffers from the Rmac glitch, try to eliminate all zero area faces in your model.
 It is easy to see the edges on box shaped skyboxes.
