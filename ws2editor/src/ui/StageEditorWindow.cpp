@@ -100,7 +100,6 @@ namespace WS2Editor {
                 QFile *f = new QFile(urls.at(i).toLocalFile());
                 std::function<void()> *func = new std::function<void()>([=]() {ui->viewportWidget->makeCurrentContext();});
                 tasks.append(new Task::ImportFileTask(f, func));
-                qDebug() << "Max-APP" << tasks.front();
             }
 
             ws2TaskManager->enqueueTasks(tasks);
