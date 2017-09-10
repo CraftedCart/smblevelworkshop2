@@ -134,8 +134,14 @@ target_link_libraries(${PROJECT_NAME}
     ws2common
     )
 
-install(TARGETS ${PROJECT_NAME} DESTINATION bin)
+if(WIN32)
+    #Windows has no concept of rpath, so just group all the exes/dlls in one big mess of a directory
+    install(TARGETS ${PROJECT_NAME} DESTINATION .)
+else(WIN32)
+    install(TARGETS ${PROJECT_NAME} DESTINATION bin)
+endif(WIN32)
 
+#.desktop and icon files
 if(UNIX AND NOT APPLE)
     install(FILES ./resources/Raw/ws2editor.desktop DESTINATION share/applications)
     install(FILES ./resources/Raw/ws2editor.png DESTINATION share/icons)
