@@ -124,6 +124,21 @@ namespace WS2Editor {
                  */
                 void checkGLErrors(QString location);
 
+                /**
+                 * @brief Performs a raycast taking normalized device coordinates into mind
+                 * Useful for camera
+                 *
+                 * @param pos The position in camera space to start raycasting from
+                 * @param startPos The position of the camera
+                 * @param distance The distance that the raycast should test for
+                 * @param proj The projection matrix
+                 * @param view The view matrix
+                 *
+                 * @return A pointer to the raycast callback (Don't forget to delete this when you're done!)
+                 */
+                btCollisionWorld::ClosestRayResultCallback* ndcRaycast(const glm::vec2 pos, const glm::vec3 startPos,
+                        const float distance, const glm::mat4 proj, const glm::mat4 view);
+
                 void selectNodeAtScreenPos(const glm::vec2 pos);
 
             signals:

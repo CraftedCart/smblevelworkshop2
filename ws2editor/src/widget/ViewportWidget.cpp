@@ -428,18 +428,19 @@ namespace WS2Editor {
             }
         }
 
-        void ViewportWidget::selectNodeAtScreenPos(const glm::vec2 pos) {
+        btCollisionWorld::ClosestRayResultCallback* ViewportWidget::ndcRaycast(const glm::vec2 pos, const glm::vec3 startPos,
+                const float distance, const glm::mat4 proj, const glm::mat4 view) {
             //NDC = Normalized device coordinates
             glm::vec4 rayStartNdc(
-                    (pos.x / width() - 0.5f) * 2.0f,
-                    -(pos.y / height() - 0.5f) * 2.0f,
+                    pos.x,
+                    pos.y,
                     -1.0f, //The near clipping plane maps to -1 Z in NDC
                     1.0f
                     );
 
             glm::vec4 rayEndNdc(
-                    (pos.x / width() - 0.5f) * 2.0f,
-                    -(pos.y / height() - 0.5f) * 2.0f,
+                    pos.x,
+                    pos.y,
                     0.0f,
                     1.0f
                     );
@@ -457,28 +458,43 @@ namespace WS2Editor {
             rayDirWorld = glm::normalize(rayDirWorld);
 
             //Raycast
-            glm::vec3 raycastEnd = *cameraPos + rayDirWorld * 2000.0f;
+            glm::vec3 raycastEnd = startPos + rayDirWorld * distance;
             raycastEnd *= -1.0f; //I have no idea why I need to negate everything here, but I do, and it works
 
-            btCollisionWorld::ClosestRayResultCallback rayCallback(
-                    btVector3(MathUtils::toBtVector3(*cameraPos)),
+            btCollisionWorld::ClosestRayResultCallback *rayCallback = new btCollisionWorld::ClosestRayResultCallback(
+                    btVector3(MathUtils::toBtVector3(startPos)),
                     btVector3(MathUtils::toBtVector3(raycastEnd))
                     );
 
             Project::ProjectManager::getActiveProject()->getScene()->getPhysicsManager()->getDynamicsWorld()->rayTest(
-                    btVector3(MathUtils::toBtVector3(*cameraPos)),
+                    btVector3(MathUtils::toBtVector3(startPos)),
                     btVector3(MathUtils::toBtVector3(raycastEnd)),
-                    rayCallback
+                    *rayCallback
                     );
 
-            if (rayCallback.hasHit()) {
+            return rayCallback;
+        }
+
+        void ViewportWidget::selectNodeAtScreenPos(const glm::vec2 pos) {
+            btCollisionWorld::ClosestRayResultCallback* rayCallback = ndcRaycast(
+                    glm::vec2(
+                        (pos.x / width() - 0.5f) * 2.0f,
+                        -(pos.y / height() - 0.5f) * 2.0f
+                        ),
+                    *cameraPos, Config::cameraFar, proj, view
+                    );
+
+            if (rayCallback->hasHit()) {
                 //Select the hit node
-                WS2Common::Scene::SceneNode *node = static_cast<WS2Common::Scene::SceneNode*>(rayCallback.m_collisionObject->getUserPointer());
+                WS2Common::Scene::SceneNode *node =
+                    static_cast<WS2Common::Scene::SceneNode*>(rayCallback->m_collisionObject->getUserPointer());
                 Project::ProjectManager::getActiveProject()->getScene()->getSelectionManager()->selectOnly(node);
             } else {
                 //Deselect all if nothing was hit
                 Project::ProjectManager::getActiveProject()->getScene()->getSelectionManager()->clearSelection();
             }
+
+            delete rayCallback;
         }
     }
 }
