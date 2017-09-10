@@ -94,6 +94,7 @@ set(HEADER_FILES
     ./include/exception/IOException.hpp
     ./include/exception/ModelLoadingException.hpp
     ./include/resource/ResourceManager.hpp
+    ./include/resource/ResourceManager.ipp
     ./include/resource/AbstractResource.hpp
     ./include/resource/ResourceTexture.hpp
     ./include/resource/ResourceScene.hpp

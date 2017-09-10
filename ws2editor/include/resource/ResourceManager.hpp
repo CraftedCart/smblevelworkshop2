@@ -133,21 +133,8 @@ namespace WS2Editor {
              *
              * @return A pointer to the resource if it already exists, or nullptr otherwise
              */
-            template <class T> T getResourceFromFilePath(QString filePath) {
-                auto res = std::find_if(
-                        getResources().begin(),
-                        getResources().end(),
-                        [&filePath](const AbstractResource *object) { return object->getFilePaths().contains(filePath); }
-                        );
-
-                if (res != getResources().end()) {
-                    //Resource found
-                    return static_cast<T>(*res);
-                } else {
-                    //Resource not found
-                    return nullptr;
-                }
-            }
+            template <class T>
+            T getResourceFromFilePath(QString filePath);
 
             /**
              * @brief Addes the meshes in a 3D model to the resource manager
@@ -170,6 +157,8 @@ namespace WS2Editor {
         }
     }
 }
+
+#include "resource/ResourceManager.ipp"
 
 #endif
 

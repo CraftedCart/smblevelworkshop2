@@ -1,0 +1,23 @@
+namespace WS2Editor {
+    namespace Resource {
+        namespace ResourceManager {
+            template <class T>
+            T getResourceFromFilePath(QString filePath) {
+                auto res = std::find_if(
+                        getResources().begin(),
+                        getResources().end(),
+                        [&filePath](const AbstractResource *object) { return object->getFilePaths().contains(filePath); }
+                        );
+
+                if (res != getResources().end()) {
+                    //Resource found
+                    return static_cast<T>(*res);
+                } else {
+                    //Resource not found
+                    return nullptr;
+                }
+            }
+        }
+    }
+}
+
