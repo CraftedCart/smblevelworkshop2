@@ -33,6 +33,10 @@ namespace WS2Editor {
             return btVector3(vec.x, vec.y, vec.z);
         }
 
+        QPoint toQPoint(const glm::vec2 &vec) {
+            return QPoint(vec.x, vec.y);
+        }
+
         int randInt(const int a, const int b) {
             std::uniform_int_distribution<> distr(a, b);
             return distr(*WS2Editor::randGen);

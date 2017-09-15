@@ -9,6 +9,7 @@
 #include "Config.hpp"
 #include <glm/gtx/transform.hpp>
 #include <glm/gtc/constants.hpp>
+#include <BulletCollision/NarrowPhaseCollision/btRaycastCallback.h>
 #include <Qt>
 #include <QTimer>
 #include <QDebug>
@@ -48,6 +49,7 @@ namespace WS2Editor {
             delete cameraPos;
             delete targetCameraPos;
             delete cameraRot;
+            delete tooltipPixmap;
 
             makeCurrent();
         }
@@ -101,6 +103,9 @@ namespace WS2Editor {
             //GLManager::physicsDebugShaderViewID = glGetUniformLocation(GLManager::physicsDebugProgID, "viewMat");
             //GLManager::physicsDebugShaderProjID = glGetUniformLocation(GLManager::physicsDebugProgID, "projMat");
 
+            //Load pixmaps
+            tooltipPixmap = new QPixmap(":/Workshop2/Images/tooltip.png");
+
             //Mark the initial project as loaded, so that models added to the scene are also loaded
             Project::ProjectManager::getActiveProject()->getScene()->load();
 
@@ -115,7 +120,7 @@ namespace WS2Editor {
          * @note This disables GL_DEPTH_TEST because of the usage of QPainter
          * @todo This feels hacky as it's calling glm::project twice
          */
-        void ViewportWidget::drawText(const glm::vec3 &pos, const QString &str, const QColor &col) {
+        void ViewportWidget::drawText(QPainter &painter, const glm::vec3 &pos, const QString &str, const QColor &col) {
             //TODO Stop calling glm::project twice
             //Projection matrix
             //glm::mat4 proj = glm::perspective(glm::radians(Config::cameraFov), (float) width() / (float) height(), 0.1f, 2000.0f);
@@ -138,11 +143,9 @@ namespace WS2Editor {
             glm::vec3 projected2 = glm::project(pos, view2, proj, viewport);
 
             if (projected.z < 1) {
-                QPainter painter(this);
                 painter.setPen(col);
                 painter.setFont(QFont());
                 painter.drawText(projected.x, projected2.y, str);
-                painter.end();
             }
         }
 
@@ -255,6 +258,9 @@ namespace WS2Editor {
             deltaSeconds = deltaNanoseconds / 1000000000.0f;
             prevNanosecondsElapsed = elapsedNanoseconds;
 
+            //Need to enable this every frame as this gets disabled before drawing with QPainter
+            glEnable(GL_CULL_FACE);
+
             //Projection matrix
             proj = glm::perspective(glm::radians(Config::cameraFov), (float) width() / (float) height(), Config::cameraNear, Config::cameraFar);
 
@@ -290,14 +296,6 @@ namespace WS2Editor {
                 recursiveDrawSceneNode(scene->getRootNode(), glm::mat4(1.0f));
             }
 
-            //Draw empty scene info (Like a tip of the day) if the scene is empty (The root node had only 1 child "Static" with 0 children)
-            if (scene->getRootNode()->getChildCount() == 1 &&
-                    scene->getRootNode()->getChildByIndex(0)->getChildCount() == 0) {
-                drawEmptySceneInfo();
-            }
-
-            //drawText(glm::vec3(0.0f, 0.0f, 0.0f), QString("Origin"), QColor(255, 255, 255));
-
             //Physics debug drawing
             PhysicsDebugDrawer *physicsDebugDrawer = Project::ProjectManager::getActiveProject()->getScene()->getPhysicsDebugDrawer();
             if (physicsDebugDrawer != nullptr) {
@@ -311,6 +309,26 @@ namespace WS2Editor {
                 Project::ProjectManager::getActiveProject()->getScene()->getPhysicsManager()->getDynamicsWorld()->debugDrawWorld();
                 physicsDebugDrawer->drawAll();
             }
+
+            //Painter
+            //Need to reset some OpenGL stuff before using QPainter is sane
+            glDisable(GL_CULL_FACE);
+            glUseProgram(0);
+            glActiveTexture(GL_TEXTURE0);
+            glBindTexture(GL_TEXTURE_2D, 0);
+            QPainter painter(this);
+            this->painter = &painter;
+
+            //Draw empty scene info (Like a tip of the day) if the scene is empty (The root node had only 1 child "Static" with 0 children)
+            if (scene->getRootNode()->getChildCount() == 1 &&
+                    scene->getRootNode()->getChildByIndex(0)->getChildCount() == 0) {
+                drawEmptySceneInfo(painter);
+            }
+
+            //drawText(painter, glm::vec3(0.0f, 0.0f, 0.0f), QString("Origin"), QColor(255, 255, 255));
+            drawObjectTooltipAtPos(painter, getRelativeCursorPos());
+
+            painter.end();
 
             //Check for errors
             checkGLErrors("End of ViewportWidget::paintGL()");
@@ -337,22 +355,42 @@ namespace WS2Editor {
             }
         }
 
-        void ViewportWidget::drawEmptySceneInfo() {
-            QPainter p(this);
-            p.setPen(Qt::white);
+        void ViewportWidget::drawObjectTooltipAtPos(QPainter &painter, glm::vec2 pos) {
+            btCollisionWorld::ClosestRayResultCallback* rayCallback = ndcRaycast(
+                    glm::vec2(
+                        (pos.x / width() - 0.5f) * 2.0f,
+                        -(pos.y / height() - 0.5f) * 2.0f
+                        ),
+                    *cameraPos, Config::cameraFar, proj, view
+                    );
+
+            if (rayCallback->hasHit()) {
+                WS2Common::Scene::SceneNode *node =
+                    static_cast<WS2Common::Scene::SceneNode*>(rayCallback->m_collisionObject->getUserPointer());
+
+                painter.drawPixmap(pos.x, pos.y - tooltipPixmap->height(), *tooltipPixmap);
+
+                painter.setPen(Qt::white);
+                painter.drawText(MathUtils::toQPoint(pos + glm::vec2(20, -10)), node->getName());
+            }
+
+            delete rayCallback;
+        }
+
+        void ViewportWidget::drawEmptySceneInfo(QPainter &painter) {
+            painter.setPen(Qt::white);
             QFont f;
 
             f.setPixelSize(24);
-            p.setFont(f);
-            p.drawText(24, 48, tr("SMB Level Workshop 2"));
-            p.drawText(24, 120, tr("Tip of the day"));
+            painter.setFont(f);
+            painter.drawText(24, 48, tr("SMB Level Workshop 2"));
+            painter.drawText(24, 120, tr("Tip of the day"));
 
             f.setPixelSize(14);
-            p.setFont(f);
-            p.drawText(24, 66, tr("Open a project or import models to get started"));
-            p.drawText(QRectF(24, 124, width() - 48, height() - 124 - 24), tip);
+            painter.setFont(f);
+            painter.drawText(24, 66, tr("Open a project or import models to get started"));
+            painter.drawText(QRectF(24, 124, width() - 48, height() - 124 - 24), tip);
 
-            p.end();
         }
 
         void ViewportWidget::keyPressEvent(QKeyEvent *event) {
@@ -367,14 +405,8 @@ namespace WS2Editor {
             //TODO: Rebindable mouse button
             switch (event->button()) {
                 case Qt::LeftButton:
-                    {
-                        QPoint cursorPos = QCursor::pos();
-                        QPoint tlWidgetPos = mapToGlobal(pos()); //tl = Top Left
-                        QVector2D relCursorPosQt = QVector2D(cursorPos - tlWidgetPos); //rel = Relative
-                        glm::vec2 relCursorPos = MathUtils::toGlmVec2(relCursorPosQt);
-                        selectNodeAtScreenPos(relCursorPos);
-                        break;
-                    }
+                    selectNodeAtScreenPos(getRelativeCursorPos());
+                    break;
                 case Qt::RightButton:
                     cameraNavMode = EnumCameraNav::NAV_FIRST_PERSON_FLY;
                     break;
@@ -398,6 +430,13 @@ namespace WS2Editor {
             *targetCameraPos += forward * (float) dy;
             cameraPivotDistance -= dy;
             cameraPivotDistance = glm::max(cameraPivotDistance, 1.0f);
+        }
+
+        glm::vec2 ViewportWidget::getRelativeCursorPos() {
+            QPoint cursorPos = QCursor::pos();
+            QPoint tlWidgetPos = mapToGlobal(pos()); //tl = Top Left
+            QVector2D relCursorPosQt = QVector2D(cursorPos - tlWidgetPos); //rel = Relative
+            return MathUtils::toGlmVec2(relCursorPosQt);
         }
 
         void ViewportWidget::checkGLErrors(QString location) {
@@ -454,17 +493,17 @@ namespace WS2Editor {
             rayEndWorld /= rayEndWorld.w;
 
             //Get the ray direction
-            glm::vec3 rayDirWorld(rayStartWorld - rayEndWorld);
+            glm::vec3 rayDirWorld(rayEndWorld - rayStartWorld);
             rayDirWorld = glm::normalize(rayDirWorld);
 
             //Raycast
             glm::vec3 raycastEnd = startPos + rayDirWorld * distance;
-            raycastEnd *= -1.0f; //I have no idea why I need to negate everything here, but I do, and it works
 
             btCollisionWorld::ClosestRayResultCallback *rayCallback = new btCollisionWorld::ClosestRayResultCallback(
                     btVector3(MathUtils::toBtVector3(startPos)),
                     btVector3(MathUtils::toBtVector3(raycastEnd))
                     );
+            rayCallback->m_flags = btTriangleRaycastCallback::kF_FilterBackfaces; //Ignore back faces
 
             Project::ProjectManager::getActiveProject()->getScene()->getPhysicsManager()->getDynamicsWorld()->rayTest(
                     btVector3(MathUtils::toBtVector3(startPos)),
