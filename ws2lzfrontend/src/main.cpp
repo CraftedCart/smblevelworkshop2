@@ -1,5 +1,5 @@
 #include "MessageHandler.hpp"
-#include "GameVersion.hpp"
+#include "EnumGameVersion.hpp"
 #include <QCoreApplication>
 #include <QCommandLineParser>
 #include <QDebug>
@@ -24,7 +24,7 @@ int main(int argc, char *argv[]) {
     parser.process(app);
 
     //Some variables
-    WS2Lz::GameVersion gameVersion = WS2Lz::GameVersion::SUPER_MONKEY_BALL_2;
+    WS2Common::EnumGameVersion gameVersion = WS2Common::EnumGameVersion::SUPER_MONKEY_BALL_2;
 
     if (app.arguments().length() == 1) {
         //No arguments - print help
@@ -56,9 +56,9 @@ int main(int argc, char *argv[]) {
         //The --game-version switch was set
         //Check that the game version is valid
         if (parser.value("g") == "1") {
-            gameVersion = WS2Lz::GameVersion::SUPER_MONKEY_BALL_1;
+            gameVersion = WS2Common::EnumGameVersion::SUPER_MONKEY_BALL_1;
         } else if (parser.value("g") == "2") {
-            gameVersion = WS2Lz::GameVersion::SUPER_MONKEY_BALL_2;
+            gameVersion = WS2Common::EnumGameVersion::SUPER_MONKEY_BALL_2;
         } else {
             //Invalid version
             qCritical().noquote() << QCoreApplication::translate("main", "Invalid game version specified. Use --help for more info.");

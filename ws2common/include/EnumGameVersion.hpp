@@ -1,14 +1,14 @@
 /**
  * @file
- * @brief Header for the GameVersion enum
+ * @brief Header for the EnumGameVersion enum
  */
 
-namespace WS2Lz {
+namespace WS2Common {
 
     /**
      * @brief An enum to differentiate between games
      */
-    enum GameVersion {
+    enum EnumGameVersion {
         SUPER_MONKEY_BALL_1,
         SUPER_MONKEY_BALL_2
     };

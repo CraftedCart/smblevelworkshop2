@@ -22,7 +22,6 @@ set(SOURCE_FILES
     )
 
 set(HEADER_FILES
-    ./include/GameVersion.hpp
     )
 
 add_library(${PROJECT_NAME} SHARED ${SOURCE_FILES} ${HEADER_FILES})

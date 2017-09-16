@@ -27,6 +27,7 @@ set(SOURCE_FILES
 
 set(HEADER_FILES
     ./include/MessageHandler.hpp
+    ./include/EnumGameVersion.hpp
     ./include/scene/SceneNode.hpp
     ./include/scene/MeshSceneNode.hpp
     )
