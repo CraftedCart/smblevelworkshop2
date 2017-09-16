@@ -44,7 +44,7 @@ int main(int argc, char *argv[]) {
     }
 
     //Check for a valid output
-    if (!(parser.isSet("s") || parser.isSet("s"))) {
+    if (!(parser.isSet("o") || parser.isSet("s"))) {
         qCritical().noquote() << QCoreApplication::translate("main", "No output file specified. Use --help for more info.");
         return EXIT_FAILURE;
     }
