@@ -15,7 +15,7 @@ namespace WS2Common {
                 QString meshName;
 
             public:
-                MeshSceneNode(QString name);
+                MeshSceneNode(const QString name);
 
                 /**
                  * @brief Setter for meshName

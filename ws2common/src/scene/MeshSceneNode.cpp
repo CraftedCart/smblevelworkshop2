@@ -2,7 +2,7 @@
 
 namespace WS2Common {
     namespace Scene {
-        MeshSceneNode::MeshSceneNode(QString name) : SceneNode(name) {}
+        MeshSceneNode::MeshSceneNode(const QString name) : SceneNode(name) {}
 
         void MeshSceneNode::setMeshName(QString meshName) {
             this->meshName = meshName;
