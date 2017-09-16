@@ -20,11 +20,13 @@ include_directories(./include)
 include_directories(${CMAKE_BINARY_DIR})
 
 set(SOURCE_FILES
+    ./src/MessageHandler.cpp
     ./src/scene/SceneNode.cpp
     ./src/scene/MeshSceneNode.cpp
     )
 
 set(HEADER_FILES
+    ./include/MessageHandler.hpp
     ./include/scene/SceneNode.hpp
     ./include/scene/MeshSceneNode.hpp
     )
