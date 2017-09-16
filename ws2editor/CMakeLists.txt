@@ -134,6 +134,12 @@ target_link_libraries(${PROJECT_NAME}
     ws2common
     )
 
+#Export headers
+target_include_directories(${PROJECT_NAME} PUBLIC
+    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
+    $<INSTALL_INTERFACE:include>
+    PRIVATE src)
+
 if(WIN32)
     #Windows has no concept of rpath, so just group all the exes/dlls in one big mess of a directory
     install(TARGETS ${PROJECT_NAME} DESTINATION .)

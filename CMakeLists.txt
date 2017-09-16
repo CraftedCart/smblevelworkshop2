@@ -12,5 +12,7 @@ configure_file("cmake/uninstall.cmake" "cmake/uninstall.cmake" COPYONLY)
 add_custom_target(uninstall "${CMAKE_COMMAND}" -P "cmake/uninstall.cmake")
 
 add_subdirectory(./ws2common)
+add_subdirectory(./ws2lz)
+add_subdirectory(./ws2lzfrontend)
 add_subdirectory(./ws2editor)
 
