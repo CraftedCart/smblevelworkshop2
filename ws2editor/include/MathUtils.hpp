@@ -8,6 +8,10 @@
 #include <btBulletDynamicsCommon.h>
 
 namespace WS2Editor {
+
+    /**
+     * @brief Various functions to convert between types and other misc math related functions
+     */
     namespace MathUtils {
         glm::vec3 toGlmVec3(const QVector3D &vec);
         glm::vec3 toGlmVec3(const QVector2D &vec);

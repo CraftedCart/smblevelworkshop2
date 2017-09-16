@@ -12,6 +12,13 @@
 //Based off of the push design from https://softwareengineering.stackexchange.com/a/305833
 
 namespace WS2Editor {
+
+    /**
+     * @brief Class for progress reporting.
+     *
+     * Tasks are nested and a new task can be started with begin(stepCount), and ended with end()
+     * A task has stepCount operations to complete, and you can increment the operations done with inc()
+     */
     class Progress : public QObject {
         Q_OBJECT
 

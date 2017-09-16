@@ -12,6 +12,11 @@
 
 namespace WS2Editor {
     namespace Scene {
+
+        /**
+         * @brief Extends on the MeshSceneNode, providing extra functionality to integrate it into WS2Editor, such as
+         *        a renderable mesh and collision shape for raycasting.
+         */
         class EditorMeshSceneNode : public WS2Common::Scene::MeshSceneNode {
             protected:
                 Resource::ResourceMesh *mesh;

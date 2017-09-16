@@ -2,6 +2,14 @@
 #include <stdio.h>
 
 namespace WS2Common {
+
+    /**
+     * @brief Custom message handler for logging - Install it with qInstallMessageHandler(messageHandler)
+     *
+     * @param type The message type
+     * @param context The message context
+     * @param msg The message
+     */
     void messageHandler(QtMsgType type, const QMessageLogContext &context, const QString &msg) {
         Q_UNUSED(context);
 

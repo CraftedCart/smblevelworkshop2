@@ -11,6 +11,10 @@
 
 namespace WS2Editor {
     namespace Task {
+
+        /**
+         * @brief An executable task with progress reporting and a user friendly message
+         */
         class Task {
             public:
                 virtual ~Task() {}

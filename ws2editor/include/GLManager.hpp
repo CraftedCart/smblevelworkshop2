@@ -9,6 +9,10 @@
 #include <QImage>
 
 namespace WS2Editor {
+
+    /**
+     * @brief Functions, constants and variables to aid with GL
+     */
     namespace GLManager {
         enum VertexAttribs {
             VERTEX_POSITION = 0,

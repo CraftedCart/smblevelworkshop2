@@ -10,6 +10,10 @@
 
 namespace WS2Editor {
     namespace Model {
+
+        /**
+         * @brief Stores data for a single vertex
+         */
         struct Vertex {
             glm::vec3 position;
             glm::vec3 normal;
