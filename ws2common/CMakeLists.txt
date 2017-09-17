@@ -23,13 +23,30 @@ set(SOURCE_FILES
     ./src/MessageHandler.cpp
     ./src/scene/SceneNode.cpp
     ./src/scene/MeshSceneNode.cpp
+    ./src/scene/GoalSceneNode.cpp
+    ./src/scene/BumperSceneNode.cpp
+    ./src/scene/JamabarSceneNode.cpp
+    ./src/scene/BananaSceneNode.cpp
+    ./src/scene/FalloutVolumeSceneNode.cpp
+    ./src/scene/SwitchSceneNode.cpp
+    ./src/scene/WormholeSceneNode.cpp
     )
 
 set(HEADER_FILES
     ./include/MessageHandler.hpp
     ./include/EnumGameVersion.hpp
+    ./include/EnumGoalType.hpp
+    ./include/EnumBananaType.hpp
+    ./include/EnumPlaybackState.hpp
     ./include/scene/SceneNode.hpp
     ./include/scene/MeshSceneNode.hpp
+    ./include/scene/GoalSceneNode.hpp
+    ./include/scene/BumperSceneNode.hpp
+    ./include/scene/JamabarSceneNode.hpp
+    ./include/scene/BananaSceneNode.hpp
+    ./include/scene/FalloutVolumeSceneNode.hpp
+    ./include/scene/SwitchSceneNode.hpp
+    ./include/scene/WormholeSceneNode.hpp
     )
 
 add_library(${PROJECT_NAME} SHARED ${SOURCE_FILES} ${HEADER_FILES})

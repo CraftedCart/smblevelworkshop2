@@ -1,0 +1,24 @@
+/**
+ * @file
+ * @brief Header for the EnumGoalType enum
+ */
+
+#ifndef SMBLEVELWORKSHOP2_WS2COMMON_ENUMGOALTYPE_HPP
+#define SMBLEVELWORKSHOP2_WS2COMMON_ENUMGOALTYPE_HPP
+
+namespace WS2Common {
+
+    /**
+     * @brief An enum to differentiate goal types
+     *
+     * @note The values given for the goals here are for SMB 2 - SMB 1 uses different values in the LZ
+     */
+    enum EnumGoalType {
+        BLUE = 0x0001,
+        GREEN = 0x0101,
+        RED = 0x0201
+    };
+}
+
+#endif
+

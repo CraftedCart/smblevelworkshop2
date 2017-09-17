@@ -3,6 +3,9 @@
  * @brief Header for the EnumGameVersion enum
  */
 
+#ifndef SMBLEVELWORKSHOP2_WS2COMMON_ENUMGAMEVERSION_HPP
+#define SMBLEVELWORKSHOP2_WS2COMMON_ENUMGAMEVERSION_HPP
+
 namespace WS2Common {
 
     /**
@@ -13,4 +16,6 @@ namespace WS2Common {
         SUPER_MONKEY_BALL_2
     };
 }
+
+#endif
 

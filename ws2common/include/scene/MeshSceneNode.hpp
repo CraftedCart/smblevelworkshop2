@@ -3,6 +3,9 @@
  * @brief Header for the MeshSceneNode class
  */
 
+#ifndef SMBLEVELWORKSHOP2_WS2COMMON_SCENE_MESHSCENENODE_HPP
+#define SMBLEVELWORKSHOP2_WS2COMMON_SCENE_MESHSCENENODE_HPP
+
 #include "scene/SceneNode.hpp"
 
 namespace WS2Common {
@@ -33,4 +36,6 @@ namespace WS2Common {
         };
     }
 }
+
+#endif
 
