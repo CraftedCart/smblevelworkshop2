@@ -3,8 +3,8 @@
  * @brief Header for the WS2Editor::Resource::ResourceManager namespace
  */
 
-#ifndef SMBLEVELWORKSHOP2_RESOURCEMANAGER_HPP
-#define SMBLEVELWORKSHOP2_RESOURCEMANAGER_HPP
+#ifndef SMBLEVELWORKSHOP2_WS2EDITOR_RESOURCEMANAGER_HPP
+#define SMBLEVELWORKSHOP2_WS2EDITOR_RESOURCEMANAGER_HPP
 
 #include "ws2editor/resource/AbstractResource.hpp"
 #include "ws2editor/resource/ResourceMesh.hpp"

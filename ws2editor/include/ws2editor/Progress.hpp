@@ -3,8 +3,8 @@
  * @brief Header for the WS2Editor::Progress class
  */
 
-#ifndef SMBLEVELWORKSHOP2_PROGRESS_HPP
-#define SMBLEVELWORKSHOP2_PROGRESS_HPP
+#ifndef SMBLEVELWORKSHOP2_WS2EDITOR_PROGRESS_HPP
+#define SMBLEVELWORKSHOP2_WS2EDITOR_PROGRESS_HPP
 
 #include <QObject>
 #include <QStack>

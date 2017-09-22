@@ -5,8 +5,8 @@
  * Oh Apple, why do you put your GL header in a different place
  */
 
-#ifndef SMBLEVELWORKSHOP2_GLPLATFORM_HPP
-#define SMBLEVELWORKSHOP2_GLPLATFORM_HPP
+#ifndef SMBLEVELWORKSHOP2_WS2EDITOR_GLPLATFORM_HPP
+#define SMBLEVELWORKSHOP2_WS2EDITOR_GLPLATFORM_HPP
 
 #include <GL/glew.h>
 #include <glm/glm.hpp>

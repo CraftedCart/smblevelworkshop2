@@ -3,8 +3,8 @@
  * @brief Header for the WS2Editor::Model::Scene class
  */
 
-#ifndef SMBLEVELWORKSHOP2_RESOURCE_RESOURCESCENE_HPP
-#define SMBLEVELWORKSHOP2_RESOURCE_RESOURCESCENE_HPP
+#ifndef SMBLEVELWORKSHOP2_WS2EDITOR_RESOURCE_RESOURCESCENE_HPP
+#define SMBLEVELWORKSHOP2_WS2EDITOR_RESOURCE_RESOURCESCENE_HPP
 
 #include "ws2editor/resource/ResourceMesh.hpp"
 #include "ws2editor/resource/AbstractResource.hpp"

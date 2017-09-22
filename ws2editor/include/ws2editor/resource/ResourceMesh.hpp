@@ -3,8 +3,8 @@
  * @brief Header for the WS2Editor::Model::Mesh class
  */
 
-#ifndef SMBLEVELWORKSHOP2_RESOURCE_RESOURCEMESH_HPP
-#define SMBLEVELWORKSHOP2_RESOURCE_RESOURCEMESH_HPP
+#ifndef SMBLEVELWORKSHOP2_WS2EDITOR_RESOURCE_RESOURCEMESH_HPP
+#define SMBLEVELWORKSHOP2_WS2EDITOR_RESOURCE_RESOURCEMESH_HPP
 
 #include "ws2editor/model/MeshSegment.hpp"
 #include "ws2editor/resource/AbstractResource.hpp"

@@ -3,8 +3,8 @@
  * @brief Header for the WS2Editor::Scene::EditorMeshSceneNode class
  */
 
-#ifndef SMBLEVELWORKSHOP2_SCENE_MESHSCEHENODE_HPP
-#define SMBLEVELWORKSHOP2_SCENE_MESHSCEHENODE_HPP
+#ifndef SMBLEVELWORKSHOP2_WS2EDITOR_SCENE_MESHSCEHENODE_HPP
+#define SMBLEVELWORKSHOP2_WS2EDITOR_SCENE_MESHSCEHENODE_HPP
 
 #include "ws2common/scene/MeshSceneNode.hpp"
 #include "ws2editor/resource/ResourceMesh.hpp"

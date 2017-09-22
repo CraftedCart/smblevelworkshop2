@@ -3,8 +3,8 @@
  * @brief Header for the WS2Editor::Model::Texture struct
  */
 
-#ifndef SMBLEVELWORKSHOP2_MODEL_TEXTURE_HPP
-#define SMBLEVELWORKSHOP2_MODEL_TEXTURE_HPP
+#ifndef SMBLEVELWORKSHOP2_WS2EDITOR_MODEL_TEXTURE_HPP
+#define SMBLEVELWORKSHOP2_WS2EDITOR_MODEL_TEXTURE_HPP
 
 #include "ws2editor/glplatform.hpp"
 #include "ws2editor/resource/AbstractResource.hpp"

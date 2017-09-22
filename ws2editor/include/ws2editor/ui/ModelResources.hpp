@@ -3,8 +3,8 @@
  * @brief Header for the WS2Editor::UI::ModelResources clas
  */
 
-#ifndef SMBLEVELWORKSHOP2_UI_MODELRESOURCES_HPP
-#define SMBLEVELWORKSHOP2_UI_MODELRESOURCES_HPP
+#ifndef SMBLEVELWORKSHOP2_WS2EDITOR_UI_MODELRESOURCES_HPP
+#define SMBLEVELWORKSHOP2_WS2EDITOR_UI_MODELRESOURCES_HPP
 
 #include "ws2editor/resource/AbstractResource.hpp"
 #include <QAbstractTableModel>

@@ -3,8 +3,8 @@
  * @brief Header for the MeshSegment class
  */
 
-#ifndef SMBLEVELWORKSHOP2_MODEL_MESHSEGMENT_HPP
-#define SMBLEVELWORKSHOP2_MODEL_MESHSEGMENT_HPP
+#ifndef SMBLEVELWORKSHOP2_WS2EDITOR_MODEL_MESHSEGMENT_HPP
+#define SMBLEVELWORKSHOP2_WS2EDITOR_MODEL_MESHSEGMENT_HPP
 
 #include "ws2editor/model/Vertex.hpp"
 #include "ws2editor/resource/ResourceTexture.hpp"

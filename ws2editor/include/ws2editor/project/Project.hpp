@@ -3,8 +3,8 @@
  * @brief Header for the WS2Editor::Project::Project
  */
 
-#ifndef SMBLEVELWORKSHOP2_PROJECT_PROJECT_HPP
-#define SMBLEVELWORKSHOP2_PROJECT_PROJECT_HPP
+#ifndef SMBLEVELWORKSHOP2_WS2EDITOR_PROJECT_PROJECT_HPP
+#define SMBLEVELWORKSHOP2_WS2EDITOR_PROJECT_PROJECT_HPP
 
 #include "ws2editor/resource/ResourceScene.hpp"
 

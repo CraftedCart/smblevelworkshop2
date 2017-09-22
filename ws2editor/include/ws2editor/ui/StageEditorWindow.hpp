@@ -3,8 +3,8 @@
  * @brief Header for the StageEditorWindow class
  */
 
-#ifndef SMBLEVELWORKSHOP2_UI_MAINWINDOW_HPP
-#define SMBLEVELWORKSHOP2_UI_MAINWINDOW_HPP
+#ifndef SMBLEVELWORKSHOP2_WS2EDITOR_UI_MAINWINDOW_HPP
+#define SMBLEVELWORKSHOP2_WS2EDITOR_UI_MAINWINDOW_HPP
 
 #include <QMainWindow>
 #include <QLabel>

@@ -3,8 +3,8 @@
  * @brief Header for the Config namespace which stores user configurable variables
  */
 
-#ifndef SMBLEVELWORKSHOP2_CONFIG_HPP
-#define SMBLEVELWORKSHOP2_CONFIG_HPP
+#ifndef SMBLEVELWORKSHOP2_WS2EDITOR_CONFIG_HPP
+#define SMBLEVELWORKSHOP2_WS2EDITOR_CONFIG_HPP
 
 namespace WS2Editor {
     /**

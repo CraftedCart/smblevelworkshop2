@@ -3,8 +3,8 @@
  * @brief Header for global WS2 members
  */
 
-#ifndef SMBLEVELWORKSHOP2_WS2_HPP
-#define SMBLEVELWORKSHOP2_WS2_HPP
+#ifndef SMBLEVELWORKSHOP2_WS2EDITOR_WS2_HPP
+#define SMBLEVELWORKSHOP2_WS2EDITOR_WS2_HPP
 
 #include "task/TaskManager.hpp"
 #include <QApplication>

@@ -3,8 +3,8 @@
  * @brief Header for the WS2Editor::Model::Vertex struct
  */
 
-#ifndef SMBLEVELWORKSHOP2_MODEL_VERTEX_HPP
-#define SMBLEVELWORKSHOP2_MODEL_VERTEX_HPP
+#ifndef SMBLEVELWORKSHOP2_WS2EDITOR_MODEL_VERTEX_HPP
+#define SMBLEVELWORKSHOP2_WS2EDITOR_MODEL_VERTEX_HPP
 
 #include "ws2editor/glplatform.hpp"
 

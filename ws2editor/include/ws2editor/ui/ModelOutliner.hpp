@@ -3,8 +3,8 @@
  * @brief Header for the WS2Editor::UI::ModelOutliner clas
  */
 
-#ifndef SMBLEVELWORKSHOP2_UI_MODELOUTLINER_HPP
-#define SMBLEVELWORKSHOP2_UI_MODELOUTLINER_HPP
+#ifndef SMBLEVELWORKSHOP2_WS2EDITOR_UI_MODELOUTLINER_HPP
+#define SMBLEVELWORKSHOP2_WS2EDITOR_UI_MODELOUTLINER_HPP
 
 #include "ws2common/scene/SceneNode.hpp"
 #include <QAbstractTableModel>
