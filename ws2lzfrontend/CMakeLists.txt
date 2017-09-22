@@ -19,7 +19,7 @@ include_directories(./include)
 include_directories(${CMAKE_BINARY_DIR})
 
 set(SOURCE_FILES
-    ./src/main.cpp
+    ./src/ws2lzfrontend/main.cpp
     )
 
 set(HEADER_FILES

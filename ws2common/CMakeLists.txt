@@ -20,33 +20,33 @@ include_directories(./include)
 include_directories(${CMAKE_BINARY_DIR})
 
 set(SOURCE_FILES
-    ./src/MessageHandler.cpp
-    ./src/scene/SceneNode.cpp
-    ./src/scene/MeshSceneNode.cpp
-    ./src/scene/GoalSceneNode.cpp
-    ./src/scene/BumperSceneNode.cpp
-    ./src/scene/JamabarSceneNode.cpp
-    ./src/scene/BananaSceneNode.cpp
-    ./src/scene/FalloutVolumeSceneNode.cpp
-    ./src/scene/SwitchSceneNode.cpp
-    ./src/scene/WormholeSceneNode.cpp
+    ./src/ws2common/MessageHandler.cpp
+    ./src/ws2common/scene/SceneNode.cpp
+    ./src/ws2common/scene/MeshSceneNode.cpp
+    ./src/ws2common/scene/GoalSceneNode.cpp
+    ./src/ws2common/scene/BumperSceneNode.cpp
+    ./src/ws2common/scene/JamabarSceneNode.cpp
+    ./src/ws2common/scene/BananaSceneNode.cpp
+    ./src/ws2common/scene/FalloutVolumeSceneNode.cpp
+    ./src/ws2common/scene/SwitchSceneNode.cpp
+    ./src/ws2common/scene/WormholeSceneNode.cpp
     )
 
 set(HEADER_FILES
-    ./include/MessageHandler.hpp
-    ./include/EnumGameVersion.hpp
-    ./include/EnumGoalType.hpp
-    ./include/EnumBananaType.hpp
-    ./include/EnumPlaybackState.hpp
-    ./include/scene/SceneNode.hpp
-    ./include/scene/MeshSceneNode.hpp
-    ./include/scene/GoalSceneNode.hpp
-    ./include/scene/BumperSceneNode.hpp
-    ./include/scene/JamabarSceneNode.hpp
-    ./include/scene/BananaSceneNode.hpp
-    ./include/scene/FalloutVolumeSceneNode.hpp
-    ./include/scene/SwitchSceneNode.hpp
-    ./include/scene/WormholeSceneNode.hpp
+    ./include/ws2common/MessageHandler.hpp
+    ./include/ws2common/EnumGameVersion.hpp
+    ./include/ws2common/EnumGoalType.hpp
+    ./include/ws2common/EnumBananaType.hpp
+    ./include/ws2common/EnumPlaybackState.hpp
+    ./include/ws2common/scene/SceneNode.hpp
+    ./include/ws2common/scene/MeshSceneNode.hpp
+    ./include/ws2common/scene/GoalSceneNode.hpp
+    ./include/ws2common/scene/BumperSceneNode.hpp
+    ./include/ws2common/scene/JamabarSceneNode.hpp
+    ./include/ws2common/scene/BananaSceneNode.hpp
+    ./include/ws2common/scene/FalloutVolumeSceneNode.hpp
+    ./include/ws2common/scene/SwitchSceneNode.hpp
+    ./include/ws2common/scene/WormholeSceneNode.hpp
     )
 
 add_library(${PROJECT_NAME} SHARED ${SOURCE_FILES} ${HEADER_FILES})
