@@ -107,7 +107,7 @@ namespace WS2Editor {
 
                     //Just for the warning
                     if (!mesh->HasTextureCoords(UV_CHANNEL)) {
-                        qDebug() << "Warning: A mesh is missing texuture coordinates - Defaulting to 0, 0 for all vertices";
+                        qWarning() << "A mesh is missing texuture coordinates - Defaulting to 0, 0 for all vertices";
                     }
 
                     for (unsigned int i = 0; i < mesh->mNumVertices; i++) {

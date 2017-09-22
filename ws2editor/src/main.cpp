@@ -2,11 +2,14 @@
 #include "ui/StageEditorWindow.hpp"
 #include "ui/ModelManager.hpp"
 #include "resource/ResourceManager.hpp"
+#include "MessageHandler.hpp"
 #include <QFile>
 #include <QSurfaceFormat>
 #include <QSplashScreen>
 
 int main(int argc, char *argv[]) {
+    qInstallMessageHandler(WS2Common::messageHandler);
+
     //Init WS2
     WS2Editor::ws2Init(argc, argv);
 
