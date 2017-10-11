@@ -21,6 +21,7 @@ include_directories(${CMAKE_BINARY_DIR})
 
 set(SOURCE_FILES
     ./src/ws2common/MessageHandler.cpp
+    ./src/ws2common/Stage.cpp
     ./src/ws2common/scene/SceneNode.cpp
     ./src/ws2common/scene/MeshSceneNode.cpp
     ./src/ws2common/scene/GoalSceneNode.cpp
@@ -30,6 +31,7 @@ set(SOURCE_FILES
     ./src/ws2common/scene/FalloutVolumeSceneNode.cpp
     ./src/ws2common/scene/SwitchSceneNode.cpp
     ./src/ws2common/scene/WormholeSceneNode.cpp
+    ./src/ws2common/config/XMLConfigParser.cpp
     )
 
 set(HEADER_FILES
@@ -38,6 +40,7 @@ set(HEADER_FILES
     ./include/ws2common/EnumGoalType.hpp
     ./include/ws2common/EnumBananaType.hpp
     ./include/ws2common/EnumPlaybackState.hpp
+    ./include/ws2common/Stage.hpp
     ./include/ws2common/scene/SceneNode.hpp
     ./include/ws2common/scene/MeshSceneNode.hpp
     ./include/ws2common/scene/GoalSceneNode.hpp
@@ -47,6 +50,7 @@ set(HEADER_FILES
     ./include/ws2common/scene/FalloutVolumeSceneNode.hpp
     ./include/ws2common/scene/SwitchSceneNode.hpp
     ./include/ws2common/scene/WormholeSceneNode.hpp
+    ./include/ws2common/config/XMLConfigParser.hpp
     )
 
 add_library(${PROJECT_NAME} SHARED ${SOURCE_FILES} ${HEADER_FILES})

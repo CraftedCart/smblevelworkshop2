@@ -17,6 +17,8 @@ namespace WS2Common {
                  */
                 QString meshName;
 
+                //TODO: Collision shape
+
             public:
                 MeshSceneNode(const QString name);
 

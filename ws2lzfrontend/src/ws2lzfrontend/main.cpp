@@ -1,7 +1,9 @@
 #include "ws2common/MessageHandler.hpp"
 #include "ws2common/EnumGameVersion.hpp"
+#include "ws2common/config/XMLConfigParser.hpp"
 #include <QCoreApplication>
 #include <QCommandLineParser>
+#include <QFile>
 #include <QDebug>
 
 int main(int argc, char *argv[]) {
@@ -66,6 +68,17 @@ int main(int argc, char *argv[]) {
     }
 
     //NYI warning
+    qInfo() << "Reading configuration...";
+    QFile configFile(parser.value("c"));
+    configFile.open(QIODevice::ReadOnly | QIODevice::Text);
+    QString config = configFile.readAll();
+    configFile.close();
+
+    qInfo() << "Parsing configuration...";
+    WS2Common::Stage *stage = WS2Common::Config::XMLConfigParser::parseStage(config);
+    //TODO: Do some magic with stage
+    delete stage;
+
     qCritical().noquote() << "ws2lzfrontend not yet implemented. At all. This is just a placeholder.";
 
     return EXIT_SUCCESS;
