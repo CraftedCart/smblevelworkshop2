@@ -47,4 +47,11 @@ namespace WS2Common {
                 abort();
         }
     }
+
+    QDebug operator<<(QDebug debug, const glm::vec3 &vec) {
+        QDebugStateSaver saver(debug);
+        debug.nospace() << '(' << vec.x << ", " << vec.y << ", " << vec.z << ')';
+
+        return debug;
+    }
 }
