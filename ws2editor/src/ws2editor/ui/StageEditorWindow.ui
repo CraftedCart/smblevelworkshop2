@@ -492,7 +492,7 @@
      <normaloff>:/Workshop2/Icons/Add.png</normaloff>:/Workshop2/Icons/Add.png</iconset>
    </property>
    <property name="text">
-    <string>New Node</string>
+    <string>New Group Node</string>
    </property>
    <property name="toolTip">
     <string>Adds a new empty node to the scene</string>
