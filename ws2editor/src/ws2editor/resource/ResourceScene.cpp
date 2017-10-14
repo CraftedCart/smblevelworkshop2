@@ -3,6 +3,7 @@
 #include "ws2editor/resource/ResourceManager.hpp"
 #include "ws2editor/scene/EditorMeshSceneNode.hpp"
 #include "ws2editor/ui/ModelManager.hpp"
+#include "ws2common/scene/GroupSceneNode.hpp"
 #include <QByteArray>
 #include <QFileInfo>
 
@@ -10,7 +11,7 @@ namespace WS2Editor {
     namespace Resource {
         ResourceScene::ResourceScene() {
             rootNode = new WS2Common::Scene::SceneNode("root");
-            WS2Common::Scene::SceneNode *staticNode = new WS2Common::Scene::SceneNode(tr("Static"));
+            WS2Common::Scene::GroupSceneNode *staticNode = new WS2Common::Scene::GroupSceneNode(tr("Static"));
             rootNode->addChild(staticNode);
             UI::ModelManager::modelOutliner->onNodeAdded(staticNode); //TODO: This feels hacky
 
@@ -70,7 +71,7 @@ namespace WS2Editor {
             WS2Common::Scene::SceneNode *staticNode = rootNode->getChildByName(tr("Static"));
             //Create the static node if it doesn't exist
             if (!staticNode) {
-                staticNode = new WS2Common::Scene::SceneNode(tr("Static"));
+                staticNode = new WS2Common::Scene::GroupSceneNode(tr("Static"));
                 rootNode->addChild(staticNode);
                 UI::ModelManager::modelOutliner->onNodeAdded(staticNode); //TODO: This feels hacky
             }
