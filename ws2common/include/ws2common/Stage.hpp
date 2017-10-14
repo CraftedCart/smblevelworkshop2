@@ -7,14 +7,14 @@
 #define SMBLEVELWORKSHOP2_WS2COMMON_STAGE_HPP
 
 #include "ws2common/scene/SceneNode.hpp"
-#include "glm/glm.hpp"
+#include "ws2common/scene/BackgroundGroupSceneNode.hpp"
+#include <glm/glm.hpp>
 
 namespace WS2Common {
     class Stage {
         protected:
             Scene::SceneNode *rootNode;
 
-            glm::vec3 startPos;
             float falloutY;
             //TODO: Fog
             //TODO: Animated fog
@@ -47,20 +47,6 @@ namespace WS2Common {
             Scene::SceneNode* getRootNode();
 
             /**
-             * @brief Setter for startPos
-             *
-             * @param startPos The starting position of the stage to set
-             */
-            void setStartPos(const glm::vec3 startPos);
-
-            /**
-             * @brief Getter for startPos
-             *
-             * @return The starting position of the stage
-             */
-            glm::vec3 getStartPos();
-
-            /**
              * @brief Setter for falloutY
              *
              * @param falloutY The fallout Y position to set
@@ -73,6 +59,15 @@ namespace WS2Common {
              * @return The fallout Y position to get
              */
             float getFalloutY();
+
+            /**
+             * @brief Finds the first background group scene node, by searching direct children of rootNode
+             *
+             * @param createIfNonExistent Should a new background group be created and returned if none are found?
+             *
+             * @return The first background group scene node, or nullptr if there are none and createIfNonExistent is false
+             */
+            Scene::BackgroundGroupSceneNode* getFirstBackgroundGroup(bool createIfNonExistent = false);
     };
 }
 

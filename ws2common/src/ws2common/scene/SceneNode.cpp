@@ -15,6 +15,10 @@ namespace WS2Common {
             return name;
         }
 
+        void SceneNode::setName(const QString name) {
+            this->name = name;
+        }
+
         QVector<SceneNode*>& SceneNode::getChildren() {
             return children;
         }
@@ -68,12 +72,24 @@ namespace WS2Common {
             return position;
         }
 
+        void SceneNode::setPosition(const glm::vec3 position) {
+            this->position = position;
+        }
+
         glm::vec3 SceneNode::getRotation() const {
             return rotation;
         }
 
+        void SceneNode::setRotation(const glm::vec3 rotation) {
+            this->rotation = rotation;
+        }
+
         glm::vec3 SceneNode::getScale() const {
             return scale;
+        }
+
+        void SceneNode::setScale(const glm::vec3 scale) {
+            this->scale = scale;
         }
     }
 }

@@ -23,6 +23,8 @@ set(SOURCE_FILES
     ./src/ws2common/MessageHandler.cpp
     ./src/ws2common/Stage.cpp
     ./src/ws2common/scene/SceneNode.cpp
+    ./src/ws2common/scene/StartSceneNode.cpp
+    ./src/ws2common/scene/BackgroundGroupSceneNode.cpp
     ./src/ws2common/scene/MeshSceneNode.cpp
     ./src/ws2common/scene/GoalSceneNode.cpp
     ./src/ws2common/scene/BumperSceneNode.cpp
@@ -35,12 +37,16 @@ set(SOURCE_FILES
     )
 
 set(HEADER_FILES
+    ./include/ws2common/WS2Common.hpp
+    ./include/ws2common/WS2Common.ipp
     ./include/ws2common/MessageHandler.hpp
     ./include/ws2common/EnumGameVersion.hpp
     ./include/ws2common/EnumGoalType.hpp
     ./include/ws2common/EnumBananaType.hpp
     ./include/ws2common/EnumPlaybackState.hpp
     ./include/ws2common/Stage.hpp
+    ./include/ws2common/scene/SceneNode.hpp
+    ./include/ws2common/scene/StartSceneNode.hpp
     ./include/ws2common/scene/SceneNode.hpp
     ./include/ws2common/scene/MeshSceneNode.hpp
     ./include/ws2common/scene/GoalSceneNode.hpp

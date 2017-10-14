@@ -48,6 +48,13 @@ namespace WS2Common {
                 const QString getName() const;
 
                 /**
+                 * @brief Setter for WS2::Scene::SceneNode::name
+                 *
+                 * @param name The new name to set for the node
+                 */
+                void setName(const QString name);
+
+                /**
                  * @brief Getter for WS2::Scene::SceneNode::children
                  *
                  * @return A reference to the children QVector
@@ -108,19 +115,46 @@ namespace WS2Common {
                 virtual void setParent(SceneNode *parent);
 
                 /**
+                 * @brief Getter for position
+                 *
                  * @return The position of the node relative to its parent
                  */
                 glm::vec3 getPosition() const;
 
                 /**
+                 * @brief Setter for position
+                 *
+                 * @param position The new position to set
+                 */
+                void setPosition(const glm::vec3 position);
+
+                /**
+                 * @brief Getter for rotation
+                 *
                  * @return The rotation of the node relative to its parent
                  */
                 glm::vec3 getRotation() const;
 
                 /**
+                 * @brief Setter for rotation
+                 *
+                 * @param rotation The new rotation to set
+                 */
+                void setRotation(const glm::vec3 rotation);
+
+                /**
+                 * @brief Getter for scale
+                 *
                  * @return The position of the node relative to its parent
                  */
                 glm::vec3 getScale() const;
+
+                /**
+                 * @brief Setter for scale
+                 *
+                 * @param scale The new scale to set
+                 */
+                void setScale(const glm::vec3 scale);
         };
     }
 }

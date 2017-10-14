@@ -1,8 +1,11 @@
 #include "ws2common/Stage.hpp"
+#include "ws2common/WS2Common.hpp"
+#include <QCoreApplication>
 
 namespace WS2Common {
     Stage::Stage() {
         rootNode = new Scene::SceneNode("root");
+        rootNode->addChild(new Scene::BackgroundGroupSceneNode(QCoreApplication::translate("Stage", "Background Group")));
     }
 
     Stage::~Stage() {
@@ -17,20 +20,27 @@ namespace WS2Common {
         return rootNode;
     }
 
-    void Stage::setStartPos(const glm::vec3 startPos) {
-        this->startPos = startPos;
-    }
-
-    glm::vec3 Stage::getStartPos() {
-        return startPos;
-    }
-
     void Stage::setFalloutY(const float falloutY) {
         this->falloutY = falloutY;
     }
 
     float Stage::getFalloutY() {
         return falloutY;
+    }
+
+    Scene::BackgroundGroupSceneNode* Stage::getFirstBackgroundGroup(bool createIfNonExistent) {
+        foreach(Scene::SceneNode *node, rootNode->getChildren()) {
+            if(instanceOf<Scene::BackgroundGroupSceneNode>(node)) return static_cast<Scene::BackgroundGroupSceneNode*>(node);
+        }
+
+        //No background nodes found
+        if (createIfNonExistent) {
+            Scene::BackgroundGroupSceneNode *node = new Scene::BackgroundGroupSceneNode(QCoreApplication::translate("Stage", "Background Group"));
+            rootNode->addChild(node);
+            return node;
+        } else {
+            return nullptr;
+        }
     }
 }
 
