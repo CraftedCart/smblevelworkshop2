@@ -47,36 +47,37 @@ namespace WS2Common {
                 abort();
         }
     }
-
-    QDebug operator<<(QDebug debug, const glm::vec3 &vec) {
-        QDebugStateSaver saver(debug);
-        debug.nospace() << '(' << vec.x << ", " << vec.y << ", " << vec.z << ')';
-
-        return debug;
-    }
-
-    QDebug operator<<(QDebug debug, const Scene::SceneNode *node) {
-        std::function<void (const unsigned int, const Scene::SceneNode*)> f =
-            [&debug, &f](const unsigned int indentLevel, const Scene::SceneNode *node) {
-            //debug.nospace().noquote() << QString(indentLevel * 4, ' ') << node->getName() << '\n';
-
-                if (indentLevel > 0) {
-                    for (unsigned int i = 0; i < indentLevel - 1; i++) {
-                        debug.nospace().noquote() << " │  ";
-                    }
-                    debug.nospace().noquote() << " ├─ ";
-                }
-
-                debug.nospace().noquote() << node->getName() << '\n';
-
-            foreach(const Scene::SceneNode *child, node->getChildren()) {
-                f(indentLevel + 1, child);
-            }
-        };
-
-        QDebugStateSaver saver(debug);
-        f(0, node);
-
-        return debug;
-    }
 }
+
+QDebug operator<<(QDebug debug, const glm::vec3 &vec) {
+    QDebugStateSaver saver(debug);
+    debug.nospace() << '(' << vec.x << ", " << vec.y << ", " << vec.z << ')';
+
+    return debug;
+}
+
+QDebug operator<<(QDebug debug, const WS2Common::Scene::SceneNode *node) {
+    std::function<void (const unsigned int, const WS2Common::Scene::SceneNode*)> f =
+        [&debug, &f](const unsigned int indentLevel, const WS2Common::Scene::SceneNode *node) {
+        //debug.nospace().noquote() << QString(indentLevel * 4, ' ') << node->getName() << '\n';
+
+            if (indentLevel > 0) {
+                for (unsigned int i = 0; i < indentLevel - 1; i++) {
+                    debug.nospace().noquote() << " │  ";
+                }
+                debug.nospace().noquote() << " ├─ ";
+            }
+
+            debug.nospace().noquote() << node->getName() << '\n';
+
+        foreach(const WS2Common::Scene::SceneNode *child, node->getChildren()) {
+            f(indentLevel + 1, child);
+        }
+    };
+
+    QDebugStateSaver saver(debug);
+    f(0, node);
+
+    return debug;
+}
+

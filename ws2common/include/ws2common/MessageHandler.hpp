@@ -15,10 +15,11 @@
 namespace WS2Common {
     void messageHandler(QtMsgType type, const QMessageLogContext &context, const QString &msg);
 
-    //Custom types
-    QDebug operator<<(QDebug debug, const glm::vec3 &vec);
-    QDebug operator<<(QDebug debug, const Scene::SceneNode *node);
 }
+
+//Custom types
+QDebug operator<<(QDebug debug, const glm::vec3 &vec);
+QDebug operator<<(QDebug debug, const WS2Common::Scene::SceneNode *node);
 
 #endif
 

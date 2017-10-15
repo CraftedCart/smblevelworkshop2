@@ -1,5 +1,4 @@
 #include "ws2common/config/XMLConfigParser.hpp"
-#include "ws2common/MessageHandler.hpp"
 #include <QXmlStreamReader>
 #include <QDebug>
 #include <QCoreApplication>
@@ -52,8 +51,6 @@ namespace WS2Common {
                         break;
                     }
                 }
-
-                qDebug() << stage->getRootNode();
 
                 if (xml.hasError()) {
                     //TODO: Throw an exception or something
