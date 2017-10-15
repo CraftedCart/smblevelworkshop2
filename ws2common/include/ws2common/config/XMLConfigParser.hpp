@@ -6,6 +6,13 @@
 #include "ws2common/Stage.hpp"
 #include "ws2common/scene/StartSceneNode.hpp"
 #include "ws2common/scene/MeshSceneNode.hpp"
+#include "ws2common/scene/GroupSceneNode.hpp"
+#include "ws2common/scene/GoalSceneNode.hpp"
+#include "ws2common/scene/BumperSceneNode.hpp"
+#include "ws2common/scene/JamabarSceneNode.hpp"
+#include "ws2common/scene/BananaSceneNode.hpp"
+#include "ws2common/scene/FalloutVolumeSceneNode.hpp"
+#include "ws2common/scene/SwitchSceneNode.hpp"
 #include <QXmlStreamAttributes>
 
 namespace WS2Common {
@@ -42,6 +49,94 @@ namespace WS2Common {
              * @return The background model parsed from the config
              */
             Scene::MeshSceneNode* parseBackgroundModel(QXmlStreamReader &xml);
+
+            /**
+             * @brief Parses an item group in an XML config
+             *
+             * Make sure the XML reader is within the itemGroup element before calling this
+             *
+             * @param xml The QXmlStreamReader
+             *
+             * @return The item group parsed from the config, as a GroupSceneNode
+             */
+            Scene::GroupSceneNode* parseItemGroup(QXmlStreamReader &xml);
+
+            /**
+             * @brief Parses a goal in an XML config
+             *
+             * Make sure the XML reader is within the goal element before calling this
+             *
+             * @param xml The QXmlStreamReader
+             *
+             * @return The goal parsed from the config
+             */
+            Scene::GoalSceneNode* parseGoal(QXmlStreamReader &xml);
+
+            /**
+             * @brief Parses a bumper in an XML config
+             *
+             * Make sure the XML reader is within the bumper element before calling this
+             *
+             * @param xml The QXmlStreamReader
+             *
+             * @return The bumper parsed from the config
+             */
+            Scene::BumperSceneNode* parseBumper(QXmlStreamReader &xml);
+
+            /**
+             * @brief Parses a jamabar in an XML config
+             *
+             * Make sure the XML reader is within the jamabar element before calling this
+             *
+             * @param xml The QXmlStreamReader
+             *
+             * @return The jamabar parsed from the config
+             */
+            Scene::JamabarSceneNode* parseJamabar(QXmlStreamReader &xml);
+
+            /**
+             * @brief Parses a banana in an XML config
+             *
+             * Make sure the XML reader is within the banana element before calling this
+             *
+             * @param xml The QXmlStreamReader
+             *
+             * @return The banana parsed from the config
+             */
+            Scene::BananaSceneNode* parseBanana(QXmlStreamReader &xml);
+
+            /**
+             * @brief Parses a fallout volume in an XML config
+             *
+             * Make sure the XML reader is within the falloutVolume element before calling this
+             *
+             * @param xml The QXmlStreamReader
+             *
+             * @return The jamabar parsed from the config
+             */
+            Scene::FalloutVolumeSceneNode* parseFalloutVolume(QXmlStreamReader &xml);
+
+            /**
+             * @brief Parses a switch in an XML config
+             *
+             * Make sure the XML reader is within the switch element before calling this
+             *
+             * @param xml The QXmlStreamReader
+             *
+             * @return The switch parsed from the config
+             */
+            Scene::SwitchSceneNode* parseSwitch(QXmlStreamReader &xml);
+
+            /**
+             * @brief Parses a level model in an XML config
+             *
+             * Make sure the XML reader is within the levelModel element before calling this
+             *
+             * @param xml The QXmlStreamReader
+             *
+             * @return The level model parsed from the config
+             */
+            Scene::MeshSceneNode* parseLevelModel(QXmlStreamReader &xml);
 
             /**
              * @brief Gets an XML attribute with the name attrName

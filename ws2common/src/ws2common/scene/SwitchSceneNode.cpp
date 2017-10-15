@@ -11,6 +11,14 @@ namespace WS2Common {
         void SwitchSceneNode::setType(EnumPlaybackState type) {
             this->type = type;
         }
+
+        unsigned short SwitchSceneNode::getAnimGroupId() {
+            return animGroupId;
+        }
+
+        void SwitchSceneNode::setAnimGroupId(unsigned short animGroupId) {
+            this->animGroupId = animGroupId;
+        }
     }
 }
 

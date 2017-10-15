@@ -26,7 +26,7 @@ namespace WS2Common {
                             if (!xml.isStartElement()) continue; //Ignore all end elements, again
 
                             if (xml.name() == "modelImport") {
-                                qWarning() << "modelImport not yet implemented";
+                                qWarning() << "modelImport not yet implemented!";
                                 xml.skipCurrentElement();
                             } else if (xml.name() == "start") {
                                 stage->getRootNode()->addChild(parseStart(xml));
@@ -35,10 +35,10 @@ namespace WS2Common {
                             } else if (xml.name() == "falloutPlane") {
                                 stage->setFalloutY(getAttribute(xml.attributes(), "y").toFloat());
                             } else if (xml.name() == "fog") {
-                                qWarning() << "fog not yet implemented";
+                                qWarning() << "fog not yet implemented!";
                                 xml.skipCurrentElement();
                             } else if (xml.name() == "itemGroup") {
-                                qWarning() << "itemGroup not yet implemented";
+                                stage->getRootNode()->addChild(parseItemGroup(xml));
                                 xml.skipCurrentElement();
                             } else {
                                 qWarning().noquote() << "Unrecognised tag:" << xml.name();
@@ -63,7 +63,7 @@ namespace WS2Common {
 
             Scene::StartSceneNode* parseStart(QXmlStreamReader &xml) {
                 //Default name is "Start", translated
-                Scene::StartSceneNode *start = new Scene::StartSceneNode(QCoreApplication::tr("XMLConfigParser", "Start"));
+                Scene::StartSceneNode *start = new Scene::StartSceneNode(QCoreApplication::translate("XMLConfigParser", "Start"));
 
                 while (!(xml.isEndElement() && xml.name() == "start")) {
                     xml.readNext();
@@ -75,6 +75,8 @@ namespace WS2Common {
                         start->setPosition(getVec3Attributes(xml.attributes()));
                     } else if (xml.name() == "rotation") {
                         start->setRotation(getVec3Attributes(xml.attributes()));
+                    } else {
+                        qWarning().noquote() << "Unrecognised tag: start >" << xml.name();
                     }
                 }
 
@@ -109,10 +111,240 @@ namespace WS2Common {
                     } else if (xml.name() == "textureScroll") { //TODO
                         qWarning() << "backgroundModel > textureScroll not yet implemented!";
                         xml.skipCurrentElement();
+                    } else {
+                        qWarning().noquote() << "Unrecognised tag: backgroundModel >" << xml.name();
                     }
                 }
 
                 return bg;
+            }
+
+            Scene::GroupSceneNode* parseItemGroup(QXmlStreamReader &xml) {
+                //Default name is "Group", translated
+                Scene::GroupSceneNode *group = new Scene::GroupSceneNode(QCoreApplication::tr("XMLConfigParser", "Group"));
+
+                while (!(xml.isEndElement() && xml.name() == "itemGroup")) {
+                    xml.readNext();
+                    if (!xml.isStartElement()) continue; //Ignore all end elements
+
+                    if (xml.name() == "name") {
+                        group->setName(xml.readElementText());
+                    } else if (xml.name() == "rotationCenter") { //TODO
+                        qWarning() << "itemGroup > rotationCenter not yet implemented!";
+                        xml.skipCurrentElement();
+                    } else if (xml.name() == "initialRotation") { //TODO
+                        qWarning() << "itemGroup > initialRotation not yet implemented!";
+                        xml.skipCurrentElement();
+                    } else if (xml.name() == "animSeesawType") { //TODO
+                        qWarning() << "itemGroup > animSeesawType not yet implemented!";
+                        xml.skipCurrentElement();
+                    } else if (xml.name() == "seesawSensitivity") { //TODO
+                        qWarning() << "itemGroup > seesawSensitivity not yet implemented!";
+                        xml.skipCurrentElement();
+                    } else if (xml.name() == "seesawResetStiffness") { //TODO
+                        qWarning() << "itemGroup > seesawResetStiffness not yet implemented!";
+                        xml.skipCurrentElement();
+                    } else if (xml.name() == "seesawRotationBounds") { //TODO
+                        qWarning() << "itemGroup > seesawRotationBounds not yet implemented!";
+                        xml.skipCurrentElement();
+                    } else if (xml.name() == "animKeyframes") { //TODO
+                        qWarning() << "itemGroup > animKeyframes not yet implemented!";
+                        xml.skipCurrentElement();
+                    } else if (xml.name() == "animLoopTime") { //TODO
+                        qWarning() << "itemGroup > animLoopTime not yet implemented!";
+                        xml.skipCurrentElement();
+                    } else if (xml.name() == "animGroupID") { //TODO
+                        qWarning() << "itemGroup > animGroupID not yet implemented!";
+                        xml.skipCurrentElement();
+                    } else if (xml.name() == "animInitialState") { //TODO
+                        qWarning() << "itemGroup > animInitialState not yet implemented!";
+                        xml.skipCurrentElement();
+                    } else if (xml.name() == "collisionGrid") { //TODO
+                        qWarning() << "itemGroup > collisionGrid not yet implemented!";
+                        xml.skipCurrentElement();
+                    } else if (xml.name() == "goal") {
+                        group->addChild(parseGoal(xml));
+                    } else if (xml.name() == "bumper") {
+                        group->addChild(parseBumper(xml));
+                    } else if (xml.name() == "jamabar") {
+                        group->addChild(parseJamabar(xml));
+                    } else if (xml.name() == "banana") {
+                        group->addChild(parseBanana(xml));
+                    } else if (xml.name() == "falloutVolume") {
+                        group->addChild(parseFalloutVolume(xml));
+                    } else if (xml.name() == "wormhole") { //TODO
+                        qWarning() << "itemGroup > wormhole not yet implemented!";
+                        xml.skipCurrentElement();
+                        //TODO: Store wormhole destinations in a map
+                        //TODO: Then link wormholes after processing
+                    } else if (xml.name() == "switch") {
+                        group->addChild(parseSwitch(xml));
+                    } else if (xml.name() == "levelModel") { //TODO
+                        group->addChild(parseLevelModel(xml));
+                    } else {
+                        qWarning().noquote() << "Unrecognised tag: itemGroup >" << xml.name();
+                    }
+                }
+
+                return group;
+            }
+
+            Scene::GoalSceneNode* parseGoal(QXmlStreamReader &xml) {
+                //Default name is "Goal x", translated
+                unsigned int id = 0;
+                Scene::GoalSceneNode *goal = new Scene::GoalSceneNode(QCoreApplication::translate("XMLConfigParser", "Goal %1").arg(id));
+
+                while (!(xml.isEndElement() && xml.name() == "goal")) {
+                    xml.readNext();
+                    if (!xml.isStartElement()) continue; //Ignore all end elements
+
+                    if (xml.name() == "name") {
+                        goal->setName(xml.readElementText());
+                    } else if (xml.name() == "position") {
+                        goal->setPosition(getVec3Attributes(xml.attributes()));
+                    } else if (xml.name() == "rotation") {
+                        goal->setRotation(getVec3Attributes(xml.attributes()));
+                    } else if (xml.name() == "type") {
+                        goal->setType(GoalType::fromString(xml.readElementText()));
+                    } else {
+                        qWarning().noquote() << "Unrecognised tag: goal >" << xml.name();
+                    }
+                }
+
+                return goal;
+            }
+
+            Scene::BumperSceneNode* parseBumper(QXmlStreamReader &xml) {
+                //Default name is "Bumper x", translated
+                unsigned int id = 0;
+                Scene::BumperSceneNode *bumper = new Scene::BumperSceneNode(QCoreApplication::translate("XMLConfigParser", "Bumper %1").arg(id));
+
+                while (!(xml.isEndElement() && xml.name() == "bumper")) {
+                    xml.readNext();
+                    if (!xml.isStartElement()) continue; //Ignore all end elements
+
+                    if (xml.name() == "name") {
+                        bumper->setName(xml.readElementText());
+                    } else if (xml.name() == "position") {
+                        bumper->setPosition(getVec3Attributes(xml.attributes()));
+                    } else if (xml.name() == "rotation") {
+                        bumper->setRotation(getVec3Attributes(xml.attributes()));
+                    } else if (xml.name() == "scale") {
+                        bumper->setScale(getVec3Attributes(xml.attributes()));
+                    } else {
+                        qWarning().noquote() << "Unrecognised tag: bumper >" << xml.name();
+                    }
+                }
+
+                return bumper;
+            }
+
+            Scene::JamabarSceneNode* parseJamabar(QXmlStreamReader &xml) {
+                //Default name is "Jamabar x", translated
+                unsigned int id = 0;
+                Scene::JamabarSceneNode *jamabar = new Scene::JamabarSceneNode(QCoreApplication::translate("XMLConfigParser", "Jamabar %1").arg(id));
+
+                while (!(xml.isEndElement() && xml.name() == "jamabar")) {
+                    xml.readNext();
+                    if (!xml.isStartElement()) continue; //Ignore all end elements
+
+                    if (xml.name() == "name") {
+                        jamabar->setName(xml.readElementText());
+                    } else if (xml.name() == "position") {
+                        jamabar->setPosition(getVec3Attributes(xml.attributes()));
+                    } else if (xml.name() == "rotation") {
+                        jamabar->setRotation(getVec3Attributes(xml.attributes()));
+                    } else if (xml.name() == "scale") {
+                        jamabar->setScale(getVec3Attributes(xml.attributes()));
+                    } else {
+                        qWarning().noquote() << "Unrecognised tag: jamabar >" << xml.name();
+                    }
+                }
+
+                return jamabar;
+            }
+
+            Scene::BananaSceneNode* parseBanana(QXmlStreamReader &xml) {
+                //Default name is "Banana x", translated
+                unsigned int id = 0;
+                Scene::BananaSceneNode *banana = new Scene::BananaSceneNode(QCoreApplication::translate("XMLConfigParser", "Banana %1").arg(id));
+
+                while (!(xml.isEndElement() && xml.name() == "banana")) {
+                    xml.readNext();
+                    if (!xml.isStartElement()) continue; //Ignore all end elements
+
+                    if (xml.name() == "name") {
+                        banana->setName(xml.readElementText());
+                    } else if (xml.name() == "position") {
+                        banana->setPosition(getVec3Attributes(xml.attributes()));
+                    } else if (xml.name() == "type") {
+                        banana->setType(BananaType::fromString(xml.readElementText()));
+                    } else {
+                        qWarning().noquote() << "Unrecognised tag: banana >" << xml.name();
+                    }
+                }
+
+                return banana;
+            }
+
+            Scene::FalloutVolumeSceneNode* parseFalloutVolume(QXmlStreamReader &xml) {
+                //Default name is "Fallout Volume x", translated
+                unsigned int id = 0;
+                Scene::FalloutVolumeSceneNode *volume = new Scene::FalloutVolumeSceneNode(QCoreApplication::translate("XMLConfigParser", "Fallout Volume %1").arg(id));
+
+                while (!(xml.isEndElement() && xml.name() == "falloutVolume")) {
+                    xml.readNext();
+                    if (!xml.isStartElement()) continue; //Ignore all end elements
+
+                    if (xml.name() == "name") {
+                        volume->setName(xml.readElementText());
+                    } else if (xml.name() == "position") {
+                        volume->setPosition(getVec3Attributes(xml.attributes()));
+                    } else if (xml.name() == "rotation") {
+                        volume->setRotation(getVec3Attributes(xml.attributes()));
+                    } else if (xml.name() == "scale") {
+                        volume->setScale(getVec3Attributes(xml.attributes()));
+                    } else {
+                        qWarning().noquote() << "Unrecognised tag: falloutVolume >" << xml.name();
+                    }
+                }
+
+                return volume;
+            }
+
+            Scene::SwitchSceneNode* parseSwitch(QXmlStreamReader &xml) {
+                //Default name is "Switch x", translated
+                unsigned int id = 0;
+                //Woo can't use switch as a variable name!
+                Scene::SwitchSceneNode *sw = new Scene::SwitchSceneNode(QCoreApplication::translate("XMLConfigParser", "Switch %1").arg(id));
+
+                while (!(xml.isEndElement() && xml.name() == "switch")) {
+                    xml.readNext();
+                    if (!xml.isStartElement()) continue; //Ignore all end elements
+
+                    if (xml.name() == "name") {
+                        sw->setName(xml.readElementText());
+                    } else if (xml.name() == "position") {
+                        sw->setPosition(getVec3Attributes(xml.attributes()));
+                    } else if (xml.name() == "rotation") {
+                        sw->setRotation(getVec3Attributes(xml.attributes()));
+                    } else if (xml.name() == "type") {
+                        sw->setType(PlaybackState::fromString(xml.readElementText()));
+                    } else if (xml.name() == "animGroupID") {
+                        sw->setAnimGroupId(xml.readElementText().toUShort());
+                    } else {
+                        qWarning().noquote() << "Unrecognised tag: switch >" << xml.name();
+                    }
+                }
+
+                return sw;
+            }
+
+            Scene::MeshSceneNode* parseLevelModel(QXmlStreamReader &xml) {
+                QString name = xml.readElementText();
+                Scene::MeshSceneNode *mesh = new Scene::MeshSceneNode(name);
+                mesh->setMeshName(name);
+                return mesh;
             }
 
             QStringRef getAttribute(const QXmlStreamAttributes &attrs, const QString attrName) {

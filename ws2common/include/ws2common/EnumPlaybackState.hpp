@@ -6,6 +6,8 @@
 #ifndef SMBLEVELWORKSHOP2_WS2COMMON_ENUMPLAYBACKSTATE_HPP
 #define SMBLEVELWORKSHOP2_WS2COMMON_ENUMPLAYBACKSTATE_HPP
 
+#include <QString>
+
 namespace WS2Common {
 
     /**
@@ -18,6 +20,17 @@ namespace WS2Common {
         FAST_FORWARD = 0x0003,
         REWIND = 0x0004
     };
+
+    namespace PlaybackState {
+        /**
+         * @brief Converts a string to an EnumPlaybackState
+         *
+         * @param str The string
+         *
+         * @return The EnumPlaybackState for the string. If the string is invalid, PLAY will be returned.
+         */
+        EnumPlaybackState fromString(QString str);
+    }
 }
 
 #endif

@@ -6,6 +6,8 @@
 #ifndef SMBLEVELWORKSHOP2_WS2COMMON_ENUMGOALTYPE_HPP
 #define SMBLEVELWORKSHOP2_WS2COMMON_ENUMGOALTYPE_HPP
 
+#include <QString>
+
 namespace WS2Common {
 
     /**
@@ -18,6 +20,17 @@ namespace WS2Common {
         GREEN = 0x0101,
         RED = 0x0201
     };
+
+    namespace GoalType {
+        /**
+         * @brief Converts a string to an EnumGoalType
+         *
+         * @param str The string
+         *
+         * @return The EnumGoalType for the string. If the string is invalid, BLUE will be returned.
+         */
+        EnumGoalType fromString(QString str);
+    }
 }
 
 #endif

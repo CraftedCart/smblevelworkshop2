@@ -21,6 +21,9 @@ include_directories(${CMAKE_BINARY_DIR})
 
 set(SOURCE_FILES
     ./src/ws2common/MessageHandler.cpp
+    ./src/ws2common/EnumGoalType.cpp
+    ./src/ws2common/EnumBananaType.cpp
+    ./src/ws2common/EnumPlaybackState.cpp
     ./src/ws2common/Stage.cpp
     ./src/ws2common/scene/SceneNode.cpp
     ./src/ws2common/scene/StartSceneNode.cpp
