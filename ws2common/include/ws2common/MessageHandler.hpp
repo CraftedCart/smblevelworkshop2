@@ -3,6 +3,7 @@
  * @brief Header for the message handler, for logging output
  */
 
+#include "ws2common/scene/SceneNode.hpp"
 #include <QtGlobal>
 #include <QString>
 #include <QDebug>
@@ -16,6 +17,7 @@ namespace WS2Common {
 
     //Custom types
     QDebug operator<<(QDebug debug, const glm::vec3 &vec);
+    QDebug operator<<(QDebug debug, const Scene::SceneNode *node);
 }
 
 #endif

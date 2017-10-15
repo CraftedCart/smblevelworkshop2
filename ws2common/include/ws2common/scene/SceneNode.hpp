@@ -62,6 +62,13 @@ namespace WS2Common {
                 QVector<SceneNode*>& getChildren();
 
                 /**
+                 * @brief Const getter for WS2::Scene::SceneNode::children
+                 *
+                 * @return A reference to the children QVector
+                 */
+                const QVector<SceneNode*>& getChildren() const;
+
+                /**
                  * @brief Returns a child node by it's index position in the children QVector
                  *
                  * @param index The index of the child to retrieve

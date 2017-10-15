@@ -23,6 +23,10 @@ namespace WS2Common {
             return children;
         }
 
+        const QVector<SceneNode*>& SceneNode::getChildren() const {
+            return children;
+        }
+
         SceneNode* SceneNode::getChildByIndex(int index) {
             return children[index];
         }

@@ -54,4 +54,29 @@ namespace WS2Common {
 
         return debug;
     }
+
+    QDebug operator<<(QDebug debug, const Scene::SceneNode *node) {
+        std::function<void (const unsigned int, const Scene::SceneNode*)> f =
+            [&debug, &f](const unsigned int indentLevel, const Scene::SceneNode *node) {
+            //debug.nospace().noquote() << QString(indentLevel * 4, ' ') << node->getName() << '\n';
+
+                if (indentLevel > 0) {
+                    for (unsigned int i = 0; i < indentLevel - 1; i++) {
+                        debug.nospace().noquote() << " │  ";
+                    }
+                    debug.nospace().noquote() << " ├─ ";
+                }
+
+                debug.nospace().noquote() << node->getName() << '\n';
+
+            foreach(const Scene::SceneNode *child, node->getChildren()) {
+                f(indentLevel + 1, child);
+            }
+        };
+
+        QDebugStateSaver saver(debug);
+        f(0, node);
+
+        return debug;
+    }
 }

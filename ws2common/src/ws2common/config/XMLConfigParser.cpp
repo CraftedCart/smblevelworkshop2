@@ -53,6 +53,8 @@ namespace WS2Common {
                     }
                 }
 
+                qDebug() << stage->getRootNode();
+
                 if (xml.hasError()) {
                     //TODO: Throw an exception or something
                     qWarning().noquote() << "XML parsing error:" << xml.errorString();
