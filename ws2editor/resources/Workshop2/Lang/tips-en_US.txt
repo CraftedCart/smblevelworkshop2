@@ -8,7 +8,7 @@ If your stage suffers from the Rmac glitch, try to eliminate all zero area faces
 It is easy to see the edges on box shaped skyboxes.
 Reducing texture size, the number of mipmaps per texture, or the polygon count can help in the event that there is not enough memory for your stage. You may opt to have a more complicated display model, but have the collision model have fewer polygons.
 When using custom goal models with multiple goal colors, the blue goal must be listed first in the GMA.
-When using custom goal models, make sure to mark the center part as double sided in the GMA, or duplicate that part and flip to normals, so that it isn't invisible from the back of the goal.
+When using custom goal models, make sure to mark the center part as double sided in the GMA, or duplicate that part and flip the normals, so that it isn't invisible from the back of the goal.
 When animating stages, try to avoid making players wait obnoxious amounts of time at the beginning of a stage.
 Skyboxes can add a lot to a stage. Bonus points if they're more than just a box/cylinder/sphere.
 Place the fallout position slightly below the lowest point a player can bounce up from. Nobody wants to wait long periods of time to fallout, nor fall out when they could have bounced back onto the stage.
