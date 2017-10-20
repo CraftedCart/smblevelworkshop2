@@ -56,6 +56,20 @@ QDebug operator<<(QDebug debug, const glm::vec3 &vec) {
     return debug;
 }
 
+QDebug operator<<(QDebug debug, const glm::vec2 &vec) {
+    QDebugStateSaver saver(debug);
+    debug.nospace() << '(' << vec.x << ", " << vec.y << ')';
+
+    return debug;
+}
+
+QDebug operator<<(QDebug debug, const glm::uvec2 &vec) {
+    QDebugStateSaver saver(debug);
+    debug.nospace() << '(' << vec.x << ", " << vec.y << ')';
+
+    return debug;
+}
+
 QDebug operator<<(QDebug debug, const WS2Common::Scene::SceneNode *node) {
     std::function<void (const unsigned int, const WS2Common::Scene::SceneNode*)> f =
         [&debug, &f](const unsigned int indentLevel, const WS2Common::Scene::SceneNode *node) {

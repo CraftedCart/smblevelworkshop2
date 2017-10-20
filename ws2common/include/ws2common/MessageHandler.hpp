@@ -19,6 +19,8 @@ namespace WS2Common {
 
 //Custom types
 QDebug operator<<(QDebug debug, const glm::vec3 &vec);
+QDebug operator<<(QDebug debug, const glm::vec2 &vec);
+QDebug operator<<(QDebug debug, const glm::uvec2 &vec);
 QDebug operator<<(QDebug debug, const WS2Common::Scene::SceneNode *node);
 
 #endif
