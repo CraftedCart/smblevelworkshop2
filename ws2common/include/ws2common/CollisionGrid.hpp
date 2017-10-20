@@ -1,0 +1,64 @@
+/**
+ * @file
+ * @brief Header for the Collision Grid class
+ */
+
+#ifndef SMBLEVELWORKSHOP2_WS2COMMON_COLLISIONGRID_HPP
+#define SMBLEVELWORKSHOP2_WS2COMMON_COLLISIONGRID_HPP
+
+#include <glm/glm.hpp>
+
+namespace WS2Common {
+    class CollisionGrid {
+        protected:
+            glm::vec2 gridStart;
+            glm::vec2 gridStep;
+            glm::uvec2 gridStepCount;
+
+        public:
+            /**
+             * @brief Setter for gridStart
+             *
+             * @param gridStart The position where the collision grid should start
+             */
+            void setGridStart(const glm::vec2 gridStart);
+
+            /**
+             * @brief Getter for gridStart
+             *
+             * @return The position where the collision grid starts
+             */
+            glm::vec2 getGridStart();
+
+            /**
+             * @brief Setter for gridStep
+             *
+             * @param gridStep How large each grid tile should be
+             */
+            void setGridStep(const glm::vec2 gridStep);
+
+            /**
+             * @brief Getter for gridStep
+             *
+             * @return How large each grid tile is
+             */
+            glm::vec2 getGridStep();
+
+            /**
+             * @brief Setter for gridStepCount
+             *
+             * @param gridStepCount How many grid tiles there should be in the X x Y direction
+             */
+            void setGridStepCount(const glm::uvec2 gridStepCount);
+
+            /**
+             * @brief Getter for gridStepCount
+             *
+             * @return How many grid tiles there are in the X x Y direction
+             */
+            glm::uvec2 getGridStepCount();
+    };
+}
+
+#endif
+

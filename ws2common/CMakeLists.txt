@@ -38,6 +38,7 @@ set(SOURCE_FILES
     ./src/ws2common/scene/SwitchSceneNode.cpp
     ./src/ws2common/scene/WormholeSceneNode.cpp
     ./src/ws2common/config/XMLConfigParser.cpp
+    ./src/ws2common/CollisionGrid.cpp
     )
 
 set(HEADER_FILES
@@ -63,6 +64,7 @@ set(HEADER_FILES
     ./include/ws2common/scene/SwitchSceneNode.hpp
     ./include/ws2common/scene/WormholeSceneNode.hpp
     ./include/ws2common/config/XMLConfigParser.hpp
+    ./include/ws2common/CollisionGrid.hpp
     )
 
 add_library(${PROJECT_NAME} SHARED ${SOURCE_FILES} ${HEADER_FILES})

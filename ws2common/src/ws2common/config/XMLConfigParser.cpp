@@ -158,9 +158,8 @@ namespace WS2Common {
                     } else if (xml.name() == "animInitialState") { //TODO
                         qWarning() << "itemGroup > animInitialState not yet implemented!";
                         xml.skipCurrentElement();
-                    } else if (xml.name() == "collisionGrid") { //TODO
-                        qWarning() << "itemGroup > collisionGrid not yet implemented!";
-                        xml.skipCurrentElement();
+                    } else if (xml.name() == "collisionGrid") {
+                        group->setCollisionGrid(parseCollisionGrid(xml));
                     } else if (xml.name() == "goal") {
                         group->addChild(parseGoal(xml));
                     } else if (xml.name() == "bumper") {
@@ -346,6 +345,30 @@ namespace WS2Common {
                 return mesh;
             }
 
+            CollisionGrid* parseCollisionGrid(QXmlStreamReader &xml) {
+                CollisionGrid *grid = new CollisionGrid();
+
+                while (!(xml.isEndElement() && xml.name() == "collisionGrid")) {
+                    xml.readNext();
+                    if (!xml.isStartElement()) continue; //Ignore all end elements
+
+                    if (xml.name() == "start") {
+                        grid->setGridStart(getVec2Attributes(xml.attributes(), "x", "z"));
+                    } else if (xml.name() == "step") {
+                        grid->setGridStep(getVec2Attributes(xml.attributes(), "x", "z"));
+                    } else if (xml.name() == "count") {
+                        grid->setGridStepCount(getUvec2Attributes(xml.attributes(), "x", "z"));
+                    } else if (xml.name() == "collision") {
+                        qWarning() << "collisionGrid > collision not yet implemented!";
+                        xml.skipCurrentElement();
+                    } else {
+                        qWarning().noquote() << "Unrecognised tag: collisionGrid >" << xml.name();
+                    }
+                }
+
+                return grid;
+            }
+
             QStringRef getAttribute(const QXmlStreamAttributes &attrs, const QString attrName) {
                 foreach(const QXmlStreamAttribute &attr, attrs) {
                     if (attr.name() == attrName) return attr.value();
@@ -362,6 +385,28 @@ namespace WS2Common {
                     if (attr.name() == x) vec.x = attr.value().toFloat();
                     else if (attr.name() == y) vec.y = attr.value().toFloat();
                     else if (attr.name() == z) vec.z = attr.value().toFloat();
+                }
+
+                return vec;
+            }
+
+            glm::vec2 getVec2Attributes(const QXmlStreamAttributes &attrs,
+                    const QString x, const QString y) {
+                glm::vec2 vec;
+                foreach(const QXmlStreamAttribute &attr, attrs) {
+                    if (attr.name() == x) vec.x = attr.value().toFloat();
+                    else if (attr.name() == y) vec.y = attr.value().toFloat();
+                }
+
+                return vec;
+            }
+
+            glm::uvec2 getUvec2Attributes(const QXmlStreamAttributes &attrs,
+                    const QString x, const QString y) {
+                glm::uvec2 vec;
+                foreach(const QXmlStreamAttribute &attr, attrs) {
+                    if (attr.name() == x) vec.x = attr.value().toFloat();
+                    else if (attr.name() == y) vec.y = attr.value().toFloat();
                 }
 
                 return vec;

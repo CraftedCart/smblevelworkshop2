@@ -13,6 +13,7 @@
 #include "ws2common/scene/BananaSceneNode.hpp"
 #include "ws2common/scene/FalloutVolumeSceneNode.hpp"
 #include "ws2common/scene/SwitchSceneNode.hpp"
+#include "ws2common/CollisionGrid.hpp"
 #include <QXmlStreamAttributes>
 
 namespace WS2Common {
@@ -139,6 +140,17 @@ namespace WS2Common {
             Scene::MeshSceneNode* parseLevelModel(QXmlStreamReader &xml);
 
             /**
+             * @brief Parses collision information in an XML config
+             *
+             * Make sure the XML reader is within the collisionGrid element before calling this
+             *
+             * @param xml The QXmlStreamReader
+             *
+             * @return The collision parsed from the config
+             */
+            CollisionGrid* parseCollisionGrid(QXmlStreamReader &xml);
+
+            /**
              * @brief Gets an XML attribute with the name attrName
              *
              * @param attrs The attributes to search through
@@ -160,6 +172,30 @@ namespace WS2Common {
              */
             glm::vec3 getVec3Attributes(const QXmlStreamAttributes &attrs,
                     const QString x = "x", const QString y = "y", const QString z = "z");
+
+            /**
+             * @brief Gets 2 XML attributes with the names x, y and puts them in a glm::vec2
+             *
+             * @param attrs The attributes to search through
+             * @param x The X attribute name
+             * @param y The Y attribute name
+             *
+             * @return A vec2 of the float values read from the x, y attrubutes
+             */
+            glm::vec2 getVec2Attributes(const QXmlStreamAttributes &attrs,
+                    const QString x = "x", const QString y = "y");
+
+            /**
+             * @brief Gets 2 XML attributes with the names x, y and puts them in a glm::uvec2
+             *
+             * @param attrs The attributes to search through
+             * @param x The X attribute name
+             * @param y The Y attribute name
+             *
+             * @return A uvec2 of the float values read from the x, y attrubutes
+             */
+            glm::uvec2 getUvec2Attributes(const QXmlStreamAttributes &attrs,
+                    const QString x = "x", const QString y = "y");
         }
     }
 }
