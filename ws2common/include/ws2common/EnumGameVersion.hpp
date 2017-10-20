@@ -13,7 +13,8 @@ namespace WS2Common {
      */
     enum EnumGameVersion {
         SUPER_MONKEY_BALL_1,
-        SUPER_MONKEY_BALL_2
+        SUPER_MONKEY_BALL_2,
+        SUPER_MONKEY_BALL_DELUXE
     };
 }
 

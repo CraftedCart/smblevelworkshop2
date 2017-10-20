@@ -47,6 +47,13 @@ namespace WS2Common {
             Scene::SceneNode* getRootNode();
 
             /**
+             * @brief Const getter for rootNode
+             *
+             * @return A pointer to the root scene node of the stage
+             */
+            const Scene::SceneNode* getRootNode() const;
+
+            /**
              * @brief Setter for falloutY
              *
              * @param falloutY The fallout Y position to set
@@ -58,7 +65,7 @@ namespace WS2Common {
              *
              * @return The fallout Y position to get
              */
-            float getFalloutY();
+            float getFalloutY() const;
 
             /**
              * @brief Finds the first background group scene node, by searching direct children of rootNode

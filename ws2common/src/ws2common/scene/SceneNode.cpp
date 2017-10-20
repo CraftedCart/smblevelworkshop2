@@ -60,7 +60,7 @@ namespace WS2Common {
             children.append(child);
         }
 
-        int SceneNode::getChildCount() {
+        int SceneNode::getChildCount() const {
             return children.size();
         }
 

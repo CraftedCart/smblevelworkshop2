@@ -1,9 +1,12 @@
 #include "ws2common/MessageHandler.hpp"
 #include "ws2common/EnumGameVersion.hpp"
 #include "ws2common/config/XMLConfigParser.hpp"
+#include "ws2lz/SMB2LzExporter.hpp"
 #include <QCoreApplication>
 #include <QCommandLineParser>
 #include <QFile>
+#include <QBuffer>
+#include <QDataStream>
 #include <QDebug>
 
 int main(int argc, char *argv[]) {
@@ -20,7 +23,7 @@ int main(int argc, char *argv[]) {
             {{"c", "config"}, QCoreApplication::translate("main", "Input path to the XML configuration file."), QCoreApplication::translate("main", "configuration file")},
             {{"o", "output"}, QCoreApplication::translate("main", "Output path to an uncompressed LZ file."), QCoreApplication::translate("main", "uncompressed output file")},
             {{"s", "compressed-output"}, QCoreApplication::translate("main", "Output path to a compressed LZ file."), QCoreApplication::translate("main", "output file")},
-            {{"g", "game-version"}, QCoreApplication::translate("main", "The version of SMB to generate an LZ file for (1 or 2)."), QCoreApplication::translate("main", "version")}
+            {{"g", "game-version"}, QCoreApplication::translate("main", "The version of SMB to generate an LZ file for (1/2/deluxe)."), QCoreApplication::translate("main", "version")}
             });
 
     parser.process(app);
@@ -61,6 +64,8 @@ int main(int argc, char *argv[]) {
             gameVersion = WS2Common::EnumGameVersion::SUPER_MONKEY_BALL_1;
         } else if (parser.value("g") == "2") {
             gameVersion = WS2Common::EnumGameVersion::SUPER_MONKEY_BALL_2;
+        } else if (parser.value("g") == "deluxe") {
+            gameVersion = WS2Common::EnumGameVersion::SUPER_MONKEY_BALL_DELUXE;
         } else {
             //Invalid version
             qCritical().noquote() << QCoreApplication::translate("main", "Invalid game version specified. Use --help for more info.");
@@ -78,10 +83,34 @@ int main(int argc, char *argv[]) {
     WS2Common::Config::XMLConfigParser confParser;
     WS2Common::Stage *stage = confParser.parseStage(config);
     qInfo() << stage->getRootNode();
-    //TODO: Do some magic with stage
-    delete stage;
 
-    qCritical().noquote() << "ws2lzfrontend not yet implemented. At all. This is just a placeholder.";
+    QBuffer buf;
+    buf.open(QIODevice::ReadWrite);
+    QDataStream dStream(&buf);
+
+    qInfo() << "Exporting file...";
+    if (gameVersion == WS2Common::EnumGameVersion::SUPER_MONKEY_BALL_1) {
+        qCritical() << "SMB 1 export not yet implemented";
+    } else if (gameVersion == WS2Common::EnumGameVersion::SUPER_MONKEY_BALL_2) {
+        WS2Lz::SMB2LzExporter exporter;
+
+        exporter.generate(dStream, *stage);
+    }
+
+    buf.seek(0);
+    //Write the uncompressed file if requested
+    if (parser.isSet("o")) {
+        QFile o(parser.value("o"));
+        o.open(QIODevice::WriteOnly);
+        o.write(buf.data());
+        o.close();
+    }
+
+    //TODO: Compression
+
+    buf.close();
+
+    delete stage;
 
     return EXIT_SUCCESS;
 }

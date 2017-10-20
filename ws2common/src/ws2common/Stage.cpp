@@ -20,11 +20,15 @@ namespace WS2Common {
         return rootNode;
     }
 
+    const Scene::SceneNode* Stage::getRootNode() const {
+        return rootNode;
+    }
+
     void Stage::setFalloutY(const float falloutY) {
         this->falloutY = falloutY;
     }
 
-    float Stage::getFalloutY() {
+    float Stage::getFalloutY() const {
         return falloutY;
     }
 

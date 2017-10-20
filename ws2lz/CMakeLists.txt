@@ -19,9 +19,13 @@ include_directories(./include)
 include_directories(${CMAKE_BINARY_DIR})
 
 set(SOURCE_FILES
+    ./src/ws2lz/WS2Lz.cpp
+    ./src/ws2lz/SMB2LzExporter.cpp
     )
 
 set(HEADER_FILES
+    ./include/ws2lz/WS2Lz.hpp
+    ./include/ws2lz/SMB2LzExporter.hpp
     )
 
 add_library(${PROJECT_NAME} SHARED ${SOURCE_FILES} ${HEADER_FILES})

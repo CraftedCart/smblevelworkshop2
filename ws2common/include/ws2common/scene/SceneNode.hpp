@@ -105,7 +105,7 @@ namespace WS2Common {
                  *
                  * @return The number of children that belong to this node
                  */
-                int getChildCount();
+                int getChildCount() const;
 
                 /**
                  * @brief Getter for WS2::Scene::SceneNode::parent
