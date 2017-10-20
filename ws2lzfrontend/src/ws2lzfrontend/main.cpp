@@ -75,7 +75,8 @@ int main(int argc, char *argv[]) {
     configFile.close();
 
     qInfo() << "Parsing configuration...";
-    WS2Common::Stage *stage = WS2Common::Config::XMLConfigParser::parseStage(config);
+    WS2Common::Config::XMLConfigParser confParser;
+    WS2Common::Stage *stage = confParser.parseStage(config);
     qInfo() << stage->getRootNode();
     //TODO: Do some magic with stage
     delete stage;
