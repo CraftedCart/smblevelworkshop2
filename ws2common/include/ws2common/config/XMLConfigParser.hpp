@@ -16,13 +16,13 @@
 #include "ws2common/scene/WormholeSceneNode.hpp"
 #include "ws2common/CollisionGrid.hpp"
 #include <QXmlStreamAttributes>
-#include <QMap>
+#include <QHash>
 
 namespace WS2Common {
     namespace Config {
         class XMLConfigParser {
             protected:
-                QMap<Scene::WormholeSceneNode*, QString> wormholeDestMap;
+                QHash<Scene::WormholeSceneNode*, QString> wormholeDestMap;
 
             public:
                 /**

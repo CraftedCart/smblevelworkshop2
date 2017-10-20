@@ -57,12 +57,12 @@ namespace WS2Common {
             }
 
             //TODO: Done parsing - now link wormholes
-            QMapIterator<Scene::WormholeSceneNode*, QString> i(wormholeDestMap);
+            QHashIterator<Scene::WormholeSceneNode*, QString> i(wormholeDestMap);
             while (i.hasNext()) {
                 i.next();
 
                 //Iterate over all wormholes to find the one with the matching destination name
-                QMapIterator<Scene::WormholeSceneNode*, QString> j(wormholeDestMap);
+                QHashIterator<Scene::WormholeSceneNode*, QString> j(wormholeDestMap);
                 while (j.hasNext()) {
                     j.next();
 
