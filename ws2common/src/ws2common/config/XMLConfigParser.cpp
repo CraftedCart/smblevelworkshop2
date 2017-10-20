@@ -56,6 +56,23 @@ namespace WS2Common {
                 qWarning().noquote() << "XML parsing error:" << xml.errorString();
             }
 
+            //TODO: Done parsing - now link wormholes
+            QMapIterator<Scene::WormholeSceneNode*, QString> i(wormholeDestMap);
+            while (i.hasNext()) {
+                i.next();
+
+                //Iterate over all wormholes to find the one with the matching destination name
+                QMapIterator<Scene::WormholeSceneNode*, QString> j(wormholeDestMap);
+                while (j.hasNext()) {
+                    j.next();
+
+                    if (i.value() == j.key()->getName()) {
+                        i.key()->setDestination(j.key());
+                        break;
+                    }
+                }
+            }
+
             return stage;
         }
 
@@ -169,14 +186,11 @@ namespace WS2Common {
                     group->addChild(parseBanana(xml));
                 } else if (xml.name() == "falloutVolume") {
                     group->addChild(parseFalloutVolume(xml));
-                } else if (xml.name() == "wormhole") { //TODO
-                    qWarning() << "itemGroup > wormhole not yet implemented!";
-                    xml.skipCurrentElement();
-                    //TODO: Store wormhole destinations in a map
-                    //TODO: Then link wormholes after processing
+                } else if (xml.name() == "wormhole") {
+                    group->addChild(parseWormhole(xml));
                 } else if (xml.name() == "switch") {
                     group->addChild(parseSwitch(xml));
-                } else if (xml.name() == "levelModel") { //TODO
+                } else if (xml.name() == "levelModel") {
                     group->addChild(parseLevelModel(xml));
                 } else {
                     qWarning().noquote() << "Unrecognised tag: itemGroup >" << xml.name();
@@ -307,6 +321,31 @@ namespace WS2Common {
             }
 
             return volume;
+        }
+
+        Scene::WormholeSceneNode* XMLConfigParser::parseWormhole(QXmlStreamReader &xml) {
+            //Default name is "Wormhole x", translated
+            unsigned int id = 0;
+            Scene::WormholeSceneNode *wh = new Scene::WormholeSceneNode(QCoreApplication::translate("XMLConfigParser", "Wormhole %1").arg(id));
+
+            while (!(xml.isEndElement() && xml.name() == "wormhole")) {
+                xml.readNext();
+                if (!xml.isStartElement()) continue; //Ignore all end elements
+
+                if (xml.name() == "name") {
+                    wh->setName(xml.readElementText());
+                } else if (xml.name() == "position") {
+                    wh->setPosition(getVec3Attributes(xml.attributes()));
+                } else if (xml.name() == "rotation") {
+                    wh->setRotation(getVec3Attributes(xml.attributes()));
+                } else if (xml.name() == "destinationName") {
+                    wormholeDestMap[wh] = xml.readElementText();
+                } else {
+                    qWarning().noquote() << "Unrecognised tag: wormhole >" << xml.name();
+                }
+            }
+
+            return wh;
         }
 
         Scene::SwitchSceneNode* XMLConfigParser::parseSwitch(QXmlStreamReader &xml) {

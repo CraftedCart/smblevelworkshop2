@@ -13,12 +13,17 @@
 #include "ws2common/scene/BananaSceneNode.hpp"
 #include "ws2common/scene/FalloutVolumeSceneNode.hpp"
 #include "ws2common/scene/SwitchSceneNode.hpp"
+#include "ws2common/scene/WormholeSceneNode.hpp"
 #include "ws2common/CollisionGrid.hpp"
 #include <QXmlStreamAttributes>
+#include <QMap>
 
 namespace WS2Common {
     namespace Config {
         class XMLConfigParser {
+            protected:
+                QMap<Scene::WormholeSceneNode*, QString> wormholeDestMap;
+
             public:
                 /**
                  * @brief Parses and XML config and converts it into a Stage object
@@ -117,6 +122,17 @@ namespace WS2Common {
                  * @return The jamabar parsed from the config
                  */
                 Scene::FalloutVolumeSceneNode* parseFalloutVolume(QXmlStreamReader &xml);
+
+                /**
+                 * @brief Parses a wormhole in an XML config
+                 *
+                 * Make sure the XML reader is within the switch element before calling this
+                 *
+                 * @param xml The QXmlStreamReader
+                 *
+                 * @return The wormhole parsed from the config
+                 */
+                Scene::WormholeSceneNode* parseWormhole(QXmlStreamReader &xml);
 
                 /**
                  * @brief Parses a switch in an XML config
