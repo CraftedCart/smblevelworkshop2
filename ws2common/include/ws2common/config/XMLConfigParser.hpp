@@ -1,6 +1,6 @@
 /**
  * @file
- * @brief Header for the XMLConfigParser namespace
+ * @brief Header for the XMLConfigParser class
  */
 
 #include "ws2common/Stage.hpp"
