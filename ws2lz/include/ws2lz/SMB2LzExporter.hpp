@@ -4,7 +4,13 @@
  */
 
 #include "ws2common/Stage.hpp"
+#include "ws2common/scene/GroupSceneNode.hpp"
+#include "ws2common/scene/GoalSceneNode.hpp"
+#include "ws2common/scene/BumperSceneNode.hpp"
+#include "ws2common/scene/JamabarSceneNode.hpp"
+#include "ws2common/scene/BananaSceneNode.hpp"
 #include <QDataStream>
+#include <QMap>
 
 namespace WS2Lz {
     /**
@@ -16,6 +22,12 @@ namespace WS2Lz {
      * - File header
      * - Start
      * - Fallout
+     * - Collision triangles
+     * - Collision triangle index list
+     * - Goals
+     * - Bumpers
+     * - Jamabars
+     * - Bananas
      */
     class SMB2LzExporter {
         protected:
@@ -38,18 +50,19 @@ namespace WS2Lz {
             const unsigned int BACKGROUND_MODEL_LENGTH = 56;
 
             //Offsets and counts
-            quint32 collisionHeaderCount;
-            quint32 collisionHeaderListOffset;
+            //Key: Offset, Value: What the offset points to
+            QMap<quint32, const WS2Common::Scene::GroupSceneNode*> collisionHeaderOffsetMap;
             quint32 startOffset;
             quint32 falloutOffset;
-            quint32 goalCount;
-            quint32 goalListOffset;
-            quint32 bumperCount;
-            quint32 bumperListOffset;
-            quint32 jamabarCount;
-            quint32 jamabarListOffset;
-            quint32 bananaCount;
-            quint32 bananaListOffset;
+            //Offsets and counts for goals, bumpers, etc per collision header
+            QMap<quint32, const WS2Common::Scene::GroupSceneNode*> goalOffsetMap;
+            QMap<const WS2Common::Scene::GroupSceneNode*, quint32> goalCountMap;
+            QMap<quint32, const WS2Common::Scene::GroupSceneNode*> bumperOffsetMap;
+            QMap<const WS2Common::Scene::GroupSceneNode*, quint32> bumperCountMap;
+            QMap<quint32, const WS2Common::Scene::GroupSceneNode*> jamabarOffsetMap;
+            QMap<const WS2Common::Scene::GroupSceneNode*, quint32> jamabarCountMap;
+            QMap<quint32, const WS2Common::Scene::GroupSceneNode*> bananaOffsetMap;
+            QMap<const WS2Common::Scene::GroupSceneNode*, quint32> bananaCountMap;
             quint32 coneCollisionObjectCount;
             quint32 coneCollisionObjectListOffset;
             quint32 sphereCollisionObjectCount;
@@ -91,9 +104,14 @@ namespace WS2Lz {
              */
             void calculateOffsets(const WS2Common::Stage &stage);
 
-            void writeFileHeader(QDataStream &dev, const WS2Common::Stage &stage);
+            void writeFileHeader(QDataStream &dev);
             void writeStart(QDataStream &dev, const WS2Common::Stage &stage);
             void writeFallout(QDataStream &dev, const WS2Common::Stage &stage);
+            void writeCollisionHeader(QDataStream &dev, const WS2Common::Scene::GroupSceneNode *node);
+            void writeGoal(QDataStream &dev, const WS2Common::Scene::GoalSceneNode *node);
+            void writeBumper(QDataStream &dev, const WS2Common::Scene::BumperSceneNode *node);
+            void writeJamabar(QDataStream &dev, const WS2Common::Scene::JamabarSceneNode *node);
+            void writeBanana(QDataStream &dev, const WS2Common::Scene::BananaSceneNode *node);
 
             void writeNull(QDataStream &dev, const unsigned int count);
 
@@ -105,6 +123,15 @@ namespace WS2Lz {
              * @return The rotation on a scale from 0x0000 to 0xFFFF
              */
             glm::tvec3<quint16> convertRotation(glm::vec3 rot);
+
+            /**
+             * @brief Adds all the values in a map together
+             *
+             * @param m The map
+             *
+             * @return All values summed
+             */
+            quint32 addAllCounts(QMap<const WS2Common::Scene::GroupSceneNode*, quint32> &m);
     };
 }
 

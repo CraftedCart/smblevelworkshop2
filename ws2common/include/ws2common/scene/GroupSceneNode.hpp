@@ -32,6 +32,13 @@ namespace WS2Common {
                  * @return collisionGrid The collision grid this GroupSceneNode has
                  */
                 CollisionGrid* getCollisionGrid();
+
+                /**
+                 * @brief Const getter for collisionGrid
+                 *
+                 * @return collisionGrid The collision grid this GroupSceneNode has
+                 */
+                const CollisionGrid* getCollisionGrid() const;
         };
     }
 }

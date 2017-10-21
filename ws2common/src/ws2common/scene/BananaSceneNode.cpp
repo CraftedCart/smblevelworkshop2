@@ -4,7 +4,7 @@ namespace WS2Common {
     namespace Scene {
         BananaSceneNode::BananaSceneNode(const QString name) : SceneNode(name) {}
 
-        EnumBananaType BananaSceneNode::getType() {
+        EnumBananaType BananaSceneNode::getType() const {
             return type;
         }
 

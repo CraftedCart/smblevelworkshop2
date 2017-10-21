@@ -26,7 +26,7 @@ namespace WS2Common {
                  *
                  * @return The type that this node is
                  */
-                EnumGoalType getType();
+                EnumGoalType getType() const;
 
                 /**
                  * @brief Setter for type

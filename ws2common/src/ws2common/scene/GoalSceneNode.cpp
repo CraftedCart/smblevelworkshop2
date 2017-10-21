@@ -4,7 +4,7 @@ namespace WS2Common {
     namespace Scene {
         GoalSceneNode::GoalSceneNode(const QString name) : SceneNode(name) {}
 
-        EnumGoalType GoalSceneNode::getType() {
+        EnumGoalType GoalSceneNode::getType() const {
             return type;
         }
 

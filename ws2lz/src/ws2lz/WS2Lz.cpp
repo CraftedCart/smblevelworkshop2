@@ -10,3 +10,13 @@ QDataStream& operator<<(QDataStream& dev, const glm::tvec3<quint16>& vec) {
     return dev;
 }
 
+QDataStream& operator<<(QDataStream& dev, const glm::vec2& vec) {
+    dev << vec.x << vec.y;
+    return dev;
+}
+
+QDataStream& operator<<(QDataStream& dev, const glm::uvec2& vec) {
+    dev << (quint32) vec.x << (quint32) vec.y;
+    return dev;
+}
+

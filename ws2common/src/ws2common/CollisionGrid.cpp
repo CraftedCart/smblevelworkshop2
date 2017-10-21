@@ -5,7 +5,7 @@ namespace WS2Common {
         this->gridStart = gridStart;
     }
 
-    glm::vec2 CollisionGrid::getGridStart() {
+    const glm::vec2 CollisionGrid::getGridStart() const {
         return gridStart;
     }
 
@@ -13,7 +13,7 @@ namespace WS2Common {
         this->gridStep = gridStep;
     }
 
-    glm::vec2 CollisionGrid::getGridStep() {
+    const glm::vec2 CollisionGrid::getGridStep() const {
         return gridStep;
     }
 
@@ -21,7 +21,7 @@ namespace WS2Common {
         this->gridStepCount = gridStepCount;
     }
 
-    glm::uvec2 CollisionGrid::getGridStepCount() {
+    const glm::uvec2 CollisionGrid::getGridStepCount() const {
         return gridStepCount;
     }
 }

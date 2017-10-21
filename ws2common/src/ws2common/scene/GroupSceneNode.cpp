@@ -15,6 +15,10 @@ namespace WS2Common {
         CollisionGrid* GroupSceneNode::getCollisionGrid() {
             return collisionGrid;
         }
+
+        const CollisionGrid* GroupSceneNode::getCollisionGrid() const {
+            return collisionGrid;
+        }
     }
 }
 

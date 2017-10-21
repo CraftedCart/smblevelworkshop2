@@ -153,6 +153,9 @@ namespace WS2Common {
                 } else if (xml.name() == "animSeesawType") { //TODO
                     qWarning() << "itemGroup > animSeesawType not yet implemented!";
                     xml.skipCurrentElement();
+                } else if (xml.name() == "conveyorSpeed") { //TODO
+                    qWarning() << "itemGroup > conveyorSpeed not yet implemented!";
+                    xml.skipCurrentElement();
                 } else if (xml.name() == "seesawSensitivity") { //TODO
                     qWarning() << "itemGroup > seesawSensitivity not yet implemented!";
                     xml.skipCurrentElement();

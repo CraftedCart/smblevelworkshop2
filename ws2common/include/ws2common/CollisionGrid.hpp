@@ -28,7 +28,7 @@ namespace WS2Common {
              *
              * @return The position where the collision grid starts
              */
-            glm::vec2 getGridStart();
+            const glm::vec2 getGridStart() const;
 
             /**
              * @brief Setter for gridStep
@@ -42,7 +42,7 @@ namespace WS2Common {
              *
              * @return How large each grid tile is
              */
-            glm::vec2 getGridStep();
+            const glm::vec2 getGridStep() const;
 
             /**
              * @brief Setter for gridStepCount
@@ -56,7 +56,7 @@ namespace WS2Common {
              *
              * @return How many grid tiles there are in the X x Y direction
              */
-            glm::uvec2 getGridStepCount();
+            const glm::uvec2 getGridStepCount() const;
     };
 }
 
