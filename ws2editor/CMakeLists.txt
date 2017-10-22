@@ -14,7 +14,7 @@ add_definitions(-Wall -Wextra -pedantic)
 string(TIMESTAMP COMPILE_TIMESTAMP UTC)
 #add_definitions(-DCOMPILE_TIMESTAMP=${COMPILE_TIMESTAMP})
 #Don't add definitions for every single file, as this will cause a recompile of everything every time
-set_source_files_properties(./src/ui/AboutWindow.cpp PROPERTIES COMPILE_FLAGS -DCOMPILE_TIMESTAMP=${COMPILE_TIMESTAMP})
+set_source_files_properties(./src/ws2editor/ui/AboutWindow.cpp PROPERTIES COMPILE_FLAGS -DCOMPILE_TIMESTAMP=${COMPILE_TIMESTAMP})
 
 #Automatically run moc, uic and rcc when needed
 set(CMAKE_AUTOMOC ON)
