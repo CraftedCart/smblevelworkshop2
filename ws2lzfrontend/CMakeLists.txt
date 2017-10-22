@@ -10,6 +10,11 @@ set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 #Be really pedantic!
 add_definitions(-Wall -Wextra -pedantic)
 
+#Show as an executable, not a shared library in file managers
+if(UNIX)
+    set(CMAKE_EXE_LINKER_FLAGS  "${CMAKE_EXE_LINKER_FLAGS} -no-pie")
+endif(UNIX)
+
 #Automatically run moc, uic and rcc when needed
 set(CMAKE_AUTOMOC ON)
 

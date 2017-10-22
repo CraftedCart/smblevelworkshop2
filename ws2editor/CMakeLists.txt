@@ -10,6 +10,11 @@ set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 #Be really pedantic!
 add_definitions(-Wall -Wextra -pedantic)
 
+#Show as an executable, not a shared library in file managers
+if(UNIX)
+    set(CMAKE_EXE_LINKER_FLAGS  "${CMAKE_EXE_LINKER_FLAGS} -no-pie")
+endif(UNIX)
+
 #Add compile time proprocessor macro
 string(TIMESTAMP COMPILE_TIMESTAMP UTC)
 #add_definitions(-DCOMPILE_TIMESTAMP=${COMPILE_TIMESTAMP})
