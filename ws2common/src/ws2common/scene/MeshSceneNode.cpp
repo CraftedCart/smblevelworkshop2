@@ -8,7 +8,7 @@ namespace WS2Common {
             this->meshName = meshName;
         }
 
-        QString MeshSceneNode::getMeshName() {
+        const QString MeshSceneNode::getMeshName() const {
             return meshName;
         }
     }

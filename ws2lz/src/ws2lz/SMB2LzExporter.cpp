@@ -69,6 +69,34 @@ namespace WS2Lz {
                 }
             }
         }
+
+        //Level model pointer type A
+        QMapIterator<quint32, const WS2Common::Scene::GroupSceneNode*> levelModelPointerAIter(collisionHeaderOffsetMap);
+        while (levelModelPointerAIter.hasNext()) {
+            levelModelPointerAIter.next();
+            writeLevelModelPointerAList(dev, levelModelPointerAIter.value());
+        }
+
+        //Level model pointer type B
+        QMapIterator<quint32, const WS2Common::Scene::GroupSceneNode*> levelModelPointerBIter(collisionHeaderOffsetMap);
+        while (levelModelPointerBIter.hasNext()) {
+            levelModelPointerBIter.next();
+            writeLevelModelPointerBList(dev, levelModelPointerBIter.value());
+        }
+
+        //Level models
+        QMapIterator<quint32, const WS2Common::Scene::GroupSceneNode*> levelModelIter(collisionHeaderOffsetMap);
+        while (levelModelIter.hasNext()) {
+            levelModelIter.next();
+            writeLevelModelList(dev, levelModelIter.value());
+        }
+
+        //Level model names
+        QMapIterator<quint32, const WS2Common::Scene::GroupSceneNode*> levelModelNameIter(collisionHeaderOffsetMap);
+        while (levelModelNameIter.hasNext()) {
+            levelModelNameIter.next();
+            writeLevelModelNameList(dev, levelModelNameIter.value());
+        }
     }
 
     void SMB2LzExporter::calculateOffsets(const WS2Common::Stage &stage) {
@@ -166,6 +194,71 @@ namespace WS2Lz {
             bananaCountMap[bananaIter.value()] = bananaCount;
         }
 
+        //Iterate over all GroupSceneNodes/collision headers, and count level models to add to nextOffset
+        //For level model pointer type A
+        //Basically the exact same as before with goals
+        QMapIterator<quint32, const WS2Common::Scene::GroupSceneNode*> levelModelPointerAIter(collisionHeaderOffsetMap);
+        while (levelModelPointerAIter.hasNext()) {
+            levelModelPointerAIter.next();
+            levelModelPointerAOffsetMap[nextOffset] = levelModelPointerAIter.value();
+
+            foreach(WS2Common::Scene::SceneNode *node, levelModelPointerAIter.value()->getChildren()) {
+                if (WS2Common::instanceOf<WS2Common::Scene::MeshSceneNode>(node)) {
+                    nextOffset += LEVEL_MODEL_POINTER_TYPE_A_LENGTH;
+                }
+            }
+        }
+
+        //Iterate over all GroupSceneNodes/collision headers, and count level models to add to nextOffset
+        //For level model pointer type B
+        //Basically the exact same as before with goals
+        QMapIterator<quint32, const WS2Common::Scene::GroupSceneNode*> levelModelPointerBIter(collisionHeaderOffsetMap);
+        while (levelModelPointerBIter.hasNext()) {
+            levelModelPointerBIter.next();
+            levelModelPointerBOffsetMap[nextOffset] = levelModelPointerBIter.value();
+
+            foreach(WS2Common::Scene::SceneNode *node, levelModelPointerBIter.value()->getChildren()) {
+                if (WS2Common::instanceOf<WS2Common::Scene::MeshSceneNode>(node)) {
+                    nextOffset += LEVEL_MODEL_POINTER_TYPE_B_LENGTH;
+                }
+            }
+        }
+
+        //Iterate over all GroupSceneNodes/collision headers, and count level models to add to nextOffset
+        //Basically the exact same as before with goals
+        QMapIterator<quint32, const WS2Common::Scene::GroupSceneNode*> levelModelIter(collisionHeaderOffsetMap);
+        while (levelModelIter.hasNext()) {
+            levelModelIter.next();
+            levelModelOffsetMap[nextOffset] = levelModelIter.value();
+            quint32 levelModelCount = 0; //Number of levelModels in this collision header
+
+            foreach(WS2Common::Scene::SceneNode *node, levelModelIter.value()->getChildren()) {
+                if (WS2Common::instanceOf<WS2Common::Scene::MeshSceneNode>(node)) {
+                    nextOffset += LEVEL_MODEL_LENGTH;
+                    levelModelCount++;
+                }
+            }
+
+            //Store levelModel count in the map
+            levelModelCountMap[levelModelIter.value()] = levelModelCount;
+        }
+
+        //Iterate over all level models, and add the model name + null terminator padded to 4 bytes to nextOffset
+        QMapIterator<quint32, const WS2Common::Scene::GroupSceneNode*> levelModelNameIter(collisionHeaderOffsetMap);
+        while (levelModelNameIter.hasNext()) {
+            levelModelNameIter.next();
+            foreach(WS2Common::Scene::SceneNode *node, levelModelNameIter.value()->getChildren()) {
+                if (WS2Common::instanceOf<WS2Common::Scene::MeshSceneNode>(node)) {
+                    //Found a level model
+                    WS2Common::Scene::MeshSceneNode *mesh = static_cast<WS2Common::Scene::MeshSceneNode*>(node);
+                    levelModelNameOffsetMap[nextOffset] = mesh->getMeshName();
+
+                    //+ 1 because size() does not include a null terminator
+                    nextOffset += roundUpNearest4(mesh->getMeshName().size() + 1);
+                }
+            }
+        }
+
         //Just set all this guff to null for now in case it isn't
         coneCollisionObjectCount = 0;
         coneCollisionObjectListOffset = 0;
@@ -180,9 +273,6 @@ namespace WS2Lz {
         //TODO: Mystery 8
         //TODO: Reflective level model
         //TODO: Level model instances
-        levelModelCount = 0;
-        levelModelPointerAListOffset = 0;
-        levelModelPointerBListOffset = 0;
         switchCount = 0;
         switchListOffset = 0;
         //TODO: Fog anim header
@@ -221,10 +311,10 @@ namespace WS2Lz {
         writeNull(dev, 8); //TODO: Reflective level models
         writeNull(dev, 12);
         writeNull(dev, 8); //TODO: Level model instances
-        dev << levelModelCount;
-        dev << levelModelPointerAListOffset;
-        dev << levelModelCount;
-        dev << levelModelPointerBListOffset;
+        dev << addAllCounts(levelModelCountMap);
+        dev << levelModelPointerAOffsetMap.firstKey();
+        dev << addAllCounts(levelModelCountMap);
+        dev << levelModelPointerBOffsetMap.firstKey();
         writeNull(dev, 12);
         dev << switchCount;
         dev << switchListOffset;
@@ -278,7 +368,10 @@ namespace WS2Lz {
         dev << jamabarOffsetMap.key(node);
         dev << bananaCountMap.value(node);
         dev << bananaOffsetMap.key(node);
-        writeNull(dev, 1080); //TODO: Everything else
+        writeNull(dev, 48); //TODO: Everything else
+        dev << levelModelCountMap.value(node);
+        dev << levelModelPointerBOffsetMap.key(node);
+        writeNull(dev, 1024); //TODO: Everything else
     }
 
     void SMB2LzExporter::writeGoal(QDataStream &dev, const WS2Common::Scene::GoalSceneNode *node) {
@@ -304,6 +397,61 @@ namespace WS2Lz {
     void SMB2LzExporter::writeBanana(QDataStream &dev, const WS2Common::Scene::BananaSceneNode *node) {
         dev << node->getPosition();
         dev << (quint32) node->getType();
+    }
+
+    void SMB2LzExporter::writeLevelModelPointerAList(QDataStream &dev, const WS2Common::Scene::GroupSceneNode *node) {
+        quint32 nextOffset = levelModelOffsetMap.key(node);
+
+        foreach(WS2Common::Scene::SceneNode *node, node->getChildren()) {
+            if (WS2Common::instanceOf<WS2Common::Scene::MeshSceneNode>(node)) {
+                writeNull(dev, 4);
+                dev << (quint32) 0x00000001;
+                dev << nextOffset;
+
+                //Level models for the same collision header are just sequential stores, so it's fine to just add
+                //on the length of a single level model
+                nextOffset += LEVEL_MODEL_LENGTH;
+            }
+        }
+    }
+
+    void SMB2LzExporter::writeLevelModelPointerBList(QDataStream &dev, const WS2Common::Scene::GroupSceneNode *node) {
+        quint32 nextOffset = levelModelPointerAOffsetMap.key(node);
+
+        foreach(WS2Common::Scene::SceneNode *node, node->getChildren()) {
+            if (WS2Common::instanceOf<WS2Common::Scene::MeshSceneNode>(node)) {
+                dev << nextOffset;
+
+                //Level model pointer type As for the same collision header are just sequential stores, so it's fine to
+                //just add on the length of a single level model
+                nextOffset += LEVEL_MODEL_POINTER_TYPE_A_LENGTH;
+            }
+        }
+    }
+
+    void SMB2LzExporter::writeLevelModelList(QDataStream &dev, const WS2Common::Scene::GroupSceneNode *node) {
+        foreach(WS2Common::Scene::SceneNode *node, node->getChildren()) {
+            if (WS2Common::instanceOf<WS2Common::Scene::MeshSceneNode>(node)) {
+                writeNull(dev, 4);
+                dev << levelModelNameOffsetMap.key(static_cast<WS2Common::Scene::MeshSceneNode*>(node)->getMeshName());
+                writeNull(dev, 8);
+            }
+        }
+    }
+
+    void SMB2LzExporter::writeLevelModelNameList(QDataStream &dev, const WS2Common::Scene::GroupSceneNode *node) {
+        foreach(WS2Common::Scene::SceneNode *node, node->getChildren()) {
+            if (WS2Common::instanceOf<WS2Common::Scene::MeshSceneNode>(node)) {
+                WS2Common::Scene::MeshSceneNode *mesh = static_cast<WS2Common::Scene::MeshSceneNode*>(node);
+
+                //Write the object name
+                dev.writeRawData(mesh->getMeshName().toLatin1(), mesh->getMeshName().size());
+
+                writeNull(dev, 1); //Add a null terminator
+                //Pad to 4 bytes
+                writeNull(dev, roundUpNearest4(mesh->getMeshName().size() + 1) - (mesh->getMeshName().size() + 1));
+            }
+        }
     }
 
     void SMB2LzExporter::writeNull(QDataStream &dev, const unsigned int count) {
@@ -338,6 +486,11 @@ namespace WS2Lz {
         }
 
         return total;
+    }
+
+    quint32 SMB2LzExporter::roundUpNearest4(quint32 n) {
+        if (n % 4 == 0) return n;
+        return (n + 3) / 4 * 4;
     }
 }
 

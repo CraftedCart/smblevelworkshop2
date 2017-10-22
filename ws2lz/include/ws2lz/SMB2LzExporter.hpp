@@ -9,6 +9,7 @@
 #include "ws2common/scene/BumperSceneNode.hpp"
 #include "ws2common/scene/JamabarSceneNode.hpp"
 #include "ws2common/scene/BananaSceneNode.hpp"
+#include "ws2common/scene/MeshSceneNode.hpp"
 #include <QDataStream>
 #include <QMap>
 
@@ -28,6 +29,10 @@ namespace WS2Lz {
      * - Bumpers
      * - Jamabars
      * - Bananas
+     * - Level model pointer type A
+     * - Level model pointer type B
+     * - Level model
+     * - Level model name
      */
     class SMB2LzExporter {
         protected:
@@ -39,9 +44,9 @@ namespace WS2Lz {
             const unsigned int COLLISION_TRIANGLE_LENGTH = 64;
             const unsigned int COLLISION_TRIANGLE_INDEX_LENGTH = 2;
             const unsigned int COLLISION_TRIANGLE_LIST_POINTER_LENGTH = 4;
-            const unsigned int LEVEL_MODEL_OFFSET_TYPE_A_LENGTH = 12;
-            const unsigned int LEVEL_MODEL_OFFSET_TYPE_B_LENGTH = 4;
-            const unsigned int LEVEL_MODEL_TYPE_A_LENGTH = 16;
+            const unsigned int LEVEL_MODEL_POINTER_TYPE_A_LENGTH = 12;
+            const unsigned int LEVEL_MODEL_POINTER_TYPE_B_LENGTH = 4;
+            const unsigned int LEVEL_MODEL_LENGTH = 16;
             const unsigned int GOAL_LENGTH = 20;
             const unsigned int BUMPER_LENGTH = 32;
             const unsigned int JAMABAR_LENGTH = 32;
@@ -63,6 +68,7 @@ namespace WS2Lz {
             QMap<const WS2Common::Scene::GroupSceneNode*, quint32> jamabarCountMap;
             QMap<quint32, const WS2Common::Scene::GroupSceneNode*> bananaOffsetMap;
             QMap<const WS2Common::Scene::GroupSceneNode*, quint32> bananaCountMap;
+            //TODO: Replace all this with maps \/
             quint32 coneCollisionObjectCount;
             quint32 coneCollisionObjectListOffset;
             quint32 sphereCollisionObjectCount;
@@ -76,9 +82,11 @@ namespace WS2Lz {
             //TODO: Mystery 8
             //TODO: Reflective level models
             //TODO: Level model instances
-            quint32 levelModelCount;
-            quint32 levelModelPointerAListOffset;
-            quint32 levelModelPointerBListOffset;
+            QMap<quint32, const WS2Common::Scene::GroupSceneNode*> levelModelPointerAOffsetMap;
+            QMap<quint32, const WS2Common::Scene::GroupSceneNode*> levelModelPointerBOffsetMap;
+            QMap<quint32, const WS2Common::Scene::GroupSceneNode*> levelModelOffsetMap;
+            QMap<const WS2Common::Scene::GroupSceneNode*, quint32> levelModelCountMap;
+            QMap<quint32, QString> levelModelNameOffsetMap;
             quint32 switchCount;
             quint32 switchListOffset;
             //TODO: Fog anim header
@@ -112,6 +120,10 @@ namespace WS2Lz {
             void writeBumper(QDataStream &dev, const WS2Common::Scene::BumperSceneNode *node);
             void writeJamabar(QDataStream &dev, const WS2Common::Scene::JamabarSceneNode *node);
             void writeBanana(QDataStream &dev, const WS2Common::Scene::BananaSceneNode *node);
+            void writeLevelModelPointerAList(QDataStream &dev, const WS2Common::Scene::GroupSceneNode *node);
+            void writeLevelModelPointerBList(QDataStream &dev, const WS2Common::Scene::GroupSceneNode *node);
+            void writeLevelModelList(QDataStream &dev, const WS2Common::Scene::GroupSceneNode *node);
+            void writeLevelModelNameList(QDataStream &dev, const WS2Common::Scene::GroupSceneNode *node);
 
             void writeNull(QDataStream &dev, const unsigned int count);
 
@@ -132,6 +144,15 @@ namespace WS2Lz {
              * @return All values summed
              */
             quint32 addAllCounts(QMap<const WS2Common::Scene::GroupSceneNode*, quint32> &m);
+
+            /**
+             * @brief Rounds up a value to the nearest multiple of 4
+             *
+             * @param n The number to round
+             *
+             * @return The rounded up value
+             */
+            quint32 roundUpNearest4(quint32 n);
     };
 }
 

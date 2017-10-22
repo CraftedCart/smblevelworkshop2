@@ -34,7 +34,7 @@ namespace WS2Common {
                  *
                  * @return The name of the referenced mesh
                  */
-                QString getMeshName();
+                const QString getMeshName() const;
         };
     }
 }
