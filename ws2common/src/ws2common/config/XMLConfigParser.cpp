@@ -5,7 +5,7 @@
 
 namespace WS2Common {
     namespace Config {
-        Stage* XMLConfigParser::parseStage(QString config) {
+        Stage* XMLConfigParser::parseStage(QString config, QDir relativeRoot) {
             Stage *stage = new Stage();
 
             //Read and parse the XML
@@ -24,8 +24,8 @@ namespace WS2Common {
                         if (!xml.isStartElement()) continue; //Ignore all end elements, again
 
                         if (xml.name() == "modelImport") {
-                            qWarning() << "modelImport not yet implemented!";
-                            xml.skipCurrentElement();
+                            QUrl url = parseModelImport(xml, relativeRoot);
+                            if (!url.isEmpty()) stage->addModel(url);
                         } else if (xml.name() == "start") {
                             stage->getRootNode()->addChild(parseStart(xml));
                         } else if (xml.name() == "backgroundModel") {
@@ -37,7 +37,6 @@ namespace WS2Common {
                             xml.skipCurrentElement();
                         } else if (xml.name() == "itemGroup") {
                             stage->getRootNode()->addChild(parseItemGroup(xml));
-                            xml.skipCurrentElement();
                         } else {
                             qWarning().noquote() << "Unrecognised tag:" << xml.name();
                         }
@@ -56,7 +55,7 @@ namespace WS2Common {
                 qWarning().noquote() << "XML parsing error:" << xml.errorString();
             }
 
-            //TODO: Done parsing - now link wormholes
+            //Done parsing - now link wormholes
             QHashIterator<Scene::WormholeSceneNode*, QString> i(wormholeDestMap);
             while (i.hasNext()) {
                 i.next();
@@ -74,6 +73,33 @@ namespace WS2Common {
             }
 
             return stage;
+        }
+
+        QUrl XMLConfigParser::parseModelImport(QXmlStreamReader &xml, QDir relativeRoot) {
+            QString value = xml.readElementText();
+
+            if (value.startsWith("//")) { //Beginning with // denotes a relative path
+                QFileInfo fileInfo(relativeRoot, value.mid(2));
+
+                //Check if the file is missing, and return am empty QUrl if so
+                if (!fileInfo.exists()) {
+                    qWarning().noquote() << "modelImport file missing:" << fileInfo.absoluteFilePath();
+                    return QUrl();
+                }
+
+                return QUrl::fromLocalFile(fileInfo.absoluteFilePath());
+            } else { //Else it should be a URL (Like file:///something/or/other.obj)
+                QUrl url(value);
+                QFileInfo fileInfo(url.toLocalFile());
+
+                //Check if the file is missing, and return am empty QUrl if so
+                if (!fileInfo.exists()) {
+                    qWarning().noquote() << "modelImport file missing:" << fileInfo.absoluteFilePath();
+                    return QUrl();
+                }
+
+                return url;
+            }
         }
 
         Scene::StartSceneNode* XMLConfigParser::parseStart(QXmlStreamReader &xml) {

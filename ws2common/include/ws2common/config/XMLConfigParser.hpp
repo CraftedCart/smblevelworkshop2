@@ -17,6 +17,8 @@
 #include "ws2common/CollisionGrid.hpp"
 #include <QXmlStreamAttributes>
 #include <QHash>
+#include <QUrl>
+#include <QDir>
 
 namespace WS2Common {
     namespace Config {
@@ -26,15 +28,28 @@ namespace WS2Common {
 
             public:
                 /**
-                 * @brief Parses and XML config and converts it into a Stage object
+                 * @brief Parses an XML config and converts it into a Stage object
                  *
                  * @param config The XML as a string to parse
+                 * @param relativeRoot The directory the config file resides in, to allow obtaining paths for relative files
                  *
                  * @return A pointer to stage created
                  */
-                Stage* parseStage(QString config);
+                Stage* parseStage(QString config, QDir relativeRoot);
 
             protected:
+                /**
+                 * @brief Parses a model import of an XML config
+                 *
+                 * Make sure the XML reader is within the start element before calling this
+                 *
+                 * @param xml The QXmlStreamReader
+                 * @param relativeRoot The directory the config file resides in, to allow obtaining paths for relative files
+                 *
+                 * @return The URL containing the path to the model requested, or an empty URL if the file doesn't exist
+                 */
+                QUrl parseModelImport(QXmlStreamReader &xml, QDir relativeRoot);
+
                 /**
                  * @brief Parses the start section of an XML config
                  *

@@ -32,6 +32,18 @@ namespace WS2Common {
         return falloutY;
     }
 
+    void Stage::addModel(const QUrl url) {
+        models.append(url);
+    }
+
+    QVector<QUrl> Stage::getModels() {
+        return models;
+    }
+
+    const QVector<QUrl> Stage::getModels() const {
+        return models;
+    }
+
     Scene::BackgroundGroupSceneNode* Stage::getFirstBackgroundGroup(bool createIfNonExistent) {
         foreach(Scene::SceneNode *node, rootNode->getChildren()) {
             if(instanceOf<Scene::BackgroundGroupSceneNode>(node)) return static_cast<Scene::BackgroundGroupSceneNode*>(node);

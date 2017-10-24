@@ -5,6 +5,8 @@
 #include <QCoreApplication>
 #include <QCommandLineParser>
 #include <QFile>
+#include <QFileInfo>
+#include <QDir>
 #include <QBuffer>
 #include <QDataStream>
 #include <QDebug>
@@ -72,16 +74,19 @@ int main(int argc, char *argv[]) {
         }
     }
 
-    //NYI warning
     qInfo() << "Reading configuration...";
     QFile configFile(parser.value("c"));
     configFile.open(QIODevice::ReadOnly | QIODevice::Text);
     QString config = configFile.readAll();
     configFile.close();
 
+    //Get the config file directory, for relative file paths in the config
+    QFileInfo configFileInfo(configFile);
+    QDir configFileDir = configFileInfo.dir();
+
     qInfo() << "Parsing configuration...";
     WS2Common::Config::XMLConfigParser confParser;
-    WS2Common::Stage *stage = confParser.parseStage(config);
+    WS2Common::Stage *stage = confParser.parseStage(config, configFileDir);
     qInfo() << stage->getRootNode();
 
     QBuffer buf;

@@ -9,6 +9,8 @@
 #include "ws2common/scene/SceneNode.hpp"
 #include "ws2common/scene/BackgroundGroupSceneNode.hpp"
 #include <glm/glm.hpp>
+#include <QVector>
+#include <QUrl>
 
 namespace WS2Common {
     class Stage {
@@ -18,6 +20,11 @@ namespace WS2Common {
             float falloutY;
             //TODO: Fog
             //TODO: Animated fog
+
+            /**
+             * @brief All 3D model files that this stage may or may not use
+             */
+            QVector<QUrl> models;
 
         public:
             /**
@@ -66,6 +73,27 @@ namespace WS2Common {
              * @return The fallout Y position to get
              */
             float getFalloutY() const;
+
+            /**
+             * @brief Adds an entry to the models vector
+             *
+             * @param url The model entry to add
+             */
+            void addModel(const QUrl url);
+
+            /**
+             * @brief Getter for models
+             *
+             * @return Model files that this stage may use
+             */
+            QVector<QUrl> getModels();
+
+            /**
+             * @brief Const getter for models
+             *
+             * @return Model files that this stage may use
+             */
+            const QVector<QUrl> getModels() const;
 
             /**
              * @brief Finds the first background group scene node, by searching direct children of rootNode
