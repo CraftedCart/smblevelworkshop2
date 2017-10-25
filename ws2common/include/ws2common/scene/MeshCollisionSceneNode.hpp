@@ -1,16 +1,20 @@
 /**
  * @file
- * @brief Header for the MeshSceneNode class
+ * @brief Header for the MeshCollisionSceneNode class
  */
 
-#ifndef SMBLEVELWORKSHOP2_WS2COMMON_SCENE_MESHSCENENODE_HPP
-#define SMBLEVELWORKSHOP2_WS2COMMON_SCENE_MESHSCENENODE_HPP
+#ifndef SMBLEVELWORKSHOP2_WS2COMMON_SCENE_MESHCOLLISIONSCENENODE_HPP
+#define SMBLEVELWORKSHOP2_WS2COMMON_SCENE_MESHCOLLISIONSCENENODE_HPP
 
-#include "ws2common/scene/SceneNode.hpp"
+#include "ws2common/scene/CollisionSceneNode.hpp"
 
 namespace WS2Common {
     namespace Scene {
-        class MeshSceneNode : public SceneNode {
+
+        /**
+         * @brief Collision shape that uses every triangle of a mesh
+         */
+        class MeshCollisionSceneNode : public CollisionSceneNode {
             protected:
                 /**
                  * @brief The name of the referenced mesh
@@ -18,7 +22,7 @@ namespace WS2Common {
                 QString meshName;
 
             public:
-                MeshSceneNode(const QString name);
+                MeshCollisionSceneNode(const QString name);
 
                 /**
                  * @brief Setter for meshName

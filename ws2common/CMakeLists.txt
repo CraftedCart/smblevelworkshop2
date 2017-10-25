@@ -37,6 +37,8 @@ set(SOURCE_FILES
     ./src/ws2common/scene/FalloutVolumeSceneNode.cpp
     ./src/ws2common/scene/SwitchSceneNode.cpp
     ./src/ws2common/scene/WormholeSceneNode.cpp
+    ./src/ws2common/scene/CollisionSceneNode.cpp
+    ./src/ws2common/scene/MeshCollisionSceneNode.cpp
     ./src/ws2common/config/XMLConfigParser.cpp
     ./src/ws2common/CollisionGrid.cpp
     )
@@ -63,6 +65,8 @@ set(HEADER_FILES
     ./include/ws2common/scene/FalloutVolumeSceneNode.hpp
     ./include/ws2common/scene/SwitchSceneNode.hpp
     ./include/ws2common/scene/WormholeSceneNode.hpp
+    ./include/ws2common/scene/CollisionSceneNode.hpp
+    ./include/ws2common/scene/MeshCollisionSceneNode.hpp
     ./include/ws2common/config/XMLConfigParser.hpp
     ./include/ws2common/CollisionGrid.hpp
     )

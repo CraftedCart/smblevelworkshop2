@@ -162,6 +162,7 @@ namespace WS2Common {
 
                 /**
                  * @brief Parses a level model in an XML config
+                 * @deprecated Prefer stageModel over levelModel in a config
                  *
                  * Make sure the XML reader is within the levelModel element before calling this
                  *

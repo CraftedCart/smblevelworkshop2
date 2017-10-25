@@ -1,4 +1,5 @@
 #include "ws2common/config/XMLConfigParser.hpp"
+#include "ws2common/scene/MeshCollisionSceneNode.hpp"
 #include <QXmlStreamReader>
 #include <QDebug>
 #include <QCoreApplication>
@@ -219,8 +220,11 @@ namespace WS2Common {
                     group->addChild(parseWormhole(xml));
                 } else if (xml.name() == "switch") {
                     group->addChild(parseSwitch(xml));
-                } else if (xml.name() == "levelModel") {
+                } else if (xml.name() == "levelModel") { //Deprecated
                     group->addChild(parseLevelModel(xml));
+                } else if (xml.name() == "stageModel") {
+                    qWarning() << "itemGroup > stageModel not yet implemented!";
+                    xml.skipCurrentElement();
                 } else {
                     qWarning().noquote() << "Unrecognised tag: itemGroup >" << xml.name();
                 }
@@ -407,8 +411,24 @@ namespace WS2Common {
 
         Scene::MeshSceneNode* XMLConfigParser::parseLevelModel(QXmlStreamReader &xml) {
             QString name = xml.readElementText();
+
+            //This is deprecated!
+            qWarning() << "levelModel is deprecated! Prefer stageModel instead";
+            qWarning().noquote().nospace() << "    <stageModel>";
+            qWarning().noquote().nospace() << "        <name>" << name << "</name>";
+            qWarning().noquote().nospace() << "        <collision>";
+            qWarning().noquote().nospace() << "            <meshCollision>" << name << "</meshCollision>";
+            qWarning().noquote().nospace() << "        </collision>";
+            qWarning().noquote().nospace() << "    </stageModel>";
+
             Scene::MeshSceneNode *mesh = new Scene::MeshSceneNode(name);
             mesh->setMeshName(name);
+
+            //Add the mesh collision, using the same object for collision
+            Scene::MeshCollisionSceneNode *collision = new Scene::MeshCollisionSceneNode("Mesh Collision: " + name);
+            collision->setMeshName(name);
+            mesh->addChild(collision);
+
             return mesh;
         }
 
@@ -425,9 +445,6 @@ namespace WS2Common {
                     grid->setGridStep(getVec2Attributes(xml.attributes(), "x", "z"));
                 } else if (xml.name() == "count") {
                     grid->setGridStepCount(getUvec2Attributes(xml.attributes(), "x", "z"));
-                } else if (xml.name() == "collision") {
-                    qWarning() << "collisionGrid > collision not yet implemented!";
-                    xml.skipCurrentElement();
                 } else {
                     qWarning().noquote() << "Unrecognised tag: collisionGrid >" << xml.name();
                 }
