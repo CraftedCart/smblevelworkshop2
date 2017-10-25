@@ -1,6 +1,6 @@
 ／人◕ ‿‿ ◕人＼ Wanna make a contract?
 Paper is generally not strong enough to withstand impacts of many miles per hour.
-Wormhole frames do not have collision.
+Wormhole frames do not have collision by default. Add it by adding mesh collision to your wormholes, set to use the "WORMHOLE" object.
 Wormholes require objects named WORMHOLE (The frame) and WORM_SURFACE (The teleportation surface) to be present in only the GMA and TPL.
 Checkerboard textures make it easier to see edges and judge distance - flat colored textures should generally be avoided.
 Checkers in the vanilla game are 0.5 x 0.5 units per square.
