@@ -1,7 +1,7 @@
 #include "ws2editor/resource/ResourceMesh.hpp"
 #include "ws2editor/glplatform.hpp"
 #include "ws2editor/GLManager.hpp"
-#include "ws2editor/model/Vertex.hpp"
+#include "ws2common/model/Vertex.hpp"
 #include <QtAlgorithms>
 
 namespace WS2Editor {
@@ -14,7 +14,7 @@ namespace WS2Editor {
         }
 
         void ResourceMesh::load() {
-            for (Model::MeshSegment *segment : meshSegments) {
+            for (Model::EditorMeshSegment *segment : meshSegments) {
                 segment->load();
             }
 
@@ -24,16 +24,16 @@ namespace WS2Editor {
         void ResourceMesh::unload() {
             loaded = false;
 
-            for (Model::MeshSegment *segment : meshSegments) {
+            for (Model::EditorMeshSegment *segment : meshSegments) {
                 segment->unload();
             }
         }
 
-        const QVector<Model::MeshSegment*>& ResourceMesh::getMeshSegments() const {
+        const QVector<Model::EditorMeshSegment*>& ResourceMesh::getMeshSegments() const {
             return meshSegments;
         }
 
-        void ResourceMesh::addMeshSegment(Model::MeshSegment *segment) {
+        void ResourceMesh::addMeshSegment(Model::EditorMeshSegment *segment) {
             meshSegments.append(segment);
         }
     }

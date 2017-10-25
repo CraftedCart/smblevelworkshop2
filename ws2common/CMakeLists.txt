@@ -15,6 +15,7 @@ set(CMAKE_AUTOMOC ON)
 
 #External dependencies
 find_package(Qt5Core REQUIRED)
+find_package(Qt5Gui REQUIRED) #Need Gui for image guff
 
 include_directories(./include)
 include_directories(${CMAKE_BINARY_DIR})
@@ -25,6 +26,7 @@ set(SOURCE_FILES
     ./src/ws2common/EnumBananaType.cpp
     ./src/ws2common/EnumPlaybackState.cpp
     ./src/ws2common/Stage.cpp
+    ./src/ws2common/CollisionGrid.cpp
     ./src/ws2common/scene/SceneNode.cpp
     ./src/ws2common/scene/StartSceneNode.cpp
     ./src/ws2common/scene/GroupSceneNode.cpp
@@ -40,7 +42,9 @@ set(SOURCE_FILES
     ./src/ws2common/scene/CollisionSceneNode.cpp
     ./src/ws2common/scene/MeshCollisionSceneNode.cpp
     ./src/ws2common/config/XMLConfigParser.cpp
-    ./src/ws2common/CollisionGrid.cpp
+    ./src/ws2common/model/MeshSegment.cpp
+    ./src/ws2common/resource/AbstractResource.cpp
+    ./src/ws2common/resource/ResourceTexture.cpp
     )
 
 set(HEADER_FILES
@@ -52,6 +56,7 @@ set(HEADER_FILES
     ./include/ws2common/EnumBananaType.hpp
     ./include/ws2common/EnumPlaybackState.hpp
     ./include/ws2common/Stage.hpp
+    ./include/ws2common/CollisionGrid.hpp
     ./include/ws2common/scene/SceneNode.hpp
     ./include/ws2common/scene/StartSceneNode.hpp
     ./include/ws2common/scene/GroupSceneNode.hpp
@@ -68,13 +73,16 @@ set(HEADER_FILES
     ./include/ws2common/scene/CollisionSceneNode.hpp
     ./include/ws2common/scene/MeshCollisionSceneNode.hpp
     ./include/ws2common/config/XMLConfigParser.hpp
-    ./include/ws2common/CollisionGrid.hpp
+    ./include/ws2common/model/Vertex.hpp
+    ./include/ws2common/model/MeshSegment.hpp
+    ./include/ws2common/resource/AbstractResource.hpp
+    ./include/ws2common/resource/ResourceTexture.hpp
     )
 
 add_library(${PROJECT_NAME} SHARED ${SOURCE_FILES} ${HEADER_FILES})
 
 #External dependencies
-target_link_libraries(${PROJECT_NAME} Qt5::Core)
+target_link_libraries(${PROJECT_NAME} Qt5::Core Qt5::Gui)
 
 #Export headers
 target_include_directories(${PROJECT_NAME} PUBLIC

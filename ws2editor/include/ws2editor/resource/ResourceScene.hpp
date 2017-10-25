@@ -7,7 +7,7 @@
 #define SMBLEVELWORKSHOP2_WS2EDITOR_RESOURCE_RESOURCESCENE_HPP
 
 #include "ws2editor/resource/ResourceMesh.hpp"
-#include "ws2editor/resource/AbstractResource.hpp"
+#include "ws2common/resource/AbstractResource.hpp"
 #include "ws2common/scene/SceneNode.hpp"
 #include "ws2editor/scene/SceneSelectionManager.hpp"
 #include "ws2editor/physics/PhysicsManger.hpp"
@@ -19,7 +19,7 @@ namespace WS2Editor {
         /**
          * @todo Meshes loaded should belong to ResourceManager, not ResourceScene
          */
-        class ResourceScene : public AbstractResource {
+        class ResourceScene : public WS2Common::Resource::AbstractResource {
             Q_OBJECT
 
             protected:

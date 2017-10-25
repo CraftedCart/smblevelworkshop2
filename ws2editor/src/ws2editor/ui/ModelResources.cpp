@@ -22,7 +22,7 @@ namespace WS2Editor {
 
         QVariant ModelResources::data(const QModelIndex &index, int role) const {
             if (role == Qt::DisplayRole) {
-                Resource::AbstractResource* res = Resource::ResourceManager::getResources().at(index.row());
+                WS2Common::Resource::AbstractResource* res = Resource::ResourceManager::getResources().at(index.row());
 
                 switch (index.column()) {
                     case 0:

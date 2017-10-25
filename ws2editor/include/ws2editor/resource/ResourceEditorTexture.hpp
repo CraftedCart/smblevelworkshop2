@@ -1,26 +1,26 @@
 /**
  * @file
- * @brief Header for the WS2Editor::Model::Texture struct
+ * @brief Header for the ResourceEditorTexture class
  */
 
-#ifndef SMBLEVELWORKSHOP2_WS2EDITOR_MODEL_TEXTURE_HPP
-#define SMBLEVELWORKSHOP2_WS2EDITOR_MODEL_TEXTURE_HPP
+#ifndef SMBLEVELWORKSHOP2_WS2EDITOR_RESOURCE_RESOURCEEDITORTEXTURE_HPP
+#define SMBLEVELWORKSHOP2_WS2EDITOR_RESOURCE_RESOURCEEDITORTEXTURE_HPP
 
 #include "ws2editor/glplatform.hpp"
-#include "ws2editor/resource/AbstractResource.hpp"
+#include "ws2common/resource/ResourceTexture.hpp"
 #include <QOpenGLTexture>
 #include <QFile>
 
 namespace WS2Editor {
     namespace Resource {
-        class ResourceTexture : public AbstractResource {
+        class ResourceEditorTexture : public WS2Common::Resource::ResourceTexture {
             Q_OBJECT
 
             protected:
                 /**
                  * @brief The GL texture object
                  */
-                QOpenGLTexture *texture;
+                QOpenGLTexture *glTexture;
 
             public:
                 /**
@@ -34,20 +34,20 @@ namespace WS2Editor {
                 void unload() override;
 
                 /**
-                 * @brief Getter for texture
+                 * @brief Getter for glTexture
                  *
                  * @return A pointer to the texture object if the texture is loaded, nullptr otherwise
                  */
-                QOpenGLTexture* getTexture();
+                QOpenGLTexture* getGlTexture();
 
                 /**
-                 * @brief Setter for texture
+                 * @brief Setter for glTexture
                  * @note This object should be the owner of the pointer. Don't delete the pointer!
                  * @note This will mark the resource as loaded if not nullptr, or unloaded otherwise
                  *
                  * @param tex The texture pointer to set
                  */
-                void setTexture(QOpenGLTexture *tex);
+                void setGlTexture(QOpenGLTexture *tex);
         };
     }
 }

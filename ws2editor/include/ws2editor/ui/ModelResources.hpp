@@ -6,7 +6,7 @@
 #ifndef SMBLEVELWORKSHOP2_WS2EDITOR_UI_MODELRESOURCES_HPP
 #define SMBLEVELWORKSHOP2_WS2EDITOR_UI_MODELRESOURCES_HPP
 
-#include "ws2editor/resource/AbstractResource.hpp"
+#include "ws2common/resource/AbstractResource.hpp"
 #include <QAbstractTableModel>
 
 namespace WS2Editor {

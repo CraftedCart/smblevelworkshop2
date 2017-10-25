@@ -1,16 +1,16 @@
 /**
  * @file
- * @brief Header for the WS2Editor::Resource::AbstractResource class
+ * @brief Header for the AbstractResource class
  */
 
-#ifndef SMBLEVELWORKSHOP2_WS2EDITOR_RESOURCE_ABSTRACTRESOURCE_HPP
-#define SMBLEVELWORKSHOP2_WS2EDITOR_RESOURCE_ABSTRACTRESOURCE_HPP
+#ifndef SMBLEVELWORKSHOP2_WS2COMMON_RESOURCE_ABSTRACTRESOURCE_HPP
+#define SMBLEVELWORKSHOP2_WS2COMMON_RESOURCE_ABSTRACTRESOURCE_HPP
 
 #include <QVector>
 #include <QString>
 #include <QObject>
 
-namespace WS2Editor {
+namespace WS2Common {
     namespace Resource {
 
         /**

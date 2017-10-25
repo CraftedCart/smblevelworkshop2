@@ -6,8 +6,8 @@
 #ifndef SMBLEVELWORKSHOP2_WS2EDITOR_RESOURCE_RESOURCEMESH_HPP
 #define SMBLEVELWORKSHOP2_WS2EDITOR_RESOURCE_RESOURCEMESH_HPP
 
-#include "ws2editor/model/MeshSegment.hpp"
-#include "ws2editor/resource/AbstractResource.hpp"
+#include "ws2editor/model/EditorMeshSegment.hpp"
+#include "ws2common/resource/AbstractResource.hpp"
 #include <QVector>
 
 namespace WS2Editor {
@@ -15,14 +15,14 @@ namespace WS2Editor {
         /**
          * @todo Load and unload functions
          */
-        class ResourceMesh : public AbstractResource {
+        class ResourceMesh : public WS2Common::Resource::AbstractResource {
             Q_OBJECT
 
             protected:
                 /**
                  * @brief A vector containing pointers to MeshSegments owned by this ResourceMesh
                  */
-                QVector<Model::MeshSegment*> meshSegments;
+                QVector<Model::EditorMeshSegment*> meshSegments;
 
             public:
                 /**
@@ -53,14 +53,14 @@ namespace WS2Editor {
                  * @return A reference to the meshSegments vector, with each segment containing info for one material
                  *         of the ResourceMesh
                  */
-                const QVector<Model::MeshSegment*>& getMeshSegments() const;
+                const QVector<Model::EditorMeshSegment*>& getMeshSegments() const;
 
                 /**
                  * @brief Adds a mesh segment that belongs to this ResourceMesh
                  *
                  * @param segment The segment to add
                  */
-                void addMeshSegment(Model::MeshSegment *segment);
+                void addMeshSegment(Model::EditorMeshSegment *segment);
         };
 
     }

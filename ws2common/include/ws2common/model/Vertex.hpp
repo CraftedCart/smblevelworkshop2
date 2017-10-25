@@ -1,14 +1,14 @@
 /**
  * @file
- * @brief Header for the WS2Editor::Model::Vertex struct
+ * @brief Header for the Vertex struct
  */
 
-#ifndef SMBLEVELWORKSHOP2_WS2EDITOR_MODEL_VERTEX_HPP
-#define SMBLEVELWORKSHOP2_WS2EDITOR_MODEL_VERTEX_HPP
+#ifndef SMBLEVELWORKSHOP2_WS2COMMON_MODEL_VERTEX_HPP
+#define SMBLEVELWORKSHOP2_WS2COMMON_MODEL_VERTEX_HPP
 
-#include "ws2editor/glplatform.hpp"
+#include <glm/glm.hpp>
 
-namespace WS2Editor {
+namespace WS2Common {
     namespace Model {
 
         /**

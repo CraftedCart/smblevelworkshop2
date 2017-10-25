@@ -62,11 +62,11 @@ namespace WS2Editor {
                         ) {
                     qDebug() << "Processing node" << node->mName.C_Str() << node->mNumMeshes;
 
-                    QVector<Model::MeshSegment*> segments; //Will contain all mesh segments for each material of this node's mesh
+                    QVector<Model::EditorMeshSegment*> segments; //Will contain all mesh segments for each material of this node's mesh
                     //Process this node's mesh segments
                     for (unsigned int i = 0; i < node->mNumMeshes; i++) {
                         aiMesh *mesh = scene->mMeshes[node->mMeshes[i]];
-                        Model::MeshSegment *segment = processMeshSegment(mesh, scene, globalTransform, parentDir, shouldLoad);
+                        Model::EditorMeshSegment *segment = processMeshSegment(mesh, scene, globalTransform, parentDir, shouldLoad);
                         segments.append(segment);
                     }
 
@@ -92,16 +92,16 @@ namespace WS2Editor {
                     }
                 }
 
-                Model::MeshSegment* processMeshSegment(
+                Model::EditorMeshSegment* processMeshSegment(
                         const aiMesh *mesh,
                         const aiScene *scene,
                         const glm::mat4 globalTransform,
                         const QDir *parentDir,
                         bool shouldLoad
                         ) {
-                    QVector<Model::Vertex> vertices;
+                    QVector<WS2Common::Model::Vertex> vertices;
                     QVector<unsigned int> indices;
-                    QVector<ResourceTexture*> textures;
+                    QVector<ResourceEditorTexture*> textures;
 
                     static const int UV_CHANNEL = 0;
 
@@ -111,7 +111,7 @@ namespace WS2Editor {
                     }
 
                     for (unsigned int i = 0; i < mesh->mNumVertices; i++) {
-                        Model::Vertex vertex;
+                        WS2Common::Model::Vertex vertex;
                         glm::vec3 vec;
 
                         //Process vertex positions, normals, and texture coordinates
@@ -153,18 +153,18 @@ namespace WS2Editor {
 
                     //Process material
                     aiMaterial *material = scene->mMaterials[mesh->mMaterialIndex];
-                    QVector<Resource::ResourceTexture*> diffuseMaps = loadMaterialTextures(material, aiTextureType_DIFFUSE, parentDir, shouldLoad);
+                    QVector<Resource::ResourceEditorTexture*> diffuseMaps = loadMaterialTextures(material, aiTextureType_DIFFUSE, parentDir, shouldLoad);
                     textures.append(diffuseMaps);
-                    QVector<Resource::ResourceTexture*> specularMaps = loadMaterialTextures(material, aiTextureType_SPECULAR, parentDir, shouldLoad);
+                    QVector<Resource::ResourceEditorTexture*> specularMaps = loadMaterialTextures(material, aiTextureType_SPECULAR, parentDir, shouldLoad);
                     textures.append(specularMaps);
 
-                    Model::MeshSegment *segment = new Model::MeshSegment(vertices, indices, textures);
+                    Model::EditorMeshSegment *segment = new Model::EditorMeshSegment(vertices, indices, textures);
 
                     return segment;
                 }
 
-                QVector<Resource::ResourceTexture*> loadMaterialTextures(aiMaterial *mat, aiTextureType type, const QDir *parentDir, bool shouldLoad) {
-                    QVector<Resource::ResourceTexture*> textures;
+                QVector<Resource::ResourceEditorTexture*> loadMaterialTextures(aiMaterial *mat, aiTextureType type, const QDir *parentDir, bool shouldLoad) {
+                    QVector<Resource::ResourceEditorTexture*> textures;
 
                     int maxI = mat->GetTextureCount(type);
                     for (int i = 0; i < maxI; i++) {
@@ -190,10 +190,10 @@ namespace WS2Editor {
                         }
 
                         //Don't load another copy of the texture if it is already in the ResourceManager
-                        Resource::ResourceTexture *texture = Resource::ResourceManager::getResourceFromFilePath<Resource::ResourceTexture*>(filePath);
+                        Resource::ResourceEditorTexture *texture = Resource::ResourceManager::getResourceFromFilePath<Resource::ResourceEditorTexture*>(filePath);
 
                         if (texture == nullptr) {
-                            texture = new Resource::ResourceTexture();
+                            texture = new Resource::ResourceEditorTexture();
                             texture->setId(filePath);
                             texture->setFilePath(filePath);
                             if (shouldLoad) texture->load();
@@ -210,19 +210,19 @@ namespace WS2Editor {
                 }
             } //End of ResourceManagerInternal
 
-            QVector<AbstractResource*>& getResources() {
-                static QVector<AbstractResource*> resources;
+            QVector<WS2Common::Resource::AbstractResource*>& getResources() {
+                static QVector<WS2Common::Resource::AbstractResource*> resources;
                 return resources;
             }
 
-            void addResource(AbstractResource *res) {
+            void addResource(WS2Common::Resource::AbstractResource *res) {
                 getResources().append(res);
                 if (qAppRunning) UI::ModelManager::modelResources->onResourceAdded();
             }
 
             void unloadAllResources() {
                 for (int i = 0; i < getResources().size(); i++) {
-                    AbstractResource *res = getResources().at(i);
+                    WS2Common::Resource::AbstractResource *res = getResources().at(i);
                     if (res->isLoaded()) {
                         qDebug() << "Unloading:" << res->getId();
                         res->unload();

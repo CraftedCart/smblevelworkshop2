@@ -1,6 +1,6 @@
-#include "ws2editor/resource/AbstractResource.hpp"
+#include "ws2common/resource/AbstractResource.hpp"
 
-namespace WS2Editor {
+namespace WS2Common {
     namespace Resource {
         AbstractResource::~AbstractResource() {
             if (isLoaded()) unload();
@@ -35,9 +35,13 @@ namespace WS2Editor {
             return filePaths;
         }
 
-        void AbstractResource::load() {}
+        void AbstractResource::load() {
+            loaded = true;
+        }
 
-        void AbstractResource::unload() {}
+        void AbstractResource::unload() {
+            loaded = false;
+        }
 
         bool AbstractResource::isLoaded() {
             return loaded;

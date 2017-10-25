@@ -137,15 +137,16 @@ namespace WS2Editor {
         }
 
         void renderMesh(const Resource::ResourceMesh *mesh) {
-            const QVector<Model::MeshSegment*>& segments = mesh->getMeshSegments();
+            const QVector<Model::EditorMeshSegment*>& segments = mesh->getMeshSegments();
 
             for (int i = 0; i < segments.size(); i++) {
-                const Model::MeshSegment* segment = segments.at(i);
+                const Model::EditorMeshSegment* segment = segments.at(i);
 
                 //Set up textures
                 for (int i = 0; i < segment->getTextures().size(); i++) {
                     glActiveTexture(GL_TEXTURE0 + i);
-                    segment->getTextures().at(i)->getTexture()->bind();
+                    //Assume that it's a ResourceEditorTexture
+                    static_cast<Resource::ResourceEditorTexture*>(segment->getTextures().at(i))->getGlTexture()->bind();
                 }
                 static const int texIDs[32] = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31};
                 glUniform1iv(shaderTexID, MAX_SHADER_TEXTURES, texIDs);

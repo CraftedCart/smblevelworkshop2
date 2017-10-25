@@ -6,30 +6,20 @@
 #ifndef SMBLEVELWORKSHOP2_WS2EDITOR_MODEL_MESHSEGMENT_HPP
 #define SMBLEVELWORKSHOP2_WS2EDITOR_MODEL_MESHSEGMENT_HPP
 
-#include "ws2editor/model/Vertex.hpp"
-#include "ws2editor/resource/ResourceTexture.hpp"
-#include "ws2editor/glplatform.hpp"
+#include "ws2common/model/Vertex.hpp"
+#include "ws2common/resource/ResourceTexture.hpp"
 #include <QVector>
 
-namespace WS2Editor {
+namespace WS2Common {
     namespace Model {
         /**
          * @brief Contains the data for one material in a 3D model
          */
         class MeshSegment {
             protected:
-                QVector<Model::Vertex> vertices;
+                QVector<Vertex> vertices;
                 QVector<unsigned int> indices;
                 QVector<Resource::ResourceTexture*> textures;
-
-                GLuint vao;
-                GLuint vbo;
-                GLuint ebo;
-
-                /**
-                 * @brief Generates GL buffers
-                 */
-                void generateGlBuffers();
 
             public:
                 /**
@@ -39,22 +29,15 @@ namespace WS2Editor {
                  * @param indices
                  * @param textures
                  */
-                MeshSegment(QVector<Model::Vertex> vertices, QVector<unsigned int> indices, QVector<Resource::ResourceTexture*> textures);
-
-                /**
-                 * @brief Generates GL buffers for the mesh
-                 */
-                void load();
-
-                /**
-                 * @brief Deletes the GL buffers for the mesh
-                 */
-                void unload();
+                MeshSegment(
+                        QVector<Vertex> vertices,
+                        QVector<unsigned int> indices,
+                        QVector<Resource::ResourceTexture*> textures);
 
                 /**
                  * @return A reference to the vertices vector
                  */
-                const QVector<Model::Vertex>& getVertices() const;
+                const QVector<Vertex>& getVertices() const;
 
                 /**
                  * @return A reference to the indices vector
@@ -65,11 +48,6 @@ namespace WS2Editor {
                  * @return A reference to the textures vector
                  */
                 const QVector<Resource::ResourceTexture*>& getTextures() const;
-
-                /**
-                 * @return The VAO ID of the mesh
-                 */
-                const GLuint& getVao() const;
         };
     }
 }

@@ -6,7 +6,7 @@
 #ifndef SMBLEVELWORKSHOP2_WS2EDITOR_RESOURCEMANAGER_HPP
 #define SMBLEVELWORKSHOP2_WS2EDITOR_RESOURCEMANAGER_HPP
 
-#include "ws2editor/resource/AbstractResource.hpp"
+#include "ws2common/resource/AbstractResource.hpp"
 #include "ws2editor/resource/ResourceMesh.hpp"
 #include <QVector>
 #include <QFile>
@@ -76,7 +76,7 @@ namespace WS2Editor {
                  *
                  * @return The converted mesh
                  */
-                Model::MeshSegment* processMeshSegment(
+                Model::EditorMeshSegment* processMeshSegment(
                         const aiMesh *mesh,
                         const aiScene *scene,
                         const glm::mat4 globalTransform,
@@ -94,7 +94,7 @@ namespace WS2Editor {
                  *
                  * @return A vector of textures
                  */
-                QVector<Resource::ResourceTexture*> loadMaterialTextures(
+                QVector<Resource::ResourceEditorTexture*> loadMaterialTextures(
                         aiMaterial *material,
                         aiTextureType type,
                         const QDir *parentDir,
@@ -107,7 +107,7 @@ namespace WS2Editor {
              *
              * @return A reference to the resources vector
              */
-            QVector<AbstractResource*>& getResources();
+            QVector<WS2Common::Resource::AbstractResource*>& getResources();
 
             /**
              * @brief Adds a resource to the WS2Editor::Resource::ResourceManager::resources vector
@@ -116,7 +116,7 @@ namespace WS2Editor {
              *
              * @param res The resource to add
              */
-            void addResource(AbstractResource *res);
+            void addResource(WS2Common::Resource::AbstractResource *res);
 
             /**
              * @brief Unloads all registered resources if they are loaded

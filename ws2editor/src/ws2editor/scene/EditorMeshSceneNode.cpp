@@ -26,11 +26,11 @@ namespace WS2Editor {
             //Construct mesh collision shape
             btTriangleMesh *triMesh = new btTriangleMesh();
 
-            const QVector<Model::MeshSegment*>& segments = mesh->getMeshSegments();
+            const QVector<Model::EditorMeshSegment*>& segments = mesh->getMeshSegments();
 
             //Loop over all segments in the mesh
             for (int i = 0; i < segments.size(); i++) {
-                const Model::MeshSegment *segment = segments.at(i);
+                const Model::EditorMeshSegment *segment = segments.at(i);
 
                 for (int j = 0; j < segment->getIndices().size(); j += 3) {
                     triMesh->addTriangle(

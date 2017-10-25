@@ -57,14 +57,13 @@ set(SOURCE_FILES
     ./src/ws2editor/widget/OutlinerWidget.cpp
     ./src/ws2editor/GLManager.cpp
     ./src/ws2editor/MathUtils.cpp
-    ./src/ws2editor/model/MeshSegment.cpp
+    ./src/ws2editor/model/EditorMeshSegment.cpp
     ./src/ws2editor/exception/Exception.cpp
     ./src/ws2editor/exception/RuntimeException.cpp
     ./src/ws2editor/exception/IOException.cpp
     ./src/ws2editor/exception/ModelLoadingException.cpp
     ./src/ws2editor/resource/ResourceManager.cpp
-    ./src/ws2editor/resource/AbstractResource.cpp
-    ./src/ws2editor/resource/ResourceTexture.cpp
+    ./src/ws2editor/resource/ResourceEditorTexture.cpp
     ./src/ws2editor/resource/ResourceScene.cpp
     ./src/ws2editor/resource/ResourceMesh.cpp
     ./src/ws2editor/project/Project.cpp
@@ -92,16 +91,14 @@ set(HEADER_FILES
     ./include/ws2editor/GLManager.hpp
     ./include/ws2editor/EnumCameraNav.hpp
     ./include/ws2editor/MathUtils.hpp
-    ./include/ws2editor/model/Vertex.hpp
-    ./include/ws2editor/model/MeshSegment.hpp
+    ./include/ws2editor/model/EditorMeshSegment.hpp
     ./include/ws2editor/exception/Exception.hpp
     ./include/ws2editor/exception/RuntimeException.hpp
     ./include/ws2editor/exception/IOException.hpp
     ./include/ws2editor/exception/ModelLoadingException.hpp
     ./include/ws2editor/resource/ResourceManager.hpp
     ./include/ws2editor/resource/ResourceManager.ipp
-    ./include/ws2editor/resource/AbstractResource.hpp
-    ./include/ws2editor/resource/ResourceTexture.hpp
+    ./include/ws2editor/resource/ResourceEditorTexture.hpp
     ./include/ws2editor/resource/ResourceScene.hpp
     ./include/ws2editor/resource/ResourceMesh.hpp
     ./include/ws2editor/project/Project.hpp
