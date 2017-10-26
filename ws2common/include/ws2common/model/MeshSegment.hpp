@@ -14,6 +14,8 @@ namespace WS2Common {
     namespace Model {
         /**
          * @brief Contains the data for one material in a 3D model
+         *
+         * @note Destroying this will not delete the textures
          */
         class MeshSegment {
             protected:
@@ -33,6 +35,8 @@ namespace WS2Common {
                         QVector<Vertex> vertices,
                         QVector<unsigned int> indices,
                         QVector<Resource::ResourceTexture*> textures);
+
+                virtual ~MeshSegment();
 
                 /**
                  * @return A reference to the vertices vector

@@ -42,6 +42,13 @@ namespace WS2Editor {
                         QVector<Resource::ResourceEditorTexture*> textures);
 
                 /**
+                 * @brief Copies a MeshSegment, to an EditorMeshSegment
+                 *
+                 * @param origin The MeshSegment to copy
+                 */
+                EditorMeshSegment(const WS2Common::Model::MeshSegment &origin);
+
+                /**
                  * @brief Generates GL buffers for the mesh
                  */
                 void load();

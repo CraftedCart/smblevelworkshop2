@@ -11,6 +11,8 @@ namespace WS2Common {
             this->textures = textures;
         }
 
+        MeshSegment::~MeshSegment() {}
+
         const QVector<Vertex>& MeshSegment::getVertices() const {
             return vertices;
         }

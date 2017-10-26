@@ -9,6 +9,9 @@ namespace WS2Editor {
                 QVector<Resource::ResourceEditorTexture*> textures) :
             WS2Common::Model::MeshSegment(vertices, indices, vectorToBaseTexture(textures)) {}
 
+        EditorMeshSegment::EditorMeshSegment(const WS2Common::Model::MeshSegment &origin) :
+            WS2Common::Model::MeshSegment(origin.getVertices(), origin.getIndices(), origin.getTextures()) {}
+
         void EditorMeshSegment::load() {
             generateGlBuffers();
         }

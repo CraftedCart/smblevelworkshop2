@@ -35,7 +35,7 @@ namespace WS2Common {
                 /**
                  * @brief Unloads and deletes all mesh segments
                  */
-                ~ResourceMesh();
+                virtual ~ResourceMesh();
 
                 /**
                  * @brief Getter for meshSegments
