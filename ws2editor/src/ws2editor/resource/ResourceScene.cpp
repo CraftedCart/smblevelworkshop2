@@ -4,6 +4,7 @@
 #include "ws2editor/scene/EditorMeshSceneNode.hpp"
 #include "ws2editor/ui/ModelManager.hpp"
 #include "ws2common/scene/GroupSceneNode.hpp"
+#include "ws2common/resource/ResourceMesh.hpp"
 #include <QByteArray>
 #include <QFileInfo>
 
@@ -65,7 +66,7 @@ namespace WS2Editor {
          */
         void ResourceScene::addModel(QFile &file) {
             addFilePath(file.fileName());
-            QVector<ResourceMesh*> newMeshes = ResourceManager::addModel(file, isLoaded());
+            QVector<Resource::ResourceEditorMesh*> newMeshes = ResourceManager::addModel(file, isLoaded());
 
             //Get the static node
             WS2Common::Scene::SceneNode *staticNode = rootNode->getChildByName(tr("Static"));

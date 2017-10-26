@@ -8,7 +8,7 @@ namespace WS2Editor {
             initPhysics();
         }
 
-        EditorMeshSceneNode::EditorMeshSceneNode(const QString name, Resource::ResourceMesh *mesh) : MeshSceneNode(name) {
+        EditorMeshSceneNode::EditorMeshSceneNode(const QString name, WS2Common::Resource::ResourceMesh *mesh) : MeshSceneNode(name) {
             this->mesh = mesh;
             initPhysics();
         }
@@ -26,11 +26,11 @@ namespace WS2Editor {
             //Construct mesh collision shape
             btTriangleMesh *triMesh = new btTriangleMesh();
 
-            const QVector<Model::EditorMeshSegment*>& segments = mesh->getMeshSegments();
+            const QVector<WS2Common::Model::MeshSegment*>& segments = mesh->getMeshSegments();
 
             //Loop over all segments in the mesh
             for (int i = 0; i < segments.size(); i++) {
-                const Model::EditorMeshSegment *segment = segments.at(i);
+                const WS2Common::Model::MeshSegment *segment = segments.at(i);
 
                 for (int j = 0; j < segment->getIndices().size(); j += 3) {
                     triMesh->addTriangle(
@@ -60,7 +60,7 @@ namespace WS2Editor {
             physicsRigidBody->setUserPointer(this); //The rigid body is bound to this EditorMeshSceneNode
         }
 
-        const Resource::ResourceMesh* EditorMeshSceneNode::getMesh() const {
+        const WS2Common::Resource::ResourceMesh* EditorMeshSceneNode::getMesh() const {
             return mesh;
         }
 

@@ -6,7 +6,6 @@
 #ifndef SMBLEVELWORKSHOP2_WS2EDITOR_RESOURCE_RESOURCESCENE_HPP
 #define SMBLEVELWORKSHOP2_WS2EDITOR_RESOURCE_RESOURCESCENE_HPP
 
-#include "ws2editor/resource/ResourceMesh.hpp"
 #include "ws2common/resource/AbstractResource.hpp"
 #include "ws2common/scene/SceneNode.hpp"
 #include "ws2editor/scene/SceneSelectionManager.hpp"

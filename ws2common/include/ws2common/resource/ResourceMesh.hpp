@@ -1,28 +1,28 @@
 /**
  * @file
- * @brief Header for the WS2Editor::Model::Mesh class
+ * @brief Header for the ResourceMesh class
  */
 
-#ifndef SMBLEVELWORKSHOP2_WS2EDITOR_RESOURCE_RESOURCEMESH_HPP
-#define SMBLEVELWORKSHOP2_WS2EDITOR_RESOURCE_RESOURCEMESH_HPP
+#ifndef SMBLEVELWORKSHOP2_WS2COMMON_RESOURCE_RESOURCEMESH_HPP
+#define SMBLEVELWORKSHOP2_WS2COMMON_RESOURCE_RESOURCEMESH_HPP
 
-#include "ws2editor/model/EditorMeshSegment.hpp"
+#include "ws2common/model/MeshSegment.hpp"
 #include "ws2common/resource/AbstractResource.hpp"
 #include <QVector>
 
-namespace WS2Editor {
+namespace WS2Common {
     namespace Resource {
         /**
          * @todo Load and unload functions
          */
-        class ResourceMesh : public WS2Common::Resource::AbstractResource {
+        class ResourceMesh : public AbstractResource {
             Q_OBJECT
 
             protected:
                 /**
                  * @brief A vector containing pointers to MeshSegments owned by this ResourceMesh
                  */
-                QVector<Model::EditorMeshSegment*> meshSegments;
+                QVector<Model::MeshSegment*> meshSegments;
 
             public:
                 /**
@@ -38,29 +38,19 @@ namespace WS2Editor {
                 ~ResourceMesh();
 
                 /**
-                 * @brief Generates GL buffers for the mesh
-                 */
-                void load() override;
-
-                /**
-                 * @brief Deletes the GL buffers for the mesh
-                 */
-                void unload() override;
-
-                /**
                  * @brief Getter for meshSegments
                  *
                  * @return A reference to the meshSegments vector, with each segment containing info for one material
                  *         of the ResourceMesh
                  */
-                const QVector<Model::EditorMeshSegment*>& getMeshSegments() const;
+                const QVector<Model::MeshSegment*>& getMeshSegments() const;
 
                 /**
                  * @brief Adds a mesh segment that belongs to this ResourceMesh
                  *
                  * @param segment The segment to add
                  */
-                void addMeshSegment(Model::EditorMeshSegment *segment);
+                void addMeshSegment(Model::MeshSegment *segment);
         };
 
     }

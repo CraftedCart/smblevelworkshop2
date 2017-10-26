@@ -45,6 +45,7 @@ set(SOURCE_FILES
     ./src/ws2common/model/MeshSegment.cpp
     ./src/ws2common/resource/AbstractResource.cpp
     ./src/ws2common/resource/ResourceTexture.cpp
+    ./src/ws2common/resource/ResourceMesh.cpp
     )
 
 set(HEADER_FILES
@@ -77,6 +78,7 @@ set(HEADER_FILES
     ./include/ws2common/model/MeshSegment.hpp
     ./include/ws2common/resource/AbstractResource.hpp
     ./include/ws2common/resource/ResourceTexture.hpp
+    ./include/ws2common/resource/ResourceMesh.hpp
     )
 
 add_library(${PROJECT_NAME} SHARED ${SOURCE_FILES} ${HEADER_FILES})

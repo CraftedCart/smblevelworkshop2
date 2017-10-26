@@ -18,7 +18,7 @@ namespace WS2Editor {
                  * @throws WS2Editor::Exception::IOException When failing to read the file
                  * @throws WS2Editor::Exception::RuntimeException When Assimp fails to generate an aiScene
                  */
-                QVector<ResourceMesh*> loadModel(QFile &file, bool shouldLoad) {
+                QVector<Resource::ResourceEditorMesh*> loadModel(QFile &file, bool shouldLoad) {
                     //The file is from elsewhere - Assume it's from the local filesystem, and pass it to Assimp
                     return addModelFromFile(file.fileName().toLatin1().constData(), shouldLoad);
                 }
@@ -26,7 +26,7 @@ namespace WS2Editor {
                 /**
                  * @throws WS2Editor::Exception::ModelLoadingException When Assimp fails to generate an aiScene
                  */
-                QVector<ResourceMesh*> addModelFromFile(const char *filePath, bool shouldLoad) {
+                QVector<Resource::ResourceEditorMesh*> addModelFromFile(const char *filePath, bool shouldLoad) {
                     Assimp::Importer importer;
                     const aiScene *scene = importer.ReadFile(
                             filePath,
@@ -42,7 +42,7 @@ namespace WS2Editor {
                     const QFileInfo fileInfo = QFileInfo(filePath);
                     const QDir parentDir = fileInfo.dir();
 
-                    QVector<ResourceMesh*> meshVector;
+                    QVector<Resource::ResourceEditorMesh*> meshVector;
 
                     const glm::mat4 globalTransform = MathUtils::toGlmMat4(scene->mRootNode->mTransformation);
                     const QString filePathStr(filePath);
@@ -57,7 +57,7 @@ namespace WS2Editor {
                         const glm::mat4 globalTransform,
                         const QString *filePath,
                         const QDir *parentDir,
-                        QVector<ResourceMesh*> &meshVector,
+                        QVector<Resource::ResourceEditorMesh*> &meshVector,
                         bool shouldLoad
                         ) {
                     qDebug() << "Processing node" << node->mName.C_Str() << node->mNumMeshes;
@@ -70,9 +70,9 @@ namespace WS2Editor {
                         segments.append(segment);
                     }
 
-                    //Gather all segments of the mesh into a single ResourceMesh
+                    //Gather all segments of the mesh into a single WS2Common::Resource::ResourceMesh
                     if (segments.size() > 0) {
-                        ResourceMesh *resMesh = new ResourceMesh();
+                        Resource::ResourceEditorMesh *resMesh = new Resource::ResourceEditorMesh();
                         resMesh->setId(node->mName.C_Str());
                         resMesh->setFilePath(*filePath);
 
@@ -234,7 +234,7 @@ namespace WS2Editor {
              * @throws WS2Editor::Exception::IOException When failing to read the file
              * @throws WS2Editor::Exception::RuntimeException When Assimp fails to generate an aiScene
              */
-            QVector<ResourceMesh*> addModel(QFile &file, bool shouldLoad) {
+            QVector<Resource::ResourceEditorMesh*> addModel(QFile &file, bool shouldLoad) {
                 return ResourceManagerInternal::loadModel(file, shouldLoad);
             }
 

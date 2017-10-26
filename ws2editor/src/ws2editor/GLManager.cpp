@@ -1,4 +1,5 @@
 #include "ws2editor/GLManager.hpp"
+#include "ws2editor/model/EditorMeshSegment.hpp"
 #include <QDebug>
 #include <QDataStream>
 
@@ -136,11 +137,11 @@ namespace WS2Editor {
             return tex;
         }
 
-        void renderMesh(const Resource::ResourceMesh *mesh) {
-            const QVector<Model::EditorMeshSegment*>& segments = mesh->getMeshSegments();
+        void renderMesh(const Resource::ResourceEditorMesh *mesh) {
+            const QVector<WS2Common::Model::MeshSegment*>& segments = mesh->getMeshSegments();
 
             for (int i = 0; i < segments.size(); i++) {
-                const Model::EditorMeshSegment* segment = segments.at(i);
+                const Model::EditorMeshSegment* segment = static_cast<Model::EditorMeshSegment*>(segments.at(i));
 
                 //Set up textures
                 for (int i = 0; i < segment->getTextures().size(); i++) {

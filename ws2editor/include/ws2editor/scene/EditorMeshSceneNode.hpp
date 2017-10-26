@@ -7,7 +7,7 @@
 #define SMBLEVELWORKSHOP2_WS2EDITOR_SCENE_MESHSCEHENODE_HPP
 
 #include "ws2common/scene/MeshSceneNode.hpp"
-#include "ws2editor/resource/ResourceMesh.hpp"
+#include "ws2common/resource/ResourceMesh.hpp"
 #include <btBulletDynamicsCommon.h>
 
 namespace WS2Editor {
@@ -19,7 +19,7 @@ namespace WS2Editor {
          */
         class EditorMeshSceneNode : public WS2Common::Scene::MeshSceneNode {
             protected:
-                Resource::ResourceMesh *mesh;
+                WS2Common::Resource::ResourceMesh *mesh;
                 btCollisionShape *physicsCollisionShape;
                 btDefaultMotionState *physicsMotionState;
                 btRigidBody *physicsRigidBody;
@@ -49,7 +49,7 @@ namespace WS2Editor {
                  * @param name The name of the node
                  * @param mesh A pointer to the mesh to set
                  */
-                EditorMeshSceneNode(const QString name, Resource::ResourceMesh *mesh);
+                EditorMeshSceneNode(const QString name, WS2Common::Resource::ResourceMesh *mesh);
 
                 /**
                  * @brief Frees up resources
@@ -61,7 +61,7 @@ namespace WS2Editor {
                  *
                  * @return A pointer to the mesh
                  */
-                const Resource::ResourceMesh* getMesh() const;
+                const WS2Common::Resource::ResourceMesh* getMesh() const;
 
                 /**
                  * @brief Getter for WS2Editor::Scene::EditorMeshSceneNode::physicsRigidBody

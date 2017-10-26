@@ -6,8 +6,10 @@
 #ifndef SMBLEVELWORKSHOP2_WS2EDITOR_RESOURCEMANAGER_HPP
 #define SMBLEVELWORKSHOP2_WS2EDITOR_RESOURCEMANAGER_HPP
 
+#include "ws2editor/resource/ResourceEditorTexture.hpp"
+#include "ws2editor/model/EditorMeshSegment.hpp"
+#include "ws2editor/resource/ResourceEditorMesh.hpp"
 #include "ws2common/resource/AbstractResource.hpp"
-#include "ws2editor/resource/ResourceMesh.hpp"
 #include <QVector>
 #include <QFile>
 #include <QDir>
@@ -32,7 +34,7 @@ namespace WS2Editor {
                  *
                  * @return A vector of added meshes
                  */
-                QVector<ResourceMesh*> loadModel(QFile &file, bool shouldLoad = false);
+                QVector<Resource::ResourceEditorMesh*> loadModel(QFile &file, bool shouldLoad = false);
 
                 /**
                  * @brief Append a model to the scene from the file given
@@ -42,7 +44,7 @@ namespace WS2Editor {
                  *
                  * @return A vector of added meshes
                  */
-                QVector<ResourceMesh*> addModelFromFile(const char *filePath, bool shouldLoad = false);
+                QVector<Resource::ResourceEditorMesh*> addModelFromFile(const char *filePath, bool shouldLoad = false);
 
                 /**
                  * @brief Recursive function that keeps calling itself for each child node in the parent node given.
@@ -61,7 +63,7 @@ namespace WS2Editor {
                         const glm::mat4 globalTransform,
                         const QString *filePath,
                         const QDir *parentDir,
-                        QVector<ResourceMesh*> &meshVector,
+                        QVector<Resource::ResourceEditorMesh*> &meshVector,
                         bool shouldLoad = false
                         );
 
@@ -144,7 +146,7 @@ namespace WS2Editor {
              *
              * @return A vector of added meshes
              */
-            QVector<ResourceMesh*> addModel(QFile &file, bool shouldLoad = false);
+            QVector<Resource::ResourceEditorMesh*> addModel(QFile &file, bool shouldLoad = false);
 
             /**
              * @brief Generates a unique resource ID prefixed with prefix

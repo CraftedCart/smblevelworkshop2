@@ -347,7 +347,9 @@ namespace WS2Editor {
 
             if (const Scene::EditorMeshSceneNode *mesh = dynamic_cast<const Scene::EditorMeshSceneNode*>(node)) {
                 glUniformMatrix4fv(GLManager::shaderModelID, 1, GL_FALSE, &transform[0][0]);
-                GLManager::renderMesh(mesh->getMesh());
+                //Assume it's a ResourceEditorMesh
+                //TODO: There must be a better way then assuming right?
+                GLManager::renderMesh(static_cast<const Resource::ResourceEditorMesh*>(mesh->getMesh()));
             }
 
             for (int i = 0; i < node->getChildren().size(); i++) {
