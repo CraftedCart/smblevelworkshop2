@@ -1,6 +1,6 @@
-#include "ws2editor/exception/RuntimeException.hpp"
+#include "ws2common/exception/RuntimeException.hpp"
 
-namespace WS2Editor {
+namespace WS2Common {
     namespace Exception {
         RuntimeException::RuntimeException() {
             message = "No RuntimeException message given";

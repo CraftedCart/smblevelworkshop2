@@ -1,14 +1,14 @@
 /**
  * @file
- * @brief Header for the WS2Editor::Exception::IOException class
+ * @brief Header for the IOException class
  */
 
-#ifndef SMBLEVELWORKSHOP2_WS2EDITOR_EXCEPTION_IOEXCEPTION_HPP
-#define SMBLEVELWORKSHOP2_WS2EDITOR_EXCEPTION_IOEXCEPTION_HPP
+#ifndef SMBLEVELWORKSHOP2_WS2COMMON_EXCEPTION_IOEXCEPTION_HPP
+#define SMBLEVELWORKSHOP2_WS2COMMON_EXCEPTION_IOEXCEPTION_HPP
 
-#include "ws2editor/exception/RuntimeException.hpp"
+#include "ws2common/exception/RuntimeException.hpp"
 
-namespace WS2Editor {
+namespace WS2Common {
     namespace Exception {
 
         /**

@@ -2,8 +2,8 @@
 #include "ws2editor/resource/ResourceManager.hpp"
 #include "ws2editor/ui/ModelManager.hpp"
 #include "ws2editor/MathUtils.hpp"
-#include "ws2editor/exception/IOException.hpp"
-#include "ws2editor/exception/ModelLoadingException.hpp"
+#include "ws2common/exception/IOException.hpp"
+#include "ws2common/exception/ModelLoadingException.hpp"
 #include <algorithm>
 #include <assimp/Importer.hpp>
 #include <assimp/postprocess.h>
@@ -15,8 +15,8 @@ namespace WS2Editor {
         namespace ResourceManager {
             namespace ResourceManagerInternal {
                 /**
-                 * @throws WS2Editor::Exception::IOException When failing to read the file
-                 * @throws WS2Editor::Exception::RuntimeException When Assimp fails to generate an aiScene
+                 * @throws IOException When failing to read the file
+                 * @throws RuntimeException When Assimp fails to generate an aiScene
                  */
                 QVector<Resource::ResourceEditorMesh*> loadModel(QFile &file, bool shouldLoad) {
                     //The file is from elsewhere - Assume it's from the local filesystem, and pass it to Assimp
@@ -24,7 +24,7 @@ namespace WS2Editor {
                 }
 
                 /**
-                 * @throws WS2Editor::Exception::ModelLoadingException When Assimp fails to generate an aiScene
+                 * @throws ModelLoadingException When Assimp fails to generate an aiScene
                  */
                 QVector<Resource::ResourceEditorMesh*> addModelFromFile(const char *filePath, bool shouldLoad) {
                     Assimp::Importer importer;
@@ -36,7 +36,7 @@ namespace WS2Editor {
                     //Check if stuff went wrong
                     if (!scene || scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE || !scene->mRootNode) {
                         //Oh noes!
-                        throw Exception::ModelLoadingException(QString(importer.GetErrorString()));
+                        throw WS2Common::Exception::ModelLoadingException(QString(importer.GetErrorString()));
                     }
 
                     const QFileInfo fileInfo = QFileInfo(filePath);
@@ -231,8 +231,8 @@ namespace WS2Editor {
             }
 
             /**
-             * @throws WS2Editor::Exception::IOException When failing to read the file
-             * @throws WS2Editor::Exception::RuntimeException When Assimp fails to generate an aiScene
+             * @throws IOException When failing to read the file
+             * @throws RuntimeException When Assimp fails to generate an aiScene
              */
             QVector<Resource::ResourceEditorMesh*> addModel(QFile &file, bool shouldLoad) {
                 return ResourceManagerInternal::loadModel(file, shouldLoad);
@@ -262,7 +262,7 @@ namespace WS2Editor {
                 }
 
                 //Ok so someone had the idea of having UINT_MAX taken names
-                throw Exception::RuntimeException("There are UINT_MAX or more matching names in "
+                throw WS2Common::Exception::RuntimeException("There are UINT_MAX or more matching names in "
                         "generateUniqueId(QString prefix)");
             }
         }

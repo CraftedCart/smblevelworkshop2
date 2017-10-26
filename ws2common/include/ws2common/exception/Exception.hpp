@@ -1,15 +1,15 @@
 /**
  * @file
- * @brief Header for the WS2Editor::Exception::Exception class
+ * @brief Header for the Exception class
  */
 
-#ifndef SMBLEVELWORKSHOP2_WS2EDITOR_EXCEPTION_EXCEPTION_HPP
-#define SMBLEVELWORKSHOP2_WS2EDITOR_EXCEPTION_EXCEPTION_HPP
+#ifndef SMBLEVELWORKSHOP2_WS2COMMON_EXCEPTION_EXCEPTION_HPP
+#define SMBLEVELWORKSHOP2_WS2COMMON_EXCEPTION_EXCEPTION_HPP
 
 #include <QException>
 #include <QString>
 
-namespace WS2Editor {
+namespace WS2Common {
     namespace Exception {
 
         /**

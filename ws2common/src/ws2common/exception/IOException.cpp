@@ -1,6 +1,6 @@
-#include "ws2editor/exception/IOException.hpp"
+#include "ws2common/exception/IOException.hpp"
 
-namespace WS2Editor {
+namespace WS2Common {
     namespace Exception {
         IOException::IOException() {
             message = "No IOException message given";

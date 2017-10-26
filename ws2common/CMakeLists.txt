@@ -46,6 +46,10 @@ set(SOURCE_FILES
     ./src/ws2common/resource/AbstractResource.cpp
     ./src/ws2common/resource/ResourceTexture.cpp
     ./src/ws2common/resource/ResourceMesh.cpp
+    ./src/ws2common/exception/Exception.cpp
+    ./src/ws2common/exception/RuntimeException.cpp
+    ./src/ws2common/exception/IOException.cpp
+    ./src/ws2common/exception/ModelLoadingException.cpp
     )
 
 set(HEADER_FILES
@@ -79,6 +83,10 @@ set(HEADER_FILES
     ./include/ws2common/resource/AbstractResource.hpp
     ./include/ws2common/resource/ResourceTexture.hpp
     ./include/ws2common/resource/ResourceMesh.hpp
+    ./include/ws2common/exception/Exception.hpp
+    ./include/ws2common/exception/RuntimeException.hpp
+    ./include/ws2common/exception/IOException.hpp
+    ./include/ws2common/exception/ModelLoadingException.hpp
     )
 
 add_library(${PROJECT_NAME} SHARED ${SOURCE_FILES} ${HEADER_FILES})
