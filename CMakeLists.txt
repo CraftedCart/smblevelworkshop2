@@ -4,7 +4,7 @@ project(smblevelworkshop2)
 #Export compile commands for editor autocomplete
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
-SET(CMAKE_INSTALL_RPATH_USE_LINK_PATH TRUE)
+set(CMAKE_INSTALL_RPATH_USE_LINK_PATH TRUE)
 set(CMAKE_INSTALL_RPATH "$ORIGIN/../lib:$ORIGIN")
 
 #Add uninstall target
