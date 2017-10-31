@@ -5,6 +5,10 @@ Another installment in Super Monkey Ball hacking - SMB Level Workshop 2 is a sta
 
 WS2 is very early in development for now, and is not at all useable as a level editor. It may not be ready for a while, with me needing to learn and apply modern OpenGL and Qt 5. In the meanwhile, I refer you to the [original SMB Level Workshop](https://github.com/CraftedCart/SMBLevelWorkshop).
 
+## Discord
+
+Join the Workshop Discord server over here: https://discord.gg/CEYjvDj
+
 ## Why? Wasn't the original SMB Level Workshop good enough?
 
 The original SMB Level Workshop has been quite the learning experience for me, in what is good to do and especially what not to do; the what not to do part however comes from experience maintaining it. The original one has become quite the pain to maintain with little seperation between the UI and the logic of the editor, fiddly at best and buggy at worst UI code, outdated, slow OpenGL, and issues with LWJGL 2.9. I decided that it would be better to move on and start afresh.
