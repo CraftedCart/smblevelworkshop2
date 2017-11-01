@@ -10,8 +10,9 @@ set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 #Be really pedantic!
 add_definitions(-Wall -Wextra -pedantic)
 
-#Automatically run moc when needed
+#Automatically run moc and rcc when needed
 set(CMAKE_AUTOMOC ON)
+set(CMAKE_AUTORCC ON)
 
 #External dependencies
 find_package(Qt5Core REQUIRED)
@@ -89,7 +90,11 @@ set(HEADER_FILES
     ./include/ws2common/exception/ModelLoadingException.hpp
     )
 
-add_library(${PROJECT_NAME} SHARED ${SOURCE_FILES} ${HEADER_FILES})
+set(RESOURCE_FILES
+    ./resources/ws2common/WS2CommonResources.qrc
+    )
+
+add_library(${PROJECT_NAME} SHARED ${SOURCE_FILES} ${HEADER_FILES} ${RESOURCE_FILES})
 
 #External dependencies
 target_link_libraries(${PROJECT_NAME} Qt5::Core Qt5::Gui)

@@ -183,7 +183,7 @@ namespace WS2Editor {
 
                         //Check if the file doesn't exist, and load the uvtemplate texture instead
                         if (!QFileInfo(filePath).exists()) {
-                            filePath = ":/Workshop2/Images/uvtemplate.png";
+                            filePath = ":/WS2Common/Images/uvtemplate.png";
                         }
 
                         //Don't load another copy of the texture if it is already in the ResourceManager
