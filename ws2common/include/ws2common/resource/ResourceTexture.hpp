@@ -37,6 +37,13 @@ namespace WS2Common {
                  * @return A pointer to texture, or nullptr if not loaded
                  */
                 QImage* getTexture();
+
+                /**
+                 * @brief Const getter for texture
+                 *
+                 * @return A pointer to texture, or nullptr if not loaded
+                 */
+                const QImage* getTexture() const;
         };
     }
 }

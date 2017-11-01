@@ -51,6 +51,11 @@ namespace WS2Common {
                 /**
                  * @return A reference to the textures vector
                  */
+                QVector<Resource::ResourceTexture*>& getTextures();
+
+                /**
+                 * @return A const reference to the textures vector
+                 */
                 const QVector<Resource::ResourceTexture*>& getTextures() const;
         };
     }

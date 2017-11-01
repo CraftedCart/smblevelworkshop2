@@ -21,9 +21,13 @@ namespace WS2Common {
             return indices;
         }
 
+        QVector<Resource::ResourceTexture*>& MeshSegment::getTextures() {
+            return textures;
+        }
+
         const QVector<Resource::ResourceTexture*>& MeshSegment::getTextures() const {
             return textures;
-       }
-   }
+        }
+    }
 }
 

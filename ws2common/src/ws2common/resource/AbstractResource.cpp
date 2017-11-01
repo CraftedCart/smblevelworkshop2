@@ -43,7 +43,7 @@ namespace WS2Common {
             loaded = false;
         }
 
-        bool AbstractResource::isLoaded() {
+        bool AbstractResource::isLoaded() const {
             return loaded;
         }
     }

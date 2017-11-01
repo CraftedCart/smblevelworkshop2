@@ -34,7 +34,7 @@ namespace WS2Editor {
                  *
                  * @return A vector of added meshes
                  */
-                QVector<Resource::ResourceEditorMesh*> loadModel(QFile &file, bool shouldLoad = false);
+                QVector<WS2Common::Resource::ResourceMesh*> loadModel(QFile &file);
 
                 /**
                  * @brief Append a model to the scene from the file given
@@ -44,7 +44,7 @@ namespace WS2Editor {
                  *
                  * @return A vector of added meshes
                  */
-                QVector<Resource::ResourceEditorMesh*> addModelFromFile(const char *filePath, bool shouldLoad = false);
+                QVector<WS2Common::Resource::ResourceMesh*> addModelFromFile(const char *filePath);
 
                 /**
                  * @brief Recursive function that keeps calling itself for each child node in the parent node given.
@@ -63,8 +63,7 @@ namespace WS2Editor {
                         const glm::mat4 globalTransform,
                         const QString *filePath,
                         const QDir *parentDir,
-                        QVector<Resource::ResourceEditorMesh*> &meshVector,
-                        bool shouldLoad = false
+                        QVector<WS2Common::Resource::ResourceMesh*> &meshVector
                         );
 
                 /**
@@ -78,12 +77,11 @@ namespace WS2Editor {
                  *
                  * @return The converted mesh
                  */
-                Model::EditorMeshSegment* processMeshSegment(
+                WS2Common::Model::MeshSegment* processMeshSegment(
                         const aiMesh *mesh,
                         const aiScene *scene,
                         const glm::mat4 globalTransform,
-                        const QDir *parentDir,
-                        bool shouldLoad = false
+                        const QDir *parentDir
                         );
 
                 /**
@@ -96,11 +94,10 @@ namespace WS2Editor {
                  *
                  * @return A vector of textures
                  */
-                QVector<Resource::ResourceEditorTexture*> loadMaterialTextures(
+                QVector<WS2Common::Resource::ResourceTexture*> loadMaterialTextures(
                         aiMaterial *material,
                         aiTextureType type,
-                        const QDir *parentDir,
-                        bool shouldLoad = false
+                        const QDir *parentDir
                         );
             }
 
@@ -146,7 +143,7 @@ namespace WS2Editor {
              *
              * @return A vector of added meshes
              */
-            QVector<Resource::ResourceEditorMesh*> addModel(QFile &file, bool shouldLoad = false);
+            QVector<ResourceEditorMesh*> addModel(QFile &file, bool shouldLoad = false);
 
             /**
              * @brief Generates a unique resource ID prefixed with prefix

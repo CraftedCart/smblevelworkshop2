@@ -10,13 +10,17 @@ namespace WS2Editor {
             WS2Common::Model::MeshSegment(vertices, indices, vectorToBaseTexture(textures)) {}
 
         EditorMeshSegment::EditorMeshSegment(const WS2Common::Model::MeshSegment &origin) :
-            WS2Common::Model::MeshSegment(origin.getVertices(), origin.getIndices(), origin.getTextures()) {}
+            WS2Common::Model::MeshSegment(origin.getVertices(), origin.getIndices(), origin.getTextures()) {
+        }
 
         void EditorMeshSegment::load() {
+            if (loaded) return; //Don't reload it if it's already loaded
             generateGlBuffers();
+            loaded = true;
         }
 
         void EditorMeshSegment::unload() {
+            loaded = false;
             GLuint buffers[] = {vao, vbo, ebo};
             glDeleteBuffers(3, buffers);
         }

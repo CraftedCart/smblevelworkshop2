@@ -23,6 +23,8 @@ namespace WS2Editor {
                 GLuint vbo;
                 GLuint ebo;
 
+                bool loaded = false;
+
                 /**
                  * @brief Generates GL buffers
                  */
@@ -43,6 +45,8 @@ namespace WS2Editor {
 
                 /**
                  * @brief Copies a MeshSegment, to an EditorMeshSegment
+                 *
+                 * @note Does not convert textures to ResourceEditorTextures!
                  *
                  * @param origin The MeshSegment to copy
                  */

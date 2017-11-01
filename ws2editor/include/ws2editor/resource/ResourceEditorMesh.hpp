@@ -20,9 +20,9 @@ namespace WS2Editor {
                 /**
                  * @brief Copy constructor, that also converts all MeshSegments to EditorMeshSegments
                  *
-                 * @param origin The ResourceEditorMesh to copy
+                 * @param origin The ResourceMesh to copy
                  */
-                ResourceEditorMesh(const ResourceEditorMesh &origin);
+                ResourceEditorMesh(const ResourceMesh &origin);
 
                 /**
                  * @brief Generates GL buffers for the mesh

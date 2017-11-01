@@ -6,25 +6,31 @@ namespace WS2Editor {
     namespace Resource {
         ResourceEditorMesh::ResourceEditorMesh() {}
 
-        ResourceEditorMesh::ResourceEditorMesh(const ResourceEditorMesh &origin) {
-            QVector<WS2Common::Model::MeshSegment*> newMeshSegments(origin.getMeshSegments().size());
-
+        ResourceEditorMesh::ResourceEditorMesh(const ResourceMesh &origin) {
             //Check for non-ResourceEditorMeshes, and convert them over
-            int i = 0;
             foreach(WS2Common::Model::MeshSegment* segment, origin.getMeshSegments()) {
                 if (WS2Common::instanceOf<Model::EditorMeshSegment>(segment)) {
                     //Copy it over
-                    newMeshSegments[i] = new Model::EditorMeshSegment(*static_cast<Model::EditorMeshSegment*>(segment));
+                    meshSegments.append(new Model::EditorMeshSegment(*static_cast<Model::EditorMeshSegment*>(segment)));
                 } else {
                     //Convert it
-                    newMeshSegments[i] = new Model::EditorMeshSegment(*segment);
+                    meshSegments.append(new Model::EditorMeshSegment(*segment));
                 }
             }
+
+            //Copy over the other guff
+            id = origin.getId();
+            filePaths = origin.getFilePaths();
         }
 
         void ResourceEditorMesh::load() {
-            for (WS2Common::Model::MeshSegment *segment : meshSegments) {
-                static_cast<Model::EditorMeshSegment*>(segment)->load();
+            foreach(WS2Common::Model::MeshSegment *segment, meshSegments) {
+                Model::EditorMeshSegment *editorSegment = static_cast<Model::EditorMeshSegment*>(segment);
+                foreach (WS2Common::Resource::ResourceTexture *tex, editorSegment->getTextures()) {
+                    tex->load();
+                }
+
+                editorSegment->load();
             }
 
             loaded = true;
@@ -35,6 +41,7 @@ namespace WS2Editor {
 
             for (WS2Common::Model::MeshSegment *segment : meshSegments) {
                 static_cast<Model::EditorMeshSegment*>(segment)->unload();
+                //TODO: Unload textures (But not ones in use by other meshes)
             }
         }
     }

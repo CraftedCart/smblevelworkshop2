@@ -4,7 +4,17 @@
 
 namespace WS2Editor {
     namespace Resource {
+        ResourceEditorTexture::ResourceEditorTexture() {}
+
+        ResourceEditorTexture::ResourceEditorTexture(const WS2Common::Resource::ResourceTexture &origin) {
+            id = origin.getId();
+            filePaths = origin.getFilePaths();
+            loaded = origin.isLoaded();
+            if (loaded) load();
+        }
+
         void ResourceEditorTexture::load() {
+            if (loaded) return; //Don't reload it if it's already loaded
             WS2Common::Resource::ResourceTexture::load(); //Call super function
 
             qDebug() << "Loading GL texture:" << id;

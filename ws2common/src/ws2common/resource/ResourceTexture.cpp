@@ -19,6 +19,10 @@ namespace WS2Common {
         QImage* ResourceTexture::getTexture() {
             return texture;
         }
+
+        const QImage* ResourceTexture::getTexture() const {
+            return texture;
+        }
     }
 }
 

@@ -4,6 +4,7 @@
 #include "ws2editor/MathUtils.hpp"
 #include "ws2common/exception/IOException.hpp"
 #include "ws2common/exception/ModelLoadingException.hpp"
+#include "ws2common/WS2Common.hpp"
 #include <algorithm>
 #include <assimp/Importer.hpp>
 #include <assimp/postprocess.h>
@@ -18,15 +19,15 @@ namespace WS2Editor {
                  * @throws IOException When failing to read the file
                  * @throws RuntimeException When Assimp fails to generate an aiScene
                  */
-                QVector<Resource::ResourceEditorMesh*> loadModel(QFile &file, bool shouldLoad) {
+                QVector<WS2Common::Resource::ResourceMesh*> loadModel(QFile &file) {
                     //The file is from elsewhere - Assume it's from the local filesystem, and pass it to Assimp
-                    return addModelFromFile(file.fileName().toLatin1().constData(), shouldLoad);
+                    return addModelFromFile(file.fileName().toLatin1().constData());
                 }
 
                 /**
                  * @throws ModelLoadingException When Assimp fails to generate an aiScene
                  */
-                QVector<Resource::ResourceEditorMesh*> addModelFromFile(const char *filePath, bool shouldLoad) {
+                QVector<WS2Common::Resource::ResourceMesh*> addModelFromFile(const char *filePath) {
                     Assimp::Importer importer;
                     const aiScene *scene = importer.ReadFile(
                             filePath,
@@ -42,11 +43,11 @@ namespace WS2Editor {
                     const QFileInfo fileInfo = QFileInfo(filePath);
                     const QDir parentDir = fileInfo.dir();
 
-                    QVector<Resource::ResourceEditorMesh*> meshVector;
+                    QVector<WS2Common::Resource::ResourceMesh*> meshVector;
 
                     const glm::mat4 globalTransform = MathUtils::toGlmMat4(scene->mRootNode->mTransformation);
                     const QString filePathStr(filePath);
-                    processNode(scene->mRootNode, scene, globalTransform, &filePathStr, &parentDir, meshVector, shouldLoad);
+                    processNode(scene->mRootNode, scene, globalTransform, &filePathStr, &parentDir, meshVector);
 
                     return meshVector;
                 }
@@ -57,22 +58,21 @@ namespace WS2Editor {
                         const glm::mat4 globalTransform,
                         const QString *filePath,
                         const QDir *parentDir,
-                        QVector<Resource::ResourceEditorMesh*> &meshVector,
-                        bool shouldLoad
+                        QVector<WS2Common::Resource::ResourceMesh*> &meshVector
                         ) {
                     qDebug() << "Processing node" << node->mName.C_Str() << node->mNumMeshes;
 
-                    QVector<Model::EditorMeshSegment*> segments; //Will contain all mesh segments for each material of this node's mesh
+                    QVector<WS2Common::Model::MeshSegment*> segments; //Will contain all mesh segments for each material of this node's mesh
                     //Process this node's mesh segments
                     for (unsigned int i = 0; i < node->mNumMeshes; i++) {
                         aiMesh *mesh = scene->mMeshes[node->mMeshes[i]];
-                        Model::EditorMeshSegment *segment = processMeshSegment(mesh, scene, globalTransform, parentDir, shouldLoad);
+                        WS2Common::Model::MeshSegment *segment = processMeshSegment(mesh, scene, globalTransform, parentDir);
                         segments.append(segment);
                     }
 
                     //Gather all segments of the mesh into a single WS2Common::Resource::ResourceMesh
                     if (segments.size() > 0) {
-                        Resource::ResourceEditorMesh *resMesh = new Resource::ResourceEditorMesh();
+                        WS2Common::Resource::ResourceMesh *resMesh = new WS2Common::Resource::ResourceMesh();
                         resMesh->setId(node->mName.C_Str());
                         resMesh->setFilePath(*filePath);
 
@@ -80,28 +80,25 @@ namespace WS2Editor {
                             resMesh->addMeshSegment(segments.at(j));
                         }
 
-                        if (shouldLoad) resMesh->load();
-
                         addResource(resMesh);
                         meshVector.append(resMesh);
                     }
 
                     //Recursively call this function to process meshes for all children
                     for (unsigned int i = 0; i < node->mNumChildren; i++) {
-                        processNode(node->mChildren[i], scene, globalTransform, filePath, parentDir, meshVector, shouldLoad);
+                        processNode(node->mChildren[i], scene, globalTransform, filePath, parentDir, meshVector);
                     }
                 }
 
-                Model::EditorMeshSegment* processMeshSegment(
+                WS2Common::Model::MeshSegment* processMeshSegment(
                         const aiMesh *mesh,
                         const aiScene *scene,
                         const glm::mat4 globalTransform,
-                        const QDir *parentDir,
-                        bool shouldLoad
+                        const QDir *parentDir
                         ) {
                     QVector<WS2Common::Model::Vertex> vertices;
                     QVector<unsigned int> indices;
-                    QVector<ResourceEditorTexture*> textures;
+                    QVector<WS2Common::Resource::ResourceTexture*> textures;
 
                     static const int UV_CHANNEL = 0;
 
@@ -153,18 +150,18 @@ namespace WS2Editor {
 
                     //Process material
                     aiMaterial *material = scene->mMaterials[mesh->mMaterialIndex];
-                    QVector<Resource::ResourceEditorTexture*> diffuseMaps = loadMaterialTextures(material, aiTextureType_DIFFUSE, parentDir, shouldLoad);
+                    QVector<WS2Common::Resource::ResourceTexture*> diffuseMaps = loadMaterialTextures(material, aiTextureType_DIFFUSE, parentDir);
                     textures.append(diffuseMaps);
-                    QVector<Resource::ResourceEditorTexture*> specularMaps = loadMaterialTextures(material, aiTextureType_SPECULAR, parentDir, shouldLoad);
+                    QVector<WS2Common::Resource::ResourceTexture*> specularMaps = loadMaterialTextures(material, aiTextureType_SPECULAR, parentDir);
                     textures.append(specularMaps);
 
-                    Model::EditorMeshSegment *segment = new Model::EditorMeshSegment(vertices, indices, textures);
+                    WS2Common::Model::MeshSegment *segment = new WS2Common::Model::MeshSegment(vertices, indices, textures);
 
                     return segment;
                 }
 
-                QVector<Resource::ResourceEditorTexture*> loadMaterialTextures(aiMaterial *mat, aiTextureType type, const QDir *parentDir, bool shouldLoad) {
-                    QVector<Resource::ResourceEditorTexture*> textures;
+                QVector<WS2Common::Resource::ResourceTexture*> loadMaterialTextures(aiMaterial *mat, aiTextureType type, const QDir *parentDir) {
+                    QVector<WS2Common::Resource::ResourceTexture*> textures;
 
                     int maxI = mat->GetTextureCount(type);
                     for (int i = 0; i < maxI; i++) {
@@ -190,17 +187,13 @@ namespace WS2Editor {
                         }
 
                         //Don't load another copy of the texture if it is already in the ResourceManager
-                        Resource::ResourceEditorTexture *texture = Resource::ResourceManager::getResourceFromFilePath<Resource::ResourceEditorTexture*>(filePath);
+                        WS2Common::Resource::ResourceTexture *texture = getResourceFromFilePath<WS2Common::Resource::ResourceTexture*>(filePath);
 
                         if (texture == nullptr) {
-                            texture = new Resource::ResourceEditorTexture();
+                            texture = new WS2Common::Resource::ResourceTexture();
                             texture->setId(filePath);
                             texture->setFilePath(filePath);
-                            if (shouldLoad) texture->load();
                             addResource(texture);
-                        } else if (!texture->isLoaded() && shouldLoad) {
-                            //Load the texture if one is found but not loaded, and if it should be loaded
-                            texture->load();
                         }
 
                         if (!textures.contains(texture)) textures.append(texture);
@@ -234,8 +227,53 @@ namespace WS2Editor {
              * @throws IOException When failing to read the file
              * @throws RuntimeException When Assimp fails to generate an aiScene
              */
-            QVector<Resource::ResourceEditorMesh*> addModel(QFile &file, bool shouldLoad) {
-                return ResourceManagerInternal::loadModel(file, shouldLoad);
+            QVector<ResourceEditorMesh*> addModel(QFile &file, bool shouldLoad) {
+                QVector<WS2Common::Resource::ResourceMesh*> meshVec = ResourceManagerInternal::loadModel(file);
+                QVector<void*> toDelete;
+
+                //Convert all the ResourceMeshes to ResourceEditorMeshes, and load them if requested
+                //Also convert all the ResourceTextures to ResourceEditorTextures in each MeshSegment
+                QVector<ResourceEditorMesh*> vec(meshVec.size());
+                int i = 0;
+                foreach(WS2Common::Resource::ResourceMesh *mesh, meshVec) {
+                    vec[i] = new ResourceEditorMesh(*mesh);
+
+                    foreach (WS2Common::Model::MeshSegment *segment, vec[i]->getMeshSegments()) {
+                        QVector<WS2Common::Resource::ResourceTexture*> texVec(segment->getTextures().size());
+
+                        int j = 0;
+                        foreach (WS2Common::Resource::ResourceTexture *tex, segment->getTextures()) {
+                            if (!WS2Common::instanceOf<ResourceEditorTexture>(tex)) {
+                                if (getResources().indexOf(tex) != -1) {
+                                    texVec[j] = new ResourceEditorTexture(*tex);
+                                    getResources().replace(getResources().indexOf(tex), texVec[j]);
+                                    if (toDelete.indexOf(tex) == -1) toDelete.append(tex);
+                                } else {
+                                    texVec[j] = getResourceFromFilePath<WS2Common::Resource::ResourceTexture*>(*tex->getFirstFilePath());
+                                }
+                            } else {
+                                texVec[j] = tex;
+                            }
+
+                            j++;
+                        }
+
+                        //Remove all the deleted old textures, and replace them with the editor textures
+                        segment->getTextures().clear();
+                        segment->getTextures().append(texVec);
+                    }
+
+                    if (shouldLoad) vec[i]->load();
+                    getResources().replace(getResources().indexOf(mesh), vec[i]);
+                    delete mesh;
+
+                    i++;
+                }
+
+                //Delete all old pre-conversion guff
+                qDeleteAll(toDelete);
+
+                return vec;
             }
 
             /**

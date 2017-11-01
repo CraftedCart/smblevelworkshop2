@@ -100,7 +100,7 @@ namespace WS2Common {
                  *
                  * @return Whether the resource is loaded
                  */
-                bool isLoaded();
+                bool isLoaded() const;
         };
     }
 }

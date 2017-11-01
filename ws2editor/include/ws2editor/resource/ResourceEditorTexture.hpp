@@ -24,6 +24,18 @@ namespace WS2Editor {
 
             public:
                 /**
+                 * @brief Constructs and empty texture
+                 */
+                ResourceEditorTexture();
+
+                /**
+                 * @brief Copy constructor, adding editor data to a ResourceTexture
+                 *
+                 * @param origin The ResourceTexture to copy
+                 */
+                ResourceEditorTexture(const WS2Common::Resource::ResourceTexture &origin);
+
+                /**
                  * @brief Attempts to load the GL texture
                  */
                 void load() override;
