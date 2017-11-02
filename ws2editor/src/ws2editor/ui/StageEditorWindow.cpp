@@ -12,6 +12,7 @@
 #include <Qt>
 #include <QFileDialog>
 #include <QAction>
+#include <QDesktopServices>
 #include <QDebug>
 
 namespace WS2Editor {
@@ -58,6 +59,7 @@ namespace WS2Editor {
             connect(ui->actionSettings, &QAction::triggered, this, &StageEditorWindow::showSettings);
             connect(ui->actionAbout, &QAction::triggered, this, &StageEditorWindow::showAbout);
             connect(ui->actionStageIdeaGenerator, &QAction::triggered, this, &StageEditorWindow::showStageIdeaGenerator);
+            connect(ui->actionWorkshopDiscord, &QAction::triggered, [](){ QDesktopServices::openUrl(QUrl("https://discord.gg/CEYjvDj")); });
         }
 
         StageEditorWindow::~StageEditorWindow() {

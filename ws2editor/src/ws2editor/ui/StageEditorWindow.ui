@@ -103,6 +103,7 @@
     </property>
     <addaction name="actionAbout"/>
     <addaction name="actionStageIdeaGenerator"/>
+    <addaction name="actionWorkshopDiscord"/>
    </widget>
    <addaction name="menuFile"/>
    <addaction name="menuEdit"/>
@@ -522,6 +523,11 @@
    </property>
    <property name="toolTip">
     <string>Randomly select a theme and mechanic for stages</string>
+   </property>
+  </action>
+  <action name="actionWorkshopDiscord">
+   <property name="text">
+    <string>Workshop 2 on Discord</string>
    </property>
   </action>
  </widget>
