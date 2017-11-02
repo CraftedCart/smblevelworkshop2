@@ -25,3 +25,5 @@ Make sure there's a good contrast between your stage and the background.
 Stages can be reordered to avoid duplicate stages. Totalitarianism and Nintendo cannot be replaced so changing the stage IDs can be used as a workaround.
 Too many goals can sometimes cause a variation of the points glitch where the game incorrectly registers goals (Eg: You get green points text when going through a blue goal, and other quirks).
 Build stages around concepts, not objects.
+There is a stage idea generator under the "Help" menu if you're stuck for what to do.
+Come join the community over on Discord, check the "Help" menu for the link.
