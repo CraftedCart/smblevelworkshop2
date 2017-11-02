@@ -15,7 +15,7 @@ namespace WS2Editor {
         }
 
         AboutWindow::~AboutWindow() {
-
+            delete ui;
         }
     }
 }

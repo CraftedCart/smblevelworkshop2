@@ -37,10 +37,12 @@ namespace WS2Editor {
                     QString line = in.readLine();
                     tips.append(line);
                 }
-            }
 
-            //Pick a random tip of the day
-            tip = tips.at(MathUtils::randInt(0, tips.size() - 1));
+                tipFile.close();
+
+                //Pick a random tip of the day
+                tip = tips.at(MathUtils::randInt(0, tips.size() - 1));
+            }
         }
 
         ViewportWidget::~ViewportWidget() {

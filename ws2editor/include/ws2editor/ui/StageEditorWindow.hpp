@@ -50,6 +50,11 @@ namespace WS2Editor {
                  */
                 void showAbout();
 
+                /**
+                 * @brief Shows the stage idea generator dialog
+                 */
+                void showStageIdeaGenerator();
+
             private:
                 Ui::StageEditorWindow *ui;
         };

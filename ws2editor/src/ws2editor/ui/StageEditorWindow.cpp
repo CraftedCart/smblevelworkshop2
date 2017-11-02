@@ -4,6 +4,7 @@
 #include "ws2editor/ui/ModelManager.hpp"
 #include "ws2editor/ui/SettingsDialog.hpp"
 #include "ws2editor/ui/AboutWindow.hpp"
+#include "ws2editor/ui/StageIdeaGeneratorWindow.hpp"
 #include "ws2editor/task/ImportFileTask.hpp"
 #include "ws2editor/WS2.hpp"
 #include "ws2common/scene/GroupSceneNode.hpp"
@@ -56,6 +57,7 @@ namespace WS2Editor {
             connect(ui->actionNewNode, &QAction::triggered, this, &StageEditorWindow::addSceneNode);
             connect(ui->actionSettings, &QAction::triggered, this, &StageEditorWindow::showSettings);
             connect(ui->actionAbout, &QAction::triggered, this, &StageEditorWindow::showAbout);
+            connect(ui->actionStageIdeaGenerator, &QAction::triggered, this, &StageEditorWindow::showStageIdeaGenerator);
         }
 
         StageEditorWindow::~StageEditorWindow() {
@@ -119,6 +121,11 @@ namespace WS2Editor {
 
         void StageEditorWindow::showAbout() {
             AboutWindow *win = new AboutWindow();
+            win->show();
+        }
+
+        void StageEditorWindow::showStageIdeaGenerator() {
+            StageIdeaGeneratorWindow *win = new StageIdeaGeneratorWindow();
             win->show();
         }
     }

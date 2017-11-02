@@ -52,6 +52,7 @@ set(SOURCE_FILES
     ./src/ws2editor/main.cpp
     ./src/ws2editor/ui/StageEditorWindow.cpp
     ./src/ws2editor/ui/AboutWindow.cpp
+    ./src/ws2editor/ui/StageIdeaGeneratorWindow.cpp
     ./src/ws2editor/ui/SettingsDialog.cpp
     ./src/ws2editor/widget/ViewportWidget.cpp
     ./src/ws2editor/widget/OutlinerWidget.cpp
@@ -81,6 +82,7 @@ set(SOURCE_FILES
 set(HEADER_FILES
     ./include/ws2editor/ui/StageEditorWindow.hpp
     ./include/ws2editor/ui/AboutWindow.hpp
+    ./include/ws2editor/ui/StageIdeaGeneratorWindow.hpp
     ./include/ws2editor/ui/SettingsDialog.hpp
     ./include/ws2editor/widget/ViewportWidget.hpp
     ./include/ws2editor/widget/OutlinerWidget.hpp

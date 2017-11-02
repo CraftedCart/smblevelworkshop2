@@ -102,6 +102,7 @@
      <string>Help</string>
     </property>
     <addaction name="actionAbout"/>
+    <addaction name="actionStageIdeaGenerator"/>
    </widget>
    <addaction name="menuFile"/>
    <addaction name="menuEdit"/>
@@ -513,6 +514,14 @@
    </property>
    <property name="text">
     <string>Settings</string>
+   </property>
+  </action>
+  <action name="actionStageIdeaGenerator">
+   <property name="text">
+    <string>Stage Idea Generator</string>
+   </property>
+   <property name="toolTip">
+    <string>Randomly select a theme and mechanic for stages</string>
    </property>
   </action>
  </widget>

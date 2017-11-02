@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>StageIdeaGeneratorWindow</class>
+ <widget class="QDialog" name="StageIdeaGeneratorWindow">
+  <property name="windowModality">
+   <enum>Qt::ApplicationModal</enum>
+  </property>
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>600</width>
+    <height>600</height>
+   </rect>
+  </property>
+  <property name="minimumSize">
+   <size>
+    <width>600</width>
+    <height>600</height>
+   </size>
+  </property>
+  <property name="maximumSize">
+   <size>
+    <width>600</width>
+    <height>600</height>
+   </size>
+  </property>
+  <property name="windowTitle">
+   <string>Stage Idea Generator</string>
+  </property>
+  <property name="modal">
+   <bool>true</bool>
+  </property>
+  <layout class="QVBoxLayout" name="verticalLayout">
+   <property name="sizeConstraint">
+    <enum>QLayout::SetDefaultConstraint</enum>
+   </property>
+   <item>
+    <widget class="QPushButton" name="genCombinationPushButton">
+     <property name="text">
+      <string>Generate Combination</string>
+     </property>
+    </widget>
+   </item>
+   <item>
+    <layout class="QHBoxLayout" name="buttonsHorizontalLayout">
+     <property name="sizeConstraint">
+      <enum>QLayout::SetDefaultConstraint</enum>
+     </property>
+     <item>
+      <widget class="QPushButton" name="genThemePushButton">
+       <property name="text">
+        <string>Generate Theme</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="genMechanicPushButton">
+       <property name="text">
+        <string>Generate Mechanic</string>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </item>
+   <item>
+    <layout class="QHBoxLayout" name="outputHorizonalLayout">
+     <property name="sizeConstraint">
+      <enum>QLayout::SetDefaultConstraint</enum>
+     </property>
+     <item>
+      <widget class="QListWidget" name="themesListWidget"/>
+     </item>
+     <item>
+      <widget class="QListWidget" name="mechanicsListWidget"/>
+     </item>
+    </layout>
+   </item>
+   <item>
+    <widget class="QLabel" name="extraChallengeLabel">
+     <property name="text">
+      <string>For an extra challenge, try utilising multiple mechanics!</string>
+     </property>
+    </widget>
+   </item>
+  </layout>
+ </widget>
+ <resources>
+  <include location="../../../resources/Workshop2/Workshop2Resources.qrc"/>
+  <include location="../../../resources/Workshop2/Workshop2Resources.qrc"/>
+ </resources>
+ <connections/>
+</ui>
