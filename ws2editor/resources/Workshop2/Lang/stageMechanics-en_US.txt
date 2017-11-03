@@ -11,7 +11,7 @@ Domes
 Angled Wires
 Air Control
 Riding Moving Platforms
-Giant stage
+Giant Stage
 Spirals
 Cylinders
 Bent Paths
