@@ -36,12 +36,6 @@ include_directories(SYSTEM ${OPENGL_INCLUDE_DIRS})
 find_package(GLEW REQUIRED)
 include_directories(SYSTEM ${GLEW_INCLUDE_DIRS})
 
-find_package(assimp REQUIRED)
-include_directories(SYSTEM ${ASSIMP_INCLUDE_DIRS})
-if(APPLE) #-lassimp doesn't seem to work with homebrew installed Assimp
-    set(ASSIMP_LIBRARIES /usr/local/lib/libassimp.dylib)
-endif(APPLE)
-
 find_package(Bullet REQUIRED)
 include_directories(SYSTEM ${BULLET_INCLUDE_DIRS})
 
@@ -125,7 +119,6 @@ target_link_libraries(${PROJECT_NAME}
     Qt5::Widgets
     ${OPENGL_LIBRARIES}
     ${GLEW_LIBRARIES}
-    ${ASSIMP_LIBRARIES}
     ${BULLET_LIBRARIES}
     ws2common
     )

@@ -34,9 +34,9 @@ namespace WS2Editor {
 
                 for (int j = 0; j < segment->getIndices().size(); j += 3) {
                     triMesh->addTriangle(
-                            MathUtils::toBtVector3(segment->getVertices().at(segment->getIndices().at(j)).position),
-                            MathUtils::toBtVector3(segment->getVertices().at(segment->getIndices().at(j + 1)).position),
-                            MathUtils::toBtVector3(segment->getVertices().at(segment->getIndices().at(j + 2)).position)
+                            WS2Common::MathUtils::toBtVector3(segment->getVertices().at(segment->getIndices().at(j)).position),
+                            WS2Common::MathUtils::toBtVector3(segment->getVertices().at(segment->getIndices().at(j + 1)).position),
+                            WS2Common::MathUtils::toBtVector3(segment->getVertices().at(segment->getIndices().at(j + 2)).position)
                             );
                 }
             }

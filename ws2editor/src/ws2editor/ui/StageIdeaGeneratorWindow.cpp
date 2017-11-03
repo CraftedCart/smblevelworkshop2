@@ -1,6 +1,6 @@
 #include "ws2editor/ui/StageIdeaGeneratorWindow.hpp"
 #include "ws2editor/ui_StageIdeaGeneratorWindow.h"
-#include "ws2editor/MathUtils.hpp"
+#include "ws2common/MathUtils.hpp"
 #include <QFile>
 #include <QStringList>
 #include <QTextStream>
@@ -52,12 +52,12 @@ namespace WS2Editor {
         }
 
         void StageIdeaGeneratorWindow::selectTheme() {
-            QString sel = themes.at(MathUtils::randInt(0, themes.size() - 1));
+            QString sel = themes.at(WS2Common::MathUtils::randInt(0, themes.size() - 1));
             ui->themesListWidget->insertItem(0, sel);
         }
 
         void StageIdeaGeneratorWindow::selectMechanic() {
-            QString sel = mechanics.at(MathUtils::randInt(0, mechanics.size() - 1));
+            QString sel = mechanics.at(WS2Common::MathUtils::randInt(0, mechanics.size() - 1));
             ui->mechanicsListWidget->insertItem(0, sel);
         }
     }

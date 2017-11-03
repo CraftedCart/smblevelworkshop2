@@ -1,6 +1,6 @@
 #include "ws2editor/widget/ViewportWidget.hpp"
 #include "ws2editor/GLManager.hpp"
-#include "ws2editor/MathUtils.hpp"
+#include "ws2common/MathUtils.hpp"
 #include "ws2editor/project/ProjectManager.hpp"
 #include "ws2editor/resource/ResourceManager.hpp"
 #include "ws2editor/scene/EditorMeshSceneNode.hpp"
@@ -41,7 +41,7 @@ namespace WS2Editor {
                 tipFile.close();
 
                 //Pick a random tip of the day
-                tip = tips.at(MathUtils::randInt(0, tips.size() - 1));
+                tip = tips.at(WS2Common::MathUtils::randInt(0, tips.size() - 1));
             }
         }
 
@@ -163,7 +163,7 @@ namespace WS2Editor {
 
             if (mouseLocked) {
                 QVector2D cursorDiffQt = QVector2D(widgetCenter - cursorPos);
-                glm::vec2 cursorDiff = MathUtils::toGlmVec2(cursorDiffQt);
+                glm::vec2 cursorDiff = WS2Common::MathUtils::toGlmVec2(cursorDiffQt);
 
                 //Hide cursor
                 setCursor(Qt::BlankCursor);
@@ -375,7 +375,7 @@ namespace WS2Editor {
                 painter.drawPixmap(pos.x, pos.y - tooltipPixmap->height(), *tooltipPixmap);
 
                 painter.setPen(Qt::white);
-                painter.drawText(MathUtils::toQPoint(pos + glm::vec2(20, -10)), node->getName());
+                painter.drawText(WS2Common::MathUtils::toQPoint(pos + glm::vec2(20, -10)), node->getName());
             }
 
             delete rayCallback;
@@ -440,7 +440,7 @@ namespace WS2Editor {
             QPoint cursorPos = QCursor::pos();
             QPoint tlWidgetPos = mapToGlobal(pos()); //tl = Top Left
             QVector2D relCursorPosQt = QVector2D(cursorPos - tlWidgetPos); //rel = Relative
-            return MathUtils::toGlmVec2(relCursorPosQt);
+            return WS2Common::MathUtils::toGlmVec2(relCursorPosQt);
         }
 
         void ViewportWidget::checkGLErrors(QString location) {
@@ -504,14 +504,14 @@ namespace WS2Editor {
             glm::vec3 raycastEnd = startPos + rayDirWorld * distance;
 
             btCollisionWorld::ClosestRayResultCallback *rayCallback = new btCollisionWorld::ClosestRayResultCallback(
-                    btVector3(MathUtils::toBtVector3(startPos)),
-                    btVector3(MathUtils::toBtVector3(raycastEnd))
+                    btVector3(WS2Common::MathUtils::toBtVector3(startPos)),
+                    btVector3(WS2Common::MathUtils::toBtVector3(raycastEnd))
                     );
             rayCallback->m_flags = btTriangleRaycastCallback::kF_FilterBackfaces; //Ignore back faces
 
             Project::ProjectManager::getActiveProject()->getScene()->getPhysicsManager()->getDynamicsWorld()->rayTest(
-                    btVector3(MathUtils::toBtVector3(startPos)),
-                    btVector3(MathUtils::toBtVector3(raycastEnd)),
+                    btVector3(WS2Common::MathUtils::toBtVector3(startPos)),
+                    btVector3(WS2Common::MathUtils::toBtVector3(raycastEnd)),
                     *rayCallback
                     );
 

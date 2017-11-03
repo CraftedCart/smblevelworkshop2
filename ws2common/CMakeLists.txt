@@ -18,11 +18,19 @@ set(CMAKE_AUTORCC ON)
 find_package(Qt5Core REQUIRED)
 find_package(Qt5Gui REQUIRED) #Need Gui for image guff
 
+find_package(assimp REQUIRED)
+include_directories(SYSTEM ${ASSIMP_INCLUDE_DIRS})
+if(APPLE) #-lassimp doesn't seem to work with homebrew installed Assimp
+    set(ASSIMP_LIBRARIES /usr/local/lib/libassimp.dylib)
+endif(APPLE)
+
 include_directories(./include)
 include_directories(${CMAKE_BINARY_DIR})
 
 set(SOURCE_FILES
+    ./src/ws2common/WS2Common.cpp
     ./src/ws2common/MessageHandler.cpp
+    ./src/ws2common/MathUtils.cpp
     ./src/ws2common/EnumGoalType.cpp
     ./src/ws2common/EnumBananaType.cpp
     ./src/ws2common/EnumPlaybackState.cpp
@@ -44,6 +52,7 @@ set(SOURCE_FILES
     ./src/ws2common/scene/MeshCollisionSceneNode.cpp
     ./src/ws2common/config/XMLConfigParser.cpp
     ./src/ws2common/model/MeshSegment.cpp
+    ./src/ws2common/model/ModelLoader.cpp
     ./src/ws2common/resource/AbstractResource.cpp
     ./src/ws2common/resource/ResourceTexture.cpp
     ./src/ws2common/resource/ResourceMesh.cpp
@@ -57,6 +66,7 @@ set(HEADER_FILES
     ./include/ws2common/WS2Common.hpp
     ./include/ws2common/WS2Common.ipp
     ./include/ws2common/MessageHandler.hpp
+    ./include/ws2common/MathUtils.hpp
     ./include/ws2common/EnumGameVersion.hpp
     ./include/ws2common/EnumGoalType.hpp
     ./include/ws2common/EnumBananaType.hpp
@@ -81,6 +91,8 @@ set(HEADER_FILES
     ./include/ws2common/config/XMLConfigParser.hpp
     ./include/ws2common/model/Vertex.hpp
     ./include/ws2common/model/MeshSegment.hpp
+    ./include/ws2common/model/ModelLoader.hpp
+    ./include/ws2common/model/ModelLoader.ipp
     ./include/ws2common/resource/AbstractResource.hpp
     ./include/ws2common/resource/ResourceTexture.hpp
     ./include/ws2common/resource/ResourceMesh.hpp
@@ -97,7 +109,11 @@ set(RESOURCE_FILES
 add_library(${PROJECT_NAME} SHARED ${SOURCE_FILES} ${HEADER_FILES} ${RESOURCE_FILES})
 
 #External dependencies
-target_link_libraries(${PROJECT_NAME} Qt5::Core Qt5::Gui)
+target_link_libraries(${PROJECT_NAME}
+    Qt5::Core
+    Qt5::Gui
+    ${ASSIMP_LIBRARIES}
+    )
 
 #Export headers
 target_include_directories(${PROJECT_NAME} PUBLIC

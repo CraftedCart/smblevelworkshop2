@@ -16,17 +16,17 @@ namespace WS2Editor {
     }
 
     void PhysicsDebugDrawer::drawLine(const btVector3& from, const btVector3& to, const btVector3& fromColor, const btVector3& toColor) {
-        lineData.append(MathUtils::toGlmVec3(from));
-        lineData.append(MathUtils::toGlmVec3(fromColor));
-        lineData.append(MathUtils::toGlmVec3(to));
-        lineData.append(MathUtils::toGlmVec3(toColor));
+        lineData.append(WS2Common::MathUtils::toGlmVec3(from));
+        lineData.append(WS2Common::MathUtils::toGlmVec3(fromColor));
+        lineData.append(WS2Common::MathUtils::toGlmVec3(to));
+        lineData.append(WS2Common::MathUtils::toGlmVec3(toColor));
     }
 
     void PhysicsDebugDrawer::drawLine(const btVector3& from, const btVector3& to, const btVector3& color) {
-        lineData.append(MathUtils::toGlmVec3(from));
-        lineData.append(MathUtils::toGlmVec3(color));
-        lineData.append(MathUtils::toGlmVec3(to));
-        lineData.append(MathUtils::toGlmVec3(color));
+        lineData.append(WS2Common::MathUtils::toGlmVec3(from));
+        lineData.append(WS2Common::MathUtils::toGlmVec3(color));
+        lineData.append(WS2Common::MathUtils::toGlmVec3(to));
+        lineData.append(WS2Common::MathUtils::toGlmVec3(color));
     }
 
     void PhysicsDebugDrawer::drawSphere(const btVector3& p, btScalar radius, const btVector3& color) {
