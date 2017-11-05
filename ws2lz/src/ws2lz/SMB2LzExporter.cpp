@@ -3,14 +3,25 @@
 #include "ws2common/WS2Common.hpp"
 #include "ws2common/scene/StartSceneNode.hpp"
 #include "ws2common/scene/GoalSceneNode.hpp"
+#include "ws2common/scene/MeshCollisionSceneNode.hpp"
+#include <QElapsedTimer>
 #include <QDebug>
 #include <math.h>
 
 namespace WS2Lz {
+    SMB2LzExporter::~SMB2LzExporter() {
+        qDeleteAll(triangleIntGridMap.values());
+    }
+
+    void SMB2LzExporter::setModels(QHash<QString, WS2Common::Resource::ResourceMesh*> &models) {
+        this->models = models;
+    }
+
     void SMB2LzExporter::generate(QDataStream &dev, const WS2Common::Stage &stage) {
         dev.setByteOrder(QDataStream::BigEndian);
         dev.setFloatingPointPrecision(QDataStream::SinglePrecision);
 
+        optimizeCollision(stage);
         calculateOffsets(stage);
         writeFileHeader(dev);
         writeStart(dev, stage);
@@ -23,8 +34,31 @@ namespace WS2Lz {
             writeCollisionHeader(dev, collisionHeaderIter.value());
         }
 
-        //TODO: Write collision triangles
-        //TODO: Write collision triangle index list
+        //Collision triangles
+        QMapIterator<quint32, const WS2Common::Scene::GroupSceneNode*> collisionTriangleIter(collisionHeaderOffsetMap);
+        while (collisionTriangleIter.hasNext()) {
+            collisionTriangleIter.next();
+            writeCollisionTriangles(dev, collisionTriangleIter.value());
+        }
+
+        //Collision triangle pointers
+        QMapIterator<quint32, const WS2Common::Scene::GroupSceneNode*> collisionTrianglePointerIter(collisionHeaderOffsetMap);
+        while (collisionTrianglePointerIter.hasNext()) {
+            collisionTrianglePointerIter.next();
+            //Writes the collision triangle list pointer
+            const WS2Common::Scene::GroupSceneNode *node = collisionTrianglePointerIter.value();
+            unsigned int totalTiles = node->getCollisionGrid()->getGridStepCount().x * node->getCollisionGrid()->getGridStepCount().y;
+            for (unsigned int i = 0; i < totalTiles; i++) {
+                dev << gridTriangleIndexListOffsetMap[collisionTrianglePointerIter.value()][i];
+            }
+        }
+
+        //Collision triangle index list
+        QMapIterator<quint32, const WS2Common::Scene::GroupSceneNode*> collisionTriangleIndexIter(collisionHeaderOffsetMap);
+        while (collisionTriangleIndexIter.hasNext()) {
+            collisionTriangleIndexIter.next();
+            writeCollisionTriangleIndexList(dev, triangleIntGridMap.value(collisionTriangleIndexIter.value()));
+        }
 
         //Goals
         QMapIterator<quint32, const WS2Common::Scene::GroupSceneNode*> goalIter(collisionHeaderOffsetMap);
@@ -99,6 +133,69 @@ namespace WS2Lz {
         }
     }
 
+    void SMB2LzExporter::addCollisionTriangles(
+            const WS2Common::Scene::SceneNode *node,
+            QVector<WS2Common::Model::Vertex> &allVertices,
+            QVector<unsigned int> &allIndices
+            ) {
+        if (WS2Common::instanceOf<WS2Common::Scene::MeshCollisionSceneNode>(node)) {
+            const WS2Common::Scene::MeshCollisionSceneNode *coli= static_cast<const WS2Common::Scene::MeshCollisionSceneNode*>(node);
+            //First, find the MeshSceneNode in the models QHash
+            if (models.contains(coli->getMeshName())) {
+                const WS2Common::Resource::ResourceMesh *mesh = models.value(coli->getMeshName());
+                //Now loop over all MeshSegements, and add to nextOffset
+                foreach (const WS2Common::Model::MeshSegment *seg, mesh->getMeshSegments()) {
+                    //Also need to add the previous size of allVertices to the indices to be added
+                    int prevSize = allVertices.size();
+                    allVertices.append(seg->getVertices());
+
+                    foreach(unsigned int ind, seg->getIndices()) {
+                        allIndices.append(ind + prevSize);
+                    }
+                }
+            } else {
+                //models QHash doesn't have the mesh in question - don't add it
+                qWarning().noquote() << "Missing mesh for collision" << coli->getMeshName();
+            }
+        }
+
+        //Loop over all children, looking for MeshCollisionSceneNodes
+        foreach(const WS2Common::Scene::SceneNode *child, node->getChildren()) {
+            addCollisionTriangles(child, allVertices, allIndices);
+        }
+    }
+
+    void SMB2LzExporter::optimizeCollision(const WS2Common::Stage &stage) {
+        //First check what triangles intersect which grid times, in order to optimize collision
+        qDebug() << "Now optimizing collision... This may take a little while";
+        QElapsedTimer timer; //Measure how long this operation takes - probably a little while
+        timer.start();
+
+        //Loop over all collision headers
+        foreach(WS2Common::Scene::SceneNode *node, stage.getRootNode()->getChildren()) {
+            if (WS2Common::instanceOf<WS2Common::Scene::GroupSceneNode>(node)) {
+                WS2Common::Scene::GroupSceneNode *groupNode = static_cast<WS2Common::Scene::GroupSceneNode*>(node);
+                //Find all MeshCollisionSceneNodes, and add the triangles to allVertices/allIndices
+                QVector<WS2Common::Model::Vertex> allVertices;
+                QVector<unsigned int> allIndices;
+                addCollisionTriangles(node, allVertices, allIndices);
+
+                //Now create the TriangleIntrsectionGrid, which will check each triangle for intersections with each grid tile
+                TriangleIntersectionGrid *intGrid = new TriangleIntersectionGrid(
+                        allVertices,
+                        allIndices,
+                        *groupNode->getCollisionGrid()
+                        );
+
+                //Store it
+                triangleIntGridMap[groupNode] = intGrid;
+            }
+        }
+
+        //Finished - log the amount of time it took
+        qDebug().noquote().nospace() << "Finished optimizing collision in " << timer.nsecsElapsed() / 1000000000.0f << "s";
+    }
+
     void SMB2LzExporter::calculateOffsets(const WS2Common::Stage &stage) {
         quint32 nextOffset = FILE_HEADER_LENGTH;
 
@@ -114,6 +211,54 @@ namespace WS2Lz {
                 //Found one
                 collisionHeaderOffsetMap[nextOffset] = static_cast<WS2Common::Scene::GroupSceneNode*>(node);
                 nextOffset += COLLISION_HEADER_LENGTH;
+            }
+        }
+
+        //Iterate over all GroupSceneNodes/collision headers, and call addCollisionTriangleOffsets with them
+        //This is for Collision Triangle data
+        QMapIterator<quint32, const WS2Common::Scene::GroupSceneNode*> collisionTriangleIter(collisionHeaderOffsetMap);
+        while (collisionTriangleIter.hasNext()) {
+            collisionTriangleIter.next();
+            gridTriangleListOffsetMap[nextOffset] = collisionTriangleIter.value();
+            addCollisionTriangleOffsets(collisionTriangleIter.value(), nextOffset);
+        }
+
+        //Iterate over all GroupSceneNodes/collision headers, and fill the gridTriangleListPointersOffsetMap
+        //This is for Collision Triangle Pointers
+        QMapIterator<quint32, const WS2Common::Scene::GroupSceneNode*> collisionTrianglePointerIter(collisionHeaderOffsetMap);
+        while (collisionTrianglePointerIter.hasNext()) {
+            collisionTrianglePointerIter.next();
+            gridTriangleListPointersOffsetMap[nextOffset] = collisionTrianglePointerIter.value();
+            const WS2Common::CollisionGrid *grid = collisionTriangleIter.value()->getCollisionGrid();
+            nextOffset += COLLISION_TRIANGLE_LIST_POINTER_LENGTH * grid->getGridStepCount().x * grid->getGridStepCount().y;
+        }
+
+        //Iterate over all GroupSceneNodes/collision headers, and fill the gridTriangleListOffsetMap
+        //This is for the Collision Triangle Index List
+        QMapIterator<quint32, const WS2Common::Scene::GroupSceneNode*> collisionTriangleIndexIter(collisionHeaderOffsetMap);
+        while (collisionTriangleIndexIter.hasNext()) {
+            collisionTriangleIndexIter.next();
+            gridTriangleListOffsetMap[nextOffset] = collisionTriangleIndexIter.value();
+
+            //2D vector (X, Y) containing vectors of triangle indices
+            QVector<QVector<QVector<quint16>>> indicesGrid = triangleIntGridMap.value(collisionTriangleIndexIter.value())->getIndicesGrid();
+
+            //Loop over all vectors
+            for (int x = 0; x < indicesGrid.size(); x++) {
+                for (int y = 0; y < indicesGrid[x].size(); y++) {
+                    if (indicesGrid[x][y].size() == 0) {
+                        //If this grid tile has zero triangles to collide with, just add a null offset to save file size
+                        gridTriangleIndexListOffsetMap[collisionTriangleIndexIter.value()].append(0x00000000);
+                    } else {
+                        gridTriangleIndexListOffsetMap[collisionTriangleIndexIter.value()].append(nextOffset);
+
+                        nextOffset += COLLISION_TRIANGLE_INDEX_LENGTH * (indicesGrid[x][y].size());
+                        //Add an extra index length for the 0xFFFF list terminator
+                        nextOffset += COLLISION_TRIANGLE_INDEX_LENGTH;
+                        //And keep it 4 byte aligned
+                        nextOffset = roundUpNearest4(nextOffset);
+                    }
+                }
             }
         }
 
@@ -280,6 +425,31 @@ namespace WS2Lz {
         wormholeListOffset = 0;
     }
 
+    void SMB2LzExporter::addCollisionTriangleOffsets(const WS2Common::Scene::SceneNode *node, quint32 &nextOffset) {
+        //TODO: Store this in a map or hash or something, per collision header, add a function argument for the collision header, store in a nested maps - Collision header, object name, offset
+        if (WS2Common::instanceOf<WS2Common::Scene::MeshCollisionSceneNode>(node)) {
+            const WS2Common::Scene::MeshCollisionSceneNode *coli= static_cast<const WS2Common::Scene::MeshCollisionSceneNode*>(node);
+            //First, find the MeshSceneNode in the models QHash
+            if (models.contains(coli->getMeshName())) {
+                const WS2Common::Resource::ResourceMesh *mesh = models.value(coli->getMeshName());
+                //Now loop over all MeshSegements, and add to nextOffset
+                foreach (const WS2Common::Model::MeshSegment *seg, mesh->getMeshSegments()) {
+                    int triangleCount = seg->getIndices().size() / 3;
+                    nextOffset += COLLISION_TRIANGLE_LENGTH * triangleCount;
+                }
+            } /* else {
+                //models QHash doesn't have the mesh in question - don't add it
+                //qWarning().noquote() << "Missing mesh for collision" << coli->getMeshName();
+                //Don't warn - This is done in addCollisionTriangles
+            } */
+        }
+
+        //Loop over all children, looking for MeshCollisionSceneNodes
+        foreach(const WS2Common::Scene::SceneNode *child, node->getChildren()) {
+            addCollisionTriangleOffsets(child, nextOffset);
+        }
+    }
+
     void SMB2LzExporter::writeFileHeader(QDataStream &dev) {
         writeNull(dev, 4); dev << 0x447A0000; //Magic number (Probably)
         dev << (quint32) collisionHeaderOffsetMap.size();
@@ -355,8 +525,8 @@ namespace WS2Lz {
         writeNull(dev, 2); //TODO: Animation loop type/seesaw
         writeNull(dev, 4); //TODO: Offset to animation header
         writeNull(dev, 12); //TODO: Conveyor speed vec3
-        writeNull(dev, 4); //TODO: Offset to collision triangle list
-        writeNull(dev, 4); //TODO: Offset to collision grid triangle list pointer
+        dev << gridTriangleListOffsetMap.key(node);
+        dev << gridTriangleListPointersOffsetMap.key(node);
         dev << node->getCollisionGrid()->getGridStart();
         dev << node->getCollisionGrid()->getGridStep();
         dev << node->getCollisionGrid()->getGridStepCount();
@@ -372,6 +542,31 @@ namespace WS2Lz {
         dev << levelModelCountMap.value(node);
         dev << levelModelPointerBOffsetMap.key(node);
         writeNull(dev, 1024); //TODO: Everything else
+    }
+
+    void SMB2LzExporter::writeCollisionTriangleIndexList(QDataStream &dev, const TriangleIntersectionGrid *intGrid) {
+        unsigned int bytesWritten = 0;
+
+        //This will write a list of collision triangle indices per grid tile
+        for (int x = 0; x < intGrid->getIndicesGrid().size(); x++) {
+            for (int y = 0; y < intGrid->getIndicesGrid()[x].size(); y++) {
+                //Don't bother writing anything if this grid tile has zero triangles
+                if (intGrid->getIndicesGrid()[x][y].size() == 0) continue;
+
+                foreach(quint16 index, intGrid->getIndicesGrid()[x][y]) {
+                    dev << index;
+                    bytesWritten += 2;
+                }
+                //Add 0xFFFF terminator
+                dev << (quint16) 0xFFFF;
+                bytesWritten += 2;
+                //Keep 4 byte padded if not
+                if (bytesWritten % 4 != 0) {
+                    writeNull(dev, 2);
+                    bytesWritten += 2;
+                }
+            }
+        }
     }
 
     void SMB2LzExporter::writeGoal(QDataStream &dev, const WS2Common::Scene::GoalSceneNode *node) {
@@ -397,6 +592,112 @@ namespace WS2Lz {
     void SMB2LzExporter::writeBanana(QDataStream &dev, const WS2Common::Scene::BananaSceneNode *node) {
         dev << node->getPosition();
         dev << (quint32) node->getType();
+    }
+
+    void SMB2LzExporter::writeCollisionTriangles(QDataStream &dev, const WS2Common::Scene::SceneNode *node) {
+        if (WS2Common::instanceOf<WS2Common::Scene::MeshCollisionSceneNode>(node)) {
+            const WS2Common::Scene::MeshCollisionSceneNode *coli= static_cast<const WS2Common::Scene::MeshCollisionSceneNode*>(node);
+            //This node is a MeshCollisionSceneNode - Loop over all the triangles and write them
+            //First, find the MeshSceneNode in the models QHash
+            if (models.contains(coli->getMeshName())) {
+                const WS2Common::Resource::ResourceMesh *mesh = models.value(coli->getMeshName());
+                //Now loop over all MeshSegements, and write thier collision triangles
+
+                foreach (const WS2Common::Model::MeshSegment *seg, mesh->getMeshSegments()) {
+                    //Now loop over all triangles
+                    for (int i = 0; i < seg->getIndices().size(); i += 3) {
+                        //verts.x/y/z corresponds to each triangle's vertex
+                        glm::tvec3<WS2Common::Model::Vertex> verts(
+                                seg->getVertices().at(seg->getIndices().at(i)),
+                                seg->getVertices().at(seg->getIndices().at(i + 1)),
+                                seg->getVertices().at(seg->getIndices().at(i + 2))
+                                );
+
+                        //////////////// BEGINNING OF MADNESS ////////////////
+                        //This code is mostly just copied from Yoshimaster96's smb(2)cnv
+                        //I hope I don't have to maintain this
+                        //This way lies madness
+                        //Send help
+                        //And no, I don't know what the heck these variable names are supposed to mean
+                        //Just know that this works, and don't touch it
+                        //Better yet, don't look at it - spare yourself the insanity
+                        //I think there's supposed to be some matrices in here (rxr/ryr/rzr maybe?) but just shown as multiple vec3s
+                        //I recall someone talking about rotational matrices being in here
+                        //Although I dare not touch this madness, maybe
+                        //If any brave soul dares to try to make sense of this and clean it up, thank you
+
+                        //glm::vec3 na = {verts.x.normal.x, verts.x.normal.y, verts.x.normal.z}; //This line isn't even used anyway
+                        glm::vec3 a = {verts.x.position.x, verts.x.position.y, verts.x.position.z};
+                        glm::vec3 b = {verts.y.position.x, verts.y.position.y, verts.y.position.z};
+                        glm::vec3 c = {verts.z.position.x, verts.z.position.y, verts.z.position.z};
+                        glm::vec3 ba = {b.x - a.x, b.y - a.y, b.z - a.z};
+                        glm::vec3 ca = {c.x - a.x, c.y - a.y, c.z - a.z};
+                        glm::vec3 normal = normalize(cross(normalize(ba),normalize(ca)));
+                        float l = sqrtf(normal.x * normal.x + normal.z * normal.z);
+                        float cy = normal.z / l;
+                        float sy = -normal.x / l;
+                        if(fabs(l) < 0.001f) {
+                            cy = 1.0f;
+                            sy = 0.0f;
+                        }
+                        float cx = l;
+                        float sx = normal.y;
+                        glm::vec3 rxr0(1.0f, 0.0f, 0.0f);
+                        glm::vec3 rxr1(0.0f, cx, sx);
+                        glm::vec3 rxr2(0.0f, -sx, cx);
+                        glm::vec3 ryr0(cy, 0.0f, -sy);
+                        glm::vec3 ryr1(0.0f, 1.0f, 0.0f);
+                        glm::vec3 ryr2(sy, 0.0f, cy);
+                        glm::vec3 dotry = dotm(ba, ryr0, ryr1, ryr2);
+                        glm::vec3 dotrxry = dotm(dotry, rxr0, rxr1, rxr2);
+                        l = sqrtf(dotrxry.x * dotrxry.x + dotrxry.y * dotrxry.y);
+                        float cz = dotrxry.x / l;
+                        float sz = -dotrxry.y / l;
+                        glm::vec3 rzr0(cz, sz, 0.0f);
+                        glm::vec3 rzr1(-sz, cz, 0.0f);
+                        glm::vec3 rzr2(0.0f, 0.0f, 1.0f);
+                        glm::vec3 dotrz = dotm(dotrxry, rzr0, rzr1, rzr2);
+                        dotry = dotm(ca, ryr0, ryr1, ryr2);
+                        dotrxry = dotm(dotry, rxr0, rxr1, rxr2);
+                        glm::vec3 dotrzrxry = dotm(dotrxry, rzr0, rzr1, rzr2);
+                        glm::vec3 n0v(dotrzrxry.x - dotrz.x, dotrzrxry.y - dotrz.y, dotrzrxry.z - dotrz.z);
+                        glm::vec3 n1v(-dotrzrxry.x, -dotrzrxry.y, -dotrzrxry.z);
+                        glm::vec3 n0 = normalize(hat(n0v));
+                        glm::vec3 n1 = normalize(hat(n1v));
+                        float rotX = 360.0f - reverseAngle(cx, sx);
+                        float rotY = 360.0f - reverseAngle(cy, sy);
+                        float rotZ = 360.0f - reverseAngle(cz, sz);
+
+                        dev << a.x; //X1 pos
+                        dev << a.y; //Y1 pos
+                        dev << a.z; //Z1 pos
+                        dev << normal.x; //X normal
+                        dev << normal.y; //Y normal
+                        dev << normal.z; //Z normal
+                        dev << convertRotation(glm::vec3(rotX, rotY, rotZ)); //XYZ rotation from the XZ plane
+                        writeNull(dev, 2);
+                        dev << dotrz.x; //DX2X1
+                        dev << dotrz.y; //DY2X1
+                        dev << dotrzrxry.x; //DX3X1
+                        dev << dotrzrxry.y; //DY3X1
+                        dev << n0.x; //X tangent
+                        dev << n0.y; //Y tangent
+                        dev << n1.x; //X bitangent
+                        dev << n1.y; //Y bitangent
+                        //////////////// END OF MADNESS ////////////////
+                    }
+                }
+            } /* else {
+                //models QHash doesn't have the mesh in question - don't add it
+                //Also don't warn because that happens when calculating offsets
+                //qWarning().noquote() << "Missing mesh for collision" << coli->getMeshName();
+            } */
+        }
+
+        //Loop over all children, looking for MeshCollisionSceneNodes
+        foreach(const WS2Common::Scene::SceneNode *child, node->getChildren()) {
+            writeCollisionTriangles(dev, child);
+        }
     }
 
     void SMB2LzExporter::writeLevelModelPointerAList(QDataStream &dev, const WS2Common::Scene::GroupSceneNode *node) {
@@ -455,7 +756,7 @@ namespace WS2Lz {
     }
 
     void SMB2LzExporter::writeNull(QDataStream &dev, const unsigned int count) {
-        for(unsigned int i = 0; i < count; i++) {
+        for (unsigned int i = 0; i < count; i++) {
             dev.writeRawData("\0", 1);
         }
     }
@@ -470,9 +771,9 @@ namespace WS2Lz {
         if (rot.z < 0) rot.z += 360.0f;
 
         return glm::tvec3<quint16>(
-                rot.x / 360.0f * 65535.0f,
-                rot.y / 360.0f * 65535.0f,
-                rot.z / 360.0f * 65535.0f
+                rot.x / 360.0f * 65536.0f,
+                rot.y / 360.0f * 65536.0f,
+                rot.z / 360.0f * 65536.0f
                 );
     }
 
@@ -491,6 +792,57 @@ namespace WS2Lz {
     quint32 SMB2LzExporter::roundUpNearest4(quint32 n) {
         if (n % 4 == 0) return n;
         return (n + 3) / 4 * 4;
+    }
+
+    //The rest of this file is madness required for the collision triangle writing guff
+    float SMB2LzExporter::toDegrees(float theta) {
+        //WHAT THE HECK IS THIS NUMBER EVEN SUPPOSED TO BE!? -CraftedCart
+        return 57.2957795130824 * theta;
+    }
+
+    glm::vec3 SMB2LzExporter::dotm(glm::vec3 a, glm::vec3 r0, glm::vec3 r1, glm::vec3 r2) {
+        float d0 = (a.x * r0.x) + (a.y * r1.x) + (a.z * r2.x);
+        float d1 = (a.x * r0.y) + (a.y * r1.y) + (a.z * r2.y);
+        float d2 = (a.x * r0.z) + (a.y * r1.z) + (a.z * r2.z);
+        return glm::vec3(d0, d1, d2);
+    }
+
+    float SMB2LzExporter::dot(glm::vec3 a, glm::vec3 b) {
+        return (a.x * b.x) + (a.y * b.y) + (a.z * b.z);
+    }
+
+    glm::vec3 SMB2LzExporter::cross(glm::vec3 a, glm::vec3 b) {
+        float d0 = (a.y * b.z) - (a.z * b.y);
+        float d1 = (a.z * b.x) - (a.x * b.z);
+        float d2 = (a.x * b.y) - (a.y * b.x);
+        return glm::vec3(d0,d1,d2);
+    }
+
+    glm::vec3 SMB2LzExporter::normalize(glm::vec3 v) {
+        glm::vec3 retVal = v;
+        float len = sqrtf((v.x * v.x) + (v.y * v.y) + (v.z * v.z));
+        retVal.x /= len;
+        retVal.y /= len;
+        retVal.z /= len;
+        return retVal;
+    }
+
+    glm::vec3 SMB2LzExporter::hat(glm::vec3 v) {
+        return glm::vec3(-v.y, v.x, 0.0f);
+    }
+
+    float SMB2LzExporter::reverseAngle(float c, float s) {
+        float a = toDegrees(asin(s));
+        if (c < 0.0f) a = 180.0f - a;
+        if (fabs(c) < fabs(s)) {
+            a = toDegrees(acos(c));
+            if(s < 0.0f) a = -a;
+        }
+        if (a < 0.0f) {
+            if(a > -0.001f) a = 0.0f;
+            else a += 360.0;
+        }
+        return a;
     }
 }
 

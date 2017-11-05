@@ -65,6 +65,7 @@ set(SOURCE_FILES
 set(HEADER_FILES
     ./include/ws2common/WS2Common.hpp
     ./include/ws2common/WS2Common.ipp
+    ./include/ws2common/AABB.hpp
     ./include/ws2common/MessageHandler.hpp
     ./include/ws2common/MathUtils.hpp
     ./include/ws2common/EnumGameVersion.hpp

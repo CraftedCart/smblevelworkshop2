@@ -1,6 +1,7 @@
 #include "ws2common/MessageHandler.hpp"
 #include "ws2common/EnumGameVersion.hpp"
 #include "ws2common/config/XMLConfigParser.hpp"
+#include "ws2common/model/ModelLoader.hpp"
 #include "ws2lz/SMB2LzExporter.hpp"
 #include <QCoreApplication>
 #include <QCommandLineParser>
@@ -9,6 +10,7 @@
 #include <QDir>
 #include <QBuffer>
 #include <QDataStream>
+#include <QHash>
 #include <QDebug>
 
 int main(int argc, char *argv[]) {
@@ -89,16 +91,32 @@ int main(int argc, char *argv[]) {
     WS2Common::Stage *stage = confParser.parseStage(config, configFileDir);
     qInfo() << stage->getRootNode();
 
+    qInfo() << "Loading models...";
+    //resources is only really used to conserve some memory, by preventing the creation of duplicate textures
+    QVector<WS2Common::Resource::AbstractResource*> resources;
+    QHash<QString, WS2Common::Resource::ResourceMesh*> models; //name, mesh - Using a hashmap as it will have a quicker lookup
+
+    //Load each model
+    foreach(QUrl url, stage->getModels()) {
+        QFile file(url.toLocalFile()); //Assumes the URL is local //TODO: Allow network locations maybe
+        QVector<WS2Common::Resource::ResourceMesh*> meshVec = WS2Common::Model::ModelLoader::loadModel(file, &resources);
+        foreach(WS2Common::Resource::ResourceMesh* mesh, meshVec) {
+            models[mesh->getId()] = mesh; //TODO: Use some getMeshName function or something if I ever add that
+        }
+    }
+
+    qInfo() << "Exporting file...";
     QBuffer buf;
     buf.open(QIODevice::ReadWrite);
     QDataStream dStream(&buf);
 
-    qInfo() << "Exporting file...";
     if (gameVersion == WS2Common::EnumGameVersion::SUPER_MONKEY_BALL_1) {
         qCritical() << "SMB 1 export not yet implemented";
+        return EXIT_FAILURE;
     } else if (gameVersion == WS2Common::EnumGameVersion::SUPER_MONKEY_BALL_2) {
         WS2Lz::SMB2LzExporter exporter;
 
+        exporter.setModels(models);
         exporter.generate(dStream, *stage);
     }
 
@@ -115,7 +133,10 @@ int main(int argc, char *argv[]) {
 
     buf.close();
 
+    //Cleanup
     delete stage;
+    qDeleteAll(resources);
+    //No need to qDeleteAll(models) - The resources vector contains the models that are all deleted
 
     return EXIT_SUCCESS;
 }
