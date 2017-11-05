@@ -45,12 +45,8 @@ namespace WS2Lz {
         QMapIterator<quint32, const WS2Common::Scene::GroupSceneNode*> collisionTrianglePointerIter(collisionHeaderOffsetMap);
         while (collisionTrianglePointerIter.hasNext()) {
             collisionTrianglePointerIter.next();
-            //Writes the collision triangle list pointer
-            const WS2Common::Scene::GroupSceneNode *node = collisionTrianglePointerIter.value();
-            unsigned int totalTiles = node->getCollisionGrid()->getGridStepCount().x * node->getCollisionGrid()->getGridStepCount().y;
-            for (unsigned int i = 0; i < totalTiles; i++) {
-                dev << gridTriangleIndexListOffsetMap[collisionTrianglePointerIter.value()][i];
-            }
+            //Writes the collision triangle list pointers
+            writeCollisionTriangleIndexListPointers(dev, collisionTrianglePointerIter.value());
         }
 
         //Collision triangle index list
@@ -566,6 +562,13 @@ namespace WS2Lz {
                     bytesWritten += 2;
                 }
             }
+        }
+    }
+
+    void SMB2LzExporter::writeCollisionTriangleIndexListPointers(QDataStream &dev, const WS2Common::Scene::GroupSceneNode *node) {
+        unsigned int totalTiles = node->getCollisionGrid()->getGridStepCount().x * node->getCollisionGrid()->getGridStepCount().y;
+        for (unsigned int i = 0; i < totalTiles; i++) {
+            dev << gridTriangleIndexListOffsetMap[node][i];
         }
     }
 

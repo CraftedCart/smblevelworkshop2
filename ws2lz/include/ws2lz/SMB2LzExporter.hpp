@@ -164,6 +164,7 @@ namespace WS2Lz {
             void writeFallout(QDataStream &dev, const WS2Common::Stage &stage);
             void writeCollisionHeader(QDataStream &dev, const WS2Common::Scene::GroupSceneNode *node);
             void writeCollisionTriangleIndexList(QDataStream &dev, const TriangleIntersectionGrid *intGrid);
+            void writeCollisionTriangleIndexListPointers(QDataStream &dev, const WS2Common::Scene::GroupSceneNode *node);
             void writeGoal(QDataStream &dev, const WS2Common::Scene::GoalSceneNode *node);
             void writeBumper(QDataStream &dev, const WS2Common::Scene::BumperSceneNode *node);
             void writeJamabar(QDataStream &dev, const WS2Common::Scene::JamabarSceneNode *node);
