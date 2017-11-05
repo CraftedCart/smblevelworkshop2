@@ -251,11 +251,12 @@ namespace WS2Lz {
                         nextOffset += COLLISION_TRIANGLE_INDEX_LENGTH * (indicesGrid[x][y].size());
                         //Add an extra index length for the 0xFFFF list terminator
                         nextOffset += COLLISION_TRIANGLE_INDEX_LENGTH;
-                        //And keep it 4 byte aligned
-                        nextOffset = roundUpNearest4(nextOffset);
                     }
                 }
             }
+
+            //Keep it 4 byte aligned
+            nextOffset = roundUpNearest4(nextOffset);
         }
 
         //Iterate over all GroupSceneNodes/collision headers, and count goals to add to nextOffset
@@ -556,12 +557,13 @@ namespace WS2Lz {
                 //Add 0xFFFF terminator
                 dev << (quint16) 0xFFFF;
                 bytesWritten += 2;
-                //Keep 4 byte padded if not
-                if (bytesWritten % 4 != 0) {
-                    writeNull(dev, 2);
-                    bytesWritten += 2;
-                }
             }
+        }
+
+        //Keep 4 byte padded if not
+        if (bytesWritten % 4 != 0) {
+            writeNull(dev, 2);
+            bytesWritten += 2;
         }
     }
 
