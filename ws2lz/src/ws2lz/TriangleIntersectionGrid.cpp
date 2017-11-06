@@ -41,12 +41,14 @@ namespace WS2Lz {
                         );
 
                 //The grid tile spans from topLeft to bottomRight
+                //Add some padding around the grid, in case any triangles lie on the grid tile edge
+                const float PADDING = 0.7f;
                 glm::vec2 topLeft = grid.getGridStart();
-                topLeft.x += grid.getGridStep().x * xi;
-                topLeft.y += grid.getGridStep().y * yi;
+                topLeft.x += grid.getGridStep().x * xi - PADDING;
+                topLeft.y += grid.getGridStep().y * yi - PADDING;
                 glm::vec2 bottomRight = topLeft;
-                bottomRight.x += grid.getGridStep().x;
-                bottomRight.y += grid.getGridStep().y;
+                bottomRight.x += grid.getGridStep().x + PADDING;
+                bottomRight.y += grid.getGridStep().y + PADDING;
                 WS2Common::AABB2 tileAABB(topLeft, bottomRight);
 
                 //Now iterate over every triangle, give the triangle an AABB, and check if they intersect
