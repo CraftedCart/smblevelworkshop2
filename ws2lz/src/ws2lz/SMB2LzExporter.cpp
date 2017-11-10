@@ -630,6 +630,12 @@ namespace WS2Lz {
                         //I recall someone talking about rotational matrices being in here
                         //Although I dare not touch this madness, maybe
                         //If any brave soul dares to try to make sense of this and clean it up, thank you
+                        //
+                        //Update:
+                        //Where the madness began: http://kuribo64.net/board/thread.php?pid=55329
+                        //Blank: cx, sx, cy, sy, cz and sz are floats and are the cosine and sine of the rotation angles.
+                        //Yoshimaster96: Those aren't given however. I'm trying to find the rotation angles.
+                        //Blank: You calculate the angles using cx, sx, etc. In my code snippet this is done with the reverse_angle function.
 
                         //glm::vec3 na = {verts.x.normal.x, verts.x.normal.y, verts.x.normal.z}; //This line isn't even used anyway
                         glm::vec3 a = {verts.x.position.x, verts.x.position.y, verts.x.position.z};
