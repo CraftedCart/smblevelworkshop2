@@ -2,11 +2,30 @@
 #include "ws2lz/WS2Lz.hpp"
 #include "ws2common/WS2Common.hpp"
 #include "ws2common/scene/StartSceneNode.hpp"
-#include "ws2common/scene/GoalSceneNode.hpp"
 #include "ws2common/scene/MeshCollisionSceneNode.hpp"
 #include <QElapsedTimer>
 #include <QDebug>
 #include <math.h>
+
+//Macros
+/**
+ * @brief Iterates over all collision headers - The value of group will be the GroupSceneNode at the current iteration
+ */
+#define forEachGroup(group) foreach(const WS2Common::Scene::GroupSceneNode* group, collisionHeaderOffsetMap)
+
+/**
+ * @brief Iterates over all of a SceneNode's children, and runs the following code if the child can be dynamically
+ *        casted to type
+ */
+#define forEachChildType(parent, type, child)\
+    foreach(WS2Common::Scene::SceneNode *childNode, parent->getChildren())\
+        if (type child = dynamic_cast<type>(childNode))
+
+/**
+ * @brief Combines forEachGroup and forEachChildType - Iterates over all collision headers' children, and runs the
+ *        following code if the child can be dyanmically casted to type
+ */
+#define forEachGroupChildType(type, child) forEachGroup(group) forEachChildType(group, type, child)
 
 namespace WS2Lz {
     SMB2LzExporter::~SMB2LzExporter() {
@@ -18,115 +37,29 @@ namespace WS2Lz {
     }
 
     void SMB2LzExporter::generate(QDataStream &dev, const WS2Common::Stage &stage) {
+        //TODO: Add a configureDataStream function or something - to make it easy to override for a Dx exporter
         dev.setByteOrder(QDataStream::BigEndian);
         dev.setFloatingPointPrecision(QDataStream::SinglePrecision);
 
         optimizeCollision(stage);
         calculateOffsets(stage);
+
+        //Write the data
         writeFileHeader(dev);
         writeStart(dev, stage);
         writeFallout(dev, stage);
-
-        //Collision headers
-        QMapIterator<quint32, const WS2Common::Scene::GroupSceneNode*> collisionHeaderIter(collisionHeaderOffsetMap);
-        while (collisionHeaderIter.hasNext()) {
-            collisionHeaderIter.next();
-            writeCollisionHeader(dev, collisionHeaderIter.value());
-        }
-
-        //Collision triangles
-        QMapIterator<quint32, const WS2Common::Scene::GroupSceneNode*> collisionTriangleIter(collisionHeaderOffsetMap);
-        while (collisionTriangleIter.hasNext()) {
-            collisionTriangleIter.next();
-            writeCollisionTriangles(dev, collisionTriangleIter.value());
-        }
-
-        //Collision triangle pointers
-        QMapIterator<quint32, const WS2Common::Scene::GroupSceneNode*> collisionTrianglePointerIter(collisionHeaderOffsetMap);
-        while (collisionTrianglePointerIter.hasNext()) {
-            collisionTrianglePointerIter.next();
-            //Writes the collision triangle list pointers
-            writeCollisionTriangleIndexListPointers(dev, collisionTrianglePointerIter.value());
-        }
-
-        //Collision triangle index list
-        QMapIterator<quint32, const WS2Common::Scene::GroupSceneNode*> collisionTriangleIndexIter(collisionHeaderOffsetMap);
-        while (collisionTriangleIndexIter.hasNext()) {
-            collisionTriangleIndexIter.next();
-            writeCollisionTriangleIndexList(dev, triangleIntGridMap.value(collisionTriangleIndexIter.value()));
-        }
-
-        //Goals
-        QMapIterator<quint32, const WS2Common::Scene::GroupSceneNode*> goalIter(collisionHeaderOffsetMap);
-        while (goalIter.hasNext()) {
-            goalIter.next();
-            foreach(WS2Common::Scene::SceneNode *node, goalIter.value()->getChildren()) {
-                if (WS2Common::instanceOf<WS2Common::Scene::GoalSceneNode>(node)) {
-                    writeGoal(dev, static_cast<WS2Common::Scene::GoalSceneNode*>(node));
-                }
-            }
-        }
-
-        //Bumpers
-        QMapIterator<quint32, const WS2Common::Scene::GroupSceneNode*> bumperIter(collisionHeaderOffsetMap);
-        while (bumperIter.hasNext()) {
-            bumperIter.next();
-            foreach(WS2Common::Scene::SceneNode *node, bumperIter.value()->getChildren()) {
-                if (WS2Common::instanceOf<WS2Common::Scene::BumperSceneNode>(node)) {
-                    writeBumper(dev, static_cast<WS2Common::Scene::BumperSceneNode*>(node));
-                }
-            }
-        }
-
-        //Jamabars
-        QMapIterator<quint32, const WS2Common::Scene::GroupSceneNode*> jamabarIter(collisionHeaderOffsetMap);
-        while (jamabarIter.hasNext()) {
-            jamabarIter.next();
-            foreach(WS2Common::Scene::SceneNode *node, jamabarIter.value()->getChildren()) {
-                if (WS2Common::instanceOf<WS2Common::Scene::JamabarSceneNode>(node)) {
-                    writeJamabar(dev, static_cast<WS2Common::Scene::JamabarSceneNode*>(node));
-                }
-            }
-        }
-
-        //Bananas
-        QMapIterator<quint32, const WS2Common::Scene::GroupSceneNode*> bananaIter(collisionHeaderOffsetMap);
-        while (bananaIter.hasNext()) {
-            bananaIter.next();
-            foreach(WS2Common::Scene::SceneNode *node, bananaIter.value()->getChildren()) {
-                if (WS2Common::instanceOf<WS2Common::Scene::BananaSceneNode>(node)) {
-                    writeBanana(dev, static_cast<WS2Common::Scene::BananaSceneNode*>(node));
-                }
-            }
-        }
-
-        //Level model pointer type A
-        QMapIterator<quint32, const WS2Common::Scene::GroupSceneNode*> levelModelPointerAIter(collisionHeaderOffsetMap);
-        while (levelModelPointerAIter.hasNext()) {
-            levelModelPointerAIter.next();
-            writeLevelModelPointerAList(dev, levelModelPointerAIter.value());
-        }
-
-        //Level model pointer type B
-        QMapIterator<quint32, const WS2Common::Scene::GroupSceneNode*> levelModelPointerBIter(collisionHeaderOffsetMap);
-        while (levelModelPointerBIter.hasNext()) {
-            levelModelPointerBIter.next();
-            writeLevelModelPointerBList(dev, levelModelPointerBIter.value());
-        }
-
-        //Level models
-        QMapIterator<quint32, const WS2Common::Scene::GroupSceneNode*> levelModelIter(collisionHeaderOffsetMap);
-        while (levelModelIter.hasNext()) {
-            levelModelIter.next();
-            writeLevelModelList(dev, levelModelIter.value());
-        }
-
-        //Level model names
-        QMapIterator<quint32, const WS2Common::Scene::GroupSceneNode*> levelModelNameIter(collisionHeaderOffsetMap);
-        while (levelModelNameIter.hasNext()) {
-            levelModelNameIter.next();
-            writeLevelModelNameList(dev, levelModelNameIter.value());
-        }
+        forEachGroup(group) writeCollisionHeader(dev, group); //Collision Headers
+        forEachGroup(group) writeCollisionTriangles(dev, group); //Collision triangles
+        forEachGroup(group) writeCollisionTriangleIndexListPointers(dev, group); //Collision triangle pointer
+        forEachGroup(group) writeCollisionTriangleIndexList(dev, triangleIntGridMap.value(group)); //Collision triangle index list
+        forEachGroupChildType(const WS2Common::Scene::GoalSceneNode*, node) writeGoal(dev, node); //Goals
+        forEachGroupChildType(const WS2Common::Scene::BumperSceneNode*, node) writeBumper(dev, node); //Bumpers
+        forEachGroupChildType(const WS2Common::Scene::JamabarSceneNode*, node) writeJamabar(dev, node); //Jamabars
+        forEachGroupChildType(const WS2Common::Scene::BananaSceneNode*, node) writeBanana(dev, node); //Bananas
+        forEachGroup(group) writeLevelModelPointerAList(dev, group); //Level model pointers type A
+        forEachGroup(group) writeLevelModelPointerBList(dev, group); //Level model pointers type B
+        forEachGroup(group) writeLevelModelList(dev, group); //Level models
+        forEachGroup(group) writeLevelModelNameList(dev, group); //Level model names
     }
 
     void SMB2LzExporter::addCollisionTriangles(
@@ -140,7 +73,7 @@ namespace WS2Lz {
             if (models.contains(coli->getMeshName())) {
                 const WS2Common::Resource::ResourceMesh *mesh = models.value(coli->getMeshName());
                 //Now loop over all MeshSegements, and add to nextOffset
-                foreach (const WS2Common::Model::MeshSegment *seg, mesh->getMeshSegments()) {
+                foreach(const WS2Common::Model::MeshSegment *seg, mesh->getMeshSegments()) {
                     //Also need to add the previous size of allVertices to the indices to be added
                     int prevSize = allVertices.size();
                     allVertices.append(seg->getVertices());
@@ -212,41 +145,35 @@ namespace WS2Lz {
 
         //Iterate over all GroupSceneNodes/collision headers, and call addCollisionTriangleOffsets with them
         //This is for Collision Triangle data
-        QMapIterator<quint32, const WS2Common::Scene::GroupSceneNode*> collisionTriangleIter(collisionHeaderOffsetMap);
-        while (collisionTriangleIter.hasNext()) {
-            collisionTriangleIter.next();
-            gridTriangleListOffsetMap[nextOffset] = collisionTriangleIter.value();
-            addCollisionTriangleOffsets(collisionTriangleIter.value(), nextOffset);
+        forEachGroup(group) {
+            gridTriangleListOffsetMap[nextOffset] = group;
+            addCollisionTriangleOffsets(group, nextOffset);
         }
 
         //Iterate over all GroupSceneNodes/collision headers, and fill the gridTriangleListPointersOffsetMap
         //This is for Collision Triangle Pointers
-        QMapIterator<quint32, const WS2Common::Scene::GroupSceneNode*> collisionTrianglePointerIter(collisionHeaderOffsetMap);
-        while (collisionTrianglePointerIter.hasNext()) {
-            collisionTrianglePointerIter.next();
-            gridTriangleListPointersOffsetMap[nextOffset] = collisionTrianglePointerIter.value();
-            const WS2Common::CollisionGrid *grid = collisionTriangleIter.value()->getCollisionGrid();
+        forEachGroup(group) {
+            gridTriangleListPointersOffsetMap[nextOffset] = group;
+            const WS2Common::CollisionGrid *grid = group->getCollisionGrid();
             nextOffset += COLLISION_TRIANGLE_LIST_POINTER_LENGTH * grid->getGridStepCount().x * grid->getGridStepCount().y;
         }
 
         //Iterate over all GroupSceneNodes/collision headers, and fill the gridTriangleListOffsetMap
         //This is for the Collision Triangle Index List
-        QMapIterator<quint32, const WS2Common::Scene::GroupSceneNode*> collisionTriangleIndexIter(collisionHeaderOffsetMap);
-        while (collisionTriangleIndexIter.hasNext()) {
-            collisionTriangleIndexIter.next();
-            gridTriangleListOffsetMap[nextOffset] = collisionTriangleIndexIter.value();
+        forEachGroup(group) {
+            gridTriangleListOffsetMap[nextOffset] = group;
 
             //2D vector (X, Y) containing vectors of triangle indices
-            QVector<QVector<QVector<quint16>>> indicesGrid = triangleIntGridMap.value(collisionTriangleIndexIter.value())->getIndicesGrid();
+            QVector<QVector<QVector<quint16>>> indicesGrid = triangleIntGridMap.value(group)->getIndicesGrid();
 
             //Loop over all vectors
             for (int x = 0; x < indicesGrid.size(); x++) {
                 for (int y = 0; y < indicesGrid[x].size(); y++) {
                     if (indicesGrid[x][y].size() == 0) {
                         //If this grid tile has zero triangles to collide with, just add a null offset to save file size
-                        gridTriangleIndexListOffsetMap[collisionTriangleIndexIter.value()].append(0x00000000);
+                        gridTriangleIndexListOffsetMap[group].append(0x00000000);
                     } else {
-                        gridTriangleIndexListOffsetMap[collisionTriangleIndexIter.value()].append(nextOffset);
+                        gridTriangleIndexListOffsetMap[group].append(nextOffset);
 
                         nextOffset += COLLISION_TRIANGLE_INDEX_LENGTH * (indicesGrid[x][y].size());
                         //Add an extra index length for the 0xFFFF list terminator
@@ -262,142 +189,108 @@ namespace WS2Lz {
         //Iterate over all GroupSceneNodes/collision headers, and count goals to add to nextOffset
         //Additionally, this should avoid the no extra points glitch, as the 1st collision header should point to a
         //goal list regardless of whether it has any goals or not
-        QMapIterator<quint32, const WS2Common::Scene::GroupSceneNode*> goalIter(collisionHeaderOffsetMap);
-        while (goalIter.hasNext()) {
-            goalIter.next();
-            goalOffsetMap[nextOffset] = goalIter.value();
+        forEachGroup(group) {
+            goalOffsetMap[nextOffset] = group;
             quint32 goalCount = 0; //Number of goals in this collision header
 
-            foreach(WS2Common::Scene::SceneNode *node, goalIter.value()->getChildren()) {
-                if (WS2Common::instanceOf<WS2Common::Scene::GoalSceneNode>(node)) {
-                    nextOffset += GOAL_LENGTH;
-                    goalCount++;
-                }
+            forEachChildType(group, WS2Common::Scene::GoalSceneNode*, node) {
+                nextOffset += GOAL_LENGTH;
+                goalCount++;
             }
 
             //Store goal count in the map
-            goalCountMap[goalIter.value()] = goalCount;
+            goalCountMap[group] = goalCount;
         }
 
         //Iterate over all GroupSceneNodes/collision headers, and count bumpers to add to nextOffset
         //Basically the exact same as before with goals
-        QMapIterator<quint32, const WS2Common::Scene::GroupSceneNode*> bumperIter(collisionHeaderOffsetMap);
-        while (bumperIter.hasNext()) {
-            bumperIter.next();
-            bumperOffsetMap[nextOffset] = bumperIter.value();
+        forEachGroup(group) {
+            bumperOffsetMap[nextOffset] = group;
             quint32 bumperCount = 0; //Number of bumpers in this collision header
 
-            foreach(WS2Common::Scene::SceneNode *node, bumperIter.value()->getChildren()) {
-                if (WS2Common::instanceOf<WS2Common::Scene::BumperSceneNode>(node)) {
-                    nextOffset += BUMPER_LENGTH;
-                    bumperCount++;
-                }
+            forEachChildType(group, WS2Common::Scene::BumperSceneNode*, node) {
+                nextOffset += BUMPER_LENGTH;
+                bumperCount++;
             }
 
             //Store bumper count in the map
-            bumperCountMap[bumperIter.value()] = bumperCount;
+            bumperCountMap[group] = bumperCount;
         }
 
         //Iterate over all GroupSceneNodes/collision headers, and count jamabars to add to nextOffset
         //Basically the exact same as before with goals
-        QMapIterator<quint32, const WS2Common::Scene::GroupSceneNode*> jamabarIter(collisionHeaderOffsetMap);
-        while (jamabarIter.hasNext()) {
-            jamabarIter.next();
-            jamabarOffsetMap[nextOffset] = jamabarIter.value();
+        forEachGroup(group) {
+            jamabarOffsetMap[nextOffset] = group;
             quint32 jamabarCount = 0; //Number of jamabars in this collision header
 
-            foreach(WS2Common::Scene::SceneNode *node, jamabarIter.value()->getChildren()) {
-                if (WS2Common::instanceOf<WS2Common::Scene::JamabarSceneNode>(node)) {
-                    nextOffset += JAMABAR_LENGTH;
-                    jamabarCount++;
-                }
+            forEachChildType(group, WS2Common::Scene::JamabarSceneNode*, node) {
+                nextOffset += JAMABAR_LENGTH;
+                jamabarCount++;
             }
 
             //Store jamabar count in the map
-            jamabarCountMap[jamabarIter.value()] = jamabarCount;
+            jamabarCountMap[group] = jamabarCount;
         }
 
         //Iterate over all GroupSceneNodes/collision headers, and count bananas to add to nextOffset
         //Basically the exact same as before with goals
-        QMapIterator<quint32, const WS2Common::Scene::GroupSceneNode*> bananaIter(collisionHeaderOffsetMap);
-        while (bananaIter.hasNext()) {
-            bananaIter.next();
-            bananaOffsetMap[nextOffset] = bananaIter.value();
+        forEachGroup(group) {
+            bananaOffsetMap[nextOffset] = group;
             quint32 bananaCount = 0; //Number of bananas in this collision header
 
-            foreach(WS2Common::Scene::SceneNode *node, bananaIter.value()->getChildren()) {
-                if (WS2Common::instanceOf<WS2Common::Scene::BananaSceneNode>(node)) {
-                    nextOffset += BANANA_LENGTH;
-                    bananaCount++;
-                }
+            forEachChildType(group, WS2Common::Scene::BananaSceneNode*, node) {
+                nextOffset += BANANA_LENGTH;
+                bananaCount++;
             }
 
             //Store banana count in the map
-            bananaCountMap[bananaIter.value()] = bananaCount;
+            bananaCountMap[group] = bananaCount;
         }
 
         //Iterate over all GroupSceneNodes/collision headers, and count level models to add to nextOffset
         //For level model pointer type A
         //Basically the exact same as before with goals
-        QMapIterator<quint32, const WS2Common::Scene::GroupSceneNode*> levelModelPointerAIter(collisionHeaderOffsetMap);
-        while (levelModelPointerAIter.hasNext()) {
-            levelModelPointerAIter.next();
-            levelModelPointerAOffsetMap[nextOffset] = levelModelPointerAIter.value();
+        forEachGroup(group) {
+            levelModelPointerAOffsetMap[nextOffset] = group;
 
-            foreach(WS2Common::Scene::SceneNode *node, levelModelPointerAIter.value()->getChildren()) {
-                if (WS2Common::instanceOf<WS2Common::Scene::MeshSceneNode>(node)) {
-                    nextOffset += LEVEL_MODEL_POINTER_TYPE_A_LENGTH;
-                }
+            forEachChildType(group, WS2Common::Scene::MeshSceneNode*, node) {
+                nextOffset += LEVEL_MODEL_POINTER_TYPE_A_LENGTH;
             }
         }
 
         //Iterate over all GroupSceneNodes/collision headers, and count level models to add to nextOffset
         //For level model pointer type B
         //Basically the exact same as before with goals
-        QMapIterator<quint32, const WS2Common::Scene::GroupSceneNode*> levelModelPointerBIter(collisionHeaderOffsetMap);
-        while (levelModelPointerBIter.hasNext()) {
-            levelModelPointerBIter.next();
-            levelModelPointerBOffsetMap[nextOffset] = levelModelPointerBIter.value();
+        forEachGroup(group) {
+            levelModelPointerBOffsetMap[nextOffset] = group;
 
-            foreach(WS2Common::Scene::SceneNode *node, levelModelPointerBIter.value()->getChildren()) {
-                if (WS2Common::instanceOf<WS2Common::Scene::MeshSceneNode>(node)) {
-                    nextOffset += LEVEL_MODEL_POINTER_TYPE_B_LENGTH;
-                }
+            forEachChildType(group, WS2Common::Scene::MeshSceneNode*, node) {
+                nextOffset += LEVEL_MODEL_POINTER_TYPE_B_LENGTH;
             }
         }
 
         //Iterate over all GroupSceneNodes/collision headers, and count level models to add to nextOffset
         //Basically the exact same as before with goals
-        QMapIterator<quint32, const WS2Common::Scene::GroupSceneNode*> levelModelIter(collisionHeaderOffsetMap);
-        while (levelModelIter.hasNext()) {
-            levelModelIter.next();
-            levelModelOffsetMap[nextOffset] = levelModelIter.value();
+        forEachGroup(group) {
+            levelModelOffsetMap[nextOffset] = group;
             quint32 levelModelCount = 0; //Number of levelModels in this collision header
 
-            foreach(WS2Common::Scene::SceneNode *node, levelModelIter.value()->getChildren()) {
-                if (WS2Common::instanceOf<WS2Common::Scene::MeshSceneNode>(node)) {
-                    nextOffset += LEVEL_MODEL_LENGTH;
-                    levelModelCount++;
-                }
+            forEachChildType(group, WS2Common::Scene::MeshSceneNode*, node) {
+                nextOffset += LEVEL_MODEL_LENGTH;
+                levelModelCount++;
             }
 
             //Store levelModel count in the map
-            levelModelCountMap[levelModelIter.value()] = levelModelCount;
+            levelModelCountMap[group] = levelModelCount;
         }
 
         //Iterate over all level models, and add the model name + null terminator padded to 4 bytes to nextOffset
-        QMapIterator<quint32, const WS2Common::Scene::GroupSceneNode*> levelModelNameIter(collisionHeaderOffsetMap);
-        while (levelModelNameIter.hasNext()) {
-            levelModelNameIter.next();
-            foreach(WS2Common::Scene::SceneNode *node, levelModelNameIter.value()->getChildren()) {
-                if (WS2Common::instanceOf<WS2Common::Scene::MeshSceneNode>(node)) {
-                    //Found a level model
-                    WS2Common::Scene::MeshSceneNode *mesh = static_cast<WS2Common::Scene::MeshSceneNode*>(node);
-                    levelModelNameOffsetMap[nextOffset] = mesh->getMeshName();
+        forEachGroup(group) {
+            forEachChildType(group, WS2Common::Scene::MeshSceneNode*, node) {
+                levelModelNameOffsetMap[nextOffset] = node->getMeshName();
 
-                    //+ 1 because size() does not include a null terminator
-                    nextOffset += roundUpNearest4(mesh->getMeshName().size() + 1);
-                }
+                //+ 1 because size() does not include a null terminator
+                nextOffset += roundUpNearest4(node->getMeshName().size() + 1);
             }
         }
 
@@ -498,12 +391,9 @@ namespace WS2Lz {
         WS2Common::Scene::StartSceneNode *start;
 
         //Find the start
-        foreach(WS2Common::Scene::SceneNode *node, stage.getRootNode()->getChildren()) {
-            if (WS2Common::instanceOf<WS2Common::Scene::StartSceneNode>(node)) {
-                //Found it!
-                start = static_cast<WS2Common::Scene::StartSceneNode*>(node);
-                break;
-            }
+        forEachChildType(stage.getRootNode(), WS2Common::Scene::StartSceneNode*, node) {
+            start = static_cast<WS2Common::Scene::StartSceneNode*>(node);
+            break;
         }
 
         //Write the bytes
@@ -714,55 +604,45 @@ namespace WS2Lz {
     void SMB2LzExporter::writeLevelModelPointerAList(QDataStream &dev, const WS2Common::Scene::GroupSceneNode *node) {
         quint32 nextOffset = levelModelOffsetMap.key(node);
 
-        foreach(WS2Common::Scene::SceneNode *node, node->getChildren()) {
-            if (WS2Common::instanceOf<WS2Common::Scene::MeshSceneNode>(node)) {
-                writeNull(dev, 4);
-                dev << (quint32) 0x00000001;
-                dev << nextOffset;
+        forEachChildType(node, WS2Common::Scene::MeshSceneNode*, child) {
+            writeNull(dev, 4);
+            dev << (quint32) 0x00000001;
+            dev << nextOffset;
 
-                //Level models for the same collision header are just sequential stores, so it's fine to just add
-                //on the length of a single level model
-                nextOffset += LEVEL_MODEL_LENGTH;
-            }
+            //Level models for the same collision header are just sequential stores, so it's fine to just add
+            //on the length of a single level model
+            nextOffset += LEVEL_MODEL_LENGTH;
         }
     }
 
     void SMB2LzExporter::writeLevelModelPointerBList(QDataStream &dev, const WS2Common::Scene::GroupSceneNode *node) {
         quint32 nextOffset = levelModelPointerAOffsetMap.key(node);
 
-        foreach(WS2Common::Scene::SceneNode *node, node->getChildren()) {
-            if (WS2Common::instanceOf<WS2Common::Scene::MeshSceneNode>(node)) {
-                dev << nextOffset;
+        forEachChildType(node, WS2Common::Scene::MeshSceneNode*, child) {
+            dev << nextOffset;
 
-                //Level model pointer type As for the same collision header are just sequential stores, so it's fine to
-                //just add on the length of a single level model
-                nextOffset += LEVEL_MODEL_POINTER_TYPE_A_LENGTH;
-            }
+            //Level model pointer type As for the same collision header are just sequential stores, so it's fine to
+            //just add on the length of a single level model
+            nextOffset += LEVEL_MODEL_POINTER_TYPE_A_LENGTH;
         }
     }
 
     void SMB2LzExporter::writeLevelModelList(QDataStream &dev, const WS2Common::Scene::GroupSceneNode *node) {
-        foreach(WS2Common::Scene::SceneNode *node, node->getChildren()) {
-            if (WS2Common::instanceOf<WS2Common::Scene::MeshSceneNode>(node)) {
-                writeNull(dev, 4);
-                dev << levelModelNameOffsetMap.key(static_cast<WS2Common::Scene::MeshSceneNode*>(node)->getMeshName());
-                writeNull(dev, 8);
-            }
+        forEachChildType(node, WS2Common::Scene::MeshSceneNode*, child) {
+            writeNull(dev, 4);
+            dev << levelModelNameOffsetMap.key(child->getMeshName());
+            writeNull(dev, 8);
         }
     }
 
     void SMB2LzExporter::writeLevelModelNameList(QDataStream &dev, const WS2Common::Scene::GroupSceneNode *node) {
-        foreach(WS2Common::Scene::SceneNode *node, node->getChildren()) {
-            if (WS2Common::instanceOf<WS2Common::Scene::MeshSceneNode>(node)) {
-                WS2Common::Scene::MeshSceneNode *mesh = static_cast<WS2Common::Scene::MeshSceneNode*>(node);
+        forEachChildType(node, WS2Common::Scene::MeshSceneNode*, child) {
+            //Write the object name
+            dev.writeRawData(child->getMeshName().toLatin1(), child->getMeshName().size());
 
-                //Write the object name
-                dev.writeRawData(mesh->getMeshName().toLatin1(), mesh->getMeshName().size());
-
-                writeNull(dev, 1); //Add a null terminator
-                //Pad to 4 bytes
-                writeNull(dev, roundUpNearest4(mesh->getMeshName().size() + 1) - (mesh->getMeshName().size() + 1));
-            }
+            writeNull(dev, 1); //Add a null terminator
+            //Pad to 4 bytes
+            writeNull(dev, roundUpNearest4(child->getMeshName().size() + 1) - (child->getMeshName().size() + 1));
         }
     }
 
