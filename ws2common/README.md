@@ -8,4 +8,5 @@ Common components for the Workshop 2 applications/libraries
 - Qt 5.9
     - Qt Core
 - GLM
+- Assimp
 
