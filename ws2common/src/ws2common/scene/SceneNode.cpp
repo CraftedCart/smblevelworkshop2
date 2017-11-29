@@ -9,6 +9,7 @@ namespace WS2Common {
 
         SceneNode::~SceneNode() {
             qDeleteAll(children);
+            if (animation != nullptr) delete animation;
         }
 
         const QString SceneNode::getName() const {
@@ -94,6 +95,23 @@ namespace WS2Common {
 
         void SceneNode::setScale(const glm::vec3 scale) {
             this->scale = scale;
+        }
+
+        void SceneNode::addTransformAnimation() {
+            animation = new Animation::TransformAnimation;
+        }
+
+        void SceneNode::removeTransformAnimation() {
+            delete animation;
+            animation = nullptr;
+        }
+
+        Animation::TransformAnimation* SceneNode::getTransformAnimation() {
+            return animation;
+        }
+
+        const Animation::TransformAnimation* SceneNode::getTransformAnimation() const {
+            return animation;
         }
     }
 }

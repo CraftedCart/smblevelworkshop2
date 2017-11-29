@@ -6,6 +6,7 @@
 #ifndef SMBLEVELWORKSHOP2_WS2COMMON_SCENE_SCENENODE_HPP
 #define SMBLEVELWORKSHOP2_WS2COMMON_SCENE_SCENENODE_HPP
 
+#include "ws2common/animation/TransformAnimation.hpp"
 #include <glm/glm.hpp>
 #include <QVector>
 
@@ -26,6 +27,8 @@ namespace WS2Common {
                 glm::vec3 position = glm::vec3(0.0f, 0.0f, 0.0f);
                 glm::vec3 rotation = glm::vec3(0.0f, 0.0f, 0.0f);
                 glm::vec3 scale = glm::vec3(1.0f, 1.0f, 1.0f);
+
+                Animation::TransformAnimation *animation = nullptr;
 
             public:
                 /**
@@ -162,6 +165,30 @@ namespace WS2Common {
                  * @param scale The new scale to set
                  */
                 void setScale(const glm::vec3 scale);
+
+                /**
+                 * @brief Adds empty animation data to this node
+                 */
+                void addTransformAnimation();
+
+                /**
+                 * @brief Removes animation data from this node
+                 */
+                void removeTransformAnimation();
+
+                /**
+                 * @brief Getter for animation
+                 *
+                 * @return A pointer to the animation data if it exists, nullptr otherwise
+                 */
+                Animation::TransformAnimation* getTransformAnimation();
+
+                /**
+                 * @brief Const getter for animation
+                 *
+                 * @return A pointer to the animation data if it exists, nullptr otherwise
+                 */
+                const Animation::TransformAnimation* getTransformAnimation() const;
         };
     }
 }

@@ -60,6 +60,10 @@ set(SOURCE_FILES
     ./src/ws2common/exception/RuntimeException.cpp
     ./src/ws2common/exception/IOException.cpp
     ./src/ws2common/exception/ModelLoadingException.cpp
+    ./src/ws2common/animation/EnumEasing.cpp
+    ./src/ws2common/animation/EnumLoopType.cpp
+    ./src/ws2common/animation/Keyframe.cpp
+    ./src/ws2common/animation/TransformAnimation.cpp
     )
 
 set(HEADER_FILES
@@ -101,6 +105,11 @@ set(HEADER_FILES
     ./include/ws2common/exception/RuntimeException.hpp
     ./include/ws2common/exception/IOException.hpp
     ./include/ws2common/exception/ModelLoadingException.hpp
+    ./include/ws2common/animation/EnumEasing.hpp
+    ./include/ws2common/animation/EnumLoopType.hpp
+    ./include/ws2common/animation/Keyframe.hpp
+    ./include/ws2common/animation/Keyframe.ipp
+    ./include/ws2common/animation/TransformAnimation.hpp
     )
 
 set(RESOURCE_FILES
