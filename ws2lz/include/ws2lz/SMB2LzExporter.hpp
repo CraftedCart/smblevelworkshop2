@@ -92,8 +92,8 @@ namespace WS2Lz {
             quint32 cylinderCollisionObjectListOffset;
             quint32 falloutVolumeCount;
             quint32 falloutVolumeListOffset;
-            quint32 backgroundModelCount;
-            quint32 backgroundModelListOffset;
+            QMap<quint32, const WS2Common::Scene::MeshSceneNode*> bgOffsetMap;
+            QMap<quint32, QString> bgNameOffsetMap;
             //TODO: Mystery 8
             //TODO: Reflective level models
             //TODO: Level model instances
@@ -183,6 +183,8 @@ namespace WS2Lz {
             void writeLevelModelPointerBList(QDataStream &dev, const WS2Common::Scene::GroupSceneNode *node);
             void writeLevelModelList(QDataStream &dev, const WS2Common::Scene::GroupSceneNode *node);
             void writeLevelModelNameList(QDataStream &dev, const WS2Common::Scene::GroupSceneNode *node);
+            void writeBackgroundModel(QDataStream &dev, const WS2Common::Scene::MeshSceneNode *node);
+            void writeBackgroundName(QDataStream &dev, const WS2Common::Scene::MeshSceneNode *node);
 
             void writeNull(QDataStream &dev, const unsigned int count);
 

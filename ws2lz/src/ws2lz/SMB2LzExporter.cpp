@@ -14,6 +14,11 @@
 #define forEachGroup(group) foreach(const WS2Common::Scene::GroupSceneNode* group, collisionHeaderOffsetMap)
 
 /**
+ * @brief Iterates over all background - The value of group will be the GroupSceneNode at the current iteration
+ */
+#define forEachBg(mesh) foreach(const WS2Common::Scene::MeshSceneNode* mesh, bgOffsetMap)
+
+/**
  * @brief Iterates over all of a SceneNode's children, and runs the following code if the child can be dynamically
  *        casted to type
  */
@@ -60,6 +65,8 @@ namespace WS2Lz {
         forEachGroup(group) writeLevelModelPointerBList(dev, group); //Level model pointers type B
         forEachGroup(group) writeLevelModelList(dev, group); //Level models
         forEachGroup(group) writeLevelModelNameList(dev, group); //Level model names
+        forEachBg(mesh) writeBackgroundModel(dev, mesh); //Background models
+        forEachBg(mesh) writeBackgroundName(dev, mesh); //Background model names
     }
 
     void SMB2LzExporter::addCollisionTriangles(
@@ -294,6 +301,33 @@ namespace WS2Lz {
             }
         }
 
+        //Find all background models
+        foreach(WS2Common::Scene::SceneNode *node, stage.getRootNode()->getChildren()) {
+            if (WS2Common::instanceOf<WS2Common::Scene::BackgroundGroupSceneNode>(node)) {
+                WS2Common::Scene::BackgroundGroupSceneNode *group = static_cast<WS2Common::Scene::BackgroundGroupSceneNode*>(node);
+
+                //Found one, now iterate over all children
+                foreach(WS2Common::Scene::SceneNode *bg, group->getChildren()) {
+                    if (WS2Common::instanceOf<WS2Common::Scene::MeshSceneNode>(bg)) {
+                        //Found a background mesh
+                        //Add it to a map
+                        bgOffsetMap[nextOffset] = static_cast<WS2Common::Scene::MeshSceneNode*>(bg);
+                        nextOffset += BACKGROUND_MODEL_LENGTH;
+                    } else {
+                        qWarning() << "There's a non-MeshSceneNode within a background group. This should never happen. Ignoring for now.";
+                    }
+                }
+            }
+        }
+
+        //Iterate over all background models, and add the model name + null terminator padded to 4 bytes to nextOffset
+        forEachBg(node) {
+            bgNameOffsetMap[nextOffset] = node->getMeshName();
+
+            //+ 1 because size() does not include a null terminator
+            nextOffset += roundUpNearest4(node->getMeshName().size() + 1);
+        }
+
         //Just set all this guff to null for now in case it isn't
         coneCollisionObjectCount = 0;
         coneCollisionObjectListOffset = 0;
@@ -303,8 +337,6 @@ namespace WS2Lz {
         cylinderCollisionObjectListOffset = 0;
         falloutVolumeCount = 0;
         falloutVolumeListOffset = 0;
-        backgroundModelCount = 0;
-        backgroundModelListOffset = 0;
         //TODO: Mystery 8
         //TODO: Reflective level model
         //TODO: Level model instances
@@ -363,8 +395,8 @@ namespace WS2Lz {
         dev << cylinderCollisionObjectListOffset;
         dev << falloutVolumeCount;
         dev << falloutVolumeListOffset;
-        dev << backgroundModelCount;
-        dev << backgroundModelListOffset;
+        dev << (quint32) bgOffsetMap.size();
+        dev << (quint32) (bgOffsetMap.size() > 0 ? bgOffsetMap.firstKey() : 0); //Banana list offset
         writeNull(dev, 8); //TODO: Mystery 8
         writeNull(dev, 4);
         dev << (quint32) 0x00000001;
@@ -644,6 +676,26 @@ namespace WS2Lz {
             //Pad to 4 bytes
             writeNull(dev, roundUpNearest4(child->getMeshName().size() + 1) - (child->getMeshName().size() + 1));
         }
+    }
+
+    void SMB2LzExporter::writeBackgroundModel(QDataStream &dev, const WS2Common::Scene::MeshSceneNode *node) {
+        dev << (quint32) 0x0000001F;
+        dev << bgNameOffsetMap.key(node->getMeshName());
+        writeNull(dev, 4);
+        dev << node->getPosition();
+        dev << convertRotation(node->getRotation());
+        writeNull(dev, 2);
+        dev << node->getScale();
+        writeNull(dev, 12); //TODO: Add background animation
+    }
+
+    void SMB2LzExporter::writeBackgroundName(QDataStream &dev, const WS2Common::Scene::MeshSceneNode *node) {
+        //Write the object name
+        dev.writeRawData(node->getMeshName().toLatin1(), node->getMeshName().size());
+
+        writeNull(dev, 1); //Add a null terminator
+        //Pad to 4 bytes
+        writeNull(dev, roundUpNearest4(node->getMeshName().size() + 1) - (node->getMeshName().size() + 1));
     }
 
     void SMB2LzExporter::writeNull(QDataStream &dev, const unsigned int count) {

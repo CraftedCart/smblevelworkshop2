@@ -46,7 +46,8 @@ namespace WS2Common {
 
     Scene::BackgroundGroupSceneNode* Stage::getFirstBackgroundGroup(bool createIfNonExistent) {
         foreach(Scene::SceneNode *node, rootNode->getChildren()) {
-            if(instanceOf<Scene::BackgroundGroupSceneNode>(node)) return static_cast<Scene::BackgroundGroupSceneNode*>(node);
+            //TODO: Replace this with some dynamic cast thingy
+            if (instanceOf<Scene::BackgroundGroupSceneNode>(node)) return static_cast<Scene::BackgroundGroupSceneNode*>(node);
         }
 
         //No background nodes found
