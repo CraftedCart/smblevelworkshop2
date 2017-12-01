@@ -1,6 +1,30 @@
 * {
     color: #FFFFFF;
     background-color: #212121;
+    border-radius: 0;
+}
+
+QMenuBar {
+    background: #424242;
+    color: #FFFFFF;
+}
+
+QMenuBar::item {
+    spacing: 3px; /* spacing between menu bar items */
+    padding: 1px 4px;
+    background: transparent;
+}
+
+QMenuBar::item:selected { /* when selected using mouse or keyboard */
+    background: #616161;
+}
+
+QMenuBar::item:pressed {
+    background: #2196F3;
+}
+
+QMenu::item {
+    padding: 1px 20px;
 }
 
 QMenu::item:selected {
@@ -20,8 +44,19 @@ QMenu::indicator:checked {
     image: url(:/Styles/FlatDark/Icons/Check18.png);
 }
 
-QMenu::item {
-    padding: 1px 20px;
+QStatusBar {
+    background: #424242;
+}
+
+QStatusBar::item {
+    border: none;
+}
+
+QStatusBar * {
+    background: #424242;
+    margin-left: 0 2px;
+    padding: 0;
+    /*max-height: 10px;*/
 }
 
 QDockWidget {
@@ -30,7 +65,25 @@ QDockWidget {
 }
 
 QDockWidget::title {
-    background-color: #616161;
+    background: #616161;
+    padding: 2px;
+    margin: 0;
+    font-size: 18pt;
+    text-align: left;
+}
+
+QDockWidget::close-button, QDockWidget::float-button {
+    margin: 0;
+}
+
+QMainWindow::separator {
+    background: #424242;
+    width: 2px; /* When vertical */
+    height: 2px; /* When horizontal */
+}
+
+QMainWindow::separator:hover {
+    background: #616161;
 }
 
 QToolBar {
@@ -73,27 +126,27 @@ QHeaderView::section {
 QScrollBar:horizontal {
     border: none;
     background: #424242;
-    height: 12px;
+    height: 6px;
 }
 
 QScrollBar:vertical {
     border: none;
     background: #424242;
-    width: 12px;
+    width: 6px;
 }
 
 QScrollBar::handle:horizontal {
     background: #9E9E9E;
     min-width: 20px;
-    border-radius: 2px;
-    margin: 4px 4px 4px 4px;
+    border-radius: 0;
+    margin: 0;
 }
 
 QScrollBar::handle:vertical {
     background: #9E9E9E;
     min-height: 20px;
-    border-radius: 2px;
-    margin: 4px 4px 4px 4px;
+    border-radius: 0;
+    margin: 0;
 }
 
 QScrollBar::add-line:horizontal, QScrollBar::add-line:vertical {
@@ -150,6 +203,40 @@ QToolBar::handle:horizontal {
 
 QToolBar::handle:vertical {
     image: url(":/Styles/FlatDark/Icons/VHandle.png");
+}
+
+QProgressBar {
+    border: 1px solid #616161;
+    text-align: right;
+    height: 10px;
+    max-height: 10px;
+}
+
+QProgressBar::chunk {
+    background-color: #2196F3;
+    width: 1px;
+}
+
+QLineEdit, QTextEdit, QSpinBox, QDoubleSpinBox, QComboBox {
+    color: #FFFFFF;
+    selection-color: #FFFFFF;
+    selection-background-color: #2196F3;
+    background: #424242;
+    border: none;
+}
+
+QComboBox::drop-down {
+    subcontrol-origin: padding;
+    subcontrol-position: top right;
+    width: 16px;
+    border: none;
+    background: #616161;
+}
+
+QComboBox::down-arrow {
+    image: url(":/Styles/FlatDark/Icons/MenuArrow.png");
+    width: 16px;
+    height: 16px;
 }
 
 /* vim: set syntax=css: */

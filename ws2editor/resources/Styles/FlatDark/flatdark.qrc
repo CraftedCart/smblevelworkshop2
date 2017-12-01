@@ -8,6 +8,7 @@
         <file>Icons/Close.png</file>
         <file>Icons/Undock.png</file>
         <file>Icons/Check18.png</file>
+        <file>Icons/MenuArrow.png</file>
     </qresource>
 </RCC>
 
