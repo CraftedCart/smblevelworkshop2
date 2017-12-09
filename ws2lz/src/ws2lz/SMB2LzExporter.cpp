@@ -11,19 +11,19 @@
 /**
  * @brief Iterates over all collision headers - The value of group will be the GroupSceneNode at the current iteration
  */
-#define forEachGroup(group) foreach(const WS2Common::Scene::GroupSceneNode* group, collisionHeaderOffsetMap)
+#define forEachGroup(group) foreach(const Scene::GroupSceneNode* group, collisionHeaderOffsetMap)
 
 /**
  * @brief Iterates over all background - The value of group will be the GroupSceneNode at the current iteration
  */
-#define forEachBg(mesh) foreach(const WS2Common::Scene::MeshSceneNode* mesh, bgOffsetMap)
+#define forEachBg(mesh) foreach(const Scene::MeshSceneNode* mesh, bgOffsetMap)
 
 /**
  * @brief Iterates over all of a SceneNode's children, and runs the following code if the child can be dynamically
  *        casted to type
  */
 #define forEachChildType(parent, type, child)\
-    foreach(WS2Common::Scene::SceneNode *childNode, parent->getChildren())\
+    foreach(Scene::SceneNode *childNode, parent->getChildren())\
         if (type child = dynamic_cast<type>(childNode))
 
 /**
@@ -33,15 +33,17 @@
 #define forEachGroupChildType(type, child) forEachGroup(group) forEachChildType(group, type, child)
 
 namespace WS2Lz {
+    using namespace WS2Common;
+
     SMB2LzExporter::~SMB2LzExporter() {
         qDeleteAll(triangleIntGridMap.values());
     }
 
-    void SMB2LzExporter::setModels(QHash<QString, WS2Common::Resource::ResourceMesh*> &models) {
+    void SMB2LzExporter::setModels(QHash<QString, Resource::ResourceMesh*> &models) {
         this->models = models;
     }
 
-    void SMB2LzExporter::generate(QDataStream &dev, const WS2Common::Stage &stage) {
+    void SMB2LzExporter::generate(QDataStream &dev, const Stage &stage) {
         //TODO: Add a configureDataStream function or something - to make it easy to override for a Dx exporter
         dev.setByteOrder(QDataStream::BigEndian);
         dev.setFloatingPointPrecision(QDataStream::SinglePrecision);
@@ -57,10 +59,10 @@ namespace WS2Lz {
         forEachGroup(group) writeCollisionTriangles(dev, group); //Collision triangles
         forEachGroup(group) writeCollisionTriangleIndexListPointers(dev, group); //Collision triangle pointer
         forEachGroup(group) writeCollisionTriangleIndexList(dev, triangleIntGridMap.value(group)); //Collision triangle index list
-        forEachGroupChildType(const WS2Common::Scene::GoalSceneNode*, node) writeGoal(dev, node); //Goals
-        forEachGroupChildType(const WS2Common::Scene::BumperSceneNode*, node) writeBumper(dev, node); //Bumpers
-        forEachGroupChildType(const WS2Common::Scene::JamabarSceneNode*, node) writeJamabar(dev, node); //Jamabars
-        forEachGroupChildType(const WS2Common::Scene::BananaSceneNode*, node) writeBanana(dev, node); //Bananas
+        forEachGroupChildType(const Scene::GoalSceneNode*, node) writeGoal(dev, node); //Goals
+        forEachGroupChildType(const Scene::BumperSceneNode*, node) writeBumper(dev, node); //Bumpers
+        forEachGroupChildType(const Scene::JamabarSceneNode*, node) writeJamabar(dev, node); //Jamabars
+        forEachGroupChildType(const Scene::BananaSceneNode*, node) writeBanana(dev, node); //Bananas
         forEachGroup(group) writeLevelModelPointerAList(dev, group); //Level model pointers type A
         forEachGroup(group) writeLevelModelPointerBList(dev, group); //Level model pointers type B
         forEachGroup(group) writeLevelModelList(dev, group); //Level models
@@ -70,17 +72,17 @@ namespace WS2Lz {
     }
 
     void SMB2LzExporter::addCollisionTriangles(
-            const WS2Common::Scene::SceneNode *node,
-            QVector<WS2Common::Model::Vertex> &allVertices,
+            const Scene::SceneNode *node,
+            QVector<Model::Vertex> &allVertices,
             QVector<unsigned int> &allIndices
             ) {
-        if (WS2Common::instanceOf<WS2Common::Scene::MeshCollisionSceneNode>(node)) {
-            const WS2Common::Scene::MeshCollisionSceneNode *coli= static_cast<const WS2Common::Scene::MeshCollisionSceneNode*>(node);
+        if (instanceOf<Scene::MeshCollisionSceneNode>(node)) {
+            const Scene::MeshCollisionSceneNode *coli= static_cast<const Scene::MeshCollisionSceneNode*>(node);
             //First, find the MeshSceneNode in the models QHash
             if (models.contains(coli->getMeshName())) {
-                const WS2Common::Resource::ResourceMesh *mesh = models.value(coli->getMeshName());
+                const Resource::ResourceMesh *mesh = models.value(coli->getMeshName());
                 //Now loop over all MeshSegements, and add to nextOffset
-                foreach(const WS2Common::Model::MeshSegment *seg, mesh->getMeshSegments()) {
+                foreach(const Model::MeshSegment *seg, mesh->getMeshSegments()) {
                     //Also need to add the previous size of allVertices to the indices to be added
                     int prevSize = allVertices.size();
                     allVertices.append(seg->getVertices());
@@ -96,23 +98,23 @@ namespace WS2Lz {
         }
 
         //Loop over all children, looking for MeshCollisionSceneNodes
-        foreach(const WS2Common::Scene::SceneNode *child, node->getChildren()) {
+        foreach(const Scene::SceneNode *child, node->getChildren()) {
             addCollisionTriangles(child, allVertices, allIndices);
         }
     }
 
-    void SMB2LzExporter::optimizeCollision(const WS2Common::Stage &stage) {
+    void SMB2LzExporter::optimizeCollision(const Stage &stage) {
         //First check what triangles intersect which grid times, in order to optimize collision
         qDebug() << "Now optimizing collision... This may take a little while";
         QElapsedTimer timer; //Measure how long this operation takes - probably a little while
         timer.start();
 
         //Loop over all collision headers
-        foreach(WS2Common::Scene::SceneNode *node, stage.getRootNode()->getChildren()) {
-            if (WS2Common::instanceOf<WS2Common::Scene::GroupSceneNode>(node)) {
-                WS2Common::Scene::GroupSceneNode *groupNode = static_cast<WS2Common::Scene::GroupSceneNode*>(node);
+        foreach(Scene::SceneNode *node, stage.getRootNode()->getChildren()) {
+            if (instanceOf<Scene::GroupSceneNode>(node)) {
+                Scene::GroupSceneNode *groupNode = static_cast<Scene::GroupSceneNode*>(node);
                 //Find all MeshCollisionSceneNodes, and add the triangles to allVertices/allIndices
-                QVector<WS2Common::Model::Vertex> allVertices;
+                QVector<Model::Vertex> allVertices;
                 QVector<unsigned int> allIndices;
                 addCollisionTriangles(node, allVertices, allIndices);
 
@@ -132,7 +134,7 @@ namespace WS2Lz {
         qDebug().noquote().nospace() << "Finished optimizing collision in " << timer.nsecsElapsed() / 1000000000.0f << "s";
     }
 
-    void SMB2LzExporter::calculateOffsets(const WS2Common::Stage &stage) {
+    void SMB2LzExporter::calculateOffsets(const Stage &stage) {
         quint32 nextOffset = FILE_HEADER_LENGTH;
 
         startOffset = nextOffset;
@@ -142,10 +144,10 @@ namespace WS2Lz {
         nextOffset += FALLOUT_LENGTH;
 
         //Find all GroupSceneNodes/Collision headers
-        foreach(WS2Common::Scene::SceneNode *node, stage.getRootNode()->getChildren()) {
-            if (WS2Common::instanceOf<WS2Common::Scene::GroupSceneNode>(node)) {
+        foreach(Scene::SceneNode *node, stage.getRootNode()->getChildren()) {
+            if (instanceOf<Scene::GroupSceneNode>(node)) {
                 //Found one
-                collisionHeaderOffsetMap[nextOffset] = static_cast<WS2Common::Scene::GroupSceneNode*>(node);
+                collisionHeaderOffsetMap[nextOffset] = static_cast<Scene::GroupSceneNode*>(node);
                 nextOffset += COLLISION_HEADER_LENGTH;
             }
         }
@@ -161,7 +163,7 @@ namespace WS2Lz {
         //This is for Collision Triangle Pointers
         forEachGroup(group) {
             gridTriangleListPointersOffsetMap[nextOffset] = group;
-            const WS2Common::CollisionGrid *grid = group->getCollisionGrid();
+            const CollisionGrid *grid = group->getCollisionGrid();
             nextOffset += COLLISION_TRIANGLE_LIST_POINTER_LENGTH * grid->getGridStepCount().x * grid->getGridStepCount().y;
         }
 
@@ -200,7 +202,7 @@ namespace WS2Lz {
             goalOffsetMap[nextOffset] = group;
             quint32 goalCount = 0; //Number of goals in this collision header
 
-            forEachChildType(group, WS2Common::Scene::GoalSceneNode*, node) {
+            forEachChildType(group, Scene::GoalSceneNode*, node) {
                 nextOffset += GOAL_LENGTH;
                 goalCount++;
             }
@@ -215,7 +217,7 @@ namespace WS2Lz {
             bumperOffsetMap[nextOffset] = group;
             quint32 bumperCount = 0; //Number of bumpers in this collision header
 
-            forEachChildType(group, WS2Common::Scene::BumperSceneNode*, node) {
+            forEachChildType(group, Scene::BumperSceneNode*, node) {
                 nextOffset += BUMPER_LENGTH;
                 bumperCount++;
             }
@@ -230,7 +232,7 @@ namespace WS2Lz {
             jamabarOffsetMap[nextOffset] = group;
             quint32 jamabarCount = 0; //Number of jamabars in this collision header
 
-            forEachChildType(group, WS2Common::Scene::JamabarSceneNode*, node) {
+            forEachChildType(group, Scene::JamabarSceneNode*, node) {
                 nextOffset += JAMABAR_LENGTH;
                 jamabarCount++;
             }
@@ -245,7 +247,7 @@ namespace WS2Lz {
             bananaOffsetMap[nextOffset] = group;
             quint32 bananaCount = 0; //Number of bananas in this collision header
 
-            forEachChildType(group, WS2Common::Scene::BananaSceneNode*, node) {
+            forEachChildType(group, Scene::BananaSceneNode*, node) {
                 nextOffset += BANANA_LENGTH;
                 bananaCount++;
             }
@@ -260,7 +262,7 @@ namespace WS2Lz {
         forEachGroup(group) {
             levelModelPointerAOffsetMap[nextOffset] = group;
 
-            forEachChildType(group, WS2Common::Scene::MeshSceneNode*, node) {
+            forEachChildType(group, Scene::MeshSceneNode*, node) {
                 nextOffset += LEVEL_MODEL_POINTER_TYPE_A_LENGTH;
             }
         }
@@ -271,7 +273,7 @@ namespace WS2Lz {
         forEachGroup(group) {
             levelModelPointerBOffsetMap[nextOffset] = group;
 
-            forEachChildType(group, WS2Common::Scene::MeshSceneNode*, node) {
+            forEachChildType(group, Scene::MeshSceneNode*, node) {
                 nextOffset += LEVEL_MODEL_POINTER_TYPE_B_LENGTH;
             }
         }
@@ -282,7 +284,7 @@ namespace WS2Lz {
             levelModelOffsetMap[nextOffset] = group;
             quint32 levelModelCount = 0; //Number of levelModels in this collision header
 
-            forEachChildType(group, WS2Common::Scene::MeshSceneNode*, node) {
+            forEachChildType(group, Scene::MeshSceneNode*, node) {
                 nextOffset += LEVEL_MODEL_LENGTH;
                 levelModelCount++;
             }
@@ -293,7 +295,7 @@ namespace WS2Lz {
 
         //Iterate over all level models, and add the model name + null terminator padded to 4 bytes to nextOffset
         forEachGroup(group) {
-            forEachChildType(group, WS2Common::Scene::MeshSceneNode*, node) {
+            forEachChildType(group, Scene::MeshSceneNode*, node) {
                 levelModelNameOffsetMap[nextOffset] = node->getMeshName();
 
                 //+ 1 because size() does not include a null terminator
@@ -302,16 +304,16 @@ namespace WS2Lz {
         }
 
         //Find all background models
-        foreach(WS2Common::Scene::SceneNode *node, stage.getRootNode()->getChildren()) {
-            if (WS2Common::instanceOf<WS2Common::Scene::BackgroundGroupSceneNode>(node)) {
-                WS2Common::Scene::BackgroundGroupSceneNode *group = static_cast<WS2Common::Scene::BackgroundGroupSceneNode*>(node);
+        foreach(Scene::SceneNode *node, stage.getRootNode()->getChildren()) {
+            if (instanceOf<Scene::BackgroundGroupSceneNode>(node)) {
+                Scene::BackgroundGroupSceneNode *group = static_cast<Scene::BackgroundGroupSceneNode*>(node);
 
                 //Found one, now iterate over all children
-                foreach(WS2Common::Scene::SceneNode *bg, group->getChildren()) {
-                    if (WS2Common::instanceOf<WS2Common::Scene::MeshSceneNode>(bg)) {
+                foreach(Scene::SceneNode *bg, group->getChildren()) {
+                    if (instanceOf<Scene::MeshSceneNode>(bg)) {
                         //Found a background mesh
                         //Add it to a map
-                        bgOffsetMap[nextOffset] = static_cast<WS2Common::Scene::MeshSceneNode*>(bg);
+                        bgOffsetMap[nextOffset] = static_cast<Scene::MeshSceneNode*>(bg);
                         nextOffset += BACKGROUND_MODEL_LENGTH;
                     } else {
                         qWarning() << "There's a non-MeshSceneNode within a background group. This should never happen. Ignoring for now.";
@@ -347,15 +349,15 @@ namespace WS2Lz {
         wormholeListOffset = 0;
     }
 
-    void SMB2LzExporter::addCollisionTriangleOffsets(const WS2Common::Scene::SceneNode *node, quint32 &nextOffset) {
+    void SMB2LzExporter::addCollisionTriangleOffsets(const Scene::SceneNode *node, quint32 &nextOffset) {
         //TODO: Store this in a map or hash or something, per collision header, add a function argument for the collision header, store in a nested maps - Collision header, object name, offset
-        if (WS2Common::instanceOf<WS2Common::Scene::MeshCollisionSceneNode>(node)) {
-            const WS2Common::Scene::MeshCollisionSceneNode *coli= static_cast<const WS2Common::Scene::MeshCollisionSceneNode*>(node);
+        if (instanceOf<Scene::MeshCollisionSceneNode>(node)) {
+            const Scene::MeshCollisionSceneNode *coli= static_cast<const Scene::MeshCollisionSceneNode*>(node);
             //First, find the MeshSceneNode in the models QHash
             if (models.contains(coli->getMeshName())) {
-                const WS2Common::Resource::ResourceMesh *mesh = models.value(coli->getMeshName());
+                const Resource::ResourceMesh *mesh = models.value(coli->getMeshName());
                 //Now loop over all MeshSegements, and add to nextOffset
-                foreach (const WS2Common::Model::MeshSegment *seg, mesh->getMeshSegments()) {
+                foreach (const Model::MeshSegment *seg, mesh->getMeshSegments()) {
                     int triangleCount = seg->getIndices().size() / 3;
                     nextOffset += COLLISION_TRIANGLE_LENGTH * triangleCount;
                 }
@@ -367,7 +369,7 @@ namespace WS2Lz {
         }
 
         //Loop over all children, looking for MeshCollisionSceneNodes
-        foreach(const WS2Common::Scene::SceneNode *child, node->getChildren()) {
+        foreach(const Scene::SceneNode *child, node->getChildren()) {
             addCollisionTriangleOffsets(child, nextOffset);
         }
     }
@@ -419,12 +421,12 @@ namespace WS2Lz {
         writeNull(dev, 1988);
     }
 
-    void SMB2LzExporter::writeStart(QDataStream &dev, const WS2Common::Stage &stage) {
-        WS2Common::Scene::StartSceneNode *start;
+    void SMB2LzExporter::writeStart(QDataStream &dev, const Stage &stage) {
+        Scene::StartSceneNode *start;
 
         //Find the start
-        forEachChildType(stage.getRootNode(), WS2Common::Scene::StartSceneNode*, node) {
-            start = static_cast<WS2Common::Scene::StartSceneNode*>(node);
+        forEachChildType(stage.getRootNode(), Scene::StartSceneNode*, node) {
+            start = static_cast<Scene::StartSceneNode*>(node);
             break;
         }
 
@@ -434,11 +436,11 @@ namespace WS2Lz {
         writeNull(dev, 2);
     }
 
-    void SMB2LzExporter::writeFallout(QDataStream &dev, const WS2Common::Stage &stage) {
+    void SMB2LzExporter::writeFallout(QDataStream &dev, const Stage &stage) {
         dev << stage.getFalloutY();
     }
 
-    void SMB2LzExporter::writeCollisionHeader(QDataStream &dev, const WS2Common::Scene::GroupSceneNode *node) {
+    void SMB2LzExporter::writeCollisionHeader(QDataStream &dev, const Scene::GroupSceneNode *node) {
         writeNull(dev, 12); //TODO: Center of rotation vec3
         writeNull(dev, 6); //TODO: Initial rotation vec3
         writeNull(dev, 2); //TODO: Animation loop type/seesaw
@@ -489,52 +491,52 @@ namespace WS2Lz {
         }
     }
 
-    void SMB2LzExporter::writeCollisionTriangleIndexListPointers(QDataStream &dev, const WS2Common::Scene::GroupSceneNode *node) {
+    void SMB2LzExporter::writeCollisionTriangleIndexListPointers(QDataStream &dev, const Scene::GroupSceneNode *node) {
         unsigned int totalTiles = node->getCollisionGrid()->getGridStepCount().x * node->getCollisionGrid()->getGridStepCount().y;
         for (unsigned int i = 0; i < totalTiles; i++) {
             dev << gridTriangleIndexListOffsetMap[node][i];
         }
     }
 
-    void SMB2LzExporter::writeGoal(QDataStream &dev, const WS2Common::Scene::GoalSceneNode *node) {
+    void SMB2LzExporter::writeGoal(QDataStream &dev, const Scene::GoalSceneNode *node) {
         dev << node->getPosition();
         dev << convertRotation(node->getRotation());
         dev << (quint16) node->getType();
     }
 
-    void SMB2LzExporter::writeBumper(QDataStream &dev, const WS2Common::Scene::BumperSceneNode *node) {
+    void SMB2LzExporter::writeBumper(QDataStream &dev, const Scene::BumperSceneNode *node) {
         dev << node->getPosition();
         dev << convertRotation(node->getRotation());
         writeNull(dev, 2);
         dev << node->getScale();
     }
 
-    void SMB2LzExporter::writeJamabar(QDataStream &dev, const WS2Common::Scene::JamabarSceneNode *node) {
+    void SMB2LzExporter::writeJamabar(QDataStream &dev, const Scene::JamabarSceneNode *node) {
         dev << node->getPosition();
         dev << convertRotation(node->getRotation());
         writeNull(dev, 2);
         dev << node->getScale();
     }
 
-    void SMB2LzExporter::writeBanana(QDataStream &dev, const WS2Common::Scene::BananaSceneNode *node) {
+    void SMB2LzExporter::writeBanana(QDataStream &dev, const Scene::BananaSceneNode *node) {
         dev << node->getPosition();
         dev << (quint32) node->getType();
     }
 
-    void SMB2LzExporter::writeCollisionTriangles(QDataStream &dev, const WS2Common::Scene::SceneNode *node) {
-        if (WS2Common::instanceOf<WS2Common::Scene::MeshCollisionSceneNode>(node)) {
-            const WS2Common::Scene::MeshCollisionSceneNode *coli= static_cast<const WS2Common::Scene::MeshCollisionSceneNode*>(node);
+    void SMB2LzExporter::writeCollisionTriangles(QDataStream &dev, const Scene::SceneNode *node) {
+        if (instanceOf<Scene::MeshCollisionSceneNode>(node)) {
+            const Scene::MeshCollisionSceneNode *coli= static_cast<const Scene::MeshCollisionSceneNode*>(node);
             //This node is a MeshCollisionSceneNode - Loop over all the triangles and write them
             //First, find the MeshSceneNode in the models QHash
             if (models.contains(coli->getMeshName())) {
-                const WS2Common::Resource::ResourceMesh *mesh = models.value(coli->getMeshName());
+                const Resource::ResourceMesh *mesh = models.value(coli->getMeshName());
                 //Now loop over all MeshSegements, and write thier collision triangles
 
-                foreach (const WS2Common::Model::MeshSegment *seg, mesh->getMeshSegments()) {
+                foreach (const Model::MeshSegment *seg, mesh->getMeshSegments()) {
                     //Now loop over all triangles
                     for (int i = 0; i < seg->getIndices().size(); i += 3) {
                         //verts.x/y/z corresponds to each triangle's vertex
-                        glm::tvec3<WS2Common::Model::Vertex> verts(
+                        glm::tvec3<Model::Vertex> verts(
                                 seg->getVertices().at(seg->getIndices().at(i)),
                                 seg->getVertices().at(seg->getIndices().at(i + 1)),
                                 seg->getVertices().at(seg->getIndices().at(i + 2))
@@ -628,15 +630,15 @@ namespace WS2Lz {
         }
 
         //Loop over all children, looking for MeshCollisionSceneNodes
-        foreach(const WS2Common::Scene::SceneNode *child, node->getChildren()) {
+        foreach(const Scene::SceneNode *child, node->getChildren()) {
             writeCollisionTriangles(dev, child);
         }
     }
 
-    void SMB2LzExporter::writeLevelModelPointerAList(QDataStream &dev, const WS2Common::Scene::GroupSceneNode *node) {
+    void SMB2LzExporter::writeLevelModelPointerAList(QDataStream &dev, const Scene::GroupSceneNode *node) {
         quint32 nextOffset = levelModelOffsetMap.key(node);
 
-        forEachChildType(node, WS2Common::Scene::MeshSceneNode*, child) {
+        forEachChildType(node, Scene::MeshSceneNode*, child) {
             writeNull(dev, 4);
             dev << (quint32) 0x00000001;
             dev << nextOffset;
@@ -647,10 +649,10 @@ namespace WS2Lz {
         }
     }
 
-    void SMB2LzExporter::writeLevelModelPointerBList(QDataStream &dev, const WS2Common::Scene::GroupSceneNode *node) {
+    void SMB2LzExporter::writeLevelModelPointerBList(QDataStream &dev, const Scene::GroupSceneNode *node) {
         quint32 nextOffset = levelModelPointerAOffsetMap.key(node);
 
-        forEachChildType(node, WS2Common::Scene::MeshSceneNode*, child) {
+        forEachChildType(node, Scene::MeshSceneNode*, child) {
             dev << nextOffset;
 
             //Level model pointer type As for the same collision header are just sequential stores, so it's fine to
@@ -659,16 +661,16 @@ namespace WS2Lz {
         }
     }
 
-    void SMB2LzExporter::writeLevelModelList(QDataStream &dev, const WS2Common::Scene::GroupSceneNode *node) {
-        forEachChildType(node, WS2Common::Scene::MeshSceneNode*, child) {
+    void SMB2LzExporter::writeLevelModelList(QDataStream &dev, const Scene::GroupSceneNode *node) {
+        forEachChildType(node, Scene::MeshSceneNode*, child) {
             writeNull(dev, 4);
             dev << levelModelNameOffsetMap.key(child->getMeshName());
             writeNull(dev, 8);
         }
     }
 
-    void SMB2LzExporter::writeLevelModelNameList(QDataStream &dev, const WS2Common::Scene::GroupSceneNode *node) {
-        forEachChildType(node, WS2Common::Scene::MeshSceneNode*, child) {
+    void SMB2LzExporter::writeLevelModelNameList(QDataStream &dev, const Scene::GroupSceneNode *node) {
+        forEachChildType(node, Scene::MeshSceneNode*, child) {
             //Write the object name
             dev.writeRawData(child->getMeshName().toLatin1(), child->getMeshName().size());
 
@@ -678,7 +680,7 @@ namespace WS2Lz {
         }
     }
 
-    void SMB2LzExporter::writeBackgroundModel(QDataStream &dev, const WS2Common::Scene::MeshSceneNode *node) {
+    void SMB2LzExporter::writeBackgroundModel(QDataStream &dev, const Scene::MeshSceneNode *node) {
         dev << (quint32) 0x0000001F;
         dev << bgNameOffsetMap.key(node->getMeshName());
         writeNull(dev, 4);
@@ -689,7 +691,7 @@ namespace WS2Lz {
         writeNull(dev, 12); //TODO: Add background animation
     }
 
-    void SMB2LzExporter::writeBackgroundName(QDataStream &dev, const WS2Common::Scene::MeshSceneNode *node) {
+    void SMB2LzExporter::writeBackgroundName(QDataStream &dev, const Scene::MeshSceneNode *node) {
         //Write the object name
         dev.writeRawData(node->getMeshName().toLatin1(), node->getMeshName().size());
 
@@ -720,10 +722,10 @@ namespace WS2Lz {
                 );
     }
 
-    quint32 SMB2LzExporter::addAllCounts(QMap<const WS2Common::Scene::GroupSceneNode*, quint32> &m) {
+    quint32 SMB2LzExporter::addAllCounts(QMap<const Scene::GroupSceneNode*, quint32> &m) {
         quint32 total = 0;
 
-        QMapIterator<const WS2Common::Scene::GroupSceneNode*, quint32> i(m);
+        QMapIterator<const Scene::GroupSceneNode*, quint32> i(m);
         while (i.hasNext()) {
             i.next();
             total += i.value();
