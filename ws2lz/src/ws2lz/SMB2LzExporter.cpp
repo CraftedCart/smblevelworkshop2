@@ -69,6 +69,8 @@ namespace WS2Lz {
         forEachGroup(group) writeLevelModelNameList(dev, group); //Level model names
         forEachBg(mesh) writeBackgroundModel(dev, mesh); //Background models
         forEachBg(mesh) writeBackgroundName(dev, mesh); //Background model names
+        forEachGroup(group) writeAnimationHeader(dev, group->getTransformAnimation());
+        forEachGroup(group) writeTransformAnimation(dev, group->getTransformAnimation());
     }
 
     void SMB2LzExporter::addCollisionTriangles(
@@ -330,6 +332,44 @@ namespace WS2Lz {
             nextOffset += roundUpNearest4(node->getMeshName().size() + 1);
         }
 
+        //Animation headers
+        forEachGroup(group) {
+            if (group->getTransformAnimation() != nullptr) {
+                //This node has animation
+                groupAnimHeaderOffsetMap.insert(nextOffset, group);
+                nextOffset += ANIMATION_HEADER_LENGTH;
+            }
+        }
+
+        //Animation keyframes
+        forEachGroup(group) {
+            const Animation::TransformAnimation *anim = group->getTransformAnimation();
+
+            if (anim != nullptr) {
+                //This node has animation
+
+                //PosX
+                animPosXKeyframesOffsetMap.insert(nextOffset, anim);
+                nextOffset += ANIMATION_KEYFRAME_LENGTH * anim->getPosXKeyframes().size();
+                //PosY
+                animPosYKeyframesOffsetMap.insert(nextOffset, anim);
+                nextOffset += ANIMATION_KEYFRAME_LENGTH * anim->getPosYKeyframes().size();
+                //PosZ
+                animPosZKeyframesOffsetMap.insert(nextOffset, anim);
+                nextOffset += ANIMATION_KEYFRAME_LENGTH * anim->getPosZKeyframes().size();
+
+                //RotX
+                animRotXKeyframesOffsetMap.insert(nextOffset, anim);
+                nextOffset += ANIMATION_KEYFRAME_LENGTH * anim->getRotXKeyframes().size();
+                //RotY
+                animRotYKeyframesOffsetMap.insert(nextOffset, anim);
+                nextOffset += ANIMATION_KEYFRAME_LENGTH * anim->getRotYKeyframes().size();
+                //RotZ
+                animRotZKeyframesOffsetMap.insert(nextOffset, anim);
+                nextOffset += ANIMATION_KEYFRAME_LENGTH * anim->getRotZKeyframes().size();
+            }
+        }
+
         //Just set all this guff to null for now in case it isn't
         coneCollisionObjectCount = 0;
         coneCollisionObjectListOffset = 0;
@@ -441,10 +481,25 @@ namespace WS2Lz {
     }
 
     void SMB2LzExporter::writeCollisionHeader(QDataStream &dev, const Scene::GroupSceneNode *node) {
+        //Will be nullptr if this node has no animation
+        const Animation::TransformAnimation *anim = node->getTransformAnimation();
+
         writeNull(dev, 12); //TODO: Center of rotation vec3
         writeNull(dev, 6); //TODO: Initial rotation vec3
-        writeNull(dev, 2); //TODO: Animation loop type/seesaw
-        writeNull(dev, 4); //TODO: Offset to animation header
+
+        //Animation loop type/seesaw
+        if (node->getAnimationSeesawType() == SEESAW) {
+            dev << (quint16) 0x0002;
+        } else {
+            if (anim != nullptr && anim->getLoopType() == Animation::PLAY_ONCE) {
+                dev << (quint16) 0x0001;
+            } else {
+                dev << (quint16) 0x0000;
+            }
+        }
+
+        dev << (anim != nullptr ? groupAnimHeaderOffsetMap.key(node) : (quint32) 0); //Offset to animation header
+
         writeNull(dev, 12); //TODO: Conveyor speed vec3
         dev << gridTriangleListOffsetMap.key(node);
         dev << gridTriangleListPointersOffsetMap.key(node);
@@ -462,7 +517,9 @@ namespace WS2Lz {
         writeNull(dev, 48); //TODO: Everything else
         dev << levelModelCountMap.value(node);
         dev << levelModelPointerBOffsetMap.key(node);
-        writeNull(dev, 1024); //TODO: Everything else
+        writeNull(dev, 56); //TODO: Everything else
+        dev << (anim != nullptr ? anim->getLoopTime() : (quint32) 0); //Anim loop time
+        writeNull(dev, 964); //TODO: Everything else
     }
 
     void SMB2LzExporter::writeCollisionTriangleIndexList(QDataStream &dev, const TriangleIntersectionGrid *intGrid) {
@@ -698,6 +755,44 @@ namespace WS2Lz {
         writeNull(dev, 1); //Add a null terminator
         //Pad to 4 bytes
         writeNull(dev, roundUpNearest4(node->getMeshName().size() + 1) - (node->getMeshName().size() + 1));
+    }
+
+    void SMB2LzExporter::writeAnimationHeader(QDataStream &dev, const Animation::TransformAnimation *anim) {
+        //Not all groups will have animation - get outta here if nullptr
+        if (anim == nullptr) return;
+
+        dev << (quint32) anim->getRotXKeyframes().size(); //Number of rot X keyframes
+        dev << (quint32) animRotXKeyframesOffsetMap.key(anim); //Offset to pos X keyframes
+        dev << (quint32) anim->getRotYKeyframes().size(); //Number of rot Y keyframes
+        dev << (quint32) animRotYKeyframesOffsetMap.key(anim); //Offset to rot Y keyframes
+        dev << (quint32) anim->getRotZKeyframes().size(); //Number of rot Z keyframes
+        dev << (quint32) animRotZKeyframesOffsetMap.key(anim); //Offset to rot Z keyframes
+        dev << (quint32) anim->getPosXKeyframes().size(); //Number of pos X keyframes
+        dev << (quint32) animPosXKeyframesOffsetMap.key(anim); //Offset to pos X keyframes
+        dev << (quint32) anim->getPosYKeyframes().size(); //Number of pos Y keyframes
+        dev << (quint32) animPosYKeyframesOffsetMap.key(anim); //Offset to pos Y keyframes
+        dev << (quint32) anim->getPosZKeyframes().size(); //Number of pos Z keyframes
+        dev << (quint32) animPosZKeyframesOffsetMap.key(anim); //Offset to pos Z keyframes
+        writeNull(dev, 16);
+    }
+
+    void SMB2LzExporter::writeTransformAnimation(QDataStream &dev, const Animation::TransformAnimation *anim) {
+        //Not all groups will have animation - get outta here if nullptr
+        if (anim == nullptr) return;
+
+        foreach(Animation::KeyframeF *k, anim->getPosXKeyframes()) writeKeyframeF(dev, k);
+        foreach(Animation::KeyframeF *k, anim->getPosYKeyframes()) writeKeyframeF(dev, k);
+        foreach(Animation::KeyframeF *k, anim->getPosZKeyframes()) writeKeyframeF(dev, k);
+        foreach(Animation::KeyframeF *k, anim->getRotXKeyframes()) writeKeyframeF(dev, k);
+        foreach(Animation::KeyframeF *k, anim->getRotYKeyframes()) writeKeyframeF(dev, k);
+        foreach(Animation::KeyframeF *k, anim->getRotZKeyframes()) writeKeyframeF(dev, k);
+    }
+
+    void SMB2LzExporter::writeKeyframeF(QDataStream &dev, const Animation::KeyframeF *k) {
+        dev << (quint32) k->getEasing(); //Easing
+        dev << k->getValue().first;
+        dev << k->getValue().second;
+        writeNull(dev, 8);
     }
 
     void SMB2LzExporter::writeNull(QDataStream &dev, const unsigned int count) {

@@ -62,7 +62,6 @@ set(SOURCE_FILES
     ./src/ws2common/exception/ModelLoadingException.cpp
     ./src/ws2common/animation/EnumEasing.cpp
     ./src/ws2common/animation/EnumLoopType.cpp
-    ./src/ws2common/animation/Keyframe.cpp
     ./src/ws2common/animation/TransformAnimation.cpp
     )
 

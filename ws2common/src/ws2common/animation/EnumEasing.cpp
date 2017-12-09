@@ -6,6 +6,8 @@ namespace WS2Common {
             EnumEasing fromString(QString str) {
                 if (str == "EASED" || str == "CUBIC") {
                     return CUBIC;
+                } else if (str == "CONSTANT") {
+                    return CONSTANT;
                 } else if (str == "QUADRATIC") {
                     return QUADRATIC;
                 } else if (str == "BOUNCE") {

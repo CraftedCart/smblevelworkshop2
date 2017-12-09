@@ -11,8 +11,9 @@
 namespace WS2Common {
     namespace Animation {
         enum EnumEasing {
-            LINEAR,
-            CUBIC,
+            LINEAR = 0x00000001,
+            CUBIC = 0x00000002,
+            CONSTANT = 0x00000000,
             QUADRATIC,
             BOUNCE,
             ELASTIC,

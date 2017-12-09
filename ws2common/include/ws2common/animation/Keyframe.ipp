@@ -45,6 +45,11 @@ namespace WS2Common {
         const QPair<float, T> Keyframe<T>::getHandleBValue() const {
             return handleBValue;
         }
+
+        template<typename T>
+        EnumEasing Keyframe<T>::getEasing() const {
+            return easing;
+        }
     }
 }
 

@@ -27,7 +27,15 @@ namespace WS2Common {
             return posXKeyframes;
         }
 
+        const std::set<KeyframeF*, KeyframeCompare>& TransformAnimation::getPosXKeyframes() const {
+            return posXKeyframes;
+        }
+
         std::set<KeyframeF*, KeyframeCompare>& TransformAnimation::getPosYKeyframes() {
+            return posYKeyframes;
+        }
+
+        const std::set<KeyframeF*, KeyframeCompare>& TransformAnimation::getPosYKeyframes() const {
             return posYKeyframes;
         }
 
@@ -35,7 +43,15 @@ namespace WS2Common {
             return posZKeyframes;
         }
 
+        const std::set<KeyframeF*, KeyframeCompare>& TransformAnimation::getPosZKeyframes() const {
+            return posZKeyframes;
+        }
+
         std::set<KeyframeF*, KeyframeCompare>& TransformAnimation::getRotXKeyframes() {
+            return rotXKeyframes;
+        }
+
+        const std::set<KeyframeF*, KeyframeCompare>& TransformAnimation::getRotXKeyframes() const {
             return rotXKeyframes;
         }
 
@@ -43,7 +59,15 @@ namespace WS2Common {
             return rotYKeyframes;
         }
 
+        const std::set<KeyframeF*, KeyframeCompare>& TransformAnimation::getRotYKeyframes() const {
+            return rotYKeyframes;
+        }
+
         std::set<KeyframeF*, KeyframeCompare>& TransformAnimation::getRotZKeyframes() {
+            return rotZKeyframes;
+        }
+
+        const std::set<KeyframeF*, KeyframeCompare>& TransformAnimation::getRotZKeyframes() const {
             return rotZKeyframes;
         }
     }

@@ -39,12 +39,18 @@ namespace WS2Common {
                 void setLoopTime(float loopTime);
 
                 std::set<KeyframeF*, KeyframeCompare>& getPosXKeyframes();
+                const std::set<KeyframeF*, KeyframeCompare>& getPosXKeyframes() const;
                 std::set<KeyframeF*, KeyframeCompare>& getPosYKeyframes();
+                const std::set<KeyframeF*, KeyframeCompare>& getPosYKeyframes() const;
                 std::set<KeyframeF*, KeyframeCompare>& getPosZKeyframes();
+                const std::set<KeyframeF*, KeyframeCompare>& getPosZKeyframes() const;
 
                 std::set<KeyframeF*, KeyframeCompare>& getRotXKeyframes();
+                const std::set<KeyframeF*, KeyframeCompare>& getRotXKeyframes() const;
                 std::set<KeyframeF*, KeyframeCompare>& getRotYKeyframes();
+                const std::set<KeyframeF*, KeyframeCompare>& getRotYKeyframes() const;
                 std::set<KeyframeF*, KeyframeCompare>& getRotZKeyframes();
+                const std::set<KeyframeF*, KeyframeCompare>& getRotZKeyframes() const;
         };
     }
 }

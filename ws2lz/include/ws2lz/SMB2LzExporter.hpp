@@ -63,6 +63,8 @@ namespace WS2Lz {
             const unsigned int BANANA_LENGTH = 16;
             const unsigned int WORMHOLE_LENGTH = 28;
             const unsigned int BACKGROUND_MODEL_LENGTH = 56;
+            const unsigned int ANIMATION_HEADER_LENGTH = 64;
+            const unsigned int ANIMATION_KEYFRAME_LENGTH = 20;
 
             //Other guff
             /**
@@ -88,6 +90,13 @@ namespace WS2Lz {
             QMap<const Scene::GroupSceneNode*, quint32> jamabarCountMap;
             QMap<quint32, const Scene::GroupSceneNode*> bananaOffsetMap;
             QMap<const Scene::GroupSceneNode*, quint32> bananaCountMap;
+            QMap<quint32, const Scene::GroupSceneNode*> groupAnimHeaderOffsetMap;
+            QMap<quint32, const Animation::TransformAnimation*> animPosXKeyframesOffsetMap;
+            QMap<quint32, const Animation::TransformAnimation*> animPosYKeyframesOffsetMap;
+            QMap<quint32, const Animation::TransformAnimation*> animPosZKeyframesOffsetMap;
+            QMap<quint32, const Animation::TransformAnimation*> animRotXKeyframesOffsetMap;
+            QMap<quint32, const Animation::TransformAnimation*> animRotYKeyframesOffsetMap;
+            QMap<quint32, const Animation::TransformAnimation*> animRotZKeyframesOffsetMap;
             //TODO: Replace all this with maps \/
             quint32 coneCollisionObjectCount;
             quint32 coneCollisionObjectListOffset;
@@ -190,6 +199,9 @@ namespace WS2Lz {
             void writeLevelModelNameList(QDataStream &dev, const Scene::GroupSceneNode *node);
             void writeBackgroundModel(QDataStream &dev, const Scene::MeshSceneNode *node);
             void writeBackgroundName(QDataStream &dev, const Scene::MeshSceneNode *node);
+            void writeAnimationHeader(QDataStream &dev, const Animation::TransformAnimation *anim);
+            void writeTransformAnimation(QDataStream &dev, const Animation::TransformAnimation *anim);
+            void writeKeyframeF(QDataStream &dev, const Animation::KeyframeF *k);
 
             void writeNull(QDataStream &dev, const unsigned int count);
 
