@@ -76,6 +76,7 @@ set(HEADER_FILES
     ./include/ws2common/EnumGoalType.hpp
     ./include/ws2common/EnumBananaType.hpp
     ./include/ws2common/EnumPlaybackState.hpp
+    ./include/ws2common/EnumAnimationSeesawType.hpp
     ./include/ws2common/Stage.hpp
     ./include/ws2common/CollisionGrid.hpp
     ./include/ws2common/scene/SceneNode.hpp

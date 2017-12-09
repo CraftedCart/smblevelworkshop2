@@ -23,27 +23,27 @@ namespace WS2Common {
             this->loopTime = loopTime;
         }
 
-        std::set<KeyframeF*, KeyframeCompare> TransformAnimation::getPosXKeyframes() {
+        std::set<KeyframeF*, KeyframeCompare>& TransformAnimation::getPosXKeyframes() {
             return posXKeyframes;
         }
 
-        std::set<KeyframeF*, KeyframeCompare> TransformAnimation::getPosYKeyframes() {
+        std::set<KeyframeF*, KeyframeCompare>& TransformAnimation::getPosYKeyframes() {
             return posYKeyframes;
         }
 
-        std::set<KeyframeF*, KeyframeCompare> TransformAnimation::getPosZKeyframes() {
+        std::set<KeyframeF*, KeyframeCompare>& TransformAnimation::getPosZKeyframes() {
             return posZKeyframes;
         }
 
-        std::set<KeyframeF*, KeyframeCompare> TransformAnimation::getRotXKeyframes() {
+        std::set<KeyframeF*, KeyframeCompare>& TransformAnimation::getRotXKeyframes() {
             return rotXKeyframes;
         }
 
-        std::set<KeyframeF*, KeyframeCompare> TransformAnimation::getRotYKeyframes() {
+        std::set<KeyframeF*, KeyframeCompare>& TransformAnimation::getRotYKeyframes() {
             return rotYKeyframes;
         }
 
-        std::set<KeyframeF*, KeyframeCompare> TransformAnimation::getRotZKeyframes() {
+        std::set<KeyframeF*, KeyframeCompare>& TransformAnimation::getRotZKeyframes() {
             return rotZKeyframes;
         }
     }

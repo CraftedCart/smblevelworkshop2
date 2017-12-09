@@ -97,8 +97,8 @@ namespace WS2Common {
             this->scale = scale;
         }
 
-        void SceneNode::addTransformAnimation() {
-            animation = new Animation::TransformAnimation;
+        void SceneNode::setTransformAnimation(Animation::TransformAnimation *anim) {
+            animation = anim;
         }
 
         void SceneNode::removeTransformAnimation() {
@@ -112,6 +112,14 @@ namespace WS2Common {
 
         const Animation::TransformAnimation* SceneNode::getTransformAnimation() const {
             return animation;
+        }
+
+        void SceneNode::setAnimationSeesawType(EnumAnimationSeesawType type) {
+            this->animationSeesawType = type;
+        }
+
+        EnumAnimationSeesawType SceneNode::getAnimationSeesawType() const {
+            return animationSeesawType;
         }
     }
 }

@@ -21,6 +21,8 @@ namespace WS2Common {
                 EnumEasing easing;
 
             public:
+                Keyframe(float time, T value, EnumEasing easing);
+
                 void setValue(QPair<float, T> value);
                 const QPair<float, T> getValue() const;
                 void setHandleAValue(QPair<float, T> value);

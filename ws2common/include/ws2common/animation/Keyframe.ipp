@@ -11,6 +11,12 @@
 namespace WS2Common {
     namespace Animation {
         template<typename T>
+        Keyframe<T>::Keyframe(float time, T value, EnumEasing easing) {
+            this->value = QPair<float, T>(time, value);
+            this->easing = easing;
+        }
+
+        template<typename T>
         void Keyframe<T>::setValue(QPair<float, T> value) {
             this->value = value;
         }

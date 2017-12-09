@@ -14,6 +14,7 @@
 #include "ws2common/scene/FalloutVolumeSceneNode.hpp"
 #include "ws2common/scene/SwitchSceneNode.hpp"
 #include "ws2common/scene/WormholeSceneNode.hpp"
+#include "ws2common/EnumAnimationSeesawType.hpp"
 #include "ws2common/CollisionGrid.hpp"
 #include <QXmlStreamAttributes>
 #include <QHash>
@@ -182,6 +183,39 @@ namespace WS2Common {
                  * @return The collision parsed from the config
                  */
                 CollisionGrid* parseCollisionGrid(QXmlStreamReader &xml);
+
+                /**
+                 * @brief Parses the animation/seesaw type in an XML config
+                 *
+                 * Make sure the XML reader is within the animSeesawType element before calling this
+                 *
+                 * @param xml The QXmlStreamReader
+                 *
+                 * @return The type parsed from the config
+                 */
+                QPair<EnumAnimationSeesawType, Animation::EnumLoopType> parseAnimLoopType(QXmlStreamReader &xml);
+
+                /**
+                 * @brief Parses transform animation data in an XML config
+                 *
+                 * Make sure the XML reader is within the animKeyframes element before calling this
+                 *
+                 * @param xml The QXmlStreamReader
+                 *
+                 * @return The TransformAnimation parsed from the config
+                 */
+                Animation::TransformAnimation* parseTransformAnimation(QXmlStreamReader &xml);
+
+                /**
+                 * @brief Populates the keyframe set with parsed keyframes
+                 *
+                 * @param xml The QXmlStreamReader
+                 * @param keyframes The keyframe map to populate
+                 */
+                void parseKeyframes(
+                        QXmlStreamReader &xml,
+                        std::set<Animation::KeyframeF*, Animation::KeyframeCompare> &keyframes
+                        );
 
                 /**
                  * @brief Gets an XML attribute with the name attrName

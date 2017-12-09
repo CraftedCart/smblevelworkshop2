@@ -7,6 +7,7 @@
 #define SMBLEVELWORKSHOP2_WS2COMMON_SCENE_SCENENODE_HPP
 
 #include "ws2common/animation/TransformAnimation.hpp"
+#include "ws2common/EnumAnimationSeesawType.hpp"
 #include <glm/glm.hpp>
 #include <QVector>
 
@@ -29,6 +30,7 @@ namespace WS2Common {
                 glm::vec3 scale = glm::vec3(1.0f, 1.0f, 1.0f);
 
                 Animation::TransformAnimation *animation = nullptr;
+                EnumAnimationSeesawType animationSeesawType = ANIMATION;
 
             public:
                 /**
@@ -167,9 +169,9 @@ namespace WS2Common {
                 void setScale(const glm::vec3 scale);
 
                 /**
-                 * @brief Adds empty animation data to this node
+                 * @brief Setter for transformAnimation
                  */
-                void addTransformAnimation();
+                void setTransformAnimation(Animation::TransformAnimation *anim);
 
                 /**
                  * @brief Removes animation data from this node
@@ -189,6 +191,20 @@ namespace WS2Common {
                  * @return A pointer to the animation data if it exists, nullptr otherwise
                  */
                 const Animation::TransformAnimation* getTransformAnimation() const;
+
+                /**
+                 * @brief Setter for animationSeesawType
+                 *
+                 * @param type The type to set
+                 */
+                void setAnimationSeesawType(EnumAnimationSeesawType type);
+
+                /**
+                 * @brief Getter for animationSeesawType
+                 *
+                 * @return Whether this scene node is marked as animatable or as a seesaw
+                 */
+                EnumAnimationSeesawType getAnimationSeesawType() const;
         };
     }
 }

@@ -165,6 +165,11 @@ namespace WS2Common {
             //Default name is "Group", translated
             Scene::GroupSceneNode *group = new Scene::GroupSceneNode(QCoreApplication::tr("XMLConfigParser", "Group"));
 
+            //Some stuff that needs to be linked after parsing the entire group
+            Animation::TransformAnimation *anim = nullptr;
+            Animation::EnumLoopType loopType;
+            float loopTime = 0.0f;
+
             while (!(xml.isEndElement() && xml.name() == "itemGroup")) {
                 xml.readNext();
                 if (!xml.isStartElement()) continue; //Ignore all end elements
@@ -178,8 +183,10 @@ namespace WS2Common {
                     qWarning() << "itemGroup > initialRotation not yet implemented!";
                     xml.skipCurrentElement();
                 } else if (xml.name() == "animSeesawType") { //TODO
-                    qWarning() << "itemGroup > animSeesawType not yet implemented!";
-                    xml.skipCurrentElement();
+                    QPair<EnumAnimationSeesawType, Animation::EnumLoopType> type = parseAnimLoopType(xml);
+
+                    group->setAnimationSeesawType(type.first);
+                    loopType = type.second; //loopType will be linked with an animation later if needed
                 } else if (xml.name() == "conveyorSpeed") { //TODO
                     qWarning() << "itemGroup > conveyorSpeed not yet implemented!";
                     xml.skipCurrentElement();
@@ -193,11 +200,11 @@ namespace WS2Common {
                     qWarning() << "itemGroup > seesawRotationBounds not yet implemented!";
                     xml.skipCurrentElement();
                 } else if (xml.name() == "animKeyframes") { //TODO
-                    qWarning() << "itemGroup > animKeyframes not yet implemented!";
-                    xml.skipCurrentElement();
+                    Animation::TransformAnimation *transformAnim = parseTransformAnimation(xml);
+                    group->setTransformAnimation(transformAnim);
+                    anim = transformAnim; //For later linking (So that the loop type is set in the transformAnim)
                 } else if (xml.name() == "animLoopTime") { //TODO
-                    qWarning() << "itemGroup > animLoopTime not yet implemented!";
-                    xml.skipCurrentElement();
+                    loopTime = xml.readElementText().toFloat(); //For later linking
                 } else if (xml.name() == "animGroupID") { //TODO
                     qWarning() << "itemGroup > animGroupID not yet implemented!";
                     xml.skipCurrentElement();
@@ -228,6 +235,12 @@ namespace WS2Common {
                 } else {
                     qWarning().noquote() << "Unrecognised tag: itemGroup >" << xml.name();
                 }
+            }
+
+            //TODO: Link animation loop type w/ animation is not nullptr
+            if (anim != nullptr) {
+                anim->setLoopType(loopType);
+                anim->setLoopTime(loopTime);
             }
 
             return group;
@@ -451,6 +464,88 @@ namespace WS2Common {
             }
 
             return grid;
+        }
+
+        QPair<EnumAnimationSeesawType, Animation::EnumLoopType> XMLConfigParser::parseAnimLoopType(QXmlStreamReader &xml) {
+            QString str = xml.readElementText();
+            EnumAnimationSeesawType animSeesawType;
+            Animation::EnumLoopType loopType;
+
+            if (str == "LOOPING_ANIMATION") {
+                animSeesawType = ANIMATION;
+                loopType = Animation::LOOPING;
+            } else if (str == "PLAY_ONCE_ANIMATION") {
+                animSeesawType = ANIMATION;
+                loopType = Animation::PLAY_ONCE;
+            } else if (str == "SEESAW") {
+                animSeesawType = SEESAW;
+            }
+
+            return QPair<EnumAnimationSeesawType, Animation::EnumLoopType>(animSeesawType, loopType);
+        }
+
+        Animation::TransformAnimation* XMLConfigParser::parseTransformAnimation(QXmlStreamReader &xml) {
+            Animation::TransformAnimation *anim = new Animation::TransformAnimation;
+
+            while (!(xml.isEndElement() && xml.name() == "animKeyframes")) {
+                xml.readNext();
+                if (!xml.isStartElement()) continue; //Ignore all end elements
+
+                if (xml.name() == "posX") {
+                    parseKeyframes(xml, anim->getPosXKeyframes());
+                } else if (xml.name() == "posY") {
+                    parseKeyframes(xml, anim->getPosYKeyframes());
+                } else if (xml.name() == "posZ") {
+                    parseKeyframes(xml, anim->getPosZKeyframes());
+                } else if (xml.name() == "rotX") {
+                    parseKeyframes(xml, anim->getRotXKeyframes());
+                } else if (xml.name() == "rotY") {
+                    parseKeyframes(xml, anim->getRotYKeyframes());
+                } else if (xml.name() == "rotZ") {
+                    parseKeyframes(xml, anim->getPosZKeyframes());
+                } else {
+                    qWarning().noquote() << "Unrecognised tag: animKeyframes >" << xml.name();
+                }
+            }
+
+            return anim;
+        }
+
+        void XMLConfigParser::parseKeyframes(
+                QXmlStreamReader &xml,
+                std::set<Animation::KeyframeF*, Animation::KeyframeCompare> &keyframes
+                ) {
+            using namespace Animation;
+
+            QStringRef parentName = xml.name();
+
+            while (!(xml.isEndElement() && xml.name() == parentName)) {
+                xml.readNext();
+                if (!xml.isStartElement()) continue; //Ignore all end elements
+
+                if (xml.name() == "keyframe") {
+                    float time;
+                    float value;
+                    EnumEasing easing;
+
+                    //Search through the attributes for time, value, and easing
+                    foreach(const QXmlStreamAttribute &attr, xml.attributes()) {
+                        if (attr.name() == "time") {
+                            time = attr.value().toFloat();
+                        } else if (attr.name() == "value") {
+                            value = attr.value().toFloat();
+                        } else if (attr.name() == "easing") {
+                            easing = Easing::fromString(attr.value().toString());
+                        }
+                    }
+
+                    //Create the keyframe
+                    KeyframeF *k = new KeyframeF(time, value, easing);
+                    keyframes.insert(k);
+                } else {
+                    qWarning().noquote() << "Unrecognised tag: [keyframeIdentier] >" << xml.name();
+                }
+            }
         }
 
         QStringRef XMLConfigParser::getAttribute(const QXmlStreamAttributes &attrs, const QString attrName) {
