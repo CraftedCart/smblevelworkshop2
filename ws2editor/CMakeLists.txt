@@ -12,7 +12,12 @@ add_definitions(-Wall -Wextra -pedantic)
 
 #Show as an executable, not a shared library in file managers
 if(UNIX)
-    set(CMAKE_EXE_LINKER_FLAGS  "${CMAKE_EXE_LINKER_FLAGS} -no-pie")
+    #Dang it AppleClang doesn't support -no-pie, but gcc doesn't support -nopie
+    if("${CMAKE_CXX_COMPILER_ID}" STREQUAL "AppleClang")
+        set(CMAKE_EXE_LINKER_FLAGS  "${CMAKE_EXE_LINKER_FLAGS} -nopie")
+    else("${CMAKE_CXX_COMPILER_ID}" STREQUAL "AppleClang")
+        set(CMAKE_EXE_LINKER_FLAGS  "${CMAKE_EXE_LINKER_FLAGS} -no-pie")
+    endif("${CMAKE_CXX_COMPILER_ID}" STREQUAL "AppleClang")
 endif(UNIX)
 
 #Add compile time proprocessor macro
