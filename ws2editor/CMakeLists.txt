@@ -12,7 +12,7 @@ add_definitions(-Wall -Wextra -pedantic)
 
 #Show as an executable, not a shared library in file managers
 if(UNIX)
-    #-nopie is usused with AppleClang
+    #-nopie is unused with AppleClang
     if(NOT "${CMAKE_CXX_COMPILER_ID}" STREQUAL "AppleClang")
         set(CMAKE_EXE_LINKER_FLAGS  "${CMAKE_EXE_LINKER_FLAGS} -no-pie")
     endif(NOT "${CMAKE_CXX_COMPILER_ID}" STREQUAL "AppleClang")
