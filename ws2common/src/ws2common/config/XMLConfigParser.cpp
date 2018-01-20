@@ -190,15 +190,12 @@ namespace WS2Common {
                 } else if (xml.name() == "conveyorSpeed") { //TODO
                     qWarning() << "itemGroup > conveyorSpeed not yet implemented!";
                     xml.skipCurrentElement();
-                } else if (xml.name() == "seesawSensitivity") { //TODO
-                    qWarning() << "itemGroup > seesawSensitivity not yet implemented!";
-                    xml.skipCurrentElement();
+                } else if (xml.name() == "seesawSensitivity") {
+                    group->setSeesawSensitivity(xml.readElementText().toFloat()); //TODO: Error checking
                 } else if (xml.name() == "seesawResetStiffness") { //TODO
-                    qWarning() << "itemGroup > seesawResetStiffness not yet implemented!";
-                    xml.skipCurrentElement();
+                    group->setSeesawResetStiffness(xml.readElementText().toFloat()); //TODO: Error checking
                 } else if (xml.name() == "seesawRotationBounds") { //TODO
-                    qWarning() << "itemGroup > seesawRotationBounds not yet implemented!";
-                    xml.skipCurrentElement();
+                    group->setSeesawRotationBounds(xml.readElementText().toFloat()); //TODO: Error checking
                 } else if (xml.name() == "animKeyframes") { //TODO
                     Animation::TransformAnimation *transformAnim = parseTransformAnimation(xml);
                     group->setTransformAnimation(transformAnim);

@@ -32,6 +32,10 @@ namespace WS2Common {
                 Animation::TransformAnimation *animation = nullptr;
                 EnumAnimationSeesawType animationSeesawType = ANIMATION;
 
+                float seesawSensitivity = 0.0f;
+                float seesawResetStiffness = 0.0f;
+                float seesawRotationBounds = 0.0f;
+
             public:
                 /**
                  * @brief Constructs a new SceneNode with the name specified
@@ -193,6 +197,13 @@ namespace WS2Common {
                 const Animation::TransformAnimation* getTransformAnimation() const;
 
                 /**
+                 * @brief Getter for animationSeesawType
+                 *
+                 * @return Whether this scene node is marked as animatable or as a seesaw
+                 */
+                EnumAnimationSeesawType getAnimationSeesawType() const;
+
+                /**
                  * @brief Setter for animationSeesawType
                  *
                  * @param type The type to set
@@ -200,11 +211,46 @@ namespace WS2Common {
                 void setAnimationSeesawType(EnumAnimationSeesawType type);
 
                 /**
-                 * @brief Getter for animationSeesawType
+                 * @brief Getter for seesawSensitivity
                  *
-                 * @return Whether this scene node is marked as animatable or as a seesaw
+                 * @return The seesaw sensitivity (Higher is more sensitive, negative makes the seesaw reversed)
                  */
-                EnumAnimationSeesawType getAnimationSeesawType() const;
+                float getSeesawSensitivity() const;
+
+                /**
+                 * @brief Setter for seesawSensitivity
+                 *
+                 * @param value The new seesaw sensitivity (Higher is more sensitive, negative makes the seesaw reversed)
+                 */
+                void setSeesawSensitivity(float value);
+
+                /**
+                 * @brief Getter for seesawResetStiffness
+                 *
+                 * @return The seesaw reset stiffness (Lower is looser)
+                 */
+                float getSeesawResetStiffness() const;
+
+                /**
+                 * @brief Setter for seesawResetStiffness
+                 *
+                 * @param value The new seesaw reset stiffness (Lower is looser)
+                 */
+                void setSeesawResetStiffness(float value);
+
+                /**
+                 * @brief Getter for seesawRotationBounds
+                 *
+                 * @return The seesaw bounds of rotation (Higher is less)
+                 */
+                float getSeesawRotationBounds() const;
+
+                /**
+                 * @brief Setter for seesawRotationBounds
+                 *
+                 * @param value The new seesaw seesaw bounds of rotation (Higher is less)
+                 */
+                void setSeesawRotationBounds(float value);
         };
     }
 }

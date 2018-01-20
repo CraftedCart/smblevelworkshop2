@@ -121,6 +121,30 @@ namespace WS2Common {
         EnumAnimationSeesawType SceneNode::getAnimationSeesawType() const {
             return animationSeesawType;
         }
+
+        float SceneNode::getSeesawSensitivity() const {
+            return seesawSensitivity;
+        }
+
+        void SceneNode::setSeesawSensitivity(float value) {
+            seesawSensitivity = value;
+        }
+
+        float SceneNode::getSeesawResetStiffness() const {
+            return seesawResetStiffness;
+        }
+
+        void SceneNode::setSeesawResetStiffness(float value) {
+            seesawResetStiffness = value;
+        }
+
+        float SceneNode::getSeesawRotationBounds() const {
+            return seesawRotationBounds;
+        }
+
+        void SceneNode::setSeesawRotationBounds(float value) {
+            seesawRotationBounds = value;
+        }
     }
 }
 

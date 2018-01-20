@@ -517,7 +517,20 @@ namespace WS2Lz {
         writeNull(dev, 48); //TODO: Everything else
         dev << levelModelCountMap.value(node);
         dev << levelModelPointerBOffsetMap.key(node);
-        writeNull(dev, 56); //TODO: Everything else
+        writeNull(dev, 8); //Unknown/Null
+        writeNull(dev, 2); //TODO: Anim group ID
+        writeNull(dev, 2); //Null padding
+        writeNull(dev, 4); //TODO: Switch count
+        writeNull(dev, 4); //TODO: Switch offset
+        writeNull(dev, 4); //Unknown/Null (Mystery 5 count?)
+        writeNull(dev, 4); //TODO: Offset to mystery 5
+        dev << node->getSeesawSensitivity();
+        dev << node->getSeesawResetStiffness();
+        dev << node->getSeesawRotationBounds();
+        writeNull(dev, 4); //TODO: Wormhole count
+        writeNull(dev, 4); //TODO: Wormhole offset
+        writeNull(dev, 4); //TODO: Initial animation state
+        writeNull(dev, 4); //TODO: Unknown/Null
         dev << (anim != nullptr ? anim->getLoopTime() : (quint32) 0); //Anim loop time
         writeNull(dev, 964); //TODO: Everything else
     }
