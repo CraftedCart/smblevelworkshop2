@@ -75,28 +75,28 @@ namespace WS2Lz {
 
             //Offsets and counts
             //Key: Offset, Value: What the offset points to
-            QMap<quint32, const Scene::GroupSceneNode*> collisionHeaderOffsetMap;
+            QMultiMap<quint32, const Scene::GroupSceneNode*> collisionHeaderOffsetMap;
             quint32 startOffset;
             quint32 falloutOffset;
-            QMap<quint32, const Scene::GroupSceneNode*> gridTriangleListPointersOffsetMap;
+            QMultiMap<quint32, const Scene::GroupSceneNode*> gridTriangleListPointersOffsetMap;
             QMap<const Scene::GroupSceneNode*, QVector<quint32>> gridTriangleIndexListOffsetMap;
-            QMap<quint32, const Scene::GroupSceneNode*> gridTriangleListOffsetMap;
+            QMultiMap<quint32, const Scene::GroupSceneNode*> gridTriangleListOffsetMap;
             //Offsets and counts for goals, bumpers, etc per collision header
-            QMap<quint32, const Scene::GroupSceneNode*> goalOffsetMap;
+            QMultiMap<quint32, const Scene::GroupSceneNode*> goalOffsetMap;
             QMap<const Scene::GroupSceneNode*, quint32> goalCountMap;
-            QMap<quint32, const Scene::GroupSceneNode*> bumperOffsetMap;
+            QMultiMap<quint32, const Scene::GroupSceneNode*> bumperOffsetMap;
             QMap<const Scene::GroupSceneNode*, quint32> bumperCountMap;
-            QMap<quint32, const Scene::GroupSceneNode*> jamabarOffsetMap;
+            QMultiMap<quint32, const Scene::GroupSceneNode*> jamabarOffsetMap;
             QMap<const Scene::GroupSceneNode*, quint32> jamabarCountMap;
-            QMap<quint32, const Scene::GroupSceneNode*> bananaOffsetMap;
+            QMultiMap<quint32, const Scene::GroupSceneNode*> bananaOffsetMap;
             QMap<const Scene::GroupSceneNode*, quint32> bananaCountMap;
-            QMap<quint32, const Scene::GroupSceneNode*> groupAnimHeaderOffsetMap;
-            QMap<quint32, const Animation::TransformAnimation*> animPosXKeyframesOffsetMap;
-            QMap<quint32, const Animation::TransformAnimation*> animPosYKeyframesOffsetMap;
-            QMap<quint32, const Animation::TransformAnimation*> animPosZKeyframesOffsetMap;
-            QMap<quint32, const Animation::TransformAnimation*> animRotXKeyframesOffsetMap;
-            QMap<quint32, const Animation::TransformAnimation*> animRotYKeyframesOffsetMap;
-            QMap<quint32, const Animation::TransformAnimation*> animRotZKeyframesOffsetMap;
+            QMultiMap<quint32, const Scene::GroupSceneNode*> groupAnimHeaderOffsetMap;
+            QMultiMap<quint32, const Animation::TransformAnimation*> animPosXKeyframesOffsetMap;
+            QMultiMap<quint32, const Animation::TransformAnimation*> animPosYKeyframesOffsetMap;
+            QMultiMap<quint32, const Animation::TransformAnimation*> animPosZKeyframesOffsetMap;
+            QMultiMap<quint32, const Animation::TransformAnimation*> animRotXKeyframesOffsetMap;
+            QMultiMap<quint32, const Animation::TransformAnimation*> animRotYKeyframesOffsetMap;
+            QMultiMap<quint32, const Animation::TransformAnimation*> animRotZKeyframesOffsetMap;
             //TODO: Replace all this with maps \/
             quint32 coneCollisionObjectCount;
             quint32 coneCollisionObjectListOffset;
@@ -106,16 +106,16 @@ namespace WS2Lz {
             quint32 cylinderCollisionObjectListOffset;
             quint32 falloutVolumeCount;
             quint32 falloutVolumeListOffset;
-            QMap<quint32, const Scene::MeshSceneNode*> bgOffsetMap;
-            QMap<quint32, QString> bgNameOffsetMap;
+            QMultiMap<quint32, const Scene::MeshSceneNode*> bgOffsetMap;
+            QMultiMap<quint32, QString> bgNameOffsetMap;
             //TODO: Mystery 8
             //TODO: Reflective level models
             //TODO: Level model instances
-            QMap<quint32, const Scene::GroupSceneNode*> levelModelPointerAOffsetMap;
-            QMap<quint32, const Scene::GroupSceneNode*> levelModelPointerBOffsetMap;
-            QMap<quint32, const Scene::GroupSceneNode*> levelModelOffsetMap;
+            QMultiMap<quint32, const Scene::GroupSceneNode*> levelModelPointerAOffsetMap;
+            QMultiMap<quint32, const Scene::GroupSceneNode*> levelModelPointerBOffsetMap;
+            QMultiMap<quint32, const Scene::GroupSceneNode*> levelModelOffsetMap;
             QMap<const Scene::GroupSceneNode*, quint32> levelModelCountMap;
-            QMap<quint32, QString> levelModelNameOffsetMap;
+            QMultiMap<quint32, QString> levelModelNameOffsetMap;
             quint32 switchCount;
             quint32 switchListOffset;
             //TODO: Fog anim header

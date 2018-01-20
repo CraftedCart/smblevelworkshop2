@@ -147,9 +147,9 @@ namespace WS2Lz {
 
         //Find all GroupSceneNodes/Collision headers
         foreach(Scene::SceneNode *node, stage.getRootNode()->getChildren()) {
-            if (instanceOf<Scene::GroupSceneNode>(node)) {
+            if (Scene::GroupSceneNode *group = dynamic_cast<Scene::GroupSceneNode*>(node)) {
                 //Found one
-                collisionHeaderOffsetMap[nextOffset] = static_cast<Scene::GroupSceneNode*>(node);
+                collisionHeaderOffsetMap.insert(nextOffset, group);
                 nextOffset += COLLISION_HEADER_LENGTH;
             }
         }
@@ -157,14 +157,14 @@ namespace WS2Lz {
         //Iterate over all GroupSceneNodes/collision headers, and call addCollisionTriangleOffsets with them
         //This is for Collision Triangle data
         forEachGroup(group) {
-            gridTriangleListOffsetMap[nextOffset] = group;
+            gridTriangleListOffsetMap.insert(nextOffset, group);
             addCollisionTriangleOffsets(group, nextOffset);
         }
 
         //Iterate over all GroupSceneNodes/collision headers, and fill the gridTriangleListPointersOffsetMap
         //This is for Collision Triangle Pointers
         forEachGroup(group) {
-            gridTriangleListPointersOffsetMap[nextOffset] = group;
+            gridTriangleListPointersOffsetMap.insert(nextOffset, group);
             const CollisionGrid *grid = group->getCollisionGrid();
             nextOffset += COLLISION_TRIANGLE_LIST_POINTER_LENGTH * grid->getGridStepCount().x * grid->getGridStepCount().y;
         }
@@ -172,7 +172,7 @@ namespace WS2Lz {
         //Iterate over all GroupSceneNodes/collision headers, and fill the gridTriangleListOffsetMap
         //This is for the Collision Triangle Index List
         forEachGroup(group) {
-            gridTriangleListOffsetMap[nextOffset] = group;
+            gridTriangleListOffsetMap.insert(nextOffset, group);
 
             //2D vector (X, Y) containing vectors of triangle indices
             QVector<QVector<QVector<quint16>>> indicesGrid = triangleIntGridMap.value(group)->getIndicesGrid();
@@ -201,7 +201,7 @@ namespace WS2Lz {
         //Additionally, this should avoid the no extra points glitch, as the 1st collision header should point to a
         //goal list regardless of whether it has any goals or not
         forEachGroup(group) {
-            goalOffsetMap[nextOffset] = group;
+            goalOffsetMap.insert(nextOffset, group);
             quint32 goalCount = 0; //Number of goals in this collision header
 
             forEachChildType(group, Scene::GoalSceneNode*, node) {
@@ -216,7 +216,7 @@ namespace WS2Lz {
         //Iterate over all GroupSceneNodes/collision headers, and count bumpers to add to nextOffset
         //Basically the exact same as before with goals
         forEachGroup(group) {
-            bumperOffsetMap[nextOffset] = group;
+            bumperOffsetMap.insert(nextOffset, group);
             quint32 bumperCount = 0; //Number of bumpers in this collision header
 
             forEachChildType(group, Scene::BumperSceneNode*, node) {
@@ -231,7 +231,7 @@ namespace WS2Lz {
         //Iterate over all GroupSceneNodes/collision headers, and count jamabars to add to nextOffset
         //Basically the exact same as before with goals
         forEachGroup(group) {
-            jamabarOffsetMap[nextOffset] = group;
+            jamabarOffsetMap.insert(nextOffset, group);
             quint32 jamabarCount = 0; //Number of jamabars in this collision header
 
             forEachChildType(group, Scene::JamabarSceneNode*, node) {
@@ -246,7 +246,7 @@ namespace WS2Lz {
         //Iterate over all GroupSceneNodes/collision headers, and count bananas to add to nextOffset
         //Basically the exact same as before with goals
         forEachGroup(group) {
-            bananaOffsetMap[nextOffset] = group;
+            bananaOffsetMap.insert(nextOffset, group);
             quint32 bananaCount = 0; //Number of bananas in this collision header
 
             forEachChildType(group, Scene::BananaSceneNode*, node) {
@@ -262,7 +262,7 @@ namespace WS2Lz {
         //For level model pointer type A
         //Basically the exact same as before with goals
         forEachGroup(group) {
-            levelModelPointerAOffsetMap[nextOffset] = group;
+            levelModelPointerAOffsetMap.insert(nextOffset, group);
 
             forEachChildType(group, Scene::MeshSceneNode*, node) {
                 nextOffset += LEVEL_MODEL_POINTER_TYPE_A_LENGTH;
@@ -273,7 +273,7 @@ namespace WS2Lz {
         //For level model pointer type B
         //Basically the exact same as before with goals
         forEachGroup(group) {
-            levelModelPointerBOffsetMap[nextOffset] = group;
+            levelModelPointerBOffsetMap.insert(nextOffset, group);
 
             forEachChildType(group, Scene::MeshSceneNode*, node) {
                 nextOffset += LEVEL_MODEL_POINTER_TYPE_B_LENGTH;
@@ -283,7 +283,7 @@ namespace WS2Lz {
         //Iterate over all GroupSceneNodes/collision headers, and count level models to add to nextOffset
         //Basically the exact same as before with goals
         forEachGroup(group) {
-            levelModelOffsetMap[nextOffset] = group;
+            levelModelOffsetMap.insert(nextOffset, group);
             quint32 levelModelCount = 0; //Number of levelModels in this collision header
 
             forEachChildType(group, Scene::MeshSceneNode*, node) {
@@ -298,7 +298,7 @@ namespace WS2Lz {
         //Iterate over all level models, and add the model name + null terminator padded to 4 bytes to nextOffset
         forEachGroup(group) {
             forEachChildType(group, Scene::MeshSceneNode*, node) {
-                levelModelNameOffsetMap[nextOffset] = node->getMeshName();
+                levelModelNameOffsetMap.insert(nextOffset, node->getMeshName());
 
                 //+ 1 because size() does not include a null terminator
                 nextOffset += roundUpNearest4(node->getMeshName().size() + 1);
@@ -312,10 +312,10 @@ namespace WS2Lz {
 
                 //Found one, now iterate over all children
                 foreach(Scene::SceneNode *bg, group->getChildren()) {
-                    if (instanceOf<Scene::MeshSceneNode>(bg)) {
+                    if (Scene::MeshSceneNode *mesh = dynamic_cast<Scene::MeshSceneNode*>(bg)) {
                         //Found a background mesh
                         //Add it to a map
-                        bgOffsetMap[nextOffset] = static_cast<Scene::MeshSceneNode*>(bg);
+                        bgOffsetMap.insert(nextOffset, mesh);
                         nextOffset += BACKGROUND_MODEL_LENGTH;
                     } else {
                         qWarning() << "There's a non-MeshSceneNode within a background group. This should never happen. Ignoring for now.";
@@ -326,7 +326,7 @@ namespace WS2Lz {
 
         //Iterate over all background models, and add the model name + null terminator padded to 4 bytes to nextOffset
         forEachBg(node) {
-            bgNameOffsetMap[nextOffset] = node->getMeshName();
+            bgNameOffsetMap.insert(nextOffset, node->getMeshName());
 
             //+ 1 because size() does not include a null terminator
             nextOffset += roundUpNearest4(node->getMeshName().size() + 1);
