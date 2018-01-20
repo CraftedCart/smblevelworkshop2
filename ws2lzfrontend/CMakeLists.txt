@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.6.2)
+cmake_minimum_required(VERSION 3.9.0)
 project(ws2lzfrontend)
 
 #Use C++ 11
@@ -12,7 +12,10 @@ add_definitions(-Wall -Wextra -pedantic)
 
 #Show as an executable, not a shared library in file managers
 if(UNIX)
-    set(CMAKE_EXE_LINKER_FLAGS  "${CMAKE_EXE_LINKER_FLAGS} -no-pie")
+    #-nopie is usused with AppleClang
+    if(NOT "${CMAKE_CXX_COMPILER_ID}" STREQUAL "AppleClang")
+        set(CMAKE_EXE_LINKER_FLAGS  "${CMAKE_EXE_LINKER_FLAGS} -no-pie")
+    endif(NOT "${CMAKE_CXX_COMPILER_ID}" STREQUAL "AppleClang")
 endif(UNIX)
 
 #Automatically run moc, uic and rcc when needed
@@ -22,6 +25,9 @@ set(CMAKE_AUTOMOC ON)
 find_package(Qt5Core REQUIRED)
 include_directories(./include)
 include_directories(${CMAKE_BINARY_DIR})
+
+find_package(glm REQUIRED)
+include_directories(SYSTEM ${GLM_INCLUDE_DIRS})
 
 set(SOURCE_FILES
     ./src/ws2lzfrontend/main.cpp
