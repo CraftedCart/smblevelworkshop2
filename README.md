@@ -105,6 +105,29 @@ cmake -DCMAKE_BUILD_TYPE="RelWithDebInfo" ..
 make -j 4
 ```
 
+#### macOS issues
+
+On macOS, this can fail in a few places.
+
+If cmake can't find Qt5 configuration files, run the following command (assuming you installed cmake with brew) then try again.
+
+```shell
+export CMAKE_PREFIX_PATH="/usr/local/opt/qt/lib/cmake"
+```
+
+If you installed glm and assimp with brew, it's possible that clang won't find the include files. Run the following command then try again.
+
+```shell
+export CPLUS_INCLUDE_PATH="/usr/local/opt/glm/include:/usr/local/opt/assimp/include"
+```
+
+The current version of clang doesn't recognise the `-no-pie` option, it uses `-nopie` instead. Run the following commands if you get linker errors (`clang: error: unknown argument: '-no-pie'`).
+
+```shell
+sed -i -e 's/-no-pie/-nopie/' ./ws2lzfrontend/CMakeFiles/ws2lzfrontend.dir/link.txt
+sed -i -e 's/-no-pie/-nopie/' ./ws2editor/CMakeFiles/ws2editor.dir/link.txt
+```
+
 ### With Make, MSYS Makefiles
 
 Replace the 4 in `-j 4` with however many threads you want Make to use
