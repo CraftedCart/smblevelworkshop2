@@ -107,26 +107,33 @@ make -j 4
 
 #### macOS issues
 
-On macOS, this can fail in a few places.
+While this works on my machine™, others have reported that on macOS, the build can fail in a few places.
 
-If cmake can't find Qt5 configuration files, run the following command (assuming you installed cmake with brew) then try again.
+If CMake can't find Qt5 configuration files, run the following command (Assuming you installed CMake with `brew`) then try again.
 
 ```shell
 export CMAKE_PREFIX_PATH="/usr/local/opt/qt/lib/cmake"
 ```
 
-If you installed glm and assimp with brew, it's possible that clang won't find the include files. Run the following command then try again.
+If you get linker errors with `-lassimp`, well I have no idea what's going on. You can edit `ws2common/CMakeLists.txt` to include a full path to `libassimp.dylib`.
 
-```shell
-export CPLUS_INCLUDE_PATH="/usr/local/opt/glm/include:/usr/local/opt/assimp/include"
+Replace
+
+```cmake
+if(APPLE) #For whatever reason ASSIMP_LIBRARIES does not use a full path on macOS
+    link_directories(${ASSIMP_LINK_DIRS})
+endif(APPLE)
 ```
 
-The current version of clang doesn't recognise the `-no-pie` option, it uses `-nopie` instead. Run the following commands if you get linker errors (`clang: error: unknown argument: '-no-pie'`).
+with
 
-```shell
-sed -i -e 's/-no-pie/-nopie/' ./ws2lzfrontend/CMakeFiles/ws2lzfrontend.dir/link.txt
-sed -i -e 's/-no-pie/-nopie/' ./ws2editor/CMakeFiles/ws2editor.dir/link.txt
+```cmake
+if(APPLE)
+    set(ASSIMP_LIBRARIES /usr/local/lib/libassimp.dylib)
+endif(APPLE)
 ```
+
+The path there is the default place where Homebrew installs assimp.
 
 ### With Make, MSYS Makefiles
 
