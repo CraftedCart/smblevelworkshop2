@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.6.2)
+cmake_minimum_required(VERSION 3.9.0)
 project(ws2common)
 
 #Use C++ 11
