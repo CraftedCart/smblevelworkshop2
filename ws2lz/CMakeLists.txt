@@ -15,6 +15,10 @@ set(CMAKE_AUTOMOC ON)
 
 #External dependencies
 find_package(Qt5Core REQUIRED)
+
+find_package(glm REQUIRED)
+include_directories(SYSTEM ${GLM_INCLUDE_DIRS})
+
 include_directories(./include)
 include_directories(${CMAKE_BINARY_DIR})
 

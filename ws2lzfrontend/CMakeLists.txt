@@ -28,6 +28,9 @@ find_package(Qt5Core REQUIRED)
 include_directories(./include)
 include_directories(${CMAKE_BINARY_DIR})
 
+find_package(glm REQUIRED)
+include_directories(SYSTEM ${GLM_INCLUDE_DIRS})
+
 set(SOURCE_FILES
     ./src/ws2lzfrontend/main.cpp
     )

@@ -18,6 +18,9 @@ set(CMAKE_AUTORCC ON)
 find_package(Qt5Core REQUIRED)
 find_package(Qt5Gui REQUIRED) #Need Gui for image guff
 
+find_package(glm REQUIRED)
+include_directories(SYSTEM ${GLM_INCLUDE_DIRS})
+
 find_package(assimp REQUIRED)
 include_directories(SYSTEM ${ASSIMP_INCLUDE_DIRS})
 if(APPLE) #-lassimp doesn't seem to work with homebrew installed Assimp
