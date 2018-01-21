@@ -109,7 +109,7 @@ make -j 4
 
 While this works on my machine™, others have reported that on macOS, the build can fail in a few places.
 
-If CMake can't find Qt5 configuration files, run the following command (Assuming you installed CMake with `brew`) then try again.
+If CMake can't find Qt5 configuration files, run the following command (Assuming you installed Qt5 with `brew`) then try again.
 
 ```shell
 export CMAKE_PREFIX_PATH="/usr/local/opt/qt/lib/cmake"
