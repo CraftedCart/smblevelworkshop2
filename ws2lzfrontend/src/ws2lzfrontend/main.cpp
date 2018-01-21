@@ -17,7 +17,7 @@ int main(int argc, char *argv[]) {
     qInstallMessageHandler(WS2Common::messageHandler);
 
     QCoreApplication app(argc, argv);
-    QCoreApplication::setApplicationName("ws2frontend");
+    QCoreApplication::setApplicationName("ws2lzfrontend");
 
     QCommandLineParser parser;
     parser.setApplicationDescription("An interface for ws2lz, to export LZ files for use within Super Monkey Ball");
