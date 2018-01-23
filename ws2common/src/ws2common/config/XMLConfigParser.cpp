@@ -57,19 +57,28 @@ namespace WS2Common {
             }
 
             //Done parsing - now link wormholes
+            if (wormholeDestMap.size() > 0) qDebug().noquote() << QString("Linking %1 wormholes...").arg(wormholeDestMap.size());
+
             QHashIterator<Scene::WormholeSceneNode*, QString> i(wormholeDestMap);
             while (i.hasNext()) {
                 i.next();
 
                 //Iterate over all wormholes to find the one with the matching destination name
                 QHashIterator<Scene::WormholeSceneNode*, QString> j(wormholeDestMap);
+                bool linkSuccess = false;
                 while (j.hasNext()) {
                     j.next();
 
                     if (i.value() == j.key()->getName()) {
                         i.key()->setDestination(j.key());
+                        linkSuccess = true;
                         break;
                     }
+                }
+
+                //If we couldn't find a wormhole to link against, warn the user
+                if (!linkSuccess) {
+                    qWarning().noquote() << QString("Failed to link wormhole \"%1\" to \"%2\" - \"%2\" doesn't exist").arg(j.key()->getName()).arg(i.value());
                 }
             }
 
