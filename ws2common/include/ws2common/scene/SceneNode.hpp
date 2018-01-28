@@ -25,6 +25,8 @@ namespace WS2Common {
                 QVector<SceneNode*> children;
                 SceneNode *parent;
 
+                glm::vec3 origin = glm::vec3(0.0f, 0.0f, 0.0f);
+
                 glm::vec3 position = glm::vec3(0.0f, 0.0f, 0.0f);
                 glm::vec3 rotation = glm::vec3(0.0f, 0.0f, 0.0f);
                 glm::vec3 scale = glm::vec3(1.0f, 1.0f, 1.0f);
@@ -129,6 +131,20 @@ namespace WS2Common {
                  * @param parent The parent to set
                  */
                 virtual void setParent(SceneNode *parent);
+
+                /**
+                 * @brief Getter for origin
+                 *
+                 * @return The origin point of this node
+                 */
+                glm::vec3 getOrigin() const;
+
+                /**
+                 * @brief Setter for origin
+                 *
+                 * @param position The new origin point to set
+                 */
+                void setOrigin(const glm::vec3 origin);
 
                 /**
                  * @brief Getter for position

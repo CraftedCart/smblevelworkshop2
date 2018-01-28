@@ -177,8 +177,7 @@ namespace WS2Common {
                 if (xml.name() == "name") {
                     group->setName(xml.readElementText());
                 } else if (xml.name() == "rotationCenter") { //TODO
-                    qWarning() << "itemGroup > rotationCenter not yet implemented!";
-                    xml.skipCurrentElement();
+                    group->setOrigin(getVec3Attributes(xml.attributes()));
                 } else if (xml.name() == "initialRotation") { //TODO
                     qWarning() << "itemGroup > initialRotation not yet implemented!";
                     xml.skipCurrentElement();
