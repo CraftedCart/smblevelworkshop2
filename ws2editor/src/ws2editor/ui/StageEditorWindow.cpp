@@ -20,6 +20,13 @@ namespace WS2Editor {
         StageEditorWindow::StageEditorWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::StageEditorWindow) {
             ui->setupUi(this);
 
+            setDockOptions(
+                    QMainWindow::AnimatedDocks |
+                    QMainWindow::AllowNestedDocks |
+                    QMainWindow::AllowTabbedDocks |
+                    QMainWindow::GroupedDragging
+                    );
+
             statusTaskProgressBar->hide();
             statusTaskProgressBar->setMinimumWidth(128); //Prevent the progress bar size from fluctuating
             statusTaskProgressBar->setMaximumWidth(128);
