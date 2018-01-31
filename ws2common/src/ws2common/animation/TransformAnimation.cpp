@@ -4,7 +4,7 @@ namespace WS2Common {
     namespace Animation {
         //Comparison function for keyframe lookup - to ensure that keyframes are ordered by time
         bool KeyframeCompare::operator() (const KeyframeF* lhs, const KeyframeF* rhs) const {
-            return lhs->getValue().first < rhs->getValue().second;
+            return lhs->getValue().first < rhs->getValue().first;
         }
 
         EnumLoopType TransformAnimation::getLoopType() const {
