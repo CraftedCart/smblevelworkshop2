@@ -484,8 +484,8 @@ namespace WS2Lz {
         //Will be nullptr if this node has no animation
         const Animation::TransformAnimation *anim = node->getTransformAnimation();
 
-        dev << node->getOrigin(); //Center of rotation
-        writeNull(dev, 6); //TODO: Initial rotation vec3
+        dev << node->getOriginPosition(); //Center of rotation
+        dev << convertRotation(node->getOriginRotation()); //Center of rotation
 
         //Animation loop type/seesaw
         if (node->getAnimationSeesawType() == SEESAW) {

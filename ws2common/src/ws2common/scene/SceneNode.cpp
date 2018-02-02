@@ -73,12 +73,20 @@ namespace WS2Common {
             this->parent = parent;
         }
 
-        glm::vec3 SceneNode::getOrigin() const {
-            return origin;
+        glm::vec3 SceneNode::getOriginPosition() const {
+            return originPosition;
         }
 
-        void SceneNode::setOrigin(const glm::vec3 origin) {
-            this->origin = origin;
+        void SceneNode::setOriginPosition(const glm::vec3 originPosition) {
+            this->originPosition = originPosition;
+        }
+
+        glm::vec3 SceneNode::getOriginRotation() const {
+            return originRotation;
+        }
+
+        void SceneNode::setOriginRotation(const glm::vec3 originRotation) {
+            this->originRotation = originRotation;
         }
 
         glm::vec3 SceneNode::getPosition() const {

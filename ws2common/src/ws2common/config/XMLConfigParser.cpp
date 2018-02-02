@@ -177,10 +177,9 @@ namespace WS2Common {
                 if (xml.name() == "name") {
                     group->setName(xml.readElementText());
                 } else if (xml.name() == "rotationCenter") { //TODO
-                    group->setOrigin(getVec3Attributes(xml.attributes()));
+                    group->setOriginPosition(getVec3Attributes(xml.attributes()));
                 } else if (xml.name() == "initialRotation") { //TODO
-                    qWarning() << "itemGroup > initialRotation not yet implemented!";
-                    xml.skipCurrentElement();
+                    group->setOriginRotation(getVec3Attributes(xml.attributes()));
                 } else if (xml.name() == "animSeesawType") { //TODO
                     QPair<EnumAnimationSeesawType, Animation::EnumLoopType> type = parseAnimLoopType(xml);
 
