@@ -497,7 +497,7 @@ namespace WS2Common {
                 } else if (xml.name() == "rotY") {
                     parseKeyframes(xml, anim->getRotYKeyframes());
                 } else if (xml.name() == "rotZ") {
-                    parseKeyframes(xml, anim->getPosZKeyframes());
+                    parseKeyframes(xml, anim->getRotZKeyframes());
                 } else {
                     qWarning().noquote() << "Unrecognised tag: animKeyframes >" << xml.name();
                 }
