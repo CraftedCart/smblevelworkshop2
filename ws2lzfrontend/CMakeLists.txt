@@ -23,6 +23,8 @@ set(CMAKE_AUTOMOC ON)
 
 #External dependencies
 find_package(Qt5Core REQUIRED)
+find_package(Qt5LinguistTools REQUIRED)
+
 include_directories(./include)
 include_directories(${CMAKE_BINARY_DIR})
 
@@ -36,7 +38,11 @@ set(SOURCE_FILES
 set(HEADER_FILES
     )
 
-add_executable(${PROJECT_NAME} ${SOURCE_FILES} ${HEADER_FILES})
+#TRANSLATIONS is defined by the parent CMakeLists.txt
+qt5_create_translation(TRANSLATION_FILES ${SOURCE_FILES} ${HEADER_FILES} ${TRANSLATIONS})
+qt5_add_translation(QM_FILES ${TRANSLATIONS})
+
+add_executable(${PROJECT_NAME} ${SOURCE_FILES} ${HEADER_FILES} ${TRANSLATION_FILES})
 
 #External dependencies
 target_link_libraries(${PROJECT_NAME}
@@ -57,4 +63,7 @@ if(WIN32)
 else(WIN32)
     install(TARGETS ${PROJECT_NAME} DESTINATION bin)
 endif(WIN32)
+
+#Translations
+install(FILES ${QM_FILES} DESTINATION share/ws2lzfrontend/lang)
 

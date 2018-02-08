@@ -6,12 +6,17 @@
 #include <QFile>
 #include <QSurfaceFormat>
 #include <QSplashScreen>
+#include <QTranslator>
 
 int main(int argc, char *argv[]) {
     qInstallMessageHandler(WS2Common::messageHandler);
 
     //Init WS2
     WS2Editor::ws2Init(argc, argv);
+
+    //QTranslator translator;
+    //translator.load("lang_ja_JA", QDir(QCoreApplication::applicationDirPath()).filePath("../share/ws2editor/lang"));
+    //WS2Editor::ws2App->installTranslator(&translator);
 
     //Splash screen
     QPixmap pixmap(":/Workshop2/Images/banner.png");

@@ -32,6 +32,7 @@ set(CMAKE_AUTORCC ON)
 #External dependencies
 find_package(Qt5Core REQUIRED)
 find_package(Qt5Widgets REQUIRED)
+find_package(Qt5LinguistTools REQUIRED)
 
 find_package(OpenGL REQUIRED)
 include_directories(SYSTEM ${OPENGL_INCLUDE_DIRS})
@@ -109,12 +110,23 @@ set(HEADER_FILES
     ./include/ws2editor/task/ImportFileTask.hpp
     )
 
+set(UI_FILES
+    ./src/ws2editor/ui/StageEditorWindow.ui
+    ./src/ws2editor/ui/SettingsDialog.ui
+    ./src/ws2editor/ui/StageIdeaGeneratorWindow.ui
+    ./src/ws2editor/ui/AboutWindow.ui
+    )
+
 set(RESOURCE_FILES
     ./resources/Workshop2/Workshop2Resources.qrc
     ./resources/Styles/FlatDark/flatdark.qrc
     )
 
-add_executable(${PROJECT_NAME} ${SOURCE_FILES} ${HEADER_FILES} ${RESOURCE_FILES})
+#TRANSLATIONS is defined by the parent CMakeLists.txt
+qt5_create_translation(TRANSLATION_FILES ${SOURCE_FILES} ${HEADER_FILES} ${UI_FILES} ${TRANSLATIONS})
+qt5_add_translation(QM_FILES ${TRANSLATIONS})
+
+add_executable(${PROJECT_NAME} ${SOURCE_FILES} ${HEADER_FILES} ${RESOURCE_FILES} ${TRANSLATION_FILES})
 
 #External dependencies
 target_link_libraries(${PROJECT_NAME}
@@ -144,4 +156,7 @@ if(UNIX AND NOT APPLE)
     install(FILES ./resources/Raw/ws2editor.desktop DESTINATION share/applications)
     install(FILES ./resources/Raw/ws2editor.png DESTINATION share/icons)
 endif(UNIX AND NOT APPLE)
+
+#Translations
+install(FILES ${QM_FILES} DESTINATION share/ws2editor/lang)
 
