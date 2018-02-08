@@ -22,10 +22,10 @@ int main(int argc, char *argv[]) {
     QPixmap pixmap(":/Workshop2/Images/banner.png");
     QSplashScreen splash(pixmap);
     splash.show();
-    splash.showMessage(WS2Editor::ws2App->tr("Initializing WS2"), Qt::AlignRight | Qt::AlignBottom, Qt::white);
+    splash.showMessage(QApplication::translate("main", "Initializing WS2"), Qt::AlignRight | Qt::AlignBottom, Qt::white);
     WS2Editor::ws2App->processEvents();
 
-    splash.showMessage(WS2Editor::ws2App->tr("Setting default OpenGL format"), Qt::AlignRight | Qt::AlignBottom, Qt::white);
+    splash.showMessage(QApplication::translate("main", "Setting default OpenGL format"), Qt::AlignRight | Qt::AlignBottom, Qt::white);
     WS2Editor::ws2App->processEvents();
 
     //Set default format
@@ -41,7 +41,7 @@ int main(int argc, char *argv[]) {
     QSurfaceFormat::setDefaultFormat(fmt);
 
     //Splash message
-    splash.showMessage(WS2Editor::ws2App->tr("Setting style"), Qt::AlignRight | Qt::AlignBottom, Qt::white);
+    splash.showMessage(QApplication::translate("main", "Setting style"), Qt::AlignRight | Qt::AlignBottom, Qt::white);
     WS2Editor::ws2App->processEvents();
 
     QFile styleFile(":/Styles/FlatDark/FlatDark.qss");
@@ -51,7 +51,7 @@ int main(int argc, char *argv[]) {
     WS2Editor::ws2App->setStyleSheet(style);
 
     //Splash message
-    splash.showMessage(WS2Editor::ws2App->tr("Initializing Stage Editor"), Qt::AlignRight | Qt::AlignBottom, Qt::white);
+    splash.showMessage(QApplication::translate("main", "Initializing Stage Editor"), Qt::AlignRight | Qt::AlignBottom, Qt::white);
     WS2Editor::ws2App->processEvents();
 
     WS2Editor::UI::StageEditorWindow *w = new WS2Editor::UI::StageEditorWindow();
