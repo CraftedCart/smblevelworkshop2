@@ -11,6 +11,16 @@ set(CMAKE_INSTALL_RPATH "$ORIGIN/../lib:$ORIGIN")
 configure_file("cmake/uninstall.cmake" "cmake/uninstall.cmake" COPYONLY)
 add_custom_target(uninstall "${CMAKE_COMMAND}" -P "cmake/uninstall.cmake")
 
+#No need to add lang/lang_en_US.ts to the translation list, as the source already has the en_US translation
+set(TRANSLATIONS
+    #Uh oh, I have no translations yet
+    #lang/lang_ja_JA.ts
+    )
+
+foreach(val ${TRANSLATIONS})
+    message(STATUS "Translation: " ${val})
+endforeach(val ${TRANSLATIONS})
+
 add_subdirectory(./ws2common)
 add_subdirectory(./ws2lz)
 add_subdirectory(./ws2lzfrontend)
