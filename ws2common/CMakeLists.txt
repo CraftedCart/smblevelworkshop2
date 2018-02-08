@@ -135,8 +135,8 @@ target_include_directories(${PROJECT_NAME} PUBLIC
     PRIVATE src)
 
 if(WIN32)
-    #Windows has no concept of rpath, so just group all the exes/dlls in one big mess of a directory
-    install(TARGETS ${PROJECT_NAME} DESTINATION .)
+    #Windows has no concept of rpath, so just group all the exes/dlls in one big mess of a bin directory
+    install(TARGETS ${PROJECT_NAME} DESTINATION bin)
 else(WIN32)
     install(TARGETS ${PROJECT_NAME} DESTINATION lib)
 endif(WIN32)

@@ -144,12 +144,7 @@ target_include_directories(${PROJECT_NAME} PUBLIC
     $<INSTALL_INTERFACE:include>
     PRIVATE src)
 
-if(WIN32)
-    #Windows has no concept of rpath, so just group all the exes/dlls in one big mess of a directory
-    install(TARGETS ${PROJECT_NAME} DESTINATION .)
-else(WIN32)
-    install(TARGETS ${PROJECT_NAME} DESTINATION bin)
-endif(WIN32)
+install(TARGETS ${PROJECT_NAME} DESTINATION bin)
 
 #.desktop and icon files
 if(UNIX AND NOT APPLE)
