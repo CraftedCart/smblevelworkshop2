@@ -5,6 +5,7 @@
 #include "ws2common/scene/MeshCollisionSceneNode.hpp"
 #include <QElapsedTimer>
 #include <QDebug>
+#include <QtMath>
 #include <math.h>
 
 //Macros
@@ -848,11 +849,6 @@ namespace WS2Lz {
     }
 
     //The rest of this file is madness required for the collision triangle writing guff
-    float SMB2LzExporter::toDegrees(float theta) {
-        //WHAT THE HECK IS THIS NUMBER EVEN SUPPOSED TO BE!? -CraftedCart
-        return 57.2957795130824 * theta;
-    }
-
     glm::vec3 SMB2LzExporter::dotm(glm::vec3 a, glm::vec3 r0, glm::vec3 r1, glm::vec3 r2) {
         float d0 = (a.x * r0.x) + (a.y * r1.x) + (a.z * r2.x);
         float d1 = (a.x * r0.y) + (a.y * r1.y) + (a.z * r2.y);
@@ -885,10 +881,10 @@ namespace WS2Lz {
     }
 
     float SMB2LzExporter::reverseAngle(float c, float s) {
-        float a = toDegrees(asin(s));
+        float a = qRadiansToDegrees(asin(s));
         if (c < 0.0f) a = 180.0f - a;
         if (fabs(c) < fabs(s)) {
-            a = toDegrees(acos(c));
+            a = qRadiansToDegrees(acos(c));
             if(s < 0.0f) a = -a;
         }
         if (a < 0.0f) {
