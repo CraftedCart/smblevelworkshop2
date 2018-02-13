@@ -606,7 +606,6 @@ namespace WS2Lz {
                 foreach (const Model::MeshSegment *seg, mesh->getMeshSegments()) {
                     //Now loop over all triangles
                     for (int i = 0; i < seg->getIndices().size(); i += 3) {
-                        //verts.x/y/z corresponds to each triangle's vertex
                         glm::tvec3<Model::Vertex> verts(
                                 seg->getVertices().at(seg->getIndices().at(i)),
                                 seg->getVertices().at(seg->getIndices().at(i + 1)),
@@ -615,61 +614,82 @@ namespace WS2Lz {
 
                         //////////////// BEGINNING OF MADNESS ////////////////
                         //This code is mostly just copied from Yoshimaster96's smb(2)cnv
-                        //I hope I don't have to maintain this
-                        //This way lies madness
-                        //Send help
-                        //And no, I don't know what the heck these variable names are supposed to mean
-                        //Just know that this works, and don't touch it
-                        //Better yet, don't look at it - spare yourself the insanity
-                        //I think there's supposed to be some matrices in here (rxr/ryr/rzr maybe?) but just shown as multiple vec3s
-                        //I recall someone talking about rotational matrices being in here
-                        //Although I dare not touch this madness, maybe
-                        //If any brave soul dares to try to make sense of this and clean it up, thank you
+                        //with some tweaks to make it less of a nightmare to read
+                        //I'm still not 100% sure what everything does though
+                        //
+                        //For clarification as to how a collision triangle is stored, the first coordinate is (X1, Y1, Z1),
+                        //the second coordinate is calculated as (X1 + DX2X1, Y1 + DY2Y1, Z1) then rotated about first
+                        //point by Z, then Y, then X. The third coordinate is calculated similarly, from
+                        //(X1 + DX3X1, Y1 + DY3Y1, Z1), rotated by the same angles
                         //
                         //Update:
                         //Where the madness began: http://kuribo64.net/board/thread.php?pid=55329
                         //Blank: cx, sx, cy, sy, cz and sz are floats and are the cosine and sine of the rotation angles.
                         //Yoshimaster96: Those aren't given however. I'm trying to find the rotation angles.
                         //Blank: You calculate the angles using cx, sx, etc. In my code snippet this is done with the reverse_angle function.
+                        //
+                        //For more info on how collision triangles work within Super Monkey Ball, see
+                        //https://craftedcart.github.io/SMBLevelWorkshop/documentation/index.html?page=lzFormat2#spec-lzFormat2-section-collisionTriangle
 
-                        //glm::vec3 na = {verts.x.normal.x, verts.x.normal.y, verts.x.normal.z}; //This line isn't even used anyway
-                        glm::vec3 a = {verts.x.position.x, verts.x.position.y, verts.x.position.z};
-                        glm::vec3 b = {verts.y.position.x, verts.y.position.y, verts.y.position.z};
-                        glm::vec3 c = {verts.z.position.x, verts.z.position.y, verts.z.position.z};
-                        glm::vec3 ba = {b.x - a.x, b.y - a.y, b.z - a.z};
-                        glm::vec3 ca = {c.x - a.x, c.y - a.y, c.z - a.z};
-                        glm::vec3 normal = normalize(cross(normalize(ba),normalize(ca)));
-                        float l = sqrtf(normal.x * normal.x + normal.z * normal.z);
-                        float cy = normal.z / l;
-                        float sy = -normal.x / l;
-                        if(fabs(l) < 0.001f) {
+                        glm::vec3 a = verts.x.position;
+                        glm::vec3 b = verts.y.position;
+                        glm::vec3 c = verts.z.position;
+
+                        glm::vec3 normal = glm::normalize(cross(glm::normalize(b - a), glm::normalize(c - a)));
+
+                        float l = qSqrt(normal.x * normal.x + normal.z * normal.z);
+
+                        float cy;
+                        float sy;
+                        if (qFabs(l) < 0.001f) {
                             cy = 1.0f;
                             sy = 0.0f;
+                        } else {
+                            cy = normal.z / l;
+                            sy = -normal.x / l;
                         }
+
                         float cx = l;
                         float sx = normal.y;
-                        glm::vec3 rxr0(1.0f, 0.0f, 0.0f);
-                        glm::vec3 rxr1(0.0f, cx, sx);
-                        glm::vec3 rxr2(0.0f, -sx, cx);
-                        glm::vec3 ryr0(cy, 0.0f, -sy);
-                        glm::vec3 ryr1(0.0f, 1.0f, 0.0f);
-                        glm::vec3 ryr2(sy, 0.0f, cy);
-                        glm::vec3 dotry = dotm(ba, ryr0, ryr1, ryr2);
-                        glm::vec3 dotrxry = dotm(dotry, rxr0, rxr1, rxr2);
+
+                        glm::mat3 rotXMat(
+                                1.0f, 0.0f, 0.0f,
+                                0.0f, cx, sx,
+                                0.0f, -sx, cx
+                                );
+
+                        glm::mat3 rotYMat(
+                                cy, 0.0f, -sy,
+                                0.0f, 1.0f, 0.0f,
+                                sy, 0.0f, cy
+                                );
+
+                        glm::vec3 dotry = dotm(b - a, rotYMat);
+                        glm::vec3 dotrxry = dotm(dotry, rotXMat);
                         l = sqrtf(dotrxry.x * dotrxry.x + dotrxry.y * dotrxry.y);
+
                         float cz = dotrxry.x / l;
                         float sz = -dotrxry.y / l;
-                        glm::vec3 rzr0(cz, sz, 0.0f);
-                        glm::vec3 rzr1(-sz, cz, 0.0f);
-                        glm::vec3 rzr2(0.0f, 0.0f, 1.0f);
-                        glm::vec3 dotrz = dotm(dotrxry, rzr0, rzr1, rzr2);
-                        dotry = dotm(ca, ryr0, ryr1, ryr2);
-                        dotrxry = dotm(dotry, rxr0, rxr1, rxr2);
-                        glm::vec3 dotrzrxry = dotm(dotrxry, rzr0, rzr1, rzr2);
-                        glm::vec3 n0v(dotrzrxry.x - dotrz.x, dotrzrxry.y - dotrz.y, dotrzrxry.z - dotrz.z);
-                        glm::vec3 n1v(-dotrzrxry.x, -dotrzrxry.y, -dotrzrxry.z);
-                        glm::vec3 n0 = normalize(hat(n0v));
-                        glm::vec3 n1 = normalize(hat(n1v));
+
+                        glm::mat3 rotZMat(
+                                cz, sz, 0.0f,
+                                -sz, cz, 0.0f,
+                                0.0f, 0.0f, 1.0f
+                                );
+
+                        //Delta position for vertex B from vertex A (Before rotation is applied)
+                        glm::vec3 deltaPosB = dotm(dotrxry, rotZMat);
+
+                        dotry = dotm(c - a, rotYMat);
+                        dotrxry = dotm(dotry, rotXMat);
+                        //Delta position for vertex C from vertex A (Before rotation is applied)
+                        glm::vec3 deltaPosC = dotm(dotrxry, rotZMat);
+
+                        glm::vec3 n0v(deltaPosC.x - deltaPosB.x, deltaPosC.y - deltaPosB.y, deltaPosC.z - deltaPosB.z);
+                        glm::vec3 n1v(-deltaPosC.x, -deltaPosC.y, -deltaPosC.z);
+                        glm::vec3 tangent = glm::normalize(hat(n0v));
+                        glm::vec3 bitangent = glm::normalize(hat(n1v));
+
                         float rotX = 360.0f - reverseAngle(cx, sx);
                         float rotY = 360.0f - reverseAngle(cy, sy);
                         float rotZ = 360.0f - reverseAngle(cz, sz);
@@ -682,14 +702,14 @@ namespace WS2Lz {
                         dev << normal.z; //Z normal
                         dev << convertRotation(glm::vec3(rotX, rotY, rotZ)); //XYZ rotation from the XZ plane
                         writeNull(dev, 2);
-                        dev << dotrz.x; //DX2X1
-                        dev << dotrz.y; //DY2X1
-                        dev << dotrzrxry.x; //DX3X1
-                        dev << dotrzrxry.y; //DY3X1
-                        dev << n0.x; //X tangent
-                        dev << n0.y; //Y tangent
-                        dev << n1.x; //X bitangent
-                        dev << n1.y; //Y bitangent
+                        dev << deltaPosB.x; //DX2X1
+                        dev << deltaPosB.y; //DY2X1
+                        dev << deltaPosC.x; //DX3X1
+                        dev << deltaPosC.y; //DY3X1
+                        dev << tangent.x; //X tangent
+                        dev << tangent.y; //Y tangent
+                        dev << bitangent.x; //X bitangent
+                        dev << bitangent.y; //Y bitangent
                         //////////////// END OF MADNESS ////////////////
                     }
                 }
@@ -849,15 +869,11 @@ namespace WS2Lz {
     }
 
     //The rest of this file is madness required for the collision triangle writing guff
-    glm::vec3 SMB2LzExporter::dotm(glm::vec3 a, glm::vec3 r0, glm::vec3 r1, glm::vec3 r2) {
-        float d0 = (a.x * r0.x) + (a.y * r1.x) + (a.z * r2.x);
-        float d1 = (a.x * r0.y) + (a.y * r1.y) + (a.z * r2.y);
-        float d2 = (a.x * r0.z) + (a.y * r1.z) + (a.z * r2.z);
+    glm::vec3 SMB2LzExporter::dotm(glm::vec3 a, glm::mat3 m) {
+        float d0 = (a.x * m[0][0]) + (a.y * m[1][0]) + (a.z * m[2][0]);
+        float d1 = (a.x * m[0][1]) + (a.y * m[1][1]) + (a.z * m[2][1]);
+        float d2 = (a.x * m[0][2]) + (a.y * m[1][2]) + (a.z * m[2][2]);
         return glm::vec3(d0, d1, d2);
-    }
-
-    float SMB2LzExporter::dot(glm::vec3 a, glm::vec3 b) {
-        return (a.x * b.x) + (a.y * b.y) + (a.z * b.z);
     }
 
     glm::vec3 SMB2LzExporter::cross(glm::vec3 a, glm::vec3 b) {
@@ -867,15 +883,6 @@ namespace WS2Lz {
         return glm::vec3(d0,d1,d2);
     }
 
-    glm::vec3 SMB2LzExporter::normalize(glm::vec3 v) {
-        glm::vec3 retVal = v;
-        float len = sqrtf((v.x * v.x) + (v.y * v.y) + (v.z * v.z));
-        retVal.x /= len;
-        retVal.y /= len;
-        retVal.z /= len;
-        return retVal;
-    }
-
     glm::vec3 SMB2LzExporter::hat(glm::vec3 v) {
         return glm::vec3(-v.y, v.x, 0.0f);
     }
@@ -883,7 +890,7 @@ namespace WS2Lz {
     float SMB2LzExporter::reverseAngle(float c, float s) {
         float a = qRadiansToDegrees(asin(s));
         if (c < 0.0f) a = 180.0f - a;
-        if (fabs(c) < fabs(s)) {
+        if (qFabs(c) < qFabs(s)) {
             a = qRadiansToDegrees(acos(c));
             if(s < 0.0f) a = -a;
         }

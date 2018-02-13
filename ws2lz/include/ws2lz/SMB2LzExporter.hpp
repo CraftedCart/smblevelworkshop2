@@ -233,13 +233,10 @@ namespace WS2Lz {
             quint32 roundUpNearest4(quint32 n);
 
             //The rest of this file is madness required for the collision triangle writing port guff
-            float toDegrees(float theta);
-            glm::vec3 dotm(glm::vec3 a,glm::vec3 r0,glm::vec3 r1,glm::vec3 r2);
-            float dot(glm::vec3 a,glm::vec3 b);
-            glm::vec3 cross(glm::vec3 a,glm::vec3 b);
-            glm::vec3 normalize(glm::vec3 v);
+            glm::vec3 dotm(glm::vec3 a, glm::mat3 m);
+            glm::vec3 cross(glm::vec3 a, glm::vec3 b);
             glm::vec3 hat(glm::vec3 v);
-            float reverseAngle(float c,float s);
+            float reverseAngle(float c, float s);
     };
 }
 
