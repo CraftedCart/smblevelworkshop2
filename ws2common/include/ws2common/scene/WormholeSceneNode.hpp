@@ -28,6 +28,13 @@ namespace WS2Common {
                 WormholeSceneNode* getDestination();
 
                 /**
+                 * @brief Const etter for destination
+                 *
+                 * @return A pointer to the destination WormholeSceneNode
+                 */
+                const WormholeSceneNode* getDestination() const;
+
+                /**
                  * @brief Setter for destination
                  *
                  * @param type A pointer to the destination wormhole to set this as

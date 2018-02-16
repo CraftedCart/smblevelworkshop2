@@ -64,6 +64,7 @@ namespace WS2Lz {
         forEachGroupChildType(const Scene::BumperSceneNode*, node) writeBumper(dev, node); //Bumpers
         forEachGroupChildType(const Scene::JamabarSceneNode*, node) writeJamabar(dev, node); //Jamabars
         forEachGroupChildType(const Scene::BananaSceneNode*, node) writeBanana(dev, node); //Bananas
+        forEachGroupChildType(const Scene::WormholeSceneNode*, node) writeWormhole(dev, node); //Wormholes
         forEachGroup(group) writeLevelModelPointerAList(dev, group); //Level model pointers type A
         forEachGroup(group) writeLevelModelPointerBList(dev, group); //Level model pointers type B
         forEachGroup(group) writeLevelModelList(dev, group); //Level models
@@ -259,6 +260,24 @@ namespace WS2Lz {
             bananaCountMap[group] = bananaCount;
         }
 
+        //Iterate over all GroupSceneNodes/collision headers, and count wormholes to add to nextOffset
+        //Basically the exact same as before with goals
+        forEachGroup(group) {
+            wormholeOffsetMap.insert(nextOffset, group);
+            quint32 wormholeCount = 0; //Number of wormholes in this collision header
+
+            forEachChildType(group, Scene::WormholeSceneNode*, node) {
+                //Need to store the offset of every wormhole, so that they can be linked together (by offset) later
+                wormholeIndividualOffsetMap.insert(nextOffset, node);
+
+                nextOffset += WORMHOLE_LENGTH;
+                wormholeCount++;
+            }
+
+            //Store wormhole count in the map
+            wormholeCountMap[group] = wormholeCount;
+        }
+
         //Iterate over all GroupSceneNodes/collision headers, and count level models to add to nextOffset
         //For level model pointer type A
         //Basically the exact same as before with goals
@@ -386,8 +405,6 @@ namespace WS2Lz {
         switchCount = 0;
         switchListOffset = 0;
         //TODO: Fog anim header
-        wormholeCount = 0;
-        wormholeListOffset = 0;
     }
 
     void SMB2LzExporter::addCollisionTriangleOffsets(const Scene::SceneNode *node, quint32 &nextOffset) {
@@ -454,8 +471,8 @@ namespace WS2Lz {
         dev << switchCount;
         dev << switchListOffset;
         writeNull(dev, 4); //TODO: Fog animation header
-        dev << wormholeCount;
-        dev << wormholeListOffset;
+        dev << addAllCounts(wormholeCountMap);
+        dev << wormholeOffsetMap.firstKey();
         writeNull(dev, 4); //TODO: Fog
         writeNull(dev, 20);
         writeNull(dev, 4); //TODO: Mystery 3
@@ -528,8 +545,8 @@ namespace WS2Lz {
         dev << node->getSeesawSensitivity();
         dev << node->getSeesawResetStiffness();
         dev << node->getSeesawRotationBounds();
-        writeNull(dev, 4); //TODO: Wormhole count
-        writeNull(dev, 4); //TODO: Wormhole offset
+        dev << wormholeCountMap.value(node);
+        dev << wormholeOffsetMap.key(node);
         writeNull(dev, 4); //TODO: Initial animation state
         writeNull(dev, 4); //TODO: Unknown/Null
         dev << (anim != nullptr ? anim->getLoopTime() : (quint32) 0); //Anim loop time
@@ -592,6 +609,14 @@ namespace WS2Lz {
     void SMB2LzExporter::writeBanana(QDataStream &dev, const Scene::BananaSceneNode *node) {
         dev << node->getPosition();
         dev << (quint32) node->getType();
+    }
+
+    void SMB2LzExporter::writeWormhole(QDataStream &dev, const Scene::WormholeSceneNode *node) {
+        dev << (quint32) 0x00000001;
+        dev << node->getPosition();
+        dev << convertRotation(node->getRotation());
+        writeNull(dev, 2);
+        dev << wormholeIndividualOffsetMap.key(node->getDestination()); //Destination wormhole offset
     }
 
     void SMB2LzExporter::writeCollisionTriangles(QDataStream &dev, const Scene::SceneNode *node) {

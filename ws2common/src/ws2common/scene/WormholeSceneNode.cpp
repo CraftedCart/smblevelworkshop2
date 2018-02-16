@@ -8,6 +8,10 @@ namespace WS2Common {
             return destination;
         }
 
+        const WormholeSceneNode* WormholeSceneNode::getDestination() const {
+            return destination;
+        }
+
         void WormholeSceneNode::setDestination(WormholeSceneNode *destination) {
             this->destination = destination;
         }

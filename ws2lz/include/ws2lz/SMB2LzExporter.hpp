@@ -10,6 +10,7 @@
 #include "ws2common/scene/BumperSceneNode.hpp"
 #include "ws2common/scene/JamabarSceneNode.hpp"
 #include "ws2common/scene/BananaSceneNode.hpp"
+#include "ws2common/scene/WormholeSceneNode.hpp"
 #include "ws2common/scene/MeshSceneNode.hpp"
 #include "ws2common/resource/ResourceMesh.hpp"
 #include <QDataStream>
@@ -90,6 +91,9 @@ namespace WS2Lz {
             QMap<const Scene::GroupSceneNode*, quint32> jamabarCountMap;
             QMultiMap<quint32, const Scene::GroupSceneNode*> bananaOffsetMap;
             QMap<const Scene::GroupSceneNode*, quint32> bananaCountMap;
+            QMultiMap<quint32, const Scene::GroupSceneNode*> wormholeOffsetMap; //Per collision header
+            QMultiMap<quint32, const Scene::WormholeSceneNode*> wormholeIndividualOffsetMap; //Per wormhole (Needed to link wormholes together)
+            QMap<const Scene::GroupSceneNode*, quint32> wormholeCountMap;
             QMultiMap<quint32, const Scene::GroupSceneNode*> groupAnimHeaderOffsetMap;
             QMultiMap<quint32, const Animation::TransformAnimation*> animPosXKeyframesOffsetMap;
             QMultiMap<quint32, const Animation::TransformAnimation*> animPosYKeyframesOffsetMap;
@@ -119,8 +123,6 @@ namespace WS2Lz {
             quint32 switchCount;
             quint32 switchListOffset;
             //TODO: Fog anim header
-            quint32 wormholeCount;
-            quint32 wormholeListOffset;
             //TODO: Fog
             //TODO: Mystery 3
 
@@ -183,6 +185,7 @@ namespace WS2Lz {
             void writeBumper(QDataStream &dev, const Scene::BumperSceneNode *node);
             void writeJamabar(QDataStream &dev, const Scene::JamabarSceneNode *node);
             void writeBanana(QDataStream &dev, const Scene::BananaSceneNode *node);
+            void writeWormhole(QDataStream &dev, const Scene::WormholeSceneNode *node);
 
             /**
              * @brief Recursive function - Searches through the node's children, and their children, and their children, etc
