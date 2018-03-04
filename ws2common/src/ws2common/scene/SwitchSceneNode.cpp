@@ -1,10 +1,11 @@
 #include "ws2common/scene/SwitchSceneNode.hpp"
+#include <QDebug>
 
 namespace WS2Common {
     namespace Scene {
         SwitchSceneNode::SwitchSceneNode(const QString name) : SceneNode(name) {}
 
-        EnumPlaybackState SwitchSceneNode::getType() {
+        EnumPlaybackState SwitchSceneNode::getType() const {
             return type;
         }
 
@@ -12,12 +13,12 @@ namespace WS2Common {
             this->type = type;
         }
 
-        unsigned short SwitchSceneNode::getAnimGroupId() {
-            return animGroupId;
+        unsigned short SwitchSceneNode::getLinkedAnimGroupId() const {
+            return linkedAnimGroupId;
         }
 
-        void SwitchSceneNode::setAnimGroupId(unsigned short animGroupId) {
-            this->animGroupId = animGroupId;
+        void SwitchSceneNode::setLinkedAnimGroupId(unsigned short linkedAnimGroupId) {
+            this->linkedAnimGroupId = linkedAnimGroupId;
         }
     }
 }

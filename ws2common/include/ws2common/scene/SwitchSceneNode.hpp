@@ -21,7 +21,7 @@ namespace WS2Common {
                 /**
                  * @brief The animation group that this switch affects
                  */
-                unsigned short animGroupId;
+                unsigned short linkedAnimGroupId;
 
             public:
                 SwitchSceneNode(const QString name);
@@ -31,7 +31,7 @@ namespace WS2Common {
                  *
                  * @return The type that this node is
                  */
-                EnumPlaybackState getType();
+                EnumPlaybackState getType() const;
 
                 /**
                  * @brief Setter for type
@@ -41,18 +41,18 @@ namespace WS2Common {
                 void setType(EnumPlaybackState type);
 
                 /**
-                 * @brief Getter for animGroupID
+                 * @brief Getter for linkedAnimGroupID
                  *
                  * @return The animation group ID that this switch affects
                  */
-                unsigned short getAnimGroupId();
+                unsigned short getLinkedAnimGroupId() const;
 
                 /**
-                 * @brief Setter for animGroupID
+                 * @brief Setter for linkedAnimGroupID
                  *
                  * @param The animation group ID that this switch should affect
                  */
-                void setAnimGroupId(unsigned short animGroupId);
+                void setLinkedAnimGroupId(unsigned short linkedAnimGroupId);
         };
     }
 }

@@ -10,6 +10,7 @@
 #include "ws2common/scene/BumperSceneNode.hpp"
 #include "ws2common/scene/JamabarSceneNode.hpp"
 #include "ws2common/scene/BananaSceneNode.hpp"
+#include "ws2common/scene/SwitchSceneNode.hpp"
 #include "ws2common/scene/WormholeSceneNode.hpp"
 #include "ws2common/scene/MeshSceneNode.hpp"
 #include "ws2common/resource/ResourceMesh.hpp"
@@ -37,6 +38,8 @@ namespace WS2Lz {
      * - Bumpers
      * - Jamabars
      * - Bananas
+     * - Switches
+     * - Wormholes
      * - Level model pointer type A
      * - Level model pointer type B
      * - Level model
@@ -62,6 +65,7 @@ namespace WS2Lz {
             const unsigned int BUMPER_LENGTH = 32;
             const unsigned int JAMABAR_LENGTH = 32;
             const unsigned int BANANA_LENGTH = 16;
+            const unsigned int SWITCH_LENGTH = 24;
             const unsigned int WORMHOLE_LENGTH = 28;
             const unsigned int BACKGROUND_MODEL_LENGTH = 56;
             const unsigned int ANIMATION_HEADER_LENGTH = 64;
@@ -91,6 +95,8 @@ namespace WS2Lz {
             QMap<const Scene::GroupSceneNode*, quint32> jamabarCountMap;
             QMultiMap<quint32, const Scene::GroupSceneNode*> bananaOffsetMap;
             QMap<const Scene::GroupSceneNode*, quint32> bananaCountMap;
+            QMultiMap<quint32, const Scene::GroupSceneNode*> switchOffsetMap;
+            QMap<const Scene::GroupSceneNode*, quint32> switchCountMap;
             QMultiMap<quint32, const Scene::GroupSceneNode*> wormholeOffsetMap; //Per collision header
             QMultiMap<quint32, const Scene::WormholeSceneNode*> wormholeIndividualOffsetMap; //Per wormhole (Needed to link wormholes together)
             QMap<const Scene::GroupSceneNode*, quint32> wormholeCountMap;
@@ -120,8 +126,6 @@ namespace WS2Lz {
             QMultiMap<quint32, const Scene::GroupSceneNode*> levelModelOffsetMap;
             QMap<const Scene::GroupSceneNode*, quint32> levelModelCountMap;
             QMultiMap<quint32, QString> levelModelNameOffsetMap;
-            quint32 switchCount;
-            quint32 switchListOffset;
             //TODO: Fog anim header
             //TODO: Fog
             //TODO: Mystery 3
@@ -185,6 +189,7 @@ namespace WS2Lz {
             void writeBumper(QDataStream &dev, const Scene::BumperSceneNode *node);
             void writeJamabar(QDataStream &dev, const Scene::JamabarSceneNode *node);
             void writeBanana(QDataStream &dev, const Scene::BananaSceneNode *node);
+            void writeSwitch(QDataStream &dev, const Scene::SwitchSceneNode *node);
             void writeWormhole(QDataStream &dev, const Scene::WormholeSceneNode *node);
 
             /**

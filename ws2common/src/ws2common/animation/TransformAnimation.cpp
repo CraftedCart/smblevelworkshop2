@@ -7,6 +7,14 @@ namespace WS2Common {
             return lhs->getValue().first < rhs->getValue().first;
         }
 
+        EnumPlaybackState TransformAnimation::getInitialState() const {
+            return initialState;
+        }
+
+        void TransformAnimation::setInitialState(EnumPlaybackState initialState) {
+            this->initialState = initialState;
+        }
+
         EnumLoopType TransformAnimation::getLoopType() const {
             return loopType;
         }

@@ -130,6 +130,14 @@ namespace WS2Common {
             return animation;
         }
 
+        void SceneNode::setAnimationGroupId(unsigned int animationGroupId) {
+            this->animationGroupId = animationGroupId;
+        }
+
+        unsigned int SceneNode::getAnimationGroupId() const {
+            return animationGroupId;
+        }
+
         void SceneNode::setAnimationSeesawType(EnumAnimationSeesawType type) {
             this->animationSeesawType = type;
         }

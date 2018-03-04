@@ -64,6 +64,7 @@ namespace WS2Lz {
         forEachGroupChildType(const Scene::BumperSceneNode*, node) writeBumper(dev, node); //Bumpers
         forEachGroupChildType(const Scene::JamabarSceneNode*, node) writeJamabar(dev, node); //Jamabars
         forEachGroupChildType(const Scene::BananaSceneNode*, node) writeBanana(dev, node); //Bananas
+        forEachGroupChildType(const Scene::SwitchSceneNode*, node) writeSwitch(dev, node); //Switches
         forEachGroupChildType(const Scene::WormholeSceneNode*, node) writeWormhole(dev, node); //Wormholes
         forEachGroup(group) writeLevelModelPointerAList(dev, group); //Level model pointers type A
         forEachGroup(group) writeLevelModelPointerBList(dev, group); //Level model pointers type B
@@ -260,6 +261,21 @@ namespace WS2Lz {
             bananaCountMap[group] = bananaCount;
         }
 
+        //Iterate over all GroupSceneNodes/collision headers, and count switches to add to nextOffset
+        //Basically the exact same as before with goals
+        forEachGroup(group) {
+            switchOffsetMap.insert(nextOffset, group);
+            quint32 switchCount = 0; //Number of switches in this collision header
+
+            forEachChildType(group, Scene::SwitchSceneNode*, node) {
+                nextOffset += SWITCH_LENGTH;
+                switchCount++;
+            }
+
+            //Store switch count in the map
+            switchCountMap[group] = switchCount;
+        }
+
         //Iterate over all GroupSceneNodes/collision headers, and count wormholes to add to nextOffset
         //Basically the exact same as before with goals
         forEachGroup(group) {
@@ -402,8 +418,6 @@ namespace WS2Lz {
         //TODO: Mystery 8
         //TODO: Reflective level model
         //TODO: Level model instances
-        switchCount = 0;
-        switchListOffset = 0;
         //TODO: Fog anim header
     }
 
@@ -468,11 +482,11 @@ namespace WS2Lz {
         dev << addAllCounts(levelModelCountMap);
         dev << levelModelPointerBOffsetMap.firstKey();
         writeNull(dev, 12);
-        dev << switchCount;
-        dev << switchListOffset;
+        dev << addAllCounts(switchCountMap);
+        dev << (quint32) (switchOffsetMap.size() > 0 ? switchOffsetMap.firstKey() : 0); //Switch list offset
         writeNull(dev, 4); //TODO: Fog animation header
         dev << addAllCounts(wormholeCountMap);
-        dev << wormholeOffsetMap.firstKey();
+        dev << (quint32) (wormholeOffsetMap.size() > 0 ? wormholeOffsetMap.firstKey() : 0); //Wormhole list offset
         writeNull(dev, 4); //TODO: Fog
         writeNull(dev, 20);
         writeNull(dev, 4); //TODO: Mystery 3
@@ -536,10 +550,10 @@ namespace WS2Lz {
         dev << levelModelCountMap.value(node);
         dev << levelModelPointerBOffsetMap.key(node);
         writeNull(dev, 8); //Unknown/Null
-        writeNull(dev, 2); //TODO: Anim group ID
+        dev << (quint16) node->getAnimationGroupId();
         writeNull(dev, 2); //Null padding
-        writeNull(dev, 4); //TODO: Switch count
-        writeNull(dev, 4); //TODO: Switch offset
+        dev << switchCountMap.value(node);
+        dev << switchOffsetMap.key(node);
         writeNull(dev, 4); //Unknown/Null (Mystery 5 count?)
         writeNull(dev, 4); //TODO: Offset to mystery 5
         dev << node->getSeesawSensitivity();
@@ -547,7 +561,14 @@ namespace WS2Lz {
         dev << node->getSeesawRotationBounds();
         dev << wormholeCountMap.value(node);
         dev << wormholeOffsetMap.key(node);
-        writeNull(dev, 4); //TODO: Initial animation state
+
+        //Initial animation state
+        if (node->getTransformAnimation() == nullptr) {
+            writeNull(dev, 4);
+        } else {
+            dev << node->getTransformAnimation()->getInitialState();
+        }
+
         writeNull(dev, 4); //TODO: Unknown/Null
         dev << (anim != nullptr ? anim->getLoopTime() : (quint32) 0); //Anim loop time
         writeNull(dev, 964); //TODO: Everything else
@@ -609,6 +630,14 @@ namespace WS2Lz {
     void SMB2LzExporter::writeBanana(QDataStream &dev, const Scene::BananaSceneNode *node) {
         dev << node->getPosition();
         dev << (quint32) node->getType();
+    }
+
+    void SMB2LzExporter::writeSwitch(QDataStream &dev, const Scene::SwitchSceneNode *node) {
+        dev << node->getPosition();
+        dev << convertRotation(node->getRotation());
+        dev << (quint16) node->getType();
+        dev << (quint16) node->getLinkedAnimGroupId();
+        qDebug() << node->getLinkedAnimGroupId();
     }
 
     void SMB2LzExporter::writeWormhole(QDataStream &dev, const Scene::WormholeSceneNode *node) {

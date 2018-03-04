@@ -4,6 +4,8 @@
 #include <QDebug>
 #include <QCoreApplication>
 
+//TODO: Wow did I really leave unsigned int id = 0; all over the place and never made it static/increment it? >.>
+
 namespace WS2Common {
     namespace Config {
         Stage* XMLConfigParser::parseStage(QString config, QDir relativeRoot) {
@@ -15,9 +17,7 @@ namespace WS2Common {
                 xml.readNext();
                 if (!xml.isStartElement()) continue; //Ignore all end elements
 
-                if (xml.name() == "superMonkeyBallStage") {
-                    //TODO: Check superMonkeyBallStage version attribute
-
+                if (xml.name() == "superMonkeyBallStage") { //TODO: Check superMonkeyBallStage version attribute 
                     //Parse the stages
                     while (!(xml.isEndElement() && xml.name() == "superMonkeyBallStage")) {
                         //Keep reading until the </superMonkeyBallStage> tag
@@ -167,7 +167,8 @@ namespace WS2Common {
 
             //Some stuff that needs to be linked after parsing the entire group
             Animation::TransformAnimation *anim = nullptr;
-            Animation::EnumLoopType loopType;
+            EnumPlaybackState initialState = EnumPlaybackState::PLAY;
+            Animation::EnumLoopType loopType = Animation::EnumLoopType::LOOPING;
             float loopTime = 0.0f;
 
             while (!(xml.isEndElement() && xml.name() == "itemGroup")) {
@@ -190,22 +191,20 @@ namespace WS2Common {
                     xml.skipCurrentElement();
                 } else if (xml.name() == "seesawSensitivity") {
                     group->setSeesawSensitivity(xml.readElementText().toFloat()); //TODO: Error checking
-                } else if (xml.name() == "seesawResetStiffness") { //TODO
+                } else if (xml.name() == "seesawResetStiffness") {
                     group->setSeesawResetStiffness(xml.readElementText().toFloat()); //TODO: Error checking
-                } else if (xml.name() == "seesawRotationBounds") { //TODO
+                } else if (xml.name() == "seesawRotationBounds") {
                     group->setSeesawRotationBounds(xml.readElementText().toFloat()); //TODO: Error checking
-                } else if (xml.name() == "animKeyframes") { //TODO
+                } else if (xml.name() == "animKeyframes") {
                     Animation::TransformAnimation *transformAnim = parseTransformAnimation(xml);
                     group->setTransformAnimation(transformAnim);
                     anim = transformAnim; //For later linking (So that the loop type is set in the transformAnim)
-                } else if (xml.name() == "animLoopTime") { //TODO
+                } else if (xml.name() == "animLoopTime") {
                     loopTime = xml.readElementText().toFloat(); //For later linking
-                } else if (xml.name() == "animGroupID") { //TODO
-                    qWarning() << "itemGroup > animGroupID not yet implemented!";
-                    xml.skipCurrentElement();
+                } else if (xml.name() == "animGroupId") {
+                    group->setAnimationGroupId(xml.readElementText().toUInt());
                 } else if (xml.name() == "animInitialState") { //TODO
-                    qWarning() << "itemGroup > animInitialState not yet implemented!";
-                    xml.skipCurrentElement();
+                    initialState = PlaybackState::fromString(xml.readElementText());
                 } else if (xml.name() == "collisionGrid") {
                     group->setCollisionGrid(parseCollisionGrid(xml));
                 } else if (xml.name() == "goal") {
@@ -232,8 +231,8 @@ namespace WS2Common {
                 }
             }
 
-            //TODO: Link animation loop type w/ animation is not nullptr
             if (anim != nullptr) {
+                anim->setInitialState(initialState);
                 anim->setLoopType(loopType);
                 anim->setLoopTime(loopTime);
             }
@@ -407,8 +406,8 @@ namespace WS2Common {
                     sw->setRotation(getVec3Attributes(xml.attributes()));
                 } else if (xml.name() == "type") {
                     sw->setType(PlaybackState::fromString(xml.readElementText()));
-                } else if (xml.name() == "animGroupID") {
-                    sw->setAnimGroupId(xml.readElementText().toUShort());
+                } else if (xml.name() == "animGroupId") {
+                    sw->setLinkedAnimGroupId(xml.readElementText().toUShort());
                 } else {
                     qWarning().noquote() << "Unrecognised tag: switch >" << xml.name();
                 }

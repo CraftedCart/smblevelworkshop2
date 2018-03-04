@@ -33,6 +33,7 @@ namespace WS2Common {
                 glm::vec3 scale = glm::vec3(1.0f, 1.0f, 1.0f);
 
                 Animation::TransformAnimation *animation = nullptr;
+                unsigned int animationGroupId = 0;
                 EnumAnimationSeesawType animationSeesawType = ANIMATION;
 
                 float seesawSensitivity = 0.0f;
@@ -226,6 +227,20 @@ namespace WS2Common {
                  * @return A pointer to the animation data if it exists, nullptr otherwise
                  */
                 const Animation::TransformAnimation* getTransformAnimation() const;
+
+                /**
+                 * @brief Setter for animationGroupId
+                 *
+                 * @param animationGroupId The new ID to set
+                 */
+                void setAnimationGroupId(unsigned int animationGroupId);
+
+                /**
+                 * @brief Getter for animationGroupId
+                 *
+                 * @return The numberical group that this animation is a part of
+                 */
+                unsigned int getAnimationGroupId() const;
 
                 /**
                  * @brief Getter for animationSeesawType

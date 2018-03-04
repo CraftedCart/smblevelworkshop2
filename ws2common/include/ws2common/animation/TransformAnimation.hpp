@@ -6,6 +6,7 @@
 #ifndef SMBLEVELWORKSHOP2_WS2COMMON_ANIMATION_ANIMATION_HPP
 #define SMBLEVELWORKSHOP2_WS2COMMON_ANIMATION_ANIMATION_HPP
 
+#include "ws2common/EnumPlaybackState.hpp"
 #include "ws2common/animation/EnumLoopType.hpp"
 #include "ws2common/animation/Keyframe.hpp"
 #include <set>
@@ -19,6 +20,7 @@ namespace WS2Common {
 
         class TransformAnimation {
             protected:
+                EnumPlaybackState initialState;
                 EnumLoopType loopType;
                 float loopTime;
 
@@ -32,8 +34,11 @@ namespace WS2Common {
                 std::set<KeyframeF*, KeyframeCompare> rotZKeyframes;
 
             public:
+                EnumPlaybackState getInitialState() const;
+                void setInitialState(EnumPlaybackState state);
+
                 EnumLoopType getLoopType() const;
-                void setLoopType(EnumLoopType loopType);
+                void setLoopType(EnumLoopType initialState);
 
                 float getLoopTime() const;
                 void setLoopTime(float loopTime);
