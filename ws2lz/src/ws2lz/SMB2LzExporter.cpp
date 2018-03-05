@@ -637,6 +637,7 @@ namespace WS2Lz {
         dev << convertRotation(node->getRotation());
         dev << (quint16) node->getType();
         dev << (quint16) node->getLinkedAnimGroupId();
+        writeNull(dev, 2);
     }
 
     void SMB2LzExporter::writeWormhole(QDataStream &dev, const Scene::WormholeSceneNode *node) {
