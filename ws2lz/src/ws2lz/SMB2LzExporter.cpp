@@ -532,7 +532,7 @@ namespace WS2Lz {
 
         dev << (anim != nullptr ? groupAnimHeaderOffsetMap.key(node) : (quint32) 0); //Offset to animation header
 
-        writeNull(dev, 12); //TODO: Conveyor speed vec3
+        dev << node->getConveyorSpeed();
         dev << gridTriangleListOffsetMap.key(node);
         dev << gridTriangleListPointersOffsetMap.key(node);
         dev << node->getCollisionGrid()->getGridStart();

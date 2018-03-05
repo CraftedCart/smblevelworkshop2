@@ -113,6 +113,14 @@ namespace WS2Common {
             this->scale = scale;
         }
 
+        glm::vec3 SceneNode::getConveyorSpeed() const {
+            return conveyorSpeed;
+        }
+
+        void SceneNode::setConveyorSpeed(const glm::vec3 conveyorSpeed) {
+            this->conveyorSpeed = conveyorSpeed;
+        }
+
         void SceneNode::setTransformAnimation(Animation::TransformAnimation *anim) {
             animation = anim;
         }

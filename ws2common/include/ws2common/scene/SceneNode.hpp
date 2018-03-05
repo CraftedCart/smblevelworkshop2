@@ -32,6 +32,8 @@ namespace WS2Common {
                 glm::vec3 rotation = glm::vec3(0.0f, 0.0f, 0.0f);
                 glm::vec3 scale = glm::vec3(1.0f, 1.0f, 1.0f);
 
+                glm::vec3 conveyorSpeed = glm::vec3(0.0f, 0.0f, 0.0f);
+
                 Animation::TransformAnimation *animation = nullptr;
                 unsigned int animationGroupId = 0;
                 EnumAnimationSeesawType animationSeesawType = ANIMATION;
@@ -203,6 +205,20 @@ namespace WS2Common {
                  * @param scale The new scale to set
                  */
                 void setScale(const glm::vec3 scale);
+
+                /**
+                 * @brief Getter for conveyorSpeed
+                 *
+                 * @return The velocity of the conveyor-effect this item group should apply to the player ball
+                 */
+                glm::vec3 getConveyorSpeed() const;
+
+                /**
+                 * @brief Setter for conveyorSpeed
+                 *
+                 * @param conveyorSpeed The new velocity of the conveyor-effect this item group should apply to the player ball
+                 */
+                void setConveyorSpeed(const glm::vec3 conveyorSpeed);
 
                 /**
                  * @brief Setter for transformAnimation

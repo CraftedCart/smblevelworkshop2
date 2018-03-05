@@ -17,7 +17,7 @@ namespace WS2Common {
                 xml.readNext();
                 if (!xml.isStartElement()) continue; //Ignore all end elements
 
-                if (xml.name() == "superMonkeyBallStage") { //TODO: Check superMonkeyBallStage version attribute 
+                if (xml.name() == "superMonkeyBallStage") { //TODO: Check superMonkeyBallStage version attribute
                     //Parse the stages
                     while (!(xml.isEndElement() && xml.name() == "superMonkeyBallStage")) {
                         //Keep reading until the </superMonkeyBallStage> tag
@@ -183,12 +183,10 @@ namespace WS2Common {
                     group->setOriginRotation(getVec3Attributes(xml.attributes()));
                 } else if (xml.name() == "animSeesawType") { //TODO
                     QPair<EnumAnimationSeesawType, Animation::EnumLoopType> type = parseAnimLoopType(xml);
-
                     group->setAnimationSeesawType(type.first);
                     loopType = type.second; //loopType will be linked with an animation later if needed
-                } else if (xml.name() == "conveyorSpeed") { //TODO
-                    qWarning() << "itemGroup > conveyorSpeed not yet implemented!";
-                    xml.skipCurrentElement();
+                } else if (xml.name() == "conveyorSpeed") {
+                    group->setConveyorSpeed(getVec3Attributes(xml.attributes()));
                 } else if (xml.name() == "seesawSensitivity") {
                     group->setSeesawSensitivity(xml.readElementText().toFloat()); //TODO: Error checking
                 } else if (xml.name() == "seesawResetStiffness") {
@@ -203,7 +201,7 @@ namespace WS2Common {
                     loopTime = xml.readElementText().toFloat(); //For later linking
                 } else if (xml.name() == "animGroupId") {
                     group->setAnimationGroupId(xml.readElementText().toUInt());
-                } else if (xml.name() == "animInitialState") { //TODO
+                } else if (xml.name() == "animInitialState") {
                     initialState = PlaybackState::fromString(xml.readElementText());
                 } else if (xml.name() == "collisionGrid") {
                     group->setCollisionGrid(parseCollisionGrid(xml));
