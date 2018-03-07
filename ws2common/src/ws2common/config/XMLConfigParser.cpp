@@ -4,8 +4,6 @@
 #include <QDebug>
 #include <QCoreApplication>
 
-//TODO: Wow did I really leave unsigned int id = 0; all over the place and never made it static/increment it? >.>
-
 namespace WS2Common {
     namespace Config {
         Stage* XMLConfigParser::parseStage(QString config, QDir relativeRoot) {
@@ -240,7 +238,7 @@ namespace WS2Common {
 
         Scene::GoalSceneNode* XMLConfigParser::parseGoal(QXmlStreamReader &xml) {
             //Default name is "Goal x", translated
-            unsigned int id = 0;
+            static unsigned int id = 0;
             Scene::GoalSceneNode *goal = new Scene::GoalSceneNode(QCoreApplication::translate("XMLConfigParser", "Goal %1").arg(id));
 
             while (!(xml.isEndElement() && xml.name() == "goal")) {
@@ -260,12 +258,14 @@ namespace WS2Common {
                 }
             }
 
+            id++;
+
             return goal;
         }
 
         Scene::BumperSceneNode* XMLConfigParser::parseBumper(QXmlStreamReader &xml) {
             //Default name is "Bumper x", translated
-            unsigned int id = 0;
+            static unsigned int id = 0;
             Scene::BumperSceneNode *bumper = new Scene::BumperSceneNode(QCoreApplication::translate("XMLConfigParser", "Bumper %1").arg(id));
 
             while (!(xml.isEndElement() && xml.name() == "bumper")) {
@@ -285,12 +285,14 @@ namespace WS2Common {
                 }
             }
 
+            id++;
+
             return bumper;
         }
 
         Scene::JamabarSceneNode* XMLConfigParser::parseJamabar(QXmlStreamReader &xml) {
             //Default name is "Jamabar x", translated
-            unsigned int id = 0;
+            static unsigned int id = 0;
             Scene::JamabarSceneNode *jamabar = new Scene::JamabarSceneNode(QCoreApplication::translate("XMLConfigParser", "Jamabar %1").arg(id));
 
             while (!(xml.isEndElement() && xml.name() == "jamabar")) {
@@ -310,12 +312,14 @@ namespace WS2Common {
                 }
             }
 
+            id++;
+
             return jamabar;
         }
 
         Scene::BananaSceneNode* XMLConfigParser::parseBanana(QXmlStreamReader &xml) {
             //Default name is "Banana x", translated
-            unsigned int id = 0;
+            static unsigned int id = 0;
             Scene::BananaSceneNode *banana = new Scene::BananaSceneNode(QCoreApplication::translate("XMLConfigParser", "Banana %1").arg(id));
 
             while (!(xml.isEndElement() && xml.name() == "banana")) {
@@ -333,12 +337,14 @@ namespace WS2Common {
                 }
             }
 
+            id++;
+
             return banana;
         }
 
         Scene::FalloutVolumeSceneNode* XMLConfigParser::parseFalloutVolume(QXmlStreamReader &xml) {
             //Default name is "Fallout Volume x", translated
-            unsigned int id = 0;
+            static unsigned int id = 0;
             Scene::FalloutVolumeSceneNode *volume = new Scene::FalloutVolumeSceneNode(QCoreApplication::translate("XMLConfigParser", "Fallout Volume %1").arg(id));
 
             while (!(xml.isEndElement() && xml.name() == "falloutVolume")) {
@@ -358,12 +364,14 @@ namespace WS2Common {
                 }
             }
 
+            id++;
+
             return volume;
         }
 
         Scene::WormholeSceneNode* XMLConfigParser::parseWormhole(QXmlStreamReader &xml) {
             //Default name is "Wormhole x", translated
-            unsigned int id = 0;
+            static unsigned int id = 0;
             Scene::WormholeSceneNode *wh = new Scene::WormholeSceneNode(QCoreApplication::translate("XMLConfigParser", "Wormhole %1").arg(id));
 
             while (!(xml.isEndElement() && xml.name() == "wormhole")) {
@@ -383,12 +391,14 @@ namespace WS2Common {
                 }
             }
 
+            id++;
+
             return wh;
         }
 
         Scene::SwitchSceneNode* XMLConfigParser::parseSwitch(QXmlStreamReader &xml) {
             //Default name is "Switch x", translated
-            unsigned int id = 0;
+            static unsigned int id = 0;
             //Woo can't use switch as a variable name!
             Scene::SwitchSceneNode *sw = new Scene::SwitchSceneNode(QCoreApplication::translate("XMLConfigParser", "Switch %1").arg(id));
 
@@ -410,6 +420,8 @@ namespace WS2Common {
                     qWarning().noquote() << "Unrecognised tag: switch >" << xml.name();
                 }
             }
+
+            id++;
 
             return sw;
         }
