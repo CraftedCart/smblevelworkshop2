@@ -81,7 +81,7 @@ namespace WS2Lz {
             QVector<Model::Vertex> &allVertices,
             QVector<unsigned int> &allIndices
             ) {
-        if (instanceOf<Scene::MeshCollisionSceneNode>(node)) {
+        if (dynamic_cast<const Scene::MeshCollisionSceneNode*>(node)) {
             const Scene::MeshCollisionSceneNode *coli= static_cast<const Scene::MeshCollisionSceneNode*>(node);
             //First, find the MeshSceneNode in the models QHash
             if (models.contains(coli->getMeshName())) {
@@ -116,7 +116,7 @@ namespace WS2Lz {
 
         //Loop over all collision headers
         foreach(Scene::SceneNode *node, stage.getRootNode()->getChildren()) {
-            if (instanceOf<Scene::GroupSceneNode>(node)) {
+            if (dynamic_cast<Scene::GroupSceneNode*>(node)) {
                 Scene::GroupSceneNode *groupNode = static_cast<Scene::GroupSceneNode*>(node);
                 //Find all MeshCollisionSceneNodes, and add the triangles to allVertices/allIndices
                 QVector<Model::Vertex> allVertices;
@@ -343,7 +343,7 @@ namespace WS2Lz {
 
         //Find all background models
         foreach(Scene::SceneNode *node, stage.getRootNode()->getChildren()) {
-            if (instanceOf<Scene::BackgroundGroupSceneNode>(node)) {
+            if (dynamic_cast<Scene::BackgroundGroupSceneNode*>(node)) {
                 Scene::BackgroundGroupSceneNode *group = static_cast<Scene::BackgroundGroupSceneNode*>(node);
 
                 //Found one, now iterate over all children
@@ -423,7 +423,7 @@ namespace WS2Lz {
 
     void SMB2LzExporter::addCollisionTriangleOffsets(const Scene::SceneNode *node, quint32 &nextOffset) {
         //TODO: Store this in a map or hash or something, per collision header, add a function argument for the collision header, store in a nested maps - Collision header, object name, offset
-        if (instanceOf<Scene::MeshCollisionSceneNode>(node)) {
+        if (dynamic_cast<const Scene::MeshCollisionSceneNode*>(node)) {
             const Scene::MeshCollisionSceneNode *coli= static_cast<const Scene::MeshCollisionSceneNode*>(node);
             //First, find the MeshSceneNode in the models QHash
             if (models.contains(coli->getMeshName())) {
@@ -649,7 +649,7 @@ namespace WS2Lz {
     }
 
     void SMB2LzExporter::writeCollisionTriangles(QDataStream &dev, const Scene::SceneNode *node) {
-        if (instanceOf<Scene::MeshCollisionSceneNode>(node)) {
+        if (dynamic_cast<const Scene::MeshCollisionSceneNode*>(node)) {
             const Scene::MeshCollisionSceneNode *coli= static_cast<const Scene::MeshCollisionSceneNode*>(node);
             //This node is a MeshCollisionSceneNode - Loop over all the triangles and write them
             //First, find the MeshSceneNode in the models QHash

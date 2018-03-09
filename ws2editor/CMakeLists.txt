@@ -66,7 +66,7 @@ set(SOURCE_FILES
     ./src/ws2editor/ui/ModelManager.cpp
     ./src/ws2editor/ui/ModelResources.cpp
     ./src/ws2editor/ui/ModelOutliner.cpp
-    ./src/ws2editor/WS2.cpp
+    ./src/ws2editor/WS2Editor.cpp
     ./src/ws2editor/scene/EditorMeshSceneNode.cpp
     ./src/ws2editor/scene/SceneSelectionManager.cpp
     ./src/ws2editor/physics/PhysicsManager.cpp
@@ -98,7 +98,7 @@ set(HEADER_FILES
     ./include/ws2editor/ui/ModelManager.hpp
     ./include/ws2editor/ui/ModelResources.hpp
     ./include/ws2editor/ui/ModelOutliner.hpp
-    ./include/ws2editor/WS2.hpp
+    ./include/ws2editor/WS2Editor.hpp
     ./include/ws2editor/scene/EditorMeshSceneNode.hpp
     ./include/ws2editor/scene/SceneSelectionManager.hpp
     ./include/ws2editor/physics/PhysicsManger.hpp

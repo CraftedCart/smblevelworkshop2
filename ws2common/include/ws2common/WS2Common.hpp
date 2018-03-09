@@ -10,12 +10,7 @@
 
 namespace WS2Common {
     std::mt19937* getRandGen();
-
-    template<typename Base, typename T>
-    bool instanceOf(const T *ptr);
 }
-
-#include "ws2common/WS2Common.ipp"
 
 #endif
 

@@ -1,4 +1,4 @@
-#include "ws2editor/WS2.hpp"
+#include "ws2editor/WS2Editor.hpp"
 
 namespace WS2Editor {
     //Define extern members
