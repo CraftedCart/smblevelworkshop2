@@ -56,7 +56,7 @@ namespace WS2Editor {
 
                         int j = 0;
                         foreach (WS2Common::Resource::ResourceTexture *tex, segment->getTextures()) {
-                            if (!WS2Common::instanceOf<ResourceEditorTexture>(tex)) {
+                            if (dynamic_cast<ResourceEditorTexture*>(tex) == nullptr) {
                                 if (getResources().indexOf(tex) != -1) {
                                     texVec[j] = new ResourceEditorTexture(*tex);
                                     getResources().replace(getResources().indexOf(tex), texVec[j]);

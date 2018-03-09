@@ -9,7 +9,7 @@ namespace WS2Editor {
         ResourceEditorMesh::ResourceEditorMesh(const ResourceMesh &origin) {
             //Check for non-ResourceEditorMeshes, and convert them over
             foreach(WS2Common::Model::MeshSegment* segment, origin.getMeshSegments()) {
-                if (WS2Common::instanceOf<Model::EditorMeshSegment>(segment)) {
+                if (dynamic_cast<Model::EditorMeshSegment*>(segment)) {
                     //Copy it over
                     meshSegments.append(new Model::EditorMeshSegment(*static_cast<Model::EditorMeshSegment*>(segment)));
                 } else {
