@@ -13,8 +13,8 @@ namespace WS2Lz {
         this->vertices = vertices;
 
         //Resize the indicesGrid vectors
-        indicesGrid.resize(grid.getGridStepCount().x);
-        for (unsigned int i = 0; i < grid.getGridStepCount().x; i++) indicesGrid[i].resize(grid.getGridStepCount().y);
+        indicesGrid.resize(grid.getGridStepCount().y);
+        for (unsigned int i = 0; i < grid.getGridStepCount().y; i++) indicesGrid[i].resize(grid.getGridStepCount().x);
 
         sortIntersections(vertices, indices, grid);
     }
