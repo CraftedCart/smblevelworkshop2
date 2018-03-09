@@ -131,6 +131,10 @@ namespace WS2Common {
                 xml.readNext();
                 if (!xml.isStartElement()) continue; //Ignore all end elements
 
+                //Some stuff that needs to be linked after parsing the entire background model
+                Animation::TransformAnimation *anim = nullptr;
+                float loopTime = 0.0f;
+
                 if (xml.name() == "name") {
                     QString name = xml.readElementText();
 
@@ -142,17 +146,21 @@ namespace WS2Common {
                     bg->setRotation(getVec3Attributes(xml.attributes()));
                 } else if (xml.name() == "scale") {
                     bg->setScale(getVec3Attributes(xml.attributes()));
-                } else if (xml.name() == "animKeyframes") { //TODO
-                    qWarning() << "backgroundModel > animKeyframes not yet implemented!";
-                    xml.skipCurrentElement();
-                } else if (xml.name() == "animLoopTime") { //TODO
-                    qWarning() << "backgroundModel > animLoopTime not yet implemented!";
-                    xml.skipCurrentElement();
+                } else if (xml.name() == "animKeyframes") {
+                    Animation::TransformAnimation *transformAnim = parseTransformAnimation(xml);
+                    bg->setTransformAnimation(transformAnim);
+                    anim = transformAnim; //For later linking (So that the loop type is set in the transformAnim)
+                } else if (xml.name() == "animLoopTime") {
+                    loopTime = xml.readElementText().toFloat(); //For later linking
                 } else if (xml.name() == "textureScroll") { //TODO
                     qWarning() << "backgroundModel > textureScroll not yet implemented!";
                     xml.skipCurrentElement();
                 } else {
                     qWarning().noquote() << "Unrecognised tag: backgroundModel >" << xml.name();
+                }
+
+                if (anim != nullptr) {
+                    anim->setLoopTime(loopTime);
                 }
             }
 

@@ -44,8 +44,10 @@ namespace WS2Lz {
      * - Level model pointer type B
      * - Level model
      * - Level model name
-     * - Animaton headers
-     * - Animation keyframes
+     * - Animaton headers (Stage models)
+     * - Animation keyframes (Stage models)
+     * - Animaton headers (Background models)
+     * - Animation keyframes (Background models)
      */
     class SMB2LzExporter {
 
@@ -69,6 +71,7 @@ namespace WS2Lz {
             const unsigned int WORMHOLE_LENGTH = 28;
             const unsigned int BACKGROUND_MODEL_LENGTH = 56;
             const unsigned int ANIMATION_HEADER_LENGTH = 64;
+            const unsigned int BACKGROUND_ANIMATION_HEADER_LENGTH = 80;
             const unsigned int ANIMATION_KEYFRAME_LENGTH = 20;
 
             //Other guff
@@ -101,6 +104,7 @@ namespace WS2Lz {
             QMultiMap<quint32, const Scene::WormholeSceneNode*> wormholeIndividualOffsetMap; //Per wormhole (Needed to link wormholes together)
             QMap<const Scene::GroupSceneNode*, quint32> wormholeCountMap;
             QMultiMap<quint32, const Scene::GroupSceneNode*> groupAnimHeaderOffsetMap;
+            QMultiMap<quint32, const Scene::MeshSceneNode*> bgAnimHeaderOffsetMap;
             QMultiMap<quint32, const Animation::TransformAnimation*> animPosXKeyframesOffsetMap;
             QMultiMap<quint32, const Animation::TransformAnimation*> animPosYKeyframesOffsetMap;
             QMultiMap<quint32, const Animation::TransformAnimation*> animPosZKeyframesOffsetMap;
@@ -208,6 +212,7 @@ namespace WS2Lz {
             void writeBackgroundModel(QDataStream &dev, const Scene::MeshSceneNode *node);
             void writeBackgroundName(QDataStream &dev, const Scene::MeshSceneNode *node);
             void writeAnimationHeader(QDataStream &dev, const Animation::TransformAnimation *anim);
+            void writeBackgroundAnimationHeader(QDataStream &dev, const Animation::TransformAnimation *anim);
             void writeTransformAnimation(QDataStream &dev, const Animation::TransformAnimation *anim);
             void writeKeyframeF(QDataStream &dev, const Animation::KeyframeF *k);
 

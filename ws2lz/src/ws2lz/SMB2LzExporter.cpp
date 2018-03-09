@@ -15,7 +15,7 @@
 #define forEachGroup(group) foreach(const Scene::GroupSceneNode* group, collisionHeaderOffsetMap)
 
 /**
- * @brief Iterates over all background - The value of group will be the GroupSceneNode at the current iteration
+ * @brief Iterates over all backgrounds - The value of group will be the GroupSceneNode at the current iteration
  */
 #define forEachBg(mesh) foreach(const Scene::MeshSceneNode* mesh, bgOffsetMap)
 
@@ -74,6 +74,8 @@ namespace WS2Lz {
         forEachBg(mesh) writeBackgroundName(dev, mesh); //Background model names
         forEachGroup(group) writeAnimationHeader(dev, group->getTransformAnimation());
         forEachGroup(group) writeTransformAnimation(dev, group->getTransformAnimation());
+        forEachBg(bg) writeBackgroundAnimationHeader(dev, bg->getTransformAnimation());
+        forEachBg(bg) writeTransformAnimation(dev, bg->getTransformAnimation());
     }
 
     void SMB2LzExporter::addCollisionTriangles(
@@ -380,6 +382,44 @@ namespace WS2Lz {
         //Animation keyframes
         forEachGroup(group) {
             const Animation::TransformAnimation *anim = group->getTransformAnimation();
+
+            if (anim != nullptr) {
+                //This node has animation
+
+                //PosX
+                animPosXKeyframesOffsetMap.insert(nextOffset, anim);
+                nextOffset += ANIMATION_KEYFRAME_LENGTH * anim->getPosXKeyframes().size();
+                //PosY
+                animPosYKeyframesOffsetMap.insert(nextOffset, anim);
+                nextOffset += ANIMATION_KEYFRAME_LENGTH * anim->getPosYKeyframes().size();
+                //PosZ
+                animPosZKeyframesOffsetMap.insert(nextOffset, anim);
+                nextOffset += ANIMATION_KEYFRAME_LENGTH * anim->getPosZKeyframes().size();
+
+                //RotX
+                animRotXKeyframesOffsetMap.insert(nextOffset, anim);
+                nextOffset += ANIMATION_KEYFRAME_LENGTH * anim->getRotXKeyframes().size();
+                //RotY
+                animRotYKeyframesOffsetMap.insert(nextOffset, anim);
+                nextOffset += ANIMATION_KEYFRAME_LENGTH * anim->getRotYKeyframes().size();
+                //RotZ
+                animRotZKeyframesOffsetMap.insert(nextOffset, anim);
+                nextOffset += ANIMATION_KEYFRAME_LENGTH * anim->getRotZKeyframes().size();
+            }
+        }
+
+        //Background animation headers
+        forEachBg(bg) {
+            if (bg->getTransformAnimation() != nullptr) {
+                //This node has animation
+                bgAnimHeaderOffsetMap.insert(nextOffset, bg);
+                nextOffset += BACKGROUND_ANIMATION_HEADER_LENGTH;
+            }
+        }
+
+        //Background animation keyframes
+        forEachBg(bg) {
+            const Animation::TransformAnimation *anim = bg->getTransformAnimation();
 
             if (anim != nullptr) {
                 //This node has animation
@@ -833,7 +873,11 @@ namespace WS2Lz {
         dev << convertRotation(node->getRotation());
         writeNull(dev, 2);
         dev << node->getScale();
-        writeNull(dev, 12); //TODO: Add background animation
+        dev << (node->getTransformAnimation() != nullptr ? bgAnimHeaderOffsetMap.key(node) : (quint32) 0); //Offset to animation header
+        dev << (node->getTransformAnimation() != nullptr ? bgAnimHeaderOffsetMap.key(node) : (quint32) 0); //Offset to animation header
+        //writeNull(dev, 8); //TODO: Add the other background animation/effect header
+        writeNull(dev, 4); //TODO: Add the other background animation/effect header
+        qDebug() << bgAnimHeaderOffsetMap.key(node);
     }
 
     void SMB2LzExporter::writeBackgroundName(QDataStream &dev, const Scene::MeshSceneNode *node) {
@@ -849,6 +893,28 @@ namespace WS2Lz {
         //Not all groups will have animation - get outta here if nullptr
         if (anim == nullptr) return;
 
+        dev << (quint32) anim->getRotXKeyframes().size(); //Number of rot X keyframes
+        dev << (quint32) animRotXKeyframesOffsetMap.key(anim); //Offset to pos X keyframes
+        dev << (quint32) anim->getRotYKeyframes().size(); //Number of rot Y keyframes
+        dev << (quint32) animRotYKeyframesOffsetMap.key(anim); //Offset to rot Y keyframes
+        dev << (quint32) anim->getRotZKeyframes().size(); //Number of rot Z keyframes
+        dev << (quint32) animRotZKeyframesOffsetMap.key(anim); //Offset to rot Z keyframes
+        dev << (quint32) anim->getPosXKeyframes().size(); //Number of pos X keyframes
+        dev << (quint32) animPosXKeyframesOffsetMap.key(anim); //Offset to pos X keyframes
+        dev << (quint32) anim->getPosYKeyframes().size(); //Number of pos Y keyframes
+        dev << (quint32) animPosYKeyframesOffsetMap.key(anim); //Offset to pos Y keyframes
+        dev << (quint32) anim->getPosZKeyframes().size(); //Number of pos Z keyframes
+        dev << (quint32) animPosZKeyframesOffsetMap.key(anim); //Offset to pos Z keyframes
+        writeNull(dev, 16);
+    }
+
+    void SMB2LzExporter::writeBackgroundAnimationHeader(QDataStream &dev, const Animation::TransformAnimation *anim) {
+        //Not all backgrounds will have animation - get outta here if nullptr
+        if (anim == nullptr) return;
+
+        writeNull(dev, 4); //TODO: Unknown/null
+        dev << anim->getLoopTime();
+        writeNull(dev, 8); //TODO: Unknown/null
         dev << (quint32) anim->getRotXKeyframes().size(); //Number of rot X keyframes
         dev << (quint32) animRotXKeyframesOffsetMap.key(anim); //Offset to pos X keyframes
         dev << (quint32) anim->getRotYKeyframes().size(); //Number of rot Y keyframes
