@@ -6,7 +6,7 @@
 #include "ws2editor/ui/AboutWindow.hpp"
 #include "ws2editor/ui/StageIdeaGeneratorWindow.hpp"
 #include "ws2editor/task/ImportFileTask.hpp"
-#include "ws2editor/WS2.hpp"
+#include "ws2editor/WS2Editor.hpp"
 #include "ws2common/scene/GroupSceneNode.hpp"
 #include <QFontDatabase>
 #include <Qt>

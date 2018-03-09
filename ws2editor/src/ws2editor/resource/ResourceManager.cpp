@@ -1,4 +1,4 @@
-#include "ws2editor/WS2.hpp"
+#include "ws2editor/WS2Editor.hpp"
 #include "ws2editor/resource/ResourceManager.hpp"
 #include "ws2editor/resource/ResourceEditorTexture.hpp"
 #include "ws2editor/ui/ModelManager.hpp"

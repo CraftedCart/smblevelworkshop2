@@ -1,7 +1,7 @@
 #include "ws2editor/ui/ModelOutliner.hpp"
 #include "ws2editor/project/ProjectManager.hpp"
 #include "ws2editor/scene/EditorMeshSceneNode.hpp"
-#include "ws2editor/WS2.hpp"
+#include "ws2editor/WS2Editor.hpp"
 
 namespace WS2Editor {
     namespace UI {

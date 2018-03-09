@@ -1,5 +1,5 @@
 #include "ws2editor/task/TaskManager.hpp"
-#include "ws2editor/WS2.hpp"
+#include "ws2editor/WS2Editor.hpp"
 
 namespace WS2Editor {
     namespace Task {
