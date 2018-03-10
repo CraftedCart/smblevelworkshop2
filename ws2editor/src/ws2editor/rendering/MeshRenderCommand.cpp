@@ -1,7 +1,6 @@
 #include "ws2editor/rendering/MeshRenderCommand.hpp"
 #include "ws2editor/resource/ResourceEditorTexture.hpp"
 #include "ws2editor/GLManager.hpp"
-#include <QDebug>
 
 namespace WS2Editor {
     namespace Rendering {
@@ -9,8 +8,6 @@ namespace WS2Editor {
             mesh(mesh) {}
 
         void MeshRenderCommand::draw() {
-            qDebug() << (mesh == nullptr);
-
             //Set up textures
             for (int i = 0; i < mesh->getTextures().size(); i++) {
                 glActiveTexture(GL_TEXTURE0 + i);
