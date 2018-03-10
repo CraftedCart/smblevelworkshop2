@@ -6,20 +6,20 @@
 #ifndef SMBLEVELWORKSHOP2_WS2EDITOR_CACHEDGLTEXTURE_HPP
 #define SMBLEVELWORKSHOP2_WS2EDITOR_CACHEDGLTEXTURE_HPP
 
-#include <QOpenGLTexture>
+#include "ws2editor/glplatform.hpp"
 
 namespace WS2Editor {
 
     /**
-     * @note The destructor will not delete the texture - it is your job to ensure that the correct GL context is bound and delete it yourself
+     * @note The destructor will not delete the GL texture - it is your job to ensure that the correct GL context is bound and delete it yourself
      */
     class CachedGlTexture {
         protected:
-            QOpenGLTexture *texture;
+            GLuint textureId;
 
         public:
-            void setTexture(QOpenGLTexture *texture);
-            QOpenGLTexture* getTexture();
+            void setTextureId(GLuint textureId);
+            GLuint getTextureId();
     };
 }
 

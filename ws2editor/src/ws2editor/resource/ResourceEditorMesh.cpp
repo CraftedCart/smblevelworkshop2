@@ -24,14 +24,14 @@ namespace WS2Editor {
         }
 
         void ResourceEditorMesh::load() {
-            foreach(WS2Common::Model::MeshSegment *segment, meshSegments) {
-                Model::EditorMeshSegment *editorSegment = static_cast<Model::EditorMeshSegment*>(segment);
-                foreach (WS2Common::Resource::ResourceTexture *tex, editorSegment->getTextures()) {
-                    tex->load();
-                }
+            //foreach(WS2Common::Model::MeshSegment *segment, meshSegments) {
+                //Model::EditorMeshSegment *editorSegment = static_cast<Model::EditorMeshSegment*>(segment);
+                //foreach (WS2Common::Resource::ResourceTexture *tex, editorSegment->getTextures()) {
+                    //tex->load();
+                //}
 
-                editorSegment->load();
-            }
+                //editorSegment->load();
+            //}
 
             loaded = true;
         }
@@ -39,10 +39,10 @@ namespace WS2Editor {
         void ResourceEditorMesh::unload() {
             loaded = false;
 
-            for (WS2Common::Model::MeshSegment *segment : meshSegments) {
-                static_cast<Model::EditorMeshSegment*>(segment)->unload();
-                //TODO: Unload textures (But not ones in use by other meshes)
-            }
+            //for (WS2Common::Model::MeshSegment *segment : meshSegments) {
+                //static_cast<Model::EditorMeshSegment*>(segment)->unload();
+                ////TODO: Unload textures (But not ones in use by other meshes)
+            //}
         }
     }
 }

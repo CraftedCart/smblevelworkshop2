@@ -33,7 +33,7 @@ namespace WS2Editor {
         return triCount;
     }
 
-    QVector<WS2Common::Resource::ResourceTexture*>& CachedGlMesh::getTextures() {
+    QVector<CachedGlTexture*>& CachedGlMesh::getTextures() {
         return textures;
     }
 }

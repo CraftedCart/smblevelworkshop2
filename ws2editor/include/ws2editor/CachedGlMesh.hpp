@@ -7,7 +7,7 @@
 #define SMBLEVELWORKSHOP2_WS2EDITOR_CACHEDGLMESH_HPP
 
 #include "ws2editor/glplatform.hpp"
-#include "ws2common/resource/ResourceTexture.hpp" //TODO: Temp
+#include "ws2editor/CachedGlTexture.hpp"
 #include <QVector>
 
 namespace WS2Editor {
@@ -21,7 +21,7 @@ namespace WS2Editor {
             GLuint vbo;
             GLuint ebo;
             GLuint triCount;
-            QVector<WS2Common::Resource::ResourceTexture*> textures; //TODO: Temp
+            QVector<CachedGlTexture*> textures;
 
         public:
             void setVao(GLuint vao);
@@ -32,7 +32,7 @@ namespace WS2Editor {
             GLuint getEbo() const;
             void setTriCount(GLuint triCount);
             GLuint getTriCount() const;
-            QVector<WS2Common::Resource::ResourceTexture*>& getTextures();
+            QVector<CachedGlTexture*>& getTextures();
     };
 }
 

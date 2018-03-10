@@ -1,12 +1,12 @@
 #include "ws2editor/CachedGlTexture.hpp"
 
 namespace WS2Editor {
-    void CachedGlTexture::setTexture(QOpenGLTexture *texture) {
-        this->texture = texture;
+    void CachedGlTexture::setTextureId(GLuint textureId) {
+        this->textureId = textureId;
     }
 
-    QOpenGLTexture* CachedGlTexture::getTexture() {
-        return texture;
+    GLuint CachedGlTexture::getTextureId() {
+        return textureId;
     }
 }
 
