@@ -61,7 +61,7 @@ namespace WS2Editor {
             QVector<WS2Common::Resource::ResourceTexture*> out(vec.size());
 
             int i = 0;
-            foreach(Resource::ResourceEditorTexture* tex, vec) {
+            foreach(Resource::ResourceEditorTexture *tex, vec) {
                 out[i] = tex;
                 i++;
             }

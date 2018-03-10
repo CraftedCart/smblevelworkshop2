@@ -47,6 +47,7 @@ namespace WS2Editor {
 
         ViewportWidget::~ViewportWidget() {
             //Cleanup
+            delete renderManager;
             delete keysDown;
             delete cameraPos;
             delete targetCameraPos;
@@ -297,6 +298,7 @@ namespace WS2Editor {
             if (scene != nullptr) {
                 recursiveDrawSceneNode(scene->getRootNode(), glm::mat4(1.0f));
             }
+            renderManager->renderQueue();
 
             //Physics debug drawing
             PhysicsDebugDrawer *physicsDebugDrawer = Project::ProjectManager::getActiveProject()->getScene()->getPhysicsDebugDrawer();
@@ -351,7 +353,12 @@ namespace WS2Editor {
                 glUniformMatrix4fv(GLManager::shaderModelID, 1, GL_FALSE, &transform[0][0]);
                 //Assume it's a ResourceEditorMesh
                 //TODO: There must be a better way then assuming right?
-                GLManager::renderMesh(static_cast<const Resource::ResourceEditorMesh*>(mesh->getMesh()));
+                //GLManager::renderMesh(static_cast<const Resource::ResourceEditorMesh*>(mesh->getMesh()));
+                const QVector<WS2Common::Model::MeshSegment*>& segments = mesh->getMesh()->getMeshSegments();
+
+                for (int i = 0; i < segments.size(); i++) {
+                    renderManager->enqueueRenderMesh(segments[i]);
+                }
             }
 
             for (int i = 0; i < node->getChildren().size(); i++) {

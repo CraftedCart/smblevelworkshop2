@@ -4,6 +4,7 @@
 #include "ws2editor/glplatform.hpp"
 #include "ws2editor/EnumCameraNav.hpp"
 #include "ws2editor/resource/ResourceScene.hpp"
+#include "ws2editor/RenderManager.hpp"
 #include <QOpenGLWidget>
 #include <QWidget>
 #include <QElapsedTimer>
@@ -18,6 +19,8 @@ namespace WS2Editor {
             Q_OBJECT
 
             protected:
+                RenderManager *renderManager = new RenderManager();
+
                 //Used to calculate delta time
                 QElapsedTimer elapsedTimer;
                 qint64 prevNanosecondsElapsed;

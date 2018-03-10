@@ -75,6 +75,10 @@ set(SOURCE_FILES
     ./src/ws2editor/Progress.cpp
     ./src/ws2editor/task/TaskManager.cpp
     ./src/ws2editor/task/ImportFileTask.cpp
+    ./src/ws2editor/RenderManager.cpp
+    ./src/ws2editor/CachedGlMesh.cpp
+    ./src/ws2editor/CachedGlTexture.cpp
+    ./src/ws2editor/rendering/MeshRenderCommand.cpp
     )
 
 set(HEADER_FILES
@@ -108,6 +112,11 @@ set(HEADER_FILES
     ./include/ws2editor/task/Task.hpp
     ./include/ws2editor/task/TaskManager.hpp
     ./include/ws2editor/task/ImportFileTask.hpp
+    ./include/ws2editor/RenderManager.hpp
+    ./include/ws2editor/CachedGlMesh.hpp
+    ./include/ws2editor/CachedGlTexture.hpp
+    ./include/ws2editor/rendering/IRenderCommand.hpp
+    ./include/ws2editor/rendering/MeshRenderCommand.hpp
     )
 
 set(UI_FILES
