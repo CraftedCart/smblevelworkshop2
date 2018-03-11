@@ -47,10 +47,6 @@ namespace WS2Editor {
         ViewportWidget::~ViewportWidget() {
             //Cleanup
             delete renderManager;
-            delete keysDown;
-            delete cameraPos;
-            delete targetCameraPos;
-            delete cameraRot;
             delete tooltipPixmap;
 
             makeCurrent();
@@ -129,14 +125,14 @@ namespace WS2Editor {
 
             ////Camera matrix
             //glm::mat4 view = glm::lookAt(
-                    //*targetCameraPos,
-                    //*targetCameraPos + forward,
-                    //up
-                    //);
+            //*targetCameraPos,
+            //*targetCameraPos + forward,
+            //up
+            //);
 
             glm::mat4 view2 = glm::lookAt(
-                    *targetCameraPos,
-                    *targetCameraPos + forward,
+                    targetCameraPos,
+                    targetCameraPos + forward,
                     -up
                     );
 
@@ -152,7 +148,7 @@ namespace WS2Editor {
         }
 
         bool ViewportWidget::isKeyDown(int key) {
-            return keysDown->contains(key);
+            return keysDown.contains(key);
         }
 
         void ViewportWidget::preDraw() {
@@ -169,24 +165,24 @@ namespace WS2Editor {
                 setCursor(Qt::BlankCursor);
 
                 if (cameraNavMode == EnumCameraNav::NAV_FIRST_PERSON_FLY) {
-                    *cameraRot += cursorDiff * Config::cameraRotSpeed;
+                    cameraRot += cursorDiff * Config::cameraRotSpeed;
                     //Prevent camera from going whacko or upside down
-                    cameraRot->y = glm::clamp(cameraRot->y, -glm::half_pi<float>(), glm::half_pi<float>());
+                    cameraRot.y = glm::clamp(cameraRot.y, -glm::half_pi<float>(), glm::half_pi<float>());
                 } else if (cameraNavMode == EnumCameraNav::NAV_ORBIT) {
                     //Calculate pivot center
-                    glm::vec3 orbitForward = calcForwardVector(*cameraRot);
-                    glm::vec3 pivotCenter = *targetCameraPos + (orbitForward * cameraPivotDistance);
+                    glm::vec3 orbitForward = calcForwardVector(cameraRot);
+                    glm::vec3 pivotCenter = targetCameraPos + (orbitForward * cameraPivotDistance);
                     //End calculate pivot center
 
                     //Rotate camera and calculate new camera position
-                    *cameraRot += cursorDiff * Config::cameraRotSpeed;
+                    cameraRot += cursorDiff * Config::cameraRotSpeed;
                     //Prevent camera from going whacko or upside down
-                    cameraRot->y = glm::clamp(cameraRot->y, -glm::half_pi<float>(), glm::half_pi<float>());
+                    cameraRot.y = glm::clamp(cameraRot.y, -glm::half_pi<float>(), glm::half_pi<float>());
 
-                    orbitForward = calcForwardVector(*cameraRot);
+                    orbitForward = calcForwardVector(cameraRot);
                     //Set both the target camera pos and the actual pos so weirdness doesn't happen
-                    *targetCameraPos = pivotCenter + (orbitForward * -cameraPivotDistance);
-                    *cameraPos = pivotCenter + (orbitForward * -cameraPivotDistance);
+                    targetCameraPos = pivotCenter + (orbitForward * -cameraPivotDistance);
+                    cameraPos = pivotCenter + (orbitForward * -cameraPivotDistance);
                 }
 
                 if (cameraNavMode == EnumCameraNav::NAV_FIRST_PERSON_FLY || cameraNavMode == EnumCameraNav::NAV_ORBIT) {
@@ -195,12 +191,12 @@ namespace WS2Editor {
                     //TODO: Rebindable keys
                     if (isKeyDown(Qt::Key_Shift)) locPosSpeed *= Config::cameraPosSpeedUpMultiplier;
                     if (isKeyDown(Qt::Key_Alt)) locPosSpeed *= Config::cameraPosSlowDownMultiplier;
-                    if (isKeyDown(Qt::Key_W)) *targetCameraPos += forward * deltaSeconds * locPosSpeed;
-                    if (isKeyDown(Qt::Key_S)) *targetCameraPos -= forward * deltaSeconds * locPosSpeed;
-                    if (isKeyDown(Qt::Key_D)) *targetCameraPos += right * deltaSeconds * locPosSpeed;
-                    if (isKeyDown(Qt::Key_A)) *targetCameraPos -= right * deltaSeconds * locPosSpeed;
-                    if (isKeyDown(Qt::Key_E)) *targetCameraPos += up * deltaSeconds * locPosSpeed;
-                    if (isKeyDown(Qt::Key_Q)) *targetCameraPos -= up * deltaSeconds * locPosSpeed;
+                    if (isKeyDown(Qt::Key_W)) targetCameraPos += forward * deltaSeconds * locPosSpeed;
+                    if (isKeyDown(Qt::Key_S)) targetCameraPos -= forward * deltaSeconds * locPosSpeed;
+                    if (isKeyDown(Qt::Key_D)) targetCameraPos += right * deltaSeconds * locPosSpeed;
+                    if (isKeyDown(Qt::Key_A)) targetCameraPos -= right * deltaSeconds * locPosSpeed;
+                    if (isKeyDown(Qt::Key_E)) targetCameraPos += up * deltaSeconds * locPosSpeed;
+                    if (isKeyDown(Qt::Key_Q)) targetCameraPos -= up * deltaSeconds * locPosSpeed;
                 }
             } else {
                 //Mouse not locked
@@ -223,7 +219,7 @@ namespace WS2Editor {
             }
 
             //Camera inertia
-            *cameraPos = glm::mix(*cameraPos, *targetCameraPos, qBound(0.0f, Config::cameraInertia * deltaSeconds, 1.0f));
+            cameraPos = glm::mix(cameraPos, targetCameraPos, qBound(0.0f, Config::cameraInertia * deltaSeconds, 1.0f));
 
             calcVectors();
         }
@@ -238,13 +234,13 @@ namespace WS2Editor {
 
         void ViewportWidget::calcVectors() {
             //Forward vector
-            forward = calcForwardVector(*cameraRot);
+            forward = calcForwardVector(cameraRot);
 
             //Right vector
             right = glm::vec3(
-                    glm::sin(cameraRot->x - glm::half_pi<float>()),
+                    glm::sin(cameraRot.x - glm::half_pi<float>()),
                     0,
-                    glm::cos(cameraRot->x - glm::half_pi<float>())
+                    glm::cos(cameraRot.x - glm::half_pi<float>())
                     );
 
             //Up vector - Perpendicular to forward and right vector, so use cross product
@@ -268,8 +264,8 @@ namespace WS2Editor {
 
             //Camera matrix
             view = glm::lookAt(
-                    *cameraPos,
-                    *cameraPos + forward,
+                    cameraPos,
+                    cameraPos + forward,
                     up
                     );
 
@@ -297,6 +293,7 @@ namespace WS2Editor {
             if (scene != nullptr) {
                 recursiveDrawSceneNode(scene->getRootNode(), glm::mat4(1.0f));
             }
+
             renderManager->renderQueue();
 
             //Physics debug drawing
@@ -350,11 +347,8 @@ namespace WS2Editor {
 
             if (const Scene::EditorMeshSceneNode *mesh = dynamic_cast<const Scene::EditorMeshSceneNode*>(node)) {
                 glUniformMatrix4fv(renderManager->shaderModelID, 1, GL_FALSE, &transform[0][0]);
-                //Assume it's a ResourceEditorMesh
-                //TODO: There must be a better way then assuming right?
-                //GLManager::renderMesh(static_cast<const Resource::ResourceEditorMesh*>(mesh->getMesh()));
-                const QVector<WS2Common::Model::MeshSegment*>& segments = mesh->getMesh()->getMeshSegments();
 
+                const QVector<WS2Common::Model::MeshSegment*>& segments = mesh->getMesh()->getMeshSegments();
                 for (int i = 0; i < segments.size(); i++) {
                     renderManager->enqueueRenderMesh(segments[i]);
                 }
@@ -371,7 +365,7 @@ namespace WS2Editor {
                         (pos.x / width() - 0.5f) * 2.0f,
                         -(pos.y / height() - 0.5f) * 2.0f
                         ),
-                    *cameraPos, Config::cameraFar, proj, view
+                    cameraPos, Config::cameraFar, proj, view
                     );
 
             if (rayCallback->hasHit()) {
@@ -404,11 +398,11 @@ namespace WS2Editor {
         }
 
         void ViewportWidget::keyPressEvent(QKeyEvent *event) {
-            keysDown->insert(event->key());
+            keysDown.insert(event->key());
         }
 
         void ViewportWidget::keyReleaseEvent(QKeyEvent *event) {
-            keysDown->remove(event->key());
+            keysDown.remove(event->key());
         }
 
         void ViewportWidget::mousePressEvent(QMouseEvent *event) {
@@ -437,7 +431,7 @@ namespace WS2Editor {
 
             //Zoom
             float dy = event->angleDelta().y() / 10.0f; //TODO:Make zoom around configurable
-            *targetCameraPos += forward * (float) dy;
+            targetCameraPos += forward * (float) dy;
             cameraPivotDistance -= dy;
             cameraPivotDistance = glm::max(cameraPivotDistance, 1.0f);
         }
@@ -530,7 +524,7 @@ namespace WS2Editor {
                         (pos.x / width() - 0.5f) * 2.0f,
                         -(pos.y / height() - 0.5f) * 2.0f
                         ),
-                    *cameraPos, Config::cameraFar, proj, view
+                    cameraPos, Config::cameraFar, proj, view
                     );
 
             if (rayCallback->hasHit()) {
