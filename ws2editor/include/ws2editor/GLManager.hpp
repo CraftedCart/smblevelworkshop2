@@ -13,7 +13,7 @@ namespace WS2Editor {
      * @brief Functions, constants and variables to aid with GL
      */
     namespace GLManager {
-        enum VertexAttribs {
+        enum EnumVertexAttribs {
             VERTEX_POSITION = 0,
             VERTEX_NORMAL = 1,
             VERTEX_TEX_COORD = 2

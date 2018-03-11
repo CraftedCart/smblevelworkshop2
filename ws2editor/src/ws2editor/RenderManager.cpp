@@ -148,16 +148,16 @@ namespace WS2Editor {
         glBufferData(GL_ELEMENT_ARRAY_BUFFER, mesh->getIndices().size() * sizeof(unsigned int), &mesh->getIndices()[0], GL_STATIC_DRAW);
 
         //Vertex positions
-        glEnableVertexAttribArray(GLManager::VertexAttribs::VERTEX_POSITION);
-        glVertexAttribPointer(GLManager::VertexAttribs::VERTEX_POSITION, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*) offsetof(Vertex, position));
+        glEnableVertexAttribArray(GLManager::EnumVertexAttribs::VERTEX_POSITION);
+        glVertexAttribPointer(GLManager::EnumVertexAttribs::VERTEX_POSITION, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*) offsetof(Vertex, position));
 
         //Vertex normals
-        glEnableVertexAttribArray(GLManager::VertexAttribs::VERTEX_NORMAL);
-        glVertexAttribPointer(GLManager::VertexAttribs::VERTEX_NORMAL, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*) offsetof(Vertex, normal));
+        glEnableVertexAttribArray(GLManager::EnumVertexAttribs::VERTEX_NORMAL);
+        glVertexAttribPointer(GLManager::EnumVertexAttribs::VERTEX_NORMAL, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*) offsetof(Vertex, normal));
 
         //Vertex texture coordinates
-        glEnableVertexAttribArray(GLManager::VertexAttribs::VERTEX_TEX_COORD);
-        glVertexAttribPointer(GLManager::VertexAttribs::VERTEX_TEX_COORD, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*) offsetof(Vertex, texCoord));
+        glEnableVertexAttribArray(GLManager::EnumVertexAttribs::VERTEX_TEX_COORD);
+        glVertexAttribPointer(GLManager::EnumVertexAttribs::VERTEX_TEX_COORD, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*) offsetof(Vertex, texCoord));
 
         glBindVertexArray(0);
 
