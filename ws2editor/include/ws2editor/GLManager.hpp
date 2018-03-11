@@ -2,7 +2,6 @@
 #define SMBLEVELWORKSHOP2_WS2EDITOR_GLMANAGER_HPP
 
 #include "glplatform.hpp"
-#include "ws2editor/resource/ResourceEditorMesh.hpp"
 #include <QFile>
 #include <QString>
 #include <QOpenGLTexture>
@@ -62,16 +61,6 @@ namespace WS2Editor {
          * @return The texture
          */
         QOpenGLTexture* loadTexture(QImage *image);
-
-        /**
-         * @brief Renders a mesh
-         *
-         * This assumes the appropriate shader is already bound.
-         * This also assumes that the ResourceMesh segments are EditorMeshSegments!
-         *
-         * @param mesh The mesh to render
-         */
-        void renderMesh(const Resource::ResourceEditorMesh *mesh);
     }
 }
 

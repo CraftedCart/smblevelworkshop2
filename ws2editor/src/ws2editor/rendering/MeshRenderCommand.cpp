@@ -1,5 +1,4 @@
 #include "ws2editor/rendering/MeshRenderCommand.hpp"
-#include "ws2editor/resource/ResourceEditorTexture.hpp"
 #include "ws2editor/GLManager.hpp"
 
 namespace WS2Editor {

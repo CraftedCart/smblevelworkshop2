@@ -65,8 +65,12 @@ namespace WS2Editor {
          * @throws WS2Editor::Exception::RuntimeException When Assimp fails to generate an aiScene
          */
         void ResourceScene::addModel(QFile &file) {
+            using namespace WS2Common::Resource;
+            using namespace WS2Common::Scene;
+            using namespace WS2Editor::Scene;
+
             addFilePath(file.fileName());
-            QVector<Resource::ResourceEditorMesh*> newMeshes = ResourceManager::addModel(file, isLoaded());
+            QVector<ResourceMesh*> newMeshes = ResourceManager::addModel(file, isLoaded());
 
             //Get the static node
             WS2Common::Scene::SceneNode *staticNode = rootNode->getChildByName(tr("Static"));
@@ -81,7 +85,7 @@ namespace WS2Editor {
                 //The .split("@")[0] gets the part of the name before the @ symbol, which should be the name of the mesh
                 //TODO: Make ResourceMesh store the name of a mesh, instead of doing string manip to get the name
                 QString meshName = newMeshes.at(i)->getId().split("@")[0];
-                Scene::EditorMeshSceneNode *meshNode = new Scene::EditorMeshSceneNode(meshName, newMeshes.at(i));
+                EditorMeshSceneNode *meshNode = new EditorMeshSceneNode(meshName, newMeshes.at(i));
                 meshNode->setMeshName(meshName);
                 physicsManager->addRigidBody(meshNode->getPhysicsRigidBody());
                 staticNode->addChild(meshNode);

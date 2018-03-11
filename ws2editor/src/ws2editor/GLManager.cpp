@@ -1,7 +1,6 @@
 #include "ws2editor/GLManager.hpp"
-#include "ws2editor/model/EditorMeshSegment.hpp"
-#include <QDebug>
 #include <QDataStream>
+#include <QDebug>
 
 namespace WS2Editor {
     namespace GLManager {
@@ -136,29 +135,6 @@ namespace WS2Editor {
 
             return tex;
         }
-
-        void renderMesh(const Resource::ResourceEditorMesh *mesh) {
-            const QVector<WS2Common::Model::MeshSegment*>& segments = mesh->getMeshSegments();
-
-            for (int i = 0; i < segments.size(); i++) {
-                const Model::EditorMeshSegment* segment = static_cast<Model::EditorMeshSegment*>(segments.at(i));
-
-                //Set up textures
-                for (int i = 0; i < segment->getTextures().size(); i++) {
-                    glActiveTexture(GL_TEXTURE0 + i);
-                    //Assume that it's a ResourceEditorTexture
-                    static_cast<Resource::ResourceEditorTexture*>(segment->getTextures().at(i))->getGlTexture()->bind();
-                }
-                static const int texIDs[32] = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31};
-                glUniform1iv(shaderTexID, MAX_SHADER_TEXTURES, texIDs);
-
-                //Draw the segment
-                glBindVertexArray(segment->getVao());
-                glDrawElements(GL_TRIANGLES, segment->getIndices().size(), GL_UNSIGNED_INT, 0);
-                glBindVertexArray(0);
-            }
-        }
-
     }
 }
 

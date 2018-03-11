@@ -1,6 +1,5 @@
 #include "ws2editor/WS2Editor.hpp"
 #include "ws2editor/resource/ResourceManager.hpp"
-#include "ws2editor/resource/ResourceEditorTexture.hpp"
 #include "ws2editor/ui/ModelManager.hpp"
 #include "ws2common/MathUtils.hpp"
 #include "ws2common/exception/IOException.hpp"
@@ -36,57 +35,17 @@ namespace WS2Editor {
                 }
             }
 
-            /**
-             * @throws IOException When failing to read the file
-             * @throws RuntimeException When Assimp fails to generate an aiScene
-             */
-            QVector<ResourceEditorMesh*> addModel(QFile &file, bool shouldLoad) {
-                QVector<WS2Common::Resource::ResourceMesh*> meshVec = WS2Common::Model::ModelLoader::loadModel(file, &getResources());
-                QVector<void*> toDelete;
+            QVector<ResourceMesh*> addModel(QFile &file, bool shouldLoad) {
+                using namespace WS2Common::Resource;
+                using namespace WS2Common::Model;
 
-                //Convert all the ResourceMeshes to ResourceEditorMeshes, and load them if requested
-                //Also convert all the ResourceTextures to ResourceEditorTextures in each MeshSegment
-                QVector<ResourceEditorMesh*> vec(meshVec.size());
-                int i = 0;
-                foreach(WS2Common::Resource::ResourceMesh *mesh, meshVec) {
-                    vec[i] = new ResourceEditorMesh(*mesh);
+                QVector<ResourceMesh*> meshVec = ModelLoader::loadModel(file, &getResources());
 
-                    foreach (WS2Common::Model::MeshSegment *segment, vec[i]->getMeshSegments()) {
-                        QVector<WS2Common::Resource::ResourceTexture*> texVec(segment->getTextures().size());
-
-                        int j = 0;
-                        foreach (WS2Common::Resource::ResourceTexture *tex, segment->getTextures()) {
-                            if (dynamic_cast<ResourceEditorTexture*>(tex) == nullptr) {
-                                if (getResources().indexOf(tex) != -1) {
-                                    texVec[j] = new ResourceEditorTexture(*tex);
-                                    getResources().replace(getResources().indexOf(tex), texVec[j]);
-                                    if (toDelete.indexOf(tex) == -1) toDelete.append(tex);
-                                } else {
-                                    texVec[j] = getResourceFromFilePath<WS2Common::Resource::ResourceTexture*>(*tex->getFirstFilePath());
-                                }
-                            } else {
-                                texVec[j] = tex;
-                            }
-
-                            j++;
-                        }
-
-                        //Remove all the deleted old textures, and replace them with the editor textures
-                        segment->getTextures().clear();
-                        segment->getTextures().append(texVec);
-                    }
-
-                    if (shouldLoad) vec[i]->load();
-                    getResources().replace(getResources().indexOf(mesh), vec[i]);
-                    delete mesh;
-
-                    i++;
+                foreach(ResourceMesh *mesh, meshVec) {
+                    getResources().append(mesh);
                 }
 
-                //Delete all old pre-conversion guff
-                qDeleteAll(toDelete);
-
-                return vec;
+                return meshVec;
             }
 
             /**

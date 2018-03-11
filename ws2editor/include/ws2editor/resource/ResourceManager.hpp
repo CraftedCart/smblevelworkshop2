@@ -6,19 +6,19 @@
 #ifndef SMBLEVELWORKSHOP2_WS2EDITOR_RESOURCEMANAGER_HPP
 #define SMBLEVELWORKSHOP2_WS2EDITOR_RESOURCEMANAGER_HPP
 
-#include "ws2editor/resource/ResourceEditorMesh.hpp"
-#include "ws2common/resource/AbstractResource.hpp"
+#include "ws2common/resource/ResourceMesh.hpp"
 #include <QVector>
 #include <QFile>
 #include <QDir>
 
 namespace WS2Editor {
     namespace Resource {
-
         /**
          * @brief Stores and manages various runtime resources
          */
         namespace ResourceManager {
+            using namespace WS2Common::Resource;
+
             /**
              * @brief Getter for the resources vector
              *
@@ -33,7 +33,7 @@ namespace WS2Editor {
              *
              * @param res The resource to add
              */
-            void addResource(WS2Common::Resource::AbstractResource *res);
+            void addResource(AbstractResource *res);
 
             /**
              * @brief Unloads all registered resources if they are loaded
@@ -60,8 +60,11 @@ namespace WS2Editor {
              * @param shouldLoad Should the model be loaded into the GPU
              *
              * @return A vector of added meshes
+             *
+             * @throws IOException When failing to read the file
+             * @throws RuntimeException When Assimp fails to generate an aiScene
              */
-            QVector<ResourceEditorMesh*> addModel(QFile &file, bool shouldLoad = false);
+            QVector<ResourceMesh*> addModel(QFile &file, bool shouldLoad = false);
 
             /**
              * @brief Generates a unique resource ID prefixed with prefix
