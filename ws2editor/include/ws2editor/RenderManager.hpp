@@ -10,6 +10,7 @@
 #include "ws2editor/CachedGlMesh.hpp"
 #include "ws2editor/CachedGlTexture.hpp"
 #include "ws2editor/rendering/IRenderCommand.hpp"
+#include <QFile>
 #include <QQueue>
 #include <QHash>
 
@@ -24,6 +25,13 @@ namespace WS2Editor {
      * init isn't called in the constructor as the correct OpenGL context may not be bound then
      */
     class RenderManager {
+        public:
+            enum EnumVertexAttribs {
+                VERTEX_POSITION = 0,
+                VERTEX_NORMAL = 1,
+                VERTEX_TEX_COORD = 2
+            };
+
         protected:
             QQueue<IRenderCommand*> renderFifo;
 
@@ -37,6 +45,25 @@ namespace WS2Editor {
             QHash<const MeshSegment*, CachedGlMesh*> meshCache;
             QHash<const ResourceTexture*, CachedGlTexture*> textureCache;
 
+        public:
+            /**
+             * @brief The maximum concurrently bound textures a shader can handle
+             */
+            const unsigned int MAX_SHADER_TEXTURES = 32;
+
+            GLuint progID;
+            GLuint shaderModelID;
+            GLuint shaderViewID;
+            GLuint shaderProjID;
+            GLuint shaderNormID;
+            GLuint shaderTexID;
+
+            GLuint physicsDebugProgID;
+            GLuint physicsDebugShaderModelID;
+            GLuint physicsDebugShaderViewID;
+            GLuint physicsDebugShaderProjID;
+
+        protected:
             //Copied straight from Qt QGL
             static QImage convertToGLFormat(const QImage &img);
             static void convertToGLFormatHelper(QImage &dst, const QImage &img, GLenum texture_format);
@@ -63,8 +90,27 @@ namespace WS2Editor {
              */
             void loadTextureAsync(const ResourceTexture *texture);
 
+            /**
+             * @brief Finds occurances of placeholder text in shader strings, and replaces them with a constant
+             *
+             * @param s The string to find and replace in
+             */
+            void substituteShaderConstants(QString *s);
+
         public:
             void init();
+
+            /**
+             * @brief Load, compile and link the shader files given
+             *
+             * @param vertFile The vertex shader file
+             * @param fragFile The fragment shader file
+             *
+             * @return The program ID obtained when linking the shaders
+             *
+             * @todo Handle errors
+             */
+            GLuint loadShaders(QFile *vertFile, QFile *fragFile);
 
             /**
              * @brief Adds a RenderMesh command to the render fifo, to be rendered later with renderQueue()

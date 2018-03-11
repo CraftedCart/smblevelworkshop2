@@ -1,5 +1,4 @@
 #include "ws2editor/resource/ResourceScene.hpp"
-#include "ws2editor/GLManager.hpp"
 #include "ws2editor/resource/ResourceManager.hpp"
 #include "ws2editor/scene/EditorMeshSceneNode.hpp"
 #include "ws2editor/ui/ModelManager.hpp"

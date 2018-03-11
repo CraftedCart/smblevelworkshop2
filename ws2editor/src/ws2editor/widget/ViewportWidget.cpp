@@ -1,5 +1,4 @@
 #include "ws2editor/widget/ViewportWidget.hpp"
-#include "ws2editor/GLManager.hpp"
 #include "ws2common/MathUtils.hpp"
 #include "ws2editor/project/ProjectManager.hpp"
 #include "ws2editor/resource/ResourceManager.hpp"
@@ -87,14 +86,14 @@ namespace WS2Editor {
             //Load the shaders
             QFile vertFile(":/Workshop2/Shaders/stage.vert");
             QFile fragFile(":/Workshop2/Shaders/stage.frag");
-            GLManager::progID = GLManager::loadShaders(&vertFile, &fragFile);
+            renderManager->progID = renderManager->loadShaders(&vertFile, &fragFile);
 
             //Get uniform IDs
-            GLManager::shaderModelID = glGetUniformLocation(GLManager::progID, "modelMat");
-            GLManager::shaderViewID = glGetUniformLocation(GLManager::progID, "viewMat");
-            GLManager::shaderProjID = glGetUniformLocation(GLManager::progID, "projMat");
-            GLManager::shaderNormID = glGetUniformLocation(GLManager::progID, "normMat");
-            GLManager::shaderTexID = glGetUniformLocation(GLManager::progID, "texSampler");
+            renderManager->shaderModelID = glGetUniformLocation(renderManager->progID, "modelMat");
+            renderManager->shaderViewID = glGetUniformLocation(renderManager->progID, "viewMat");
+            renderManager->shaderProjID = glGetUniformLocation(renderManager->progID, "projMat");
+            renderManager->shaderNormID = glGetUniformLocation(renderManager->progID, "normMat");
+            renderManager->shaderTexID = glGetUniformLocation(renderManager->progID, "texSampler");
 
             //Load the physics debug shaders
             //TODO: Make loading this an option
@@ -285,13 +284,13 @@ namespace WS2Editor {
 
             glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
             glEnable(GL_DEPTH_TEST);
-            glUseProgram(GLManager::progID);
+            glUseProgram(renderManager->progID);
 
             //Give the matrices to the bound shader
             //glUniformMatrix4fv(GLManager::shaderModelID, 1, GL_FALSE, &model[0][0]); //Model matrix set by recursiveDrawSceneNode
-            glUniformMatrix4fv(GLManager::shaderViewID, 1, GL_FALSE, &view[0][0]);
-            glUniformMatrix4fv(GLManager::shaderProjID, 1, GL_FALSE, &proj[0][0]);
-            glUniformMatrix3fv(GLManager::shaderNormID, 1, GL_FALSE, &norm[0][0]);
+            glUniformMatrix4fv(renderManager->shaderViewID, 1, GL_FALSE, &view[0][0]);
+            glUniformMatrix4fv(renderManager->shaderProjID, 1, GL_FALSE, &proj[0][0]);
+            glUniformMatrix3fv(renderManager->shaderNormID, 1, GL_FALSE, &norm[0][0]);
 
             Resource::ResourceScene *scene = Project::ProjectManager::getActiveProject()->getScene();
 
@@ -303,12 +302,12 @@ namespace WS2Editor {
             //Physics debug drawing
             PhysicsDebugDrawer *physicsDebugDrawer = Project::ProjectManager::getActiveProject()->getScene()->getPhysicsDebugDrawer();
             if (physicsDebugDrawer != nullptr) {
-                glUseProgram(GLManager::physicsDebugProgID);
+                glUseProgram(renderManager->physicsDebugProgID);
 
                 //Give the matrices to the bound shader
-                glUniformMatrix4fv(GLManager::physicsDebugShaderModelID, 1, GL_FALSE, &model[0][0]);
-                glUniformMatrix4fv(GLManager::physicsDebugShaderViewID, 1, GL_FALSE, &view[0][0]);
-                glUniformMatrix4fv(GLManager::physicsDebugShaderProjID, 1, GL_FALSE, &proj[0][0]);
+                glUniformMatrix4fv(renderManager->physicsDebugShaderModelID, 1, GL_FALSE, &model[0][0]);
+                glUniformMatrix4fv(renderManager->physicsDebugShaderViewID, 1, GL_FALSE, &view[0][0]);
+                glUniformMatrix4fv(renderManager->physicsDebugShaderProjID, 1, GL_FALSE, &proj[0][0]);
 
                 Project::ProjectManager::getActiveProject()->getScene()->getPhysicsManager()->getDynamicsWorld()->debugDrawWorld();
                 physicsDebugDrawer->drawAll();
@@ -350,7 +349,7 @@ namespace WS2Editor {
             transform = glm::scale(transform, node->getScale());
 
             if (const Scene::EditorMeshSceneNode *mesh = dynamic_cast<const Scene::EditorMeshSceneNode*>(node)) {
-                glUniformMatrix4fv(GLManager::shaderModelID, 1, GL_FALSE, &transform[0][0]);
+                glUniformMatrix4fv(renderManager->shaderModelID, 1, GL_FALSE, &transform[0][0]);
                 //Assume it's a ResourceEditorMesh
                 //TODO: There must be a better way then assuming right?
                 //GLManager::renderMesh(static_cast<const Resource::ResourceEditorMesh*>(mesh->getMesh()));

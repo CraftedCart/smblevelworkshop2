@@ -8,6 +8,7 @@
 
 #include "ws2editor/CachedGlMesh.hpp"
 #include "ws2editor/rendering/IRenderCommand.hpp"
+#include "ws2editor/RenderManager.hpp"
 
 namespace WS2Editor {
     namespace Rendering {
@@ -17,9 +18,10 @@ namespace WS2Editor {
         class MeshRenderCommand : public IRenderCommand {
             protected:
                 CachedGlMesh *mesh;
+                RenderManager *renderManager;
 
             public:
-                MeshRenderCommand(CachedGlMesh *mesh);
+                MeshRenderCommand(CachedGlMesh *mesh, RenderManager *renderManager);
 
                 virtual void draw() override;
         };
