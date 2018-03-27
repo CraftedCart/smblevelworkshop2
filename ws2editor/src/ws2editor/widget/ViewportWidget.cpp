@@ -45,11 +45,13 @@ namespace WS2Editor {
         }
 
         ViewportWidget::~ViewportWidget() {
-            //Cleanup
+            makeCurrent(); //Need to have the context active to work with GL
+
+            renderManager->destroy();
             delete renderManager;
             delete tooltipPixmap;
 
-            makeCurrent();
+            checkGLErrors("End of ~ViewportWidget");
         }
 
         qint64 ViewportWidget::getDeltaNanoseconds() {
@@ -60,6 +62,10 @@ namespace WS2Editor {
             return deltaSeconds;
         }
 
+        RenderManager* ViewportWidget::getRenderManager() {
+            return renderManager;
+        }
+
         void ViewportWidget::makeCurrentContext() {
             makeCurrent();
         }
@@ -68,6 +74,8 @@ namespace WS2Editor {
             //Uses default format which should use OpenGL 3.3 core
             glewExperimental = GL_TRUE;
             glewInit();
+
+            renderManager->init();
 
             //Set the clear color
             glClearColor(0.0f, 0.0f, 0.0f, 1.0f);

@@ -24,7 +24,9 @@ namespace WS2Editor {
      *
      * init isn't called in the constructor as the correct OpenGL context may not be bound then
      */
-    class RenderManager {
+    class RenderManager : public QObject {
+        Q_OBJECT
+
         public:
             enum EnumVertexAttribs {
                 VERTEX_POSITION = 0,
@@ -33,17 +35,17 @@ namespace WS2Editor {
             };
 
         protected:
+            static const qint64 CACHE_TIMEOUT = 30 * 1000; //30s = 30 * 1000 ms
+
             QQueue<IRenderCommand*> renderFifo;
 
-            CachedGlTexture defaultTexture;
-
-            /**
-             * @brief Meshes that are currently being loaded
-             *
-             * This is used to ensure that meshes aren't loaded multiple times
-             */
             QHash<const MeshSegment*, CachedGlMesh*> meshCache;
             QHash<const ResourceTexture*, CachedGlTexture*> textureCache;
+
+            /**
+             * @brief Used while a texture is loading/missing texture/etc.
+             */
+            CachedGlTexture *defaultTexture;
 
         public:
             /**
@@ -65,7 +67,6 @@ namespace WS2Editor {
 
         protected:
             //Copied straight from Qt QGL
-            static QImage convertToGLFormat(const QImage &img);
             static void convertToGLFormatHelper(QImage &dst, const QImage &img, GLenum texture_format);
             static QRgb qt_gl_convertToGLFormatHelper(QRgb src_pixel, GLenum texture_format);
 
@@ -98,7 +99,15 @@ namespace WS2Editor {
             void substituteShaderConstants(QString *s);
 
         public:
+            //Copied straight from Qt QGL
+            static QImage convertToGLFormat(const QImage &img);
+
             void init();
+
+            /**
+             * @brief Cleans up - note that the correct GL context must be bound
+             */
+            void destroy();
 
             /**
              * @brief Load, compile and link the shader files given
@@ -124,7 +133,26 @@ namespace WS2Editor {
              */
             void renderQueue();
 
+            /**
+             * @brief Returns the GL texture for a ResourceTexture - will load one if it is not cached already
+             *
+             * @param tex The GL texture corresponding to the ResourceTexture provided
+             */
+            CachedGlTexture* getTextureForResourceTexture(const ResourceTexture *tex);
+
+            /**
+             * @brief Unloads all shaders used in regular rendering (This does not include physics debug shaders)
+             */
+            void unloadShaders();
+
+            void addTexture(const QImage image, const ResourceTexture *tex);
+
             static void checkErrors(QString location);
+
+        public slots:
+            void clearMeshCache();
+            void clearTextureCache();
+            void clearAllCaches();
     };
 }
 

@@ -69,8 +69,10 @@ set(SOURCE_FILES
     ./src/ws2editor/PhysicsDebugDrawer.cpp
     ./src/ws2editor/Config.cpp
     ./src/ws2editor/Progress.cpp
+    ./src/ws2editor/task/Task.cpp
     ./src/ws2editor/task/TaskManager.cpp
     ./src/ws2editor/task/ImportFileTask.cpp
+    ./src/ws2editor/task/LoadGlTextureTask.cpp
     ./src/ws2editor/RenderManager.cpp
     ./src/ws2editor/CachedGlMesh.cpp
     ./src/ws2editor/CachedGlTexture.cpp
@@ -104,6 +106,7 @@ set(HEADER_FILES
     ./include/ws2editor/task/Task.hpp
     ./include/ws2editor/task/TaskManager.hpp
     ./include/ws2editor/task/ImportFileTask.hpp
+    ./include/ws2editor/task/LoadGlTextureTask.hpp
     ./include/ws2editor/RenderManager.hpp
     ./include/ws2editor/CachedGlMesh.hpp
     ./include/ws2editor/CachedGlTexture.hpp

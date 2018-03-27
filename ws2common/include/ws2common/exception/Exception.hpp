@@ -23,7 +23,7 @@ namespace WS2Common {
                 Exception();
                 Exception(QString message);
 
-                const QString& getMessage() const;
+                virtual const QString& getMessage() const;
 
                 Exception* clone() const override;
                 void raise() const override;

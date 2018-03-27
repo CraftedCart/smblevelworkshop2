@@ -1,4 +1,5 @@
 #include "ws2editor/WS2Editor.hpp"
+#include "ws2common/resource/ResourceMesh.hpp"
 
 namespace WS2Editor {
     //Define extern members
@@ -7,6 +8,10 @@ namespace WS2Editor {
     bool qAppRunning = false;
 
     void ws2Init(int &argc, char *argv[]) {
+        using namespace WS2Common::Resource;
+
+        qRegisterMetaType<QVector<ResourceMesh*>>("QVector<ResourceMesh*>");
+
         ws2App = new QApplication(argc, argv);
         ws2TaskManager = new Task::TaskManager();
     }

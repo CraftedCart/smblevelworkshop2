@@ -14,9 +14,20 @@ int main(int argc, char *argv[]) {
     //Init WS2
     WS2Editor::ws2Init(argc, argv);
 
-    //QTranslator translator;
-    //translator.load("lang_ja_JA", QDir(QCoreApplication::applicationDirPath()).filePath("../share/ws2editor/lang"));
-    //WS2Editor::ws2App->installTranslator(&translator);
+    //Load translations
+    QTranslator translator;
+    if (translator.load(QLocale(), QLatin1String("lang"), QLatin1String("_"), QDir(QCoreApplication::applicationDirPath()).filePath("../share/ws2editor/lang"))) {
+        WS2Editor::ws2App->installTranslator(&translator);
+    } else if (translator.load(QLocale(), QLatin1String("lang"), QLatin1String("_"), QCoreApplication::applicationDirPath())) {
+        //If the software was never installed after build, the translations will be alongside the executable
+        WS2Editor::ws2App->installTranslator(&translator);
+    } else if (translator.load("lang_en_US", QDir(QCoreApplication::applicationDirPath()).filePath("../share/ws2editor/lang"))) {
+        //If we can't find a suitable translation, try en_US
+        WS2Editor::ws2App->installTranslator(&translator);
+    } else if (translator.load("lang_en_US", QCoreApplication::applicationDirPath())) {
+        //If we can't find a suitable translation, try en_US - if not intalled
+        WS2Editor::ws2App->installTranslator(&translator);
+    }
 
     //Splash screen
     QPixmap pixmap(":/Workshop2/Images/banner.png");

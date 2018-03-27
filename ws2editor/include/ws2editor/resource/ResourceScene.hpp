@@ -6,15 +6,18 @@
 #ifndef SMBLEVELWORKSHOP2_WS2EDITOR_RESOURCE_RESOURCESCENE_HPP
 #define SMBLEVELWORKSHOP2_WS2EDITOR_RESOURCE_RESOURCESCENE_HPP
 
-#include "ws2common/resource/AbstractResource.hpp"
-#include "ws2common/scene/SceneNode.hpp"
 #include "ws2editor/scene/SceneSelectionManager.hpp"
 #include "ws2editor/physics/PhysicsManger.hpp"
 #include "ws2editor/PhysicsDebugDrawer.hpp"
+#include "ws2common/resource/AbstractResource.hpp"
+#include "ws2common/scene/SceneNode.hpp"
+#include "ws2common/resource/ResourceMesh.hpp"
 #include <QFile>
 
 namespace WS2Editor {
     namespace Resource {
+        using namespace WS2Common::Resource;
+
         /**
          * @todo Meshes loaded should belong to ResourceManager, not ResourceScene
          */
@@ -32,15 +35,6 @@ namespace WS2Editor {
                  * @brief Constructs an empty scene with a SceneNode named `QCoreApplication::translate("SceneNode", "Static")`
                  */
                 ResourceScene();
-
-                /**
-                 * @brief Construct a scene from the file given
-                 *
-                 * This just calls `addModel(file)` for you
-                 *
-                 * @param file The model file
-                 */
-                ResourceScene(QFile &file);
 
                 /**
                  * @brief Frees up resources
@@ -92,15 +86,16 @@ namespace WS2Editor {
                  */
                 Physics::PhysicsManager* getPhysicsManager();
 
-                /**
-                 * @brief Adds the file path to the resource filePaths vector, and append a model to the scene from the
-                 *        file given if the resource is marked as loaded.
-                 *
-                 * @param file The model file to append
-                 */
-                void addModel(QFile &file);
-
             public slots:
+                /**
+                 * @brief Appends models to the scene from the mesh vector given
+                 *
+                 * @param meshes The meshes to append
+                 *
+                 * @throws WS2Editor::Exception::RuntimeException When Assimp fails to generate an aiScene
+                 */
+                void addModel(const QVector<ResourceMesh*> &meshes);
+
                 /**
                  * @brief Slot for when the selected nodes has been changed
                  *

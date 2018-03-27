@@ -24,6 +24,7 @@
         <file>Shaders/physicsDebug.frag</file>
         <file>Images/banner.png</file>
         <file>Images/tooltip.png</file>
+        <file>Images/defaultgrid.png</file>
         <file>Lang/tips-en_US.txt</file>
         <file>Lang/stageThemes-en_US.txt</file>
         <file>Lang/stageMechanics-en_US.txt</file>

@@ -1,13 +1,28 @@
 #include "ws2editor/RenderManager.hpp"
 #include "ws2editor/glplatform.hpp"
 #include "ws2editor/rendering/MeshRenderCommand.hpp"
+#include "ws2editor/task/LoadGlTextureTask.hpp"
+#include "ws2editor/task/TaskManager.hpp"
+#include "ws2editor/WS2Editor.hpp"
 #include <QElapsedTimer>
 #include <QDebug>
 
 namespace WS2Editor {
     void RenderManager::init() {
-        //QImage defaultImage(":/Workshop2/Images/defaultgrid.png");
-        //loadTexture(defaultImage);
+        qDebug() << "Initializing RenderManager";
+
+        QImage defaultImage = convertToGLFormat(QImage(":/Workshop2/Images/defaultgrid.png"));
+        defaultTexture = loadTexture(defaultImage);
+    }
+
+    void RenderManager::destroy() {
+        clearAllCaches(); //Unload all render objects
+        unloadShaders();
+        //unloadPhysicsDebugShaders();
+
+        GLuint texId = defaultTexture->getTextureId();
+        glDeleteTextures(1, &texId);
+        delete defaultTexture;
     }
 
     //Copied straight from Qt QGL
@@ -28,7 +43,7 @@ namespace WS2Editor {
             qreal sx = target_width / qreal(img.width());
             qreal sy = target_height / qreal(img.height());
 
-            quint32 *dest = (quint32 *) dst.scanLine(0); // NB! avoid detach here
+            quint32 *dest = (quint32 *) dst.scanLine(0); //NB! avoid detach here
             uchar *srcPixels = (uchar *) img.scanLine(img.height() - 1);
             int sbpl = img.bytesPerLine();
             int dbpl = dst.bytesPerLine();
@@ -166,22 +181,21 @@ namespace WS2Editor {
         cachedMesh->setEbo(ebo);
         cachedMesh->setTriCount(mesh->getIndices().size());
 
-        //Find the textures, and laod them if they aren't cached already
+        //Add the textures
         foreach(const ResourceTexture *tex, mesh->getTextures()) {
-            if (!textureCache.contains(tex)) loadTextureAsync(tex);
-            cachedMesh->getTextures().append(textureCache[tex]);
+            cachedMesh->getTextures().append(tex);
         }
+
+        cachedMesh->updateAccessTimer();
 
         meshCache[mesh] = cachedMesh;
     }
 
     CachedGlTexture* RenderManager::loadTexture(const QImage &texture) {
-        QImage rgbaImage = convertToGLFormat(texture);
-
         GLuint texId;
         glGenTextures(1, &texId);
         glBindTexture(GL_TEXTURE_2D, texId);
-        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, rgbaImage.width(), rgbaImage.height(), 0, GL_RGBA, GL_UNSIGNED_BYTE, rgbaImage.bits());
+        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, texture.width(), texture.height(), 0, GL_RGBA, GL_UNSIGNED_BYTE, texture.bits());
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
         glGenerateMipmap(GL_TEXTURE_2D);
@@ -191,10 +205,16 @@ namespace WS2Editor {
         CachedGlTexture *cachedTex = new CachedGlTexture;
         cachedTex->setTextureId(texId);
 
+        cachedTex->updateAccessTimer();
+
         return cachedTex;
     }
 
     void RenderManager::loadTextureAsync(const ResourceTexture *texture) {
+        using namespace WS2Editor::Task;
+
+        qDebug().noquote() << "Loading GL texture:" << *texture->getFirstFilePath();
+
         //TODO: Actually make this async
 
         QImage img;
@@ -202,8 +222,16 @@ namespace WS2Editor {
             img = *texture->getTexture();
         } else {
             img = QImage(*texture->getFirstFilePath());
+
+            LoadGlTextureTask *task = new LoadGlTextureTask(*texture);
+            connect(task, &LoadGlTextureTask::addTexture, this, &RenderManager::addTexture);
+            ws2TaskManager->enqueueTask(task);
+
+            textureCache[texture] = defaultTexture;
+            return;
         }
-        CachedGlTexture *tex = loadTexture(img);
+
+        CachedGlTexture *tex = loadTexture(convertToGLFormat(img));
 
         textureCache[texture] = tex;
     }
@@ -319,9 +347,54 @@ namespace WS2Editor {
     void RenderManager::renderQueue() {
         using namespace WS2Editor::Rendering;
 
+        //Render everything
         foreach(IRenderCommand *cmd, renderFifo) cmd->draw();
+
+        //Clear the fifo
         qDeleteAll(renderFifo);
         renderFifo.clear();
+
+        //Check for timed-out cached objects
+        unsigned int deletedMeshes = 0;
+        unsigned int deletedTextures = 0;
+
+        QMutableHashIterator<const MeshSegment*, CachedGlMesh*> meshTimeoutIter(meshCache);
+        while (meshTimeoutIter.hasNext()) {
+            meshTimeoutIter.next();
+            if (meshTimeoutIter.value()->getLastAccessTimer().elapsed() > CACHE_TIMEOUT) {
+                GLuint vao = meshTimeoutIter.value()->getVao();
+                GLuint buffers[] {
+                    meshTimeoutIter.value()->getVbo(),
+                    meshTimeoutIter.value()->getEbo()
+                };
+
+                glDeleteVertexArrays(1, &vao);
+                glDeleteBuffers(2, buffers);
+
+                delete meshTimeoutIter.value();
+                meshTimeoutIter.remove();
+
+                deletedMeshes++;
+            }
+        }
+
+        QMutableHashIterator<const ResourceTexture*, CachedGlTexture*> texTimeoutIter(textureCache);
+        while (texTimeoutIter.hasNext()) {
+            texTimeoutIter.next();
+            if (texTimeoutIter.value()->getLastAccessTimer().elapsed() > CACHE_TIMEOUT) {
+                GLuint texId = texTimeoutIter.value()->getTextureId();
+
+                glDeleteTextures(1, &texId);
+
+                delete texTimeoutIter.value();
+                texTimeoutIter.remove();
+
+                deletedTextures++;
+            }
+        }
+
+        if (deletedMeshes > 0) qDebug().noquote() << QString("Purged %1 mesh(es) from the RenderManager cache").arg(deletedMeshes);
+        if (deletedTextures > 0) qDebug().noquote() << QString("Purged %1 texture(s) from the RenderManager cache").arg(deletedTextures);
     }
 
     void RenderManager::checkErrors(QString location) {
@@ -351,5 +424,78 @@ namespace WS2Editor {
             qWarning() << "GL Error:" << err << "-" << errString << "- Found at:" << location;
         }
     }
+
+    void RenderManager::clearMeshCache() {
+        qDebug().noquote() << QString("Clearing %1 cached meshes").arg(meshCache.size());
+
+        //Unload all meshes
+        GLuint *vertexArrays = new GLuint[meshCache.size()];
+        GLuint *buffers = new GLuint[meshCache.size() * 2];
+
+        unsigned int i = 0;
+        foreach(CachedGlMesh *mesh, meshCache.values()) {
+            vertexArrays[i] = mesh->getVao();
+            buffers[i * 2] = mesh->getVbo();
+            buffers[i * 2 + 1] = mesh->getEbo();
+
+            i++;
+        }
+
+        glDeleteVertexArrays(meshCache.size(), vertexArrays);
+        glDeleteBuffers(meshCache.size() * 2, buffers);
+
+        delete[] vertexArrays;
+        delete[] buffers;
+
+        qDeleteAll(meshCache.values());
+        meshCache.clear();
+    }
+
+    void RenderManager::clearTextureCache() {
+        qDebug().noquote() << QString("Clearing %1 cached textures").arg(textureCache.size());
+
+        //Unload all meshes
+        GLuint *textures = new GLuint[textureCache.size()];
+
+        unsigned int i = 0;
+        foreach(CachedGlTexture *tex, textureCache.values()) {
+            textures[i] = tex->getTextureId();
+
+            i++;
+        }
+
+        glDeleteTextures(textureCache.size(), textures);
+
+        delete[] textures;
+
+        qDeleteAll(textureCache.values());
+        textureCache.clear();
+    }
+
+    void RenderManager::clearAllCaches() {
+        clearMeshCache();
+        clearTextureCache();
+    }
+
+    CachedGlTexture* RenderManager::getTextureForResourceTexture(const ResourceTexture *tex) {
+        //First check if the texture has been cached already
+        //If it hasen't, we need to load it first
+        if (!textureCache.contains(tex)) {
+            loadTextureAsync(tex);
+            //TODO: Return default texture
+        }
+
+        //TODO: Update cache access time thingy
+        return textureCache[tex];
+    }
+
+    void RenderManager::unloadShaders() {
+        glDeleteProgram(progID);
+    }
+
+    void RenderManager::addTexture(const QImage image, const ResourceTexture *tex) {
+        textureCache[tex] = loadTexture(image);
+    }
+
 }
 

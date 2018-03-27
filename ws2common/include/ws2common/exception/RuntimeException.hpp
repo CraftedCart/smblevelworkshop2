@@ -19,8 +19,6 @@ namespace WS2Common {
                 RuntimeException();
                 RuntimeException(QString message);
 
-                const QString& getMessage() const;
-
                 RuntimeException* clone() const override;
                 void raise() const override;
         };

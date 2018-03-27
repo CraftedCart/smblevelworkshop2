@@ -10,6 +10,7 @@
 #include <QVector>
 #include <QFile>
 #include <QDir>
+#include <QMutex>
 
 namespace WS2Editor {
     namespace Resource {
@@ -18,6 +19,11 @@ namespace WS2Editor {
          */
         namespace ResourceManager {
             using namespace WS2Common::Resource;
+
+            /**
+             * @brief Use this when modifying the resources vector, to ensure thread safety
+             */
+            extern QMutex resourcesMutex;
 
             /**
              * @brief Getter for the resources vector

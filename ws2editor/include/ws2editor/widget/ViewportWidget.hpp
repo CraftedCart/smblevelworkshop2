@@ -61,6 +61,8 @@ namespace WS2Editor {
                 qint64 getDeltaNanoseconds();
                 float getDeltaSeconds();
 
+                RenderManager* getRenderManager();
+
                 void makeCurrentContext();
 
             protected:

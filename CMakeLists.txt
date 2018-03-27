@@ -13,7 +13,7 @@ add_custom_target(uninstall "${CMAKE_COMMAND}" -P "cmake/uninstall.cmake")
 
 #No need to add lang/lang_en_US.ts to the translation list, as the source already has the en_US translation
 set(TRANSLATIONS
-    #Uh oh, I have no translations yet
+    lang/lang_en_US.ts
     #lang/lang_ja_JA.ts
     )
 

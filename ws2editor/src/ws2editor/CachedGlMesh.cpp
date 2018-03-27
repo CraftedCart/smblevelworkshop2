@@ -1,6 +1,14 @@
 #include "ws2editor/CachedGlMesh.hpp"
 
 namespace WS2Editor {
+    void CachedGlMesh::updateAccessTimer() {
+        lastAccessTimer.start();
+    }
+
+    QElapsedTimer& CachedGlMesh::getLastAccessTimer() {
+        return lastAccessTimer;
+    }
+
     void CachedGlMesh::setVao(GLuint vao) {
         this->vao = vao;
     }
@@ -33,7 +41,7 @@ namespace WS2Editor {
         return triCount;
     }
 
-    QVector<CachedGlTexture*>& CachedGlMesh::getTextures() {
+    QVector<const ResourceTexture*>& CachedGlMesh::getTextures() {
         return textures;
     }
 }

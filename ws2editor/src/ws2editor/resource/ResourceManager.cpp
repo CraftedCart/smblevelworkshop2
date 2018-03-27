@@ -15,13 +15,19 @@
 namespace WS2Editor {
     namespace Resource {
         namespace ResourceManager {
+            //Define externs
+            QMutex resourcesMutex;
+
             QVector<WS2Common::Resource::AbstractResource*>& getResources() {
                 static QVector<WS2Common::Resource::AbstractResource*> resources;
                 return resources;
             }
 
             void addResource(WS2Common::Resource::AbstractResource *res) {
+                resourcesMutex.lock();
                 getResources().append(res);
+                resourcesMutex.unlock();
+
                 if (qAppRunning) UI::ModelManager::modelResources->onResourceAdded();
             }
 
@@ -39,11 +45,13 @@ namespace WS2Editor {
                 using namespace WS2Common::Resource;
                 using namespace WS2Common::Model;
 
-                QVector<ResourceMesh*> meshVec = ModelLoader::loadModel(file, &getResources());
+                QVector<ResourceMesh*> meshVec = ModelLoader::loadModel(file, &getResources(), &resourcesMutex);
 
+                resourcesMutex.lock();
                 foreach(ResourceMesh *mesh, meshVec) {
                     getResources().append(mesh);
                 }
+                resourcesMutex.unlock();
 
                 return meshVec;
             }

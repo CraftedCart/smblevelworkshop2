@@ -4,6 +4,7 @@
 #include "ws2common/model/ModelLoader.hpp"
 #include "ws2lz/SMB2LzExporter.hpp"
 #include <QCoreApplication>
+#include <QTranslator>
 #include <QCommandLineParser>
 #include <QFile>
 #include <QFileInfo>
@@ -18,6 +19,21 @@ int main(int argc, char *argv[]) {
 
     QCoreApplication app(argc, argv);
     QCoreApplication::setApplicationName("ws2lzfrontend");
+
+    //Load translations
+    QTranslator translator;
+    if (translator.load(QLocale(), QLatin1String("lang"), QLatin1String("_"), QDir(QCoreApplication::applicationDirPath()).filePath("../share/ws2editor/lang"))) {
+        app.installTranslator(&translator);
+    } else if (translator.load(QLocale(), QLatin1String("lang"), QLatin1String("_"), QCoreApplication::applicationDirPath())) {
+        //If the software was never installed after build, the translations will be alongside the executable
+        app.installTranslator(&translator);
+    } else if (translator.load("lang_en_US", QDir(QCoreApplication::applicationDirPath()).filePath("../share/ws2editor/lang"))) {
+        //If we can't find a suitable translation, try en_US
+        app.installTranslator(&translator);
+    } else if (translator.load("lang_en_US", QCoreApplication::applicationDirPath())) {
+        //If we can't find a suitable translation, try en_US - if not intalled
+        app.installTranslator(&translator);
+    }
 
     QCommandLineParser parser;
     parser.setApplicationDescription("An interface for ws2lz, to export LZ files for use within Super Monkey Ball");
@@ -93,13 +109,14 @@ int main(int argc, char *argv[]) {
 
     qInfo() << "Loading models...";
     //resources is only really used to conserve some memory, by preventing the creation of duplicate textures
+    QMutex resourcesMutex;
     QVector<WS2Common::Resource::AbstractResource*> resources;
     QHash<QString, WS2Common::Resource::ResourceMesh*> models; //name, mesh - Using a hashmap as it will have a quicker lookup
 
     //Load each model
     foreach(QUrl url, stage->getModels()) {
         QFile file(url.toLocalFile()); //Assumes the URL is local //TODO: Allow network locations maybe
-        QVector<WS2Common::Resource::ResourceMesh*> meshVec = WS2Common::Model::ModelLoader::loadModel(file, &resources);
+        QVector<WS2Common::Resource::ResourceMesh*> meshVec = WS2Common::Model::ModelLoader::loadModel(file, &resources, &resourcesMutex);
         foreach(WS2Common::Resource::ResourceMesh* mesh, meshVec) {
             models[mesh->getId()] = mesh; //TODO: Use some getMeshName function or something if I ever add that
         }

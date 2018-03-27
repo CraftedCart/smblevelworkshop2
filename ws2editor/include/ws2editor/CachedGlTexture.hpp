@@ -7,6 +7,7 @@
 #define SMBLEVELWORKSHOP2_WS2EDITOR_CACHEDGLTEXTURE_HPP
 
 #include "ws2editor/glplatform.hpp"
+#include <QElapsedTimer>
 
 namespace WS2Editor {
 
@@ -15,9 +16,14 @@ namespace WS2Editor {
      */
     class CachedGlTexture {
         protected:
+            QElapsedTimer lastAccessTimer;
+
             GLuint textureId;
 
         public:
+            void updateAccessTimer();
+            QElapsedTimer& getLastAccessTimer();
+
             void setTextureId(GLuint textureId);
             GLuint getTextureId();
     };
