@@ -1,5 +1,4 @@
 #include "ws2editor/PhysicsDebugDrawer.hpp"
-#include "ws2editor/GLManager.hpp"
 #include <QDebug>
 
 namespace WS2Editor {

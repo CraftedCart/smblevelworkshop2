@@ -12,15 +12,23 @@ namespace WS2Common {
                  * @throws IOException When failing to read the file
                  * @throws RuntimeException When Assimp fails to generate an aiScene
                  */
-                QVector<WS2Common::Resource::ResourceMesh*> loadModel(QFile &file, QVector<Resource::AbstractResource*> *resources) {
+                QVector<WS2Common::Resource::ResourceMesh*> loadModel(
+                        QFile &file,
+                        QVector<Resource::AbstractResource*> *resources,
+                        QMutex *resourcesMutex
+                        ) {
                     //The file is from elsewhere - Assume it's from the local filesystem, and pass it to Assimp
-                    return addModelFromFile(file.fileName().toLatin1().constData(), resources);
+                    return addModelFromFile(file.fileName().toLatin1().constData(), resources, resourcesMutex);
                 }
 
                 /**
                  * @throws ModelLoadingException When Assimp fails to generate an aiScene
                  */
-                QVector<WS2Common::Resource::ResourceMesh*> addModelFromFile(const char *filePath, QVector<Resource::AbstractResource*> *resources) {
+                QVector<WS2Common::Resource::ResourceMesh*> addModelFromFile(
+                        const char *filePath,
+                        QVector<Resource::AbstractResource*> *resources,
+                        QMutex *resourcesMutex
+                        ) {
                     Assimp::Importer importer;
                     const aiScene *scene = importer.ReadFile(
                             filePath,
@@ -40,7 +48,7 @@ namespace WS2Common {
 
                     const glm::mat4 globalTransform = MathUtils::toGlmMat4(scene->mRootNode->mTransformation);
                     const QString filePathStr(filePath);
-                    processNode(scene->mRootNode, scene, globalTransform, &filePathStr, &parentDir, meshVector, resources);
+                    processNode(scene->mRootNode, scene, globalTransform, &filePathStr, &parentDir, meshVector, resources, resourcesMutex);
 
                     return meshVector;
                 }
@@ -52,7 +60,8 @@ namespace WS2Common {
                         const QString *filePath,
                         const QDir *parentDir,
                         QVector<WS2Common::Resource::ResourceMesh*> &meshVector,
-                        QVector<Resource::AbstractResource*> *resources
+                        QVector<Resource::AbstractResource*> *resources,
+                        QMutex *resourcesMutex
                         ) {
                     //qDebug() << "Processing node" << node->mName.C_Str() << node->mNumMeshes;
 
@@ -60,7 +69,7 @@ namespace WS2Common {
                     //Process this node's mesh segments
                     for (unsigned int i = 0; i < node->mNumMeshes; i++) {
                         aiMesh *mesh = scene->mMeshes[node->mMeshes[i]];
-                        WS2Common::Model::MeshSegment *segment = processMeshSegment(mesh, scene, globalTransform, parentDir, resources);
+                        WS2Common::Model::MeshSegment *segment = processMeshSegment(mesh, scene, globalTransform, parentDir, resources, resourcesMutex);
                         segments.append(segment);
                     }
 
@@ -74,13 +83,18 @@ namespace WS2Common {
                             resMesh->addMeshSegment(segments.at(j));
                         }
 
-                        if (resources != nullptr) resources->append(resMesh);
+                        if (resources != nullptr) {
+                            if (resourcesMutex != nullptr) resourcesMutex->lock();
+                            resources->append(resMesh);
+                            if (resourcesMutex != nullptr) resourcesMutex->unlock();
+                        }
+
                         meshVector.append(resMesh);
                     }
 
                     //Recursively call this function to process meshes for all children
                     for (unsigned int i = 0; i < node->mNumChildren; i++) {
-                        processNode(node->mChildren[i], scene, globalTransform, filePath, parentDir, meshVector, resources);
+                        processNode(node->mChildren[i], scene, globalTransform, filePath, parentDir, meshVector, resources, resourcesMutex);
                     }
                 }
 
@@ -89,7 +103,8 @@ namespace WS2Common {
                         const aiScene *scene,
                         const glm::mat4 globalTransform,
                         const QDir *parentDir,
-                        QVector<Resource::AbstractResource*> *resources
+                        QVector<Resource::AbstractResource*> *resources,
+                        QMutex *resourcesMutex
                         ) {
                     QVector<WS2Common::Model::Vertex> vertices;
                     QVector<unsigned int> indices;
@@ -145,9 +160,9 @@ namespace WS2Common {
 
                     //Process material
                     aiMaterial *material = scene->mMaterials[mesh->mMaterialIndex];
-                    QVector<WS2Common::Resource::ResourceTexture*> diffuseMaps = loadMaterialTextures(material, aiTextureType_DIFFUSE, parentDir, resources);
+                    QVector<WS2Common::Resource::ResourceTexture*> diffuseMaps = loadMaterialTextures(material, aiTextureType_DIFFUSE, parentDir, resources, resourcesMutex);
                     textures.append(diffuseMaps);
-                    QVector<WS2Common::Resource::ResourceTexture*> specularMaps = loadMaterialTextures(material, aiTextureType_SPECULAR, parentDir, resources);
+                    QVector<WS2Common::Resource::ResourceTexture*> specularMaps = loadMaterialTextures(material, aiTextureType_SPECULAR, parentDir, resources, resourcesMutex);
                     textures.append(specularMaps);
 
                     WS2Common::Model::MeshSegment *segment = new WS2Common::Model::MeshSegment(vertices, indices, textures);
@@ -159,7 +174,8 @@ namespace WS2Common {
                         aiMaterial *mat,
                         aiTextureType type,
                         const QDir *parentDir,
-                        QVector<Resource::AbstractResource*> *resources
+                        QVector<Resource::AbstractResource*> *resources,
+                        QMutex *resourcesMutex
                         ) {
                     QVector<WS2Common::Resource::ResourceTexture*> textures;
 
@@ -189,14 +205,18 @@ namespace WS2Common {
                         WS2Common::Resource::ResourceTexture *texture = nullptr;
                         //Don't load another copy of the texture if it is already in the ResourceManager
                         if (resources != nullptr) {
-                            texture = getResourceFromFilePath<WS2Common::Resource::ResourceTexture*>(filePath, *resources);
+                            texture = getResourceFromFilePath<WS2Common::Resource::ResourceTexture*>(filePath, *resources, resourcesMutex);
                         }
 
                         if (texture == nullptr) {
                             texture = new WS2Common::Resource::ResourceTexture();
                             texture->setId(filePath);
                             texture->setFilePath(filePath);
-                            if (resources != nullptr) resources->append(texture);
+                            if (resources != nullptr) {
+                                if (resourcesMutex != nullptr) resourcesMutex->lock();
+                                resources->append(texture);
+                                if (resourcesMutex != nullptr) resourcesMutex->unlock();
+                            }
                         }
 
                         if (!textures.contains(texture)) textures.append(texture);

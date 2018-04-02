@@ -54,13 +54,9 @@ set(SOURCE_FILES
     ./src/ws2editor/ui/SettingsDialog.cpp
     ./src/ws2editor/widget/ViewportWidget.cpp
     ./src/ws2editor/widget/OutlinerWidget.cpp
-    ./src/ws2editor/GLManager.cpp
     ./src/ws2editor/MathUtils.cpp
-    ./src/ws2editor/model/EditorMeshSegment.cpp
     ./src/ws2editor/resource/ResourceManager.cpp
-    ./src/ws2editor/resource/ResourceEditorTexture.cpp
     ./src/ws2editor/resource/ResourceScene.cpp
-    ./src/ws2editor/resource/ResourceEditorMesh.cpp
     ./src/ws2editor/project/Project.cpp
     ./src/ws2editor/project/ProjectManager.cpp
     ./src/ws2editor/ui/ModelManager.cpp
@@ -73,8 +69,14 @@ set(SOURCE_FILES
     ./src/ws2editor/PhysicsDebugDrawer.cpp
     ./src/ws2editor/Config.cpp
     ./src/ws2editor/Progress.cpp
+    ./src/ws2editor/task/Task.cpp
     ./src/ws2editor/task/TaskManager.cpp
     ./src/ws2editor/task/ImportFileTask.cpp
+    ./src/ws2editor/task/LoadGlTextureTask.cpp
+    ./src/ws2editor/RenderManager.cpp
+    ./src/ws2editor/CachedGlMesh.cpp
+    ./src/ws2editor/CachedGlTexture.cpp
+    ./src/ws2editor/rendering/MeshRenderCommand.cpp
     )
 
 set(HEADER_FILES
@@ -84,15 +86,11 @@ set(HEADER_FILES
     ./include/ws2editor/ui/SettingsDialog.hpp
     ./include/ws2editor/widget/ViewportWidget.hpp
     ./include/ws2editor/widget/OutlinerWidget.hpp
-    ./include/ws2editor/GLManager.hpp
     ./include/ws2editor/EnumCameraNav.hpp
     ./include/ws2editor/MathUtils.hpp
-    ./include/ws2editor/model/EditorMeshSegment.hpp
     ./include/ws2editor/resource/ResourceManager.hpp
     ./include/ws2editor/resource/ResourceManager.ipp
-    ./include/ws2editor/resource/ResourceEditorTexture.hpp
     ./include/ws2editor/resource/ResourceScene.hpp
-    ./include/ws2editor/resource/ResourceEditorMesh.hpp
     ./include/ws2editor/project/Project.hpp
     ./include/ws2editor/project/ProjectManager.hpp
     ./include/ws2editor/ui/ModelManager.hpp
@@ -108,6 +106,12 @@ set(HEADER_FILES
     ./include/ws2editor/task/Task.hpp
     ./include/ws2editor/task/TaskManager.hpp
     ./include/ws2editor/task/ImportFileTask.hpp
+    ./include/ws2editor/task/LoadGlTextureTask.hpp
+    ./include/ws2editor/RenderManager.hpp
+    ./include/ws2editor/CachedGlMesh.hpp
+    ./include/ws2editor/CachedGlTexture.hpp
+    ./include/ws2editor/rendering/IRenderCommand.hpp
+    ./include/ws2editor/rendering/MeshRenderCommand.hpp
     )
 
 set(UI_FILES

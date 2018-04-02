@@ -41,7 +41,7 @@
      <x>0</x>
      <y>0</y>
      <width>1280</width>
-     <height>23</height>
+     <height>24</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuFile">
@@ -84,16 +84,9 @@
     <property name="title">
      <string>View</string>
     </property>
-    <widget class="QMenu" name="menuDebug">
-     <property name="title">
-      <string>Debug</string>
-     </property>
-     <addaction name="actionToggleViewResources"/>
-    </widget>
     <addaction name="actionToggleViewOutliner"/>
     <addaction name="actionToggleViewProperties"/>
     <addaction name="actionToggleViewTimeline"/>
-    <addaction name="menuDebug"/>
     <addaction name="separator"/>
     <addaction name="actionToggleViewToolbar"/>
    </widget>
@@ -105,10 +98,32 @@
     <addaction name="actionStageIdeaGenerator"/>
     <addaction name="actionWorkshopDiscord"/>
    </widget>
+   <widget class="QMenu" name="menuDebug">
+    <property name="title">
+     <string>Debug</string>
+    </property>
+    <widget class="QMenu" name="menuDebugView">
+     <property name="title">
+      <string>View</string>
+     </property>
+     <addaction name="actionToggleViewResources"/>
+    </widget>
+    <widget class="QMenu" name="menuRendering">
+     <property name="title">
+      <string>Rendering</string>
+     </property>
+     <addaction name="actionClearAllRenderManagerCaches"/>
+     <addaction name="actionClearRenderManagerMeshCache"/>
+     <addaction name="actionClearRenderManagerTextureCache"/>
+    </widget>
+    <addaction name="menuDebugView"/>
+    <addaction name="menuRendering"/>
+   </widget>
    <addaction name="menuFile"/>
    <addaction name="menuEdit"/>
    <addaction name="menuView"/>
    <addaction name="menuHelp"/>
+   <addaction name="menuDebug"/>
   </widget>
   <widget class="QToolBar" name="mainToolBar">
    <property name="windowTitle">
@@ -528,6 +543,21 @@
   <action name="actionWorkshopDiscord">
    <property name="text">
     <string>Workshop 2 on Discord</string>
+   </property>
+  </action>
+  <action name="actionClearRenderManagerMeshCache">
+   <property name="text">
+    <string>Clear RenderManager::meshCache</string>
+   </property>
+  </action>
+  <action name="actionClearRenderManagerTextureCache">
+   <property name="text">
+    <string>Clear RenderManager::textureCache</string>
+   </property>
+  </action>
+  <action name="actionClearAllRenderManagerCaches">
+   <property name="text">
+    <string>Clear all RenderManager caches</string>
    </property>
   </action>
  </widget>

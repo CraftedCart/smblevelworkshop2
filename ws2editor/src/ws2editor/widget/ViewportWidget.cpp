@@ -1,5 +1,4 @@
 #include "ws2editor/widget/ViewportWidget.hpp"
-#include "ws2editor/GLManager.hpp"
 #include "ws2common/MathUtils.hpp"
 #include "ws2editor/project/ProjectManager.hpp"
 #include "ws2editor/resource/ResourceManager.hpp"
@@ -46,14 +45,13 @@ namespace WS2Editor {
         }
 
         ViewportWidget::~ViewportWidget() {
-            //Cleanup
-            delete keysDown;
-            delete cameraPos;
-            delete targetCameraPos;
-            delete cameraRot;
+            makeCurrent(); //Need to have the context active to work with GL
+
+            renderManager->destroy();
+            delete renderManager;
             delete tooltipPixmap;
 
-            makeCurrent();
+            checkGLErrors("End of ~ViewportWidget");
         }
 
         qint64 ViewportWidget::getDeltaNanoseconds() {
@@ -64,6 +62,10 @@ namespace WS2Editor {
             return deltaSeconds;
         }
 
+        RenderManager* ViewportWidget::getRenderManager() {
+            return renderManager;
+        }
+
         void ViewportWidget::makeCurrentContext() {
             makeCurrent();
         }
@@ -72,6 +74,8 @@ namespace WS2Editor {
             //Uses default format which should use OpenGL 3.3 core
             glewExperimental = GL_TRUE;
             glewInit();
+
+            renderManager->init();
 
             //Set the clear color
             glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
@@ -86,14 +90,14 @@ namespace WS2Editor {
             //Load the shaders
             QFile vertFile(":/Workshop2/Shaders/stage.vert");
             QFile fragFile(":/Workshop2/Shaders/stage.frag");
-            GLManager::progID = GLManager::loadShaders(&vertFile, &fragFile);
+            renderManager->progID = renderManager->loadShaders(&vertFile, &fragFile);
 
             //Get uniform IDs
-            GLManager::shaderModelID = glGetUniformLocation(GLManager::progID, "modelMat");
-            GLManager::shaderViewID = glGetUniformLocation(GLManager::progID, "viewMat");
-            GLManager::shaderProjID = glGetUniformLocation(GLManager::progID, "projMat");
-            GLManager::shaderNormID = glGetUniformLocation(GLManager::progID, "normMat");
-            GLManager::shaderTexID = glGetUniformLocation(GLManager::progID, "texSampler");
+            renderManager->shaderModelID = glGetUniformLocation(renderManager->progID, "modelMat");
+            renderManager->shaderViewID = glGetUniformLocation(renderManager->progID, "viewMat");
+            renderManager->shaderProjID = glGetUniformLocation(renderManager->progID, "projMat");
+            renderManager->shaderNormID = glGetUniformLocation(renderManager->progID, "normMat");
+            renderManager->shaderTexID = glGetUniformLocation(renderManager->progID, "texSampler");
 
             //Load the physics debug shaders
             //TODO: Make loading this an option
@@ -129,14 +133,14 @@ namespace WS2Editor {
 
             ////Camera matrix
             //glm::mat4 view = glm::lookAt(
-                    //*targetCameraPos,
-                    //*targetCameraPos + forward,
-                    //up
-                    //);
+            //*targetCameraPos,
+            //*targetCameraPos + forward,
+            //up
+            //);
 
             glm::mat4 view2 = glm::lookAt(
-                    *targetCameraPos,
-                    *targetCameraPos + forward,
+                    targetCameraPos,
+                    targetCameraPos + forward,
                     -up
                     );
 
@@ -152,7 +156,7 @@ namespace WS2Editor {
         }
 
         bool ViewportWidget::isKeyDown(int key) {
-            return keysDown->contains(key);
+            return keysDown.contains(key);
         }
 
         void ViewportWidget::preDraw() {
@@ -169,24 +173,24 @@ namespace WS2Editor {
                 setCursor(Qt::BlankCursor);
 
                 if (cameraNavMode == EnumCameraNav::NAV_FIRST_PERSON_FLY) {
-                    *cameraRot += cursorDiff * Config::cameraRotSpeed;
+                    cameraRot += cursorDiff * Config::cameraRotSpeed;
                     //Prevent camera from going whacko or upside down
-                    cameraRot->y = glm::clamp(cameraRot->y, -glm::half_pi<float>(), glm::half_pi<float>());
+                    cameraRot.y = glm::clamp(cameraRot.y, -glm::half_pi<float>(), glm::half_pi<float>());
                 } else if (cameraNavMode == EnumCameraNav::NAV_ORBIT) {
                     //Calculate pivot center
-                    glm::vec3 orbitForward = calcForwardVector(*cameraRot);
-                    glm::vec3 pivotCenter = *targetCameraPos + (orbitForward * cameraPivotDistance);
+                    glm::vec3 orbitForward = calcForwardVector(cameraRot);
+                    glm::vec3 pivotCenter = targetCameraPos + (orbitForward * cameraPivotDistance);
                     //End calculate pivot center
 
                     //Rotate camera and calculate new camera position
-                    *cameraRot += cursorDiff * Config::cameraRotSpeed;
+                    cameraRot += cursorDiff * Config::cameraRotSpeed;
                     //Prevent camera from going whacko or upside down
-                    cameraRot->y = glm::clamp(cameraRot->y, -glm::half_pi<float>(), glm::half_pi<float>());
+                    cameraRot.y = glm::clamp(cameraRot.y, -glm::half_pi<float>(), glm::half_pi<float>());
 
-                    orbitForward = calcForwardVector(*cameraRot);
+                    orbitForward = calcForwardVector(cameraRot);
                     //Set both the target camera pos and the actual pos so weirdness doesn't happen
-                    *targetCameraPos = pivotCenter + (orbitForward * -cameraPivotDistance);
-                    *cameraPos = pivotCenter + (orbitForward * -cameraPivotDistance);
+                    targetCameraPos = pivotCenter + (orbitForward * -cameraPivotDistance);
+                    cameraPos = pivotCenter + (orbitForward * -cameraPivotDistance);
                 }
 
                 if (cameraNavMode == EnumCameraNav::NAV_FIRST_PERSON_FLY || cameraNavMode == EnumCameraNav::NAV_ORBIT) {
@@ -195,12 +199,12 @@ namespace WS2Editor {
                     //TODO: Rebindable keys
                     if (isKeyDown(Qt::Key_Shift)) locPosSpeed *= Config::cameraPosSpeedUpMultiplier;
                     if (isKeyDown(Qt::Key_Alt)) locPosSpeed *= Config::cameraPosSlowDownMultiplier;
-                    if (isKeyDown(Qt::Key_W)) *targetCameraPos += forward * deltaSeconds * locPosSpeed;
-                    if (isKeyDown(Qt::Key_S)) *targetCameraPos -= forward * deltaSeconds * locPosSpeed;
-                    if (isKeyDown(Qt::Key_D)) *targetCameraPos += right * deltaSeconds * locPosSpeed;
-                    if (isKeyDown(Qt::Key_A)) *targetCameraPos -= right * deltaSeconds * locPosSpeed;
-                    if (isKeyDown(Qt::Key_E)) *targetCameraPos += up * deltaSeconds * locPosSpeed;
-                    if (isKeyDown(Qt::Key_Q)) *targetCameraPos -= up * deltaSeconds * locPosSpeed;
+                    if (isKeyDown(Qt::Key_W)) targetCameraPos += forward * deltaSeconds * locPosSpeed;
+                    if (isKeyDown(Qt::Key_S)) targetCameraPos -= forward * deltaSeconds * locPosSpeed;
+                    if (isKeyDown(Qt::Key_D)) targetCameraPos += right * deltaSeconds * locPosSpeed;
+                    if (isKeyDown(Qt::Key_A)) targetCameraPos -= right * deltaSeconds * locPosSpeed;
+                    if (isKeyDown(Qt::Key_E)) targetCameraPos += up * deltaSeconds * locPosSpeed;
+                    if (isKeyDown(Qt::Key_Q)) targetCameraPos -= up * deltaSeconds * locPosSpeed;
                 }
             } else {
                 //Mouse not locked
@@ -223,7 +227,7 @@ namespace WS2Editor {
             }
 
             //Camera inertia
-            *cameraPos = glm::mix(*cameraPos, *targetCameraPos, qBound(0.0f, Config::cameraInertia * deltaSeconds, 1.0f));
+            cameraPos = glm::mix(cameraPos, targetCameraPos, qBound(0.0f, Config::cameraInertia * deltaSeconds, 1.0f));
 
             calcVectors();
         }
@@ -238,13 +242,13 @@ namespace WS2Editor {
 
         void ViewportWidget::calcVectors() {
             //Forward vector
-            forward = calcForwardVector(*cameraRot);
+            forward = calcForwardVector(cameraRot);
 
             //Right vector
             right = glm::vec3(
-                    glm::sin(cameraRot->x - glm::half_pi<float>()),
+                    glm::sin(cameraRot.x - glm::half_pi<float>()),
                     0,
-                    glm::cos(cameraRot->x - glm::half_pi<float>())
+                    glm::cos(cameraRot.x - glm::half_pi<float>())
                     );
 
             //Up vector - Perpendicular to forward and right vector, so use cross product
@@ -268,8 +272,8 @@ namespace WS2Editor {
 
             //Camera matrix
             view = glm::lookAt(
-                    *cameraPos,
-                    *cameraPos + forward,
+                    cameraPos,
+                    cameraPos + forward,
                     up
                     );
 
@@ -284,13 +288,13 @@ namespace WS2Editor {
 
             glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
             glEnable(GL_DEPTH_TEST);
-            glUseProgram(GLManager::progID);
+            glUseProgram(renderManager->progID);
 
             //Give the matrices to the bound shader
             //glUniformMatrix4fv(GLManager::shaderModelID, 1, GL_FALSE, &model[0][0]); //Model matrix set by recursiveDrawSceneNode
-            glUniformMatrix4fv(GLManager::shaderViewID, 1, GL_FALSE, &view[0][0]);
-            glUniformMatrix4fv(GLManager::shaderProjID, 1, GL_FALSE, &proj[0][0]);
-            glUniformMatrix3fv(GLManager::shaderNormID, 1, GL_FALSE, &norm[0][0]);
+            glUniformMatrix4fv(renderManager->shaderViewID, 1, GL_FALSE, &view[0][0]);
+            glUniformMatrix4fv(renderManager->shaderProjID, 1, GL_FALSE, &proj[0][0]);
+            glUniformMatrix3fv(renderManager->shaderNormID, 1, GL_FALSE, &norm[0][0]);
 
             Resource::ResourceScene *scene = Project::ProjectManager::getActiveProject()->getScene();
 
@@ -298,15 +302,17 @@ namespace WS2Editor {
                 recursiveDrawSceneNode(scene->getRootNode(), glm::mat4(1.0f));
             }
 
+            renderManager->renderQueue();
+
             //Physics debug drawing
             PhysicsDebugDrawer *physicsDebugDrawer = Project::ProjectManager::getActiveProject()->getScene()->getPhysicsDebugDrawer();
             if (physicsDebugDrawer != nullptr) {
-                glUseProgram(GLManager::physicsDebugProgID);
+                glUseProgram(renderManager->physicsDebugProgID);
 
                 //Give the matrices to the bound shader
-                glUniformMatrix4fv(GLManager::physicsDebugShaderModelID, 1, GL_FALSE, &model[0][0]);
-                glUniformMatrix4fv(GLManager::physicsDebugShaderViewID, 1, GL_FALSE, &view[0][0]);
-                glUniformMatrix4fv(GLManager::physicsDebugShaderProjID, 1, GL_FALSE, &proj[0][0]);
+                glUniformMatrix4fv(renderManager->physicsDebugShaderModelID, 1, GL_FALSE, &model[0][0]);
+                glUniformMatrix4fv(renderManager->physicsDebugShaderViewID, 1, GL_FALSE, &view[0][0]);
+                glUniformMatrix4fv(renderManager->physicsDebugShaderProjID, 1, GL_FALSE, &proj[0][0]);
 
                 Project::ProjectManager::getActiveProject()->getScene()->getPhysicsManager()->getDynamicsWorld()->debugDrawWorld();
                 physicsDebugDrawer->drawAll();
@@ -348,10 +354,12 @@ namespace WS2Editor {
             transform = glm::scale(transform, node->getScale());
 
             if (const Scene::EditorMeshSceneNode *mesh = dynamic_cast<const Scene::EditorMeshSceneNode*>(node)) {
-                glUniformMatrix4fv(GLManager::shaderModelID, 1, GL_FALSE, &transform[0][0]);
-                //Assume it's a ResourceEditorMesh
-                //TODO: There must be a better way then assuming right?
-                GLManager::renderMesh(static_cast<const Resource::ResourceEditorMesh*>(mesh->getMesh()));
+                glUniformMatrix4fv(renderManager->shaderModelID, 1, GL_FALSE, &transform[0][0]);
+
+                const QVector<WS2Common::Model::MeshSegment*>& segments = mesh->getMesh()->getMeshSegments();
+                for (int i = 0; i < segments.size(); i++) {
+                    renderManager->enqueueRenderMesh(segments[i]);
+                }
             }
 
             for (int i = 0; i < node->getChildren().size(); i++) {
@@ -365,7 +373,7 @@ namespace WS2Editor {
                         (pos.x / width() - 0.5f) * 2.0f,
                         -(pos.y / height() - 0.5f) * 2.0f
                         ),
-                    *cameraPos, Config::cameraFar, proj, view
+                    cameraPos, Config::cameraFar, proj, view
                     );
 
             if (rayCallback->hasHit()) {
@@ -398,11 +406,11 @@ namespace WS2Editor {
         }
 
         void ViewportWidget::keyPressEvent(QKeyEvent *event) {
-            keysDown->insert(event->key());
+            keysDown.insert(event->key());
         }
 
         void ViewportWidget::keyReleaseEvent(QKeyEvent *event) {
-            keysDown->remove(event->key());
+            keysDown.remove(event->key());
         }
 
         void ViewportWidget::mousePressEvent(QMouseEvent *event) {
@@ -431,7 +439,7 @@ namespace WS2Editor {
 
             //Zoom
             float dy = event->angleDelta().y() / 10.0f; //TODO:Make zoom around configurable
-            *targetCameraPos += forward * (float) dy;
+            targetCameraPos += forward * (float) dy;
             cameraPivotDistance -= dy;
             cameraPivotDistance = glm::max(cameraPivotDistance, 1.0f);
         }
@@ -524,7 +532,7 @@ namespace WS2Editor {
                         (pos.x / width() - 0.5f) * 2.0f,
                         -(pos.y / height() - 0.5f) * 2.0f
                         ),
-                    *cameraPos, Config::cameraFar, proj, view
+                    cameraPos, Config::cameraFar, proj, view
                     );
 
             if (rayCallback->hasHit()) {

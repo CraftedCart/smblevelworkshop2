@@ -1,10 +1,8 @@
 #include "ws2editor/resource/ResourceScene.hpp"
-#include "ws2editor/GLManager.hpp"
 #include "ws2editor/resource/ResourceManager.hpp"
 #include "ws2editor/scene/EditorMeshSceneNode.hpp"
 #include "ws2editor/ui/ModelManager.hpp"
 #include "ws2common/scene/GroupSceneNode.hpp"
-#include "ws2common/resource/ResourceMesh.hpp"
 #include <QByteArray>
 #include <QFileInfo>
 
@@ -21,14 +19,6 @@ namespace WS2Editor {
                     this, &ResourceScene::onSelectionChanged);
 
             physicsManager = new Physics::PhysicsManager();
-        }
-
-        /**
-         * @throws WS2Editor::Exception::IOException When failing to read the file
-         * @throws WS2Editor::Exception::RuntimeException When Assimp fails to generate an aiScene
-         */
-        ResourceScene::ResourceScene(QFile &file) {
-            addModel(file);
         }
 
         ResourceScene::~ResourceScene() {
@@ -62,11 +52,10 @@ namespace WS2Editor {
 
         /**
          * @throws WS2Editor::Exception::IOException When failing to read the file
-         * @throws WS2Editor::Exception::RuntimeException When Assimp fails to generate an aiScene
          */
-        void ResourceScene::addModel(QFile &file) {
-            addFilePath(file.fileName());
-            QVector<Resource::ResourceEditorMesh*> newMeshes = ResourceManager::addModel(file, isLoaded());
+        void ResourceScene::addModel(const QVector<WS2Common::Resource::ResourceMesh*> &meshes) {
+            using namespace WS2Common::Scene;
+            using namespace WS2Editor::Scene;
 
             //Get the static node
             WS2Common::Scene::SceneNode *staticNode = rootNode->getChildByName(tr("Static"));
@@ -77,11 +66,11 @@ namespace WS2Editor {
                 UI::ModelManager::modelOutliner->onNodeAdded(staticNode); //TODO: This feels hacky
             }
 
-            for (int i = 0; i < newMeshes.size(); i++) {
+            for (int i = 0; i < meshes.size(); i++) {
                 //The .split("@")[0] gets the part of the name before the @ symbol, which should be the name of the mesh
                 //TODO: Make ResourceMesh store the name of a mesh, instead of doing string manip to get the name
-                QString meshName = newMeshes.at(i)->getId().split("@")[0];
-                Scene::EditorMeshSceneNode *meshNode = new Scene::EditorMeshSceneNode(meshName, newMeshes.at(i));
+                QString meshName = meshes.at(i)->getId().split("@")[0];
+                EditorMeshSceneNode *meshNode = new EditorMeshSceneNode(meshName, meshes.at(i));
                 meshNode->setMeshName(meshName);
                 physicsManager->addRigidBody(meshNode->getPhysicsRigidBody());
                 staticNode->addChild(meshNode);
@@ -89,17 +78,8 @@ namespace WS2Editor {
             }
         }
 
-        /**
-         * @throws WS2Editor::Exception::IOException When failing to read the file
-         * @throws WS2Editor::Exception::RuntimeException When Assimp fails to generate an aiScene
-         */
         void ResourceScene::load() {
             loaded = true;
-
-            for (int i = 0; i < filePaths.size(); i++) {
-                QFile f(filePaths.at(i));
-                addModel(f);
-            }
         }
 
         void ResourceScene::unload() {

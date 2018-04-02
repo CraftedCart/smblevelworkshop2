@@ -4,6 +4,7 @@
 #include "ws2editor/glplatform.hpp"
 #include "ws2editor/EnumCameraNav.hpp"
 #include "ws2editor/resource/ResourceScene.hpp"
+#include "ws2editor/RenderManager.hpp"
 #include <QOpenGLWidget>
 #include <QWidget>
 #include <QElapsedTimer>
@@ -18,18 +19,20 @@ namespace WS2Editor {
             Q_OBJECT
 
             protected:
+                RenderManager *renderManager = new RenderManager();
+
                 //Used to calculate delta time
                 QElapsedTimer elapsedTimer;
                 qint64 prevNanosecondsElapsed;
                 qint64 deltaNanoseconds;
                 float deltaSeconds;
 
-                QSet<int> *keysDown = new QSet<int>();
+                QSet<int> keysDown;
                 bool mouseLocked = false;
 
-                glm::vec3 *targetCameraPos = new glm::vec3(10.0f, 10.0f, 10.0f);
-                glm::vec3 *cameraPos = new glm::vec3(10.0f, 10.0f, 10.0f);
-                glm::vec2 *cameraRot = new glm::vec2(0.0f, 0.0f);
+                glm::vec3 targetCameraPos = glm::vec3(10.0f, 10.0f, 10.0f);
+                glm::vec3 cameraPos = glm::vec3(10.0f, 10.0f, 10.0f);
+                glm::vec2 cameraRot = glm::vec2(0.0f, 0.0f);
                 float cameraPivotDistance = 15.0f;
                 glm::vec3 forward;
                 glm::vec3 right;
@@ -57,6 +60,8 @@ namespace WS2Editor {
 
                 qint64 getDeltaNanoseconds();
                 float getDeltaSeconds();
+
+                RenderManager* getRenderManager();
 
                 void makeCurrentContext();
 

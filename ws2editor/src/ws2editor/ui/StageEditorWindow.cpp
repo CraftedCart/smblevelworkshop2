@@ -27,20 +27,6 @@ namespace WS2Editor {
                     QMainWindow::GroupedDragging
                     );
 
-            statusTaskProgressBar->hide();
-            statusTaskProgressBar->setMinimumWidth(128); //Prevent the progress bar size from fluctuating
-            statusTaskProgressBar->setMaximumWidth(128);
-            ui->statusBar->addWidget(statusTaskProgressBar);
-            connect(ws2TaskManager->getProgress(), &Progress::valueChanged, statusTaskProgressBar, &QProgressBar::setValue);
-            connect(ws2TaskManager->getProgress(), &Progress::maxChanged, [=](unsigned int max) {
-                        if (max == 0) {
-                            statusTaskProgressBar->hide();
-                        } else {
-                            statusTaskProgressBar->setMaximum(max);
-                            statusTaskProgressBar->show();
-                        }
-                    });
-
             ui->statusBar->addWidget(statusTaskLabel);
             connect(ws2TaskManager, &Task::TaskManager::messageChanged, statusTaskLabel, &QLabel::setText);
 
@@ -67,6 +53,23 @@ namespace WS2Editor {
             connect(ui->actionAbout, &QAction::triggered, this, &StageEditorWindow::showAbout);
             connect(ui->actionStageIdeaGenerator, &QAction::triggered, this, &StageEditorWindow::showStageIdeaGenerator);
             connect(ui->actionWorkshopDiscord, &QAction::triggered, [](){ QDesktopServices::openUrl(QUrl("https://discord.gg/CEYjvDj")); });
+
+
+            //Debug menu
+            connect(ui->actionClearAllRenderManagerCaches, &QAction::triggered, [this]() {
+                    ui->viewportWidget->makeCurrentContext();
+                    ui->viewportWidget->getRenderManager()->clearAllCaches();
+                    });
+
+            connect(ui->actionClearRenderManagerMeshCache, &QAction::triggered, [this]() {
+                    ui->viewportWidget->makeCurrentContext();
+                    ui->viewportWidget->getRenderManager()->clearMeshCache();
+                    });
+
+            connect(ui->actionClearRenderManagerTextureCache, &QAction::triggered, [this]() {
+                    ui->viewportWidget->makeCurrentContext();
+                    ui->viewportWidget->getRenderManager()->clearTextureCache();
+                    });
         }
 
         StageEditorWindow::~StageEditorWindow() {
@@ -110,8 +113,7 @@ namespace WS2Editor {
 
             for (int i = 0; i < urls.size(); i++) {
                 QFile *f = new QFile(urls.at(i).toLocalFile());
-                std::function<void()> *func = new std::function<void()>([=]() {ui->viewportWidget->makeCurrentContext();});
-                tasks.append(new Task::ImportFileTask(f, func));
+                tasks.append(new Task::ImportFileTask(f));
             }
 
             ws2TaskManager->enqueueTasks(tasks);

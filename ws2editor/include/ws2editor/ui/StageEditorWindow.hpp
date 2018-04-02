@@ -23,7 +23,6 @@ namespace WS2Editor {
                 explicit StageEditorWindow(QWidget *parent = 0);
                 ~StageEditorWindow();
 
-                QProgressBar *statusTaskProgressBar = new QProgressBar();
                 QLabel *statusTaskLabel = new QLabel();
                 QLabel *statusFramerateLabel = new QLabel();
 

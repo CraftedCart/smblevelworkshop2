@@ -1,5 +1,6 @@
 #include "ws2editor/project/Project.hpp"
 #include "ws2editor/resource/ResourceManager.hpp"
+#include "ws2common/resource/ResourceMesh.hpp"
 #include <QCoreApplication>
 
 namespace WS2Editor {
@@ -32,7 +33,11 @@ namespace WS2Editor {
         }
 
         void Project::importModel(QFile &file) {
-            scene->addModel(file);
+            using namespace WS2Common::Resource;
+            using namespace WS2Editor::Resource;
+
+            const QVector<ResourceMesh*> newMeshes = ResourceManager::addModel(file, scene->isLoaded());
+            scene->addModel(newMeshes);
         }
 
         void Project::importConfig(QFile &file) {
