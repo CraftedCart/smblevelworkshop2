@@ -160,7 +160,14 @@ namespace WS2Editor {
                 btCollisionWorld::ClosestRayResultCallback* ndcRaycast(const glm::vec2 pos, const glm::vec3 startPos,
                         const float distance, const glm::mat4 proj, const glm::mat4 view);
 
-                void selectNodeAtScreenPos(const glm::vec2 pos);
+                /**
+                 * @brief Selects the node at the given gcreen position
+                 *
+                 * @param pos The screen position
+                 * @param toggleSelect If true, the selection of the object will be toggled, else the selection will be
+                 *                     overwritten with the object at the screen position
+                 */
+                void selectNodeAtScreenPos(const glm::vec2 pos, bool toggleSelect);
 
             signals:
                 void frameRendered(qint64 deltaNanoseconds);

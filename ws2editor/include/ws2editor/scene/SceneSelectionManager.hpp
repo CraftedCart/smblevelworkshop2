@@ -57,6 +57,13 @@ namespace WS2Editor {
                 void deselect(WS2Common::Scene::SceneNode *obj);
 
                 /**
+                 * @brief Selects the object is it isn't selected, otherwise deselects it
+                 *
+                 * @param obj The object to togle seelction on
+                 */
+                void toggleSelect(WS2Common::Scene::SceneNode *obj);
+
+                /**
                  * @brief Removes all objects from the selection
                  */
                 void clearSelection();

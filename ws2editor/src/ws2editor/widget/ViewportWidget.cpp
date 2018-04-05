@@ -16,6 +16,7 @@
 #include <QPoint>
 #include <QMouseEvent>
 #include <QPainter>
+#include <QApplication>
 
 namespace WS2Editor {
     namespace Widget {
@@ -399,8 +400,11 @@ namespace WS2Editor {
             //TODO: Rebindable mouse button
             switch (event->button()) {
                 case Qt::LeftButton:
-                    selectNodeAtScreenPos(getRelativeCursorPos());
-                    break;
+                    {
+                        bool toggleSelect = QApplication::keyboardModifiers() & Qt::ControlModifier;
+                        selectNodeAtScreenPos(getRelativeCursorPos(), toggleSelect);
+                        break;
+                    }
                 case Qt::RightButton:
                     cameraNavMode = EnumCameraNav::NAV_FIRST_PERSON_FLY;
                     break;
@@ -480,7 +484,7 @@ namespace WS2Editor {
             return rayCallback;
         }
 
-        void ViewportWidget::selectNodeAtScreenPos(const glm::vec2 pos) {
+        void ViewportWidget::selectNodeAtScreenPos(const glm::vec2 pos, bool toggleSelect) {
             btCollisionWorld::ClosestRayResultCallback* rayCallback = ndcRaycast(
                     glm::vec2(
                         (pos.x / width() - 0.5f) * 2.0f,
@@ -493,10 +497,15 @@ namespace WS2Editor {
                 //Select the hit node
                 WS2Common::Scene::SceneNode *node =
                     static_cast<WS2Common::Scene::SceneNode*>(rayCallback->m_collisionObject->getUserPointer());
-                Project::ProjectManager::getActiveProject()->getScene()->getSelectionManager()->selectOnly(node);
+
+                if (toggleSelect) {
+                    Project::ProjectManager::getActiveProject()->getScene()->getSelectionManager()->toggleSelect(node);
+                } else {
+                    Project::ProjectManager::getActiveProject()->getScene()->getSelectionManager()->selectOnly(node);
+                }
             } else {
                 //Deselect all if nothing was hit
-                Project::ProjectManager::getActiveProject()->getScene()->getSelectionManager()->clearSelection();
+                if (!toggleSelect) Project::ProjectManager::getActiveProject()->getScene()->getSelectionManager()->clearSelection();
             }
 
             delete rayCallback;

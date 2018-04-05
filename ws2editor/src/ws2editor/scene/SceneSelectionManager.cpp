@@ -29,6 +29,14 @@ namespace WS2Editor {
             emit onSelectionChanged(selectedObjects);
         }
 
+        void SceneSelectionManager::toggleSelect(WS2Common::Scene::SceneNode *obj) {
+            if (isSelected(obj)) {
+                deselect(obj);
+            } else {
+                select(obj);
+            }
+        }
+
         void SceneSelectionManager::clearSelection() {
             selectedObjects.clear();
 
