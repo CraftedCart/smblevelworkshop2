@@ -8,8 +8,11 @@
 #include <QDebug>
 
 namespace WS2Editor {
-    void RenderManager::init() {
+    void RenderManager::init(int fboWidth, int fboHeight) {
         qDebug() << "Initializing RenderManager";
+
+        viewportWidth = fboWidth;
+        viewportHeight = fboHeight;
 
         qDebug() << "Loading default texture";
         QImage defaultImage = convertToGLFormat(QImage(":/Workshop2/Images/defaultgrid.png"));
@@ -21,38 +24,7 @@ namespace WS2Editor {
         glBindFramebuffer(GL_FRAMEBUFFER, fbo);
 
         //Create fbo textures/buffers
-        //Color texture
-        glGenTextures(1, &fboColorTexture);
-        glBindTexture(GL_TEXTURE_2D, fboColorTexture);
-        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, 1920, 1080, 0, GL_RGB, GL_UNSIGNED_BYTE, 0);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-        glFramebufferTexture(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, fboColorTexture, 0);
-
-        //Camera normal texture
-        glGenTextures(1, &fboCameraNormalTexture);
-        glBindTexture(GL_TEXTURE_2D, fboCameraNormalTexture);
-        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, 1920, 1080, 0, GL_RGB, GL_UNSIGNED_BYTE, 0);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-        glFramebufferTexture(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT1, fboCameraNormalTexture, 0);
-
-        //Depth buffer
-        glGenRenderbuffers(1, &fboDepthBuffer);
-        glBindRenderbuffer(GL_RENDERBUFFER, fboDepthBuffer);
-        glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT, 1920, 1080);
-        glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, fboDepthBuffer);
-
-        //Set the draw buffers list
-        GLenum drawBuffers[] = {GL_COLOR_ATTACHMENT0, GL_COLOR_ATTACHMENT1};
-        glDrawBuffers(2, drawBuffers);
-
-        if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE) {
-            //TODO: Throw an exception or something
-            qCritical() << "fbo is incomplete";
-        }
+        generateFboAttachments(fboWidth, fboHeight);
 
         //Generate the fullscreen quad buffers, to draw the framebuffer
         qDebug() << "Creating fullscreen quad buffers";
@@ -115,10 +87,9 @@ namespace WS2Editor {
         //unloadPhysicsDebugShaders();
 
         GLuint texturesToDelete[] = {defaultTexture->getTextureId(), fboColorTexture, fboCameraNormalTexture};
-        glDeleteTextures(2, texturesToDelete);
+        glDeleteTextures(3, texturesToDelete);
         delete defaultTexture;
 
-        glDeleteTextures(1, &fboColorTexture);
         glDeleteRenderbuffers(1, &fboDepthBuffer);
         glDeleteFramebuffers(1, &fbo);
 
@@ -126,6 +97,60 @@ namespace WS2Editor {
         glDeleteVertexArrays(1, &fullscreenQuadVao);
 
         checkErrors("End of RenderManager::destroy()");
+    }
+
+    void RenderManager::generateFboAttachments(int fboWidth, int fboHeight) {
+        //Color texture
+        glGenTextures(1, &fboColorTexture);
+        glBindTexture(GL_TEXTURE_2D, fboColorTexture);
+        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, fboWidth, fboHeight, 0, GL_RGB, GL_UNSIGNED_BYTE, 0);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+        glFramebufferTexture(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, fboColorTexture, 0);
+
+        //Camera normal texture
+        glGenTextures(1, &fboCameraNormalTexture);
+        glBindTexture(GL_TEXTURE_2D, fboCameraNormalTexture);
+        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, fboWidth, fboHeight, 0, GL_RGB, GL_UNSIGNED_BYTE, 0);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+        glFramebufferTexture(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT1, fboCameraNormalTexture, 0);
+
+        //Depth buffer
+        glGenRenderbuffers(1, &fboDepthBuffer);
+        glBindRenderbuffer(GL_RENDERBUFFER, fboDepthBuffer);
+        glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT, fboWidth, fboHeight);
+        glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, fboDepthBuffer);
+
+        //Set the draw buffers list
+        GLenum drawBuffers[] = {GL_COLOR_ATTACHMENT0, GL_COLOR_ATTACHMENT1};
+        glDrawBuffers(2, drawBuffers);
+
+        if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE) {
+            //TODO: Throw an exception or something
+            qCritical() << "fbo is incomplete";
+        }
+    }
+
+    void RenderManager::resizeViewport(int width, int height) {
+        viewportWidth = width;
+        viewportHeight = height;
+
+        //destroyFboAttachments();
+        //generateFboAttachments(width, height);
+        //Color texture
+        glBindTexture(GL_TEXTURE_2D, fboColorTexture);
+        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, 0);
+
+        //Camera normal texture
+        glBindTexture(GL_TEXTURE_2D, fboCameraNormalTexture);
+        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, 0);
+
+        //Depth buffer
+        glBindRenderbuffer(GL_RENDERBUFFER, fboDepthBuffer);
+        glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT, width, height);
     }
 
     //Copied straight from Qt QGL
@@ -446,12 +471,12 @@ namespace WS2Editor {
         renderFifo.enqueue(new MeshRenderCommand(meshCache[mesh], this, renderCameraNormals));
     }
 
-    void RenderManager::renderQueue(GLuint targetFramebuffer, int width, int height) {
+    void RenderManager::renderQueue(GLuint targetFramebuffer) {
         using namespace WS2Editor::Rendering;
 
         //Bind the FBO
         glBindFramebuffer(GL_FRAMEBUFFER, fbo);
-        glViewport(0, 0, 1920, 1080);
+        glViewport(0, 0, viewportWidth, viewportHeight);
 
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
@@ -460,7 +485,7 @@ namespace WS2Editor {
 
         //Render the FBO contents to the screen
         glBindFramebuffer(GL_FRAMEBUFFER, targetFramebuffer);
-        glViewport(0, 0, width, height);
+        glViewport(0, 0, viewportWidth, viewportHeight);
 
         glUseProgram(compositeShaderProg);
 

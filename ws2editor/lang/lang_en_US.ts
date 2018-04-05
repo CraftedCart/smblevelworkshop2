@@ -1229,17 +1229,17 @@ Public License instead of this License.  But first, please read
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/ws2editor/widget/ViewportWidget.cpp" line="376"/>
+        <location filename="../src/ws2editor/widget/ViewportWidget.cpp" line="380"/>
         <source>SMB Level Workshop 2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/ws2editor/widget/ViewportWidget.cpp" line="377"/>
+        <location filename="../src/ws2editor/widget/ViewportWidget.cpp" line="381"/>
         <source>Tip of the day</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/ws2editor/widget/ViewportWidget.cpp" line="381"/>
+        <location filename="../src/ws2editor/widget/ViewportWidget.cpp" line="385"/>
         <source>Open a project or import models to get started</source>
         <translation type="unfinished"></translation>
     </message>

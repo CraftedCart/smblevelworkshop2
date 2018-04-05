@@ -59,6 +59,9 @@ namespace WS2Editor {
             GLuint compositeShaderTextureId;
             GLuint compositeShaderCameraNormalsTextureId;
 
+            int viewportWidth;
+            int viewportHeight;
+
         public:
             /**
              * @brief The maximum concurrently bound textures a shader can handle
@@ -111,16 +114,32 @@ namespace WS2Editor {
              */
             void substituteShaderConstants(QString *s);
 
+            /**
+             * @brief Generates textures/renderbuffers for the currently bound FBO
+             *
+             * @param fboWidth The width of the buffers to generate
+             * @param fboHeight The height of the buffers to generate
+             */
+            void generateFboAttachments(int fboWidth, int fboHeight);
+
         public:
             //Copied straight from Qt QGL
             static QImage convertToGLFormat(const QImage &img);
 
-            void init();
+            void init(int fboWidth, int fboHeight);
 
             /**
              * @brief Cleans up - note that the correct GL context must be bound
              */
             void destroy();
+
+            /**
+             * @brief Resizes the framebuffer attachments used for rendering
+             *
+             * @param width The width of the viewport
+             * @param width The height of the viewport
+             */
+            void resizeViewport(int width, int height);
 
             /**
              * @brief Load, compile and link the shader files given
@@ -146,10 +165,8 @@ namespace WS2Editor {
              * @brief Renders all meshes in the render fifo
              *
              * @param targetFramebuffer The framebuffer to render to
-             * @param width The width of the viewport
-             * @param width The height of the viewport
              */
-            void renderQueue(GLuint targetFramebuffer, int width, int height);
+            void renderQueue(GLuint targetFramebuffer);
 
             /**
              * @brief Returns the GL texture for a ResourceTexture - will load one if it is not cached already

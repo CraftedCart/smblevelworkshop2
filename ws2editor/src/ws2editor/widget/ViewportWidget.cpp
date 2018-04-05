@@ -75,7 +75,7 @@ namespace WS2Editor {
             glewExperimental = GL_TRUE;
             glewInit();
 
-            renderManager->init();
+            renderManager->init(width(), height());
 
             //Set the clear color
             glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
@@ -98,6 +98,10 @@ namespace WS2Editor {
 
             //Start the elapsed timer
             elapsedTimer.start();
+        }
+
+        void ViewportWidget::resizeGL(int w, int h) {
+            renderManager->resizeViewport(w, h);
         }
 
         /**
@@ -279,7 +283,7 @@ namespace WS2Editor {
                 recursiveDrawSceneNode(scene->getRootNode(), glm::mat4(1.0f));
             }
 
-            renderManager->renderQueue(defaultFramebufferObject(), width(), height());
+            renderManager->renderQueue(defaultFramebufferObject());
 
             //Physics debug drawing
             PhysicsDebugDrawer *physicsDebugDrawer = Project::ProjectManager::getActiveProject()->getScene()->getPhysicsDebugDrawer();
