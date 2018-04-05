@@ -67,7 +67,7 @@ namespace WS2Editor {
 
             protected:
                 void initializeGL() override;
-                //void resizeGL(int w, int h) override;
+                void resizeGL(int w, int h) override;
                 void paintGL() override;
                 void keyPressEvent(QKeyEvent *event) override;
                 void keyReleaseEvent(QKeyEvent *event) override;
@@ -144,15 +144,6 @@ namespace WS2Editor {
                  * @brief Calculates the forward, right and up vectors
                  */
                 void calcVectors();
-
-                /**
-                 * @brief Checks for OpenGL errors and logs them if any are found
-                 *
-                 * @param location This text is tacked on to the end of the log message.
-                 *                 It's recommended you put where in the code the function is called, to aid with tracking
-                 *                 down issues.
-                 */
-                void checkGLErrors(QString location);
 
                 /**
                  * @brief Performs a raycast taking normalized device coordinates into mind

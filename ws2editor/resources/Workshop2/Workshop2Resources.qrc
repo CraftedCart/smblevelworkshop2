@@ -22,6 +22,8 @@
         <file>Shaders/stage.frag</file>
         <file>Shaders/physicsDebug.vert</file>
         <file>Shaders/physicsDebug.frag</file>
+        <file>Shaders/composite.vert</file>
+        <file>Shaders/composite.frag</file>
         <file>Images/banner.png</file>
         <file>Images/tooltip.png</file>
         <file>Images/defaultgrid.png</file>

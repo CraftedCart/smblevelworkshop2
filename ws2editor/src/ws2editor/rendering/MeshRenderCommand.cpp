@@ -2,9 +2,10 @@
 
 namespace WS2Editor {
     namespace Rendering {
-        MeshRenderCommand::MeshRenderCommand(CachedGlMesh *mesh, RenderManager *renderManager) :
+        MeshRenderCommand::MeshRenderCommand(CachedGlMesh *mesh, RenderManager *renderManager, bool renderCameraNormals) :
             mesh(mesh),
-            renderManager(renderManager) {}
+            renderManager(renderManager),
+            renderCameraNormals(renderCameraNormals) {}
 
         void MeshRenderCommand::draw() {
             mesh->updateAccessTimer();
@@ -18,6 +19,7 @@ namespace WS2Editor {
             }
             static const int texIDs[32] = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31};
             glUniform1iv(renderManager->shaderTexID, renderManager->MAX_SHADER_TEXTURES, texIDs);
+            glUniform1i(renderManager->shaderRenderCameraNormals, renderCameraNormals);
 
             //Draw the segment
             glBindVertexArray(mesh->getVao());
