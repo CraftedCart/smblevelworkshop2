@@ -121,8 +121,10 @@ namespace WS2Editor {
 
         void StageEditorWindow::addSceneNode() {
             WS2Common::Scene::GroupSceneNode *newNode = new WS2Common::Scene::GroupSceneNode(tr("New Node"));
-            Project::ProjectManager::getActiveProject()->getScene()->getRootNode()->addChild(newNode);
-            ModelManager::modelOutliner->onNodeAdded(newNode); //TODO: This feels hacky
+            //Project::ProjectManager::getActiveProject()->getScene()->getRootNode()->addChild(newNode);
+            //ModelManager::modelOutliner->onNodeAdded(newNode); //TODO: This feels hacky
+
+            ModelManager::modelOutliner->addNode(newNode, Project::ProjectManager::getActiveProject()->getScene()->getRootNode());
         }
 
         void StageEditorWindow::showSettings() {

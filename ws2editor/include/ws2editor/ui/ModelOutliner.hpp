@@ -11,6 +11,8 @@
 
 namespace WS2Editor {
     namespace UI {
+        using namespace WS2Common::Scene;
+
         class ModelOutliner : public QAbstractTableModel {
             Q_OBJECT
 
@@ -20,16 +22,16 @@ namespace WS2Editor {
                  *
                  * @return A pointer to the root SceneNode of the active project
                  */
-                WS2Common::Scene::SceneNode* getRootNode() const;
+                SceneNode* getRootNode() const;
 
             public:
                 ModelOutliner(QObject *parent);
-                int rowCount(const QModelIndex &parent = QModelIndex()) const override;
-                int columnCount(const QModelIndex &parent = QModelIndex()) const override;
-                QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const override;
-                QModelIndex index(int row, int column, const QModelIndex &parent = QModelIndex()) const override;
-                QModelIndex parent(const QModelIndex &parent = QModelIndex()) const override;
-                Qt::ItemFlags flags(const QModelIndex &index) const override;
+                virtual int rowCount(const QModelIndex &parent = QModelIndex()) const override;
+                virtual int columnCount(const QModelIndex &parent = QModelIndex()) const override;
+                virtual QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const override;
+                virtual QModelIndex index(int row, int column, const QModelIndex &parent = QModelIndex()) const override;
+                virtual QModelIndex parent(const QModelIndex &parent = QModelIndex()) const override;
+                virtual Qt::ItemFlags flags(const QModelIndex &index) const override;
                 //QVariant headerData(int section, Qt::Orientation orientation, int role = Qt::DisplayRole) const override;
 
                 /**
@@ -39,21 +41,22 @@ namespace WS2Editor {
                  *
                  * @return A QModelIndex corresponding to the node
                  */
-                QModelIndex findIndexFromNode(WS2Common::Scene::SceneNode *node);
+                QModelIndex findIndexFromNode(SceneNode *node);
 
                 /**
-                 * @brief Adds an entry for a new node
+                 * @brief Adds a node to the parent and updates the model
                  *
-                 * @param addedNode The newly added node
+                 * @param node The new node to add
+                 * @param parentNode The node to parent the new node to
                  */
-                void onNodeAdded(WS2Common::Scene::SceneNode *addedNode);
+                void addNode(SceneNode *node, SceneNode *parentNode);
 
                 /**
                  * @brief Call this when the selection changes
                  *
                  * @param selectedObjects A vector of selected objects
                  */
-                void selectionChanged(QVector<WS2Common::Scene::SceneNode*>& selectedObjects);
+                void selectionChanged(QVector<SceneNode*>& selectedObjects);
 
             signals:
                 /**

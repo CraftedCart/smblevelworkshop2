@@ -11,8 +11,7 @@ namespace WS2Editor {
         ResourceScene::ResourceScene() {
             rootNode = new WS2Common::Scene::SceneNode("root");
             WS2Common::Scene::GroupSceneNode *staticNode = new WS2Common::Scene::GroupSceneNode(tr("Static"));
-            rootNode->addChild(staticNode);
-            UI::ModelManager::modelOutliner->onNodeAdded(staticNode); //TODO: This feels hacky
+            UI::ModelManager::modelOutliner->addNode(staticNode, rootNode);
 
             selectionManager = new Scene::SceneSelectionManager();
             connect(selectionManager, &Scene::SceneSelectionManager::onSelectionChanged,
@@ -62,8 +61,7 @@ namespace WS2Editor {
             //Create the static node if it doesn't exist
             if (!staticNode) {
                 staticNode = new WS2Common::Scene::GroupSceneNode(tr("Static"));
-                rootNode->addChild(staticNode);
-                UI::ModelManager::modelOutliner->onNodeAdded(staticNode); //TODO: This feels hacky
+                UI::ModelManager::modelOutliner->addNode(staticNode, rootNode);
             }
 
             for (int i = 0; i < meshes.size(); i++) {
@@ -73,8 +71,8 @@ namespace WS2Editor {
                 EditorMeshSceneNode *meshNode = new EditorMeshSceneNode(meshName, meshes.at(i));
                 meshNode->setMeshName(meshName);
                 physicsManager->addRigidBody(meshNode->getPhysicsRigidBody());
-                staticNode->addChild(meshNode);
-                UI::ModelManager::modelOutliner->onNodeAdded(meshNode); //TODO: This feels hacky
+
+                UI::ModelManager::modelOutliner->addNode(meshNode, staticNode);
             }
         }
 

@@ -4,18 +4,20 @@
 
 namespace WS2Editor {
     namespace UI {
+        using namespace WS2Common::Scene;
+
         ModelOutliner::ModelOutliner(QObject *parent) : QAbstractTableModel(parent) {}
 
-        WS2Common::Scene::SceneNode* ModelOutliner::getRootNode() const {
+        SceneNode* ModelOutliner::getRootNode() const {
             return Project::ProjectManager::getActiveProject()->getScene()->getRootNode();
         }
 
         int ModelOutliner::rowCount(const QModelIndex &parent) const {
-            WS2Common::Scene::SceneNode *parentNode;
+            SceneNode *parentNode;
             if (!parent.isValid()) {
                 parentNode = getRootNode();
             } else {
-                parentNode = static_cast<WS2Common::Scene::SceneNode*>(parent.internalPointer());
+                parentNode = static_cast<SceneNode*>(parent.internalPointer());
             }
 
             return parentNode->getChildCount();
@@ -31,7 +33,7 @@ namespace WS2Editor {
         QVariant ModelOutliner::data(const QModelIndex &index, int role) const {
             if (!index.isValid() || role != Qt::DisplayRole) return QVariant();
 
-            WS2Common::Scene::SceneNode *node = static_cast<WS2Common::Scene::SceneNode*>(index.internalPointer());
+            SceneNode *node = static_cast<SceneNode*>(index.internalPointer());
             return node->getName();
         }
 
@@ -39,14 +41,14 @@ namespace WS2Editor {
             if (!hasIndex(row, column, parent)) return QModelIndex();
 
             //Get the parent node
-            WS2Common::Scene::SceneNode *parentNode;
+            SceneNode *parentNode;
             if (!parent.isValid()) {
                 parentNode = getRootNode();
             } else {
-                parentNode = static_cast<WS2Common::Scene::SceneNode*>(parent.internalPointer());
+                parentNode = static_cast<SceneNode*>(parent.internalPointer());
             }
 
-            WS2Common::Scene::SceneNode *childNode = parentNode->getChildByIndex(row);
+            SceneNode *childNode = parentNode->getChildByIndex(row);
             if (childNode) {
                 return createIndex(row, column, childNode);
             } else {
@@ -57,8 +59,8 @@ namespace WS2Editor {
         QModelIndex ModelOutliner::parent(const QModelIndex &index) const {
             if (!index.isValid()) return QModelIndex();
 
-            WS2Common::Scene::SceneNode *childNode = static_cast<WS2Common::Scene::SceneNode*>(index.internalPointer());
-            WS2Common::Scene::SceneNode *parentNode = childNode->getParent();
+            SceneNode *childNode = static_cast<SceneNode*>(index.internalPointer());
+            SceneNode *parentNode = childNode->getParent();
 
             if (parentNode == getRootNode()) {
                 return QModelIndex();
@@ -72,9 +74,9 @@ namespace WS2Editor {
             return QAbstractItemModel::flags(index);
         }
 
-        QModelIndex ModelOutliner::findIndexFromNode(WS2Common::Scene::SceneNode *node) {
+        QModelIndex ModelOutliner::findIndexFromNode(SceneNode *node) {
             QVector<int> indexPath;
-            WS2Common::Scene::SceneNode *pathNode = node;
+            SceneNode *pathNode = node;
             while (pathNode->getParent() != nullptr) {
                 indexPath.append(pathNode->getIndex());
                 pathNode = pathNode->getParent();
@@ -88,27 +90,21 @@ namespace WS2Editor {
             return modelIdx;
         }
 
-        void ModelOutliner::onNodeAdded(WS2Common::Scene::SceneNode *addedNode) {
-            if (!WS2Editor::qAppRunning) return; //Get outta here if the QApplication isn't running - This would crash otherwise
+        void ModelOutliner::addNode(SceneNode *node, SceneNode *parentNode) {
+            //Check if the QApplication is running else we would crash
+            if (WS2Editor::qAppRunning) {
+                QModelIndex parentIndex = findIndexFromNode(parentNode);
+                int index = parentNode->getChildCount();
 
-            QVector<int> indexPath;
-            WS2Common::Scene::SceneNode *pathNode = addedNode;
-            while (pathNode->getParent() != nullptr) {
-                indexPath.append(pathNode->getIndex());
-                pathNode = pathNode->getParent();
+                beginInsertRows(parentIndex, index, index);
             }
 
-            QModelIndex modelIdx;
-            for (int i = 1; i < indexPath.size(); i++) {
-                modelIdx = index(indexPath.at(i), 0, modelIdx);
-            }
+            parentNode->addChild(node);
 
-            int idx = addedNode->getIndex();
-            beginInsertRows(modelIdx, idx, idx);
-            endInsertRows();
+            if (WS2Editor::qAppRunning) endInsertRows();
         }
 
-        void ModelOutliner::selectionChanged(QVector<WS2Common::Scene::SceneNode*>& selectedObjects) {
+        void ModelOutliner::selectionChanged(QVector<SceneNode*>& selectedObjects) {
             QVector<QModelIndex> indices;
 
             for (int i = 0; i < selectedObjects.size(); i++) {
