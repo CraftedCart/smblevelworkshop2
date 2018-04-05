@@ -3,10 +3,12 @@
 #define MAX_SHADER_TEXTURES %MAX_SHADER_TEXTURES%
 
 in vec3 normal;
+in vec4 cameraNormal;
 in vec2 uv;
 in vec3 fragPos;
 
-out vec4 color;
+layout(location = 0) out vec4 color;
+layout(location = 1) out vec4 outCameraNormal;
 
 uniform sampler2D texSampler[MAX_SHADER_TEXTURES];
 
@@ -21,5 +23,6 @@ void main() {
     vec4 diffuse = diff * lightColor;
 
     color = (ambientLight + diffuse) * texture(texSampler[0], uv);
+    outCameraNormal = cameraNormal;
 }
 

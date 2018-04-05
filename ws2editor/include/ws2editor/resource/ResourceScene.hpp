@@ -28,7 +28,7 @@ namespace WS2Editor {
                 WS2Common::Scene::SceneNode *rootNode;
                 Scene::SceneSelectionManager *selectionManager;
                 Physics::PhysicsManager *physicsManager;
-                PhysicsDebugDrawer *physicsDebugDrawer;
+                PhysicsDebugDrawer *physicsDebugDrawer = nullptr;
 
             public:
                 /**

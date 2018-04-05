@@ -51,7 +51,7 @@ namespace WS2Editor {
             delete renderManager;
             delete tooltipPixmap;
 
-            checkGLErrors("End of ~ViewportWidget");
+            RenderManager::checkErrors("End of ~ViewportWidget");
         }
 
         qint64 ViewportWidget::getDeltaNanoseconds() {
@@ -86,28 +86,6 @@ namespace WS2Editor {
 
             //Cull back faces
             glEnable(GL_CULL_FACE);
-
-            //Load the shaders
-            QFile vertFile(":/Workshop2/Shaders/stage.vert");
-            QFile fragFile(":/Workshop2/Shaders/stage.frag");
-            renderManager->progID = renderManager->loadShaders(&vertFile, &fragFile);
-
-            //Get uniform IDs
-            renderManager->shaderModelID = glGetUniformLocation(renderManager->progID, "modelMat");
-            renderManager->shaderViewID = glGetUniformLocation(renderManager->progID, "viewMat");
-            renderManager->shaderProjID = glGetUniformLocation(renderManager->progID, "projMat");
-            renderManager->shaderNormID = glGetUniformLocation(renderManager->progID, "normMat");
-            renderManager->shaderTexID = glGetUniformLocation(renderManager->progID, "texSampler");
-
-            //Load the physics debug shaders
-            //TODO: Make loading this an option
-            //QFile physVertFile(":/Workshop2/Shaders/physicsDebug.vert");
-            //QFile physFragFile(":/Workshop2/Shaders/physicsDebug.frag");
-            //GLManager::physicsDebugProgID = GLManager::loadShaders(&physVertFile, &physFragFile);
-
-            //Get uniform IDs
-            //GLManager::physicsDebugShaderViewID = glGetUniformLocation(GLManager::physicsDebugProgID, "viewMat");
-            //GLManager::physicsDebugShaderProjID = glGetUniformLocation(GLManager::physicsDebugProgID, "projMat");
 
             //Load pixmaps
             tooltipPixmap = new QPixmap(":/Workshop2/Images/tooltip.png");
@@ -286,7 +264,6 @@ namespace WS2Editor {
             //The model-view-projection matrix (Matrix multiplication is the other way round)
             //glm::mat4 mvp = proj * view * model;
 
-            glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
             glEnable(GL_DEPTH_TEST);
             glUseProgram(renderManager->progID);
 
@@ -302,7 +279,7 @@ namespace WS2Editor {
                 recursiveDrawSceneNode(scene->getRootNode(), glm::mat4(1.0f));
             }
 
-            renderManager->renderQueue();
+            renderManager->renderQueue(defaultFramebufferObject(), width(), height());
 
             //Physics debug drawing
             PhysicsDebugDrawer *physicsDebugDrawer = Project::ProjectManager::getActiveProject()->getScene()->getPhysicsDebugDrawer();
@@ -339,7 +316,7 @@ namespace WS2Editor {
             painter.end();
 
             //Check for errors
-            checkGLErrors("End of ViewportWidget::paintGL()");
+            RenderManager::checkErrors("End of ViewportWidget::paintGL()");
 
             //Emit the frameRendered Signal
             emit frameRendered(deltaNanoseconds);
@@ -358,7 +335,8 @@ namespace WS2Editor {
 
                 const QVector<WS2Common::Model::MeshSegment*>& segments = mesh->getMesh()->getMeshSegments();
                 for (int i = 0; i < segments.size(); i++) {
-                    renderManager->enqueueRenderMesh(segments[i]);
+                    bool isSelected = Project::ProjectManager::getActiveProject()->getScene()->getSelectionManager()->isSelected(node);
+                    renderManager->enqueueRenderMesh(segments[i], isSelected);
                 }
             }
 
@@ -449,34 +427,6 @@ namespace WS2Editor {
             QPoint tlWidgetPos = mapToGlobal(pos()); //tl = Top Left
             QVector2D relCursorPosQt = QVector2D(cursorPos - tlWidgetPos); //rel = Relative
             return WS2Common::MathUtils::toGlmVec2(relCursorPosQt);
-        }
-
-        void ViewportWidget::checkGLErrors(QString location) {
-            GLenum err;
-            while ((err = glGetError()) != GL_NO_ERROR) {
-                //Errors occured
-                QString errString;
-
-                switch(err) {
-                    case GL_INVALID_OPERATION:
-                        errString = "INVALID_OPERATION";
-                        break;
-                    case GL_INVALID_ENUM:
-                        errString = "INVALID_ENUM";
-                        break;
-                    case GL_INVALID_VALUE:
-                        errString = "INVALID_VALUE";
-                        break;
-                    case GL_OUT_OF_MEMORY:
-                        errString = "OUT_OF_MEMORY";
-                        break;
-                    case GL_INVALID_FRAMEBUFFER_OPERATION:
-                        errString = "INVALID_FRAMEBUFFER_OPERATION";
-                        break;
-                }
-
-                qWarning() << "GL Error:" << err << "-" << errString << "- Found at:" << location;
-            }
         }
 
         btCollisionWorld::ClosestRayResultCallback* ViewportWidget::ndcRaycast(const glm::vec2 pos, const glm::vec3 startPos,

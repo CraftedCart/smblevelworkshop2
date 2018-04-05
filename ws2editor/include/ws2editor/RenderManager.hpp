@@ -38,6 +38,7 @@ namespace WS2Editor {
             static const qint64 CACHE_TIMEOUT = 30 * 1000; //30s = 30 * 1000 ms
 
             QQueue<IRenderCommand*> renderFifo;
+            QQueue<IRenderCommand*> renderSelectionFifo;
 
             QHash<const MeshSegment*, CachedGlMesh*> meshCache;
             QHash<const ResourceTexture*, CachedGlTexture*> textureCache;
@@ -46,6 +47,17 @@ namespace WS2Editor {
              * @brief Used while a texture is loading/missing texture/etc.
              */
             CachedGlTexture *defaultTexture;
+
+            GLuint fbo;
+            GLuint fboColorTexture;
+            GLuint fboCameraNormalTexture;
+            GLuint fboDepthBuffer;
+
+            GLuint fullscreenQuadVao;
+            GLuint fullscreenQuadVbo;
+            GLuint compositeShaderProg;
+            GLuint compositeShaderTextureId;
+            GLuint compositeShaderCameraNormalsTextureId;
 
         public:
             /**
@@ -59,6 +71,7 @@ namespace WS2Editor {
             GLuint shaderProjID;
             GLuint shaderNormID;
             GLuint shaderTexID;
+            GLuint shaderRenderCameraNormals;
 
             GLuint physicsDebugProgID;
             GLuint physicsDebugShaderModelID;
@@ -125,13 +138,18 @@ namespace WS2Editor {
              * @brief Adds a RenderMesh command to the render fifo, to be rendered later with renderQueue()
              *
              * @param mesh
+             * @param renderCameraNormals Used for the selection outline
              */
-            void enqueueRenderMesh(const MeshSegment *mesh);
+            void enqueueRenderMesh(const MeshSegment *mesh, bool renderCameraNormals);
 
             /**
              * @brief Renders all meshes in the render fifo
+             *
+             * @param targetFramebuffer The framebuffer to render to
+             * @param width The width of the viewport
+             * @param width The height of the viewport
              */
-            void renderQueue();
+            void renderQueue(GLuint targetFramebuffer, int width, int height);
 
             /**
              * @brief Returns the GL texture for a ResourceTexture - will load one if it is not cached already
@@ -147,6 +165,13 @@ namespace WS2Editor {
 
             void addTexture(const QImage image, const ResourceTexture *tex);
 
+            /**
+             * @brief Checks for OpenGL errors and logs them if any are found
+             *
+             * @param location This text is tacked on to the end of the log message.
+             *                 It's recommended you put where in the code the function is called, to aid with tracking
+             *                 down issues.
+             */
             static void checkErrors(QString location);
 
         public slots:

@@ -6,6 +6,10 @@ namespace WS2Editor {
             return selectedObjects;
         }
 
+        bool SceneSelectionManager::isSelected(WS2Common::Scene::SceneNode *node) {
+            return selectedObjects.contains(node);
+        }
+
         void SceneSelectionManager::selectOnly(WS2Common::Scene::SceneNode *obj) {
             selectedObjects.clear();
             selectedObjects.append(obj);

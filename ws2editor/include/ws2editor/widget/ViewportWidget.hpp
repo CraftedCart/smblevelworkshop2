@@ -146,15 +146,6 @@ namespace WS2Editor {
                 void calcVectors();
 
                 /**
-                 * @brief Checks for OpenGL errors and logs them if any are found
-                 *
-                 * @param location This text is tacked on to the end of the log message.
-                 *                 It's recommended you put where in the code the function is called, to aid with tracking
-                 *                 down issues.
-                 */
-                void checkGLErrors(QString location);
-
-                /**
                  * @brief Performs a raycast taking normalized device coordinates into mind
                  * Useful for camera
                  *

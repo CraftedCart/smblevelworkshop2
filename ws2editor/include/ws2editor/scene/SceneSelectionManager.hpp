@@ -27,6 +27,15 @@ namespace WS2Editor {
                 QVector<WS2Common::Scene::SceneNode*>& getSelectedObjects();
 
                 /**
+                 * @brief Checks if a node is selected
+                 *
+                 * @param node The node to check
+                 *
+                 * @return Whether the node is selected or not
+                 */
+                bool isSelected(WS2Common::Scene::SceneNode *node);
+
+                /**
                  * @brief Selects the given object and deselects all other objects
                  *
                  * @param obj The object to be selected
