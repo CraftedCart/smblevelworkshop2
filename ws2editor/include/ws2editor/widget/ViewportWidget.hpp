@@ -48,6 +48,12 @@ namespace WS2Editor {
                 QPainter *painter;
 
                 QPixmap *tooltipPixmap;
+                QPixmap *importPixmap;
+
+                /**
+                 * @brief Should drag and drop info be shown around the cursor
+                 */
+                bool showDrop = false;
 
                 /**
                  * @brief Tip of the day string
@@ -66,14 +72,18 @@ namespace WS2Editor {
                 void makeCurrentContext();
 
             protected:
-                void initializeGL() override;
-                void resizeGL(int w, int h) override;
-                void paintGL() override;
-                void keyPressEvent(QKeyEvent *event) override;
-                void keyReleaseEvent(QKeyEvent *event) override;
-                void mousePressEvent(QMouseEvent *event) override;
-                void mouseReleaseEvent(QMouseEvent *event) override;
-                void wheelEvent(QWheelEvent *event) override;
+                virtual void initializeGL() override;
+                virtual void resizeGL(int w, int h) override;
+                virtual void paintGL() override;
+                virtual void keyPressEvent(QKeyEvent *event) override;
+                virtual void keyReleaseEvent(QKeyEvent *event) override;
+                virtual void mousePressEvent(QMouseEvent *event) override;
+                virtual void mouseReleaseEvent(QMouseEvent *event) override;
+                virtual void wheelEvent(QWheelEvent *event) override;
+                virtual void dragEnterEvent(QDragEnterEvent *event) override;
+                virtual void dragMoveEvent(QDragMoveEvent *event) override;
+                virtual void dropEvent(QDropEvent *event) override;
+                virtual void dragLeaveEvent(QDragLeaveEvent *event) override;
 
                 /**
                  * @brief Gets the cursor position relative to the this widget

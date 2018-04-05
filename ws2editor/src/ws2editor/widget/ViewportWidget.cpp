@@ -6,6 +6,8 @@
 #include "ws2editor/physics/PhysicsManger.hpp"
 #include "ws2editor/PhysicsDebugDrawer.hpp"
 #include "ws2editor/Config.hpp"
+#include "ws2editor/task/ImportFileTask.hpp"
+#include "ws2editor/WS2Editor.hpp"
 #include <glm/gtx/transform.hpp>
 #include <glm/gtc/constants.hpp>
 #include <BulletCollision/NarrowPhaseCollision/btRaycastCallback.h>
@@ -16,6 +18,7 @@
 #include <QPoint>
 #include <QMouseEvent>
 #include <QPainter>
+#include <QMimeData>
 #include <QApplication>
 
 namespace WS2Editor {
@@ -26,6 +29,7 @@ namespace WS2Editor {
             updateTimer->start(1000.0f / 60.0f); //Cap the framerate at 60FPS TODO: Make this adjustable
 
             setFocusPolicy(Qt::StrongFocus); //Accept keyboard input
+            setAcceptDrops(true); //Allow drag and drop onto this widget - used for file importing
 
             //Read all tips of the days
             QStringList tips;
@@ -51,6 +55,7 @@ namespace WS2Editor {
             renderManager->destroy();
             delete renderManager;
             delete tooltipPixmap;
+            delete importPixmap;
 
             RenderManager::checkErrors("End of ~ViewportWidget");
         }
@@ -90,6 +95,7 @@ namespace WS2Editor {
 
             //Load pixmaps
             tooltipPixmap = new QPixmap(":/Workshop2/Images/tooltip.png");
+            importPixmap = new QPixmap(":/Workshop2/Icons/Import.png");
 
             //Mark the initial project as loaded, so that models added to the scene are also loaded
             Project::ProjectManager::getActiveProject()->getScene()->load();
@@ -316,7 +322,26 @@ namespace WS2Editor {
             }
 
             //drawText(painter, glm::vec3(0.0f, 0.0f, 0.0f), QString("Origin"), QColor(255, 255, 255));
-            drawObjectTooltipAtPos(painter, getRelativeCursorPos());
+            glm::vec2 relativeCursorPos = getRelativeCursorPos();
+
+            if (showDrop) {
+                //Draw drag and drop info
+                QFontMetrics fontMetrics = QFontMetrics(QFont());
+                QString dropStr = tr("Drop to import files");
+
+                painter.fillRect(relativeCursorPos.x, relativeCursorPos.y - importPixmap->height(),
+                        importPixmap->width() + fontMetrics.width(dropStr) + 16, importPixmap->height(),
+                        QBrush(QColor(0, 0, 0, 127)));
+
+                painter.drawPixmap(relativeCursorPos.x, relativeCursorPos.y - importPixmap->height(), *importPixmap);
+
+                painter.setPen(Qt::white);
+                painter.drawText(WS2Common::MathUtils::toQPoint(
+                            relativeCursorPos + glm::vec2(8 + importPixmap->width(), -10)),
+                        dropStr);
+            } else {
+                drawObjectTooltipAtPos(painter, relativeCursorPos);
+            }
 
             painter.end();
 
@@ -428,6 +453,41 @@ namespace WS2Editor {
             targetCameraPos += forward * (float) dy;
             cameraPivotDistance -= dy;
             cameraPivotDistance = glm::max(cameraPivotDistance, 1.0f);
+        }
+
+        void ViewportWidget::dragEnterEvent(QDragEnterEvent *event) {
+            if (event->mimeData()->hasUrls()) showDrop = true;
+            event->acceptProposedAction();
+        }
+
+        void ViewportWidget::dragMoveEvent(QDragMoveEvent *event) {
+            event->acceptProposedAction();
+        }
+
+        void ViewportWidget::dropEvent(QDropEvent *event) {
+            //Import the dropped files
+            const QMimeData *data = event->mimeData();
+            if (data->hasUrls()) {
+                QVector<Task::Task*> tasks;
+                QList<QUrl> urls = data->urls();
+
+                for (int i = 0; i < urls.size(); i++) {
+                    QFile *f = new QFile(urls.at(i).toLocalFile());
+                    tasks.append(new Task::ImportFileTask(f));
+                }
+
+                ws2TaskManager->enqueueTasks(tasks);
+            } else {
+                qDebug() << "Invalid kind of data dropped onto the viewport";
+            }
+
+            showDrop = false;
+            event->acceptProposedAction();
+        }
+
+        void ViewportWidget::dragLeaveEvent(QDragLeaveEvent *event) {
+            showDrop = false;
+            event->accept();
         }
 
         glm::vec2 ViewportWidget::getRelativeCursorPos() {
