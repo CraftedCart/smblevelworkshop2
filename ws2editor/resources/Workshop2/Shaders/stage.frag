@@ -1,6 +1,4 @@
 #version 330 core
-//%MAX_SHADER_TEXTURES% will be replaced by the C++ code with an unsigned int
-#define MAX_SHADER_TEXTURES %MAX_SHADER_TEXTURES%
 
 in vec3 normal;
 in vec4 cameraNormal;
@@ -10,7 +8,7 @@ in vec3 fragPos;
 layout(location = 0) out vec4 color;
 layout(location = 1) out vec4 outCameraNormal;
 
-uniform sampler2D texSampler[MAX_SHADER_TEXTURES];
+uniform sampler2D texSampler;
 
 void main() {
     vec4 lightColor = vec4(1.0f, 1.0f, 1.0f, 1.0f);
@@ -22,7 +20,7 @@ void main() {
     float diff = max(dot(norm, lightDir), 0.0f);
     vec4 diffuse = diff * lightColor;
 
-    color = (ambientLight + diffuse) * texture(texSampler[0], uv);
+    color = (ambientLight + diffuse) * texture(texSampler, uv);
     outCameraNormal = cameraNormal;
 }
 

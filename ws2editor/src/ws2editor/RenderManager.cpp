@@ -378,7 +378,6 @@ namespace WS2Editor {
         }
         QString vertCode = vertFile->readAll();
         vertFile->close();
-        substituteShaderConstants(&vertCode);
 
         //Read the frag shader code
         if (!fragFile->open(QFile::ReadOnly)) {
@@ -389,7 +388,6 @@ namespace WS2Editor {
         }
         QString fragCode = fragFile->readAll();
         fragFile->close();
-        substituteShaderConstants(&fragCode);
 
         GLint result = GL_FALSE;
         int infoLogLength;
@@ -457,10 +455,6 @@ namespace WS2Editor {
         glDeleteShader(fragID);
 
         return programID;
-    }
-
-    void RenderManager::substituteShaderConstants(QString *s) {
-        s->replace("%MAX_SHADER_TEXTURES%", QString::number(MAX_SHADER_TEXTURES));
     }
 
     void RenderManager::enqueueRenderMesh(const MeshSegment *mesh, bool renderCameraNormals) {

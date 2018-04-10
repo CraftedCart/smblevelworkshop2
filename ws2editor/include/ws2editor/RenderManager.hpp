@@ -63,11 +63,6 @@ namespace WS2Editor {
             int viewportHeight;
 
         public:
-            /**
-             * @brief The maximum concurrently bound textures a shader can handle
-             */
-            const unsigned int MAX_SHADER_TEXTURES = 32;
-
             GLuint progID;
             GLuint shaderModelID;
             GLuint shaderViewID;
@@ -106,13 +101,6 @@ namespace WS2Editor {
              * @param texture A loaded ResourceTexture
              */
             void loadTextureAsync(const ResourceTexture *texture);
-
-            /**
-             * @brief Finds occurances of placeholder text in shader strings, and replaces them with a constant
-             *
-             * @param s The string to find and replace in
-             */
-            void substituteShaderConstants(QString *s);
 
             /**
              * @brief Generates textures/renderbuffers for the currently bound FBO
