@@ -127,7 +127,6 @@ namespace WS2Editor {
                  */
                 void drawText(QPainter &painter, const glm::vec3 &pos, const QString &str, const QColor &col);
 
-
                 /**
                  * @brief Draws info on the viewport (such as a tip of the day)
                  *

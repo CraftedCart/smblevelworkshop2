@@ -31,7 +31,7 @@
      <number>0</number>
     </property>
     <item row="0" column="0">
-     <widget class="WS2Editor::Widget::ViewportWidget" name="viewportWidget" native="true"/>
+     <widget class="WS2Editor::Widget::ViewportWidget" name="viewportWidget"/>
     </item>
    </layout>
   </widget>
@@ -601,7 +601,7 @@
   </customwidget>
   <customwidget>
    <class>WS2Editor::Widget::ViewportWidget</class>
-   <extends>QWidget</extends>
+   <extends>QOpenGLWidget</extends>
    <header>ws2editor/widget/ViewportWidget.hpp</header>
   </customwidget>
  </customwidgets>
