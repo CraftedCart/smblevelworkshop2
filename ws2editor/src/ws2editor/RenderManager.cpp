@@ -59,7 +59,7 @@ namespace WS2Editor {
         shaderViewID = glGetUniformLocation(progID, "viewMat");
         shaderProjID = glGetUniformLocation(progID, "projMat");
         shaderNormID = glGetUniformLocation(progID, "normMat");
-        shaderTexID = glGetUniformLocation(progID, "texSampler");
+        //shaderTexID = glGetUniformLocation(progID, "texSampler");
         shaderRenderCameraNormals = glGetUniformLocation(progID, "renderCameraNormals");
 
         //Load the physics debug shaders
