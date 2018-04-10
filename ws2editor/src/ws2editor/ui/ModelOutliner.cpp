@@ -105,7 +105,7 @@ namespace WS2Editor {
         }
 
         void ModelOutliner::removeNode(SceneNode *node) {
-            //Remove ndoes from the selection (If they are even selected)
+            //Remove nodes from the selection (If they are even selected)
             Project::ProjectManager::getActiveProject()->getScene()->getSelectionManager()->deselect(node);
 
             //Check if the QApplication is running else we would crash
