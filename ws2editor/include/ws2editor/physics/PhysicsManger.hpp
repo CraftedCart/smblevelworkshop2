@@ -42,6 +42,15 @@ namespace WS2Editor {
                  * @param rb The rigid body to add
                  */
                 void addRigidBody(btRigidBody *rb);
+
+                /**
+                 * @brief Removes a rigid body from dynamicsWorld
+                 *
+                 * @note rb is not deleted
+                 *
+                 * @param rb The rigid body to remove
+                 */
+                void removeRigidBody(btRigidBody *rb);
         };
     }
 }

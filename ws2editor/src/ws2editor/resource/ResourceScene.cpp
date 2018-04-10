@@ -68,9 +68,8 @@ namespace WS2Editor {
                 //The .split("@")[0] gets the part of the name before the @ symbol, which should be the name of the mesh
                 //TODO: Make ResourceMesh store the name of a mesh, instead of doing string manip to get the name
                 QString meshName = meshes.at(i)->getId().split("@")[0];
-                EditorMeshSceneNode *meshNode = new EditorMeshSceneNode(meshName, meshes.at(i));
+                EditorMeshSceneNode *meshNode = new EditorMeshSceneNode(meshName, this, meshes.at(i));
                 meshNode->setMeshName(meshName);
-                physicsManager->addRigidBody(meshNode->getPhysicsRigidBody());
 
                 UI::ModelManager::modelOutliner->addNode(meshNode, staticNode);
             }

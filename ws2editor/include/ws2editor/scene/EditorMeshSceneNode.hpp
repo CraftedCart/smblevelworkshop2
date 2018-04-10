@@ -11,7 +11,13 @@
 #include <btBulletDynamicsCommon.h>
 
 namespace WS2Editor {
+    namespace Resource {
+        class ResourceScene;
+    }
+
     namespace Scene {
+        using namespace WS2Editor::Resource;
+        using namespace WS2Common::Resource;
 
         /**
          * @brief Extends on the MeshSceneNode, providing extra functionality to integrate it into WS2Editor, such as
@@ -19,7 +25,8 @@ namespace WS2Editor {
          */
         class EditorMeshSceneNode : public WS2Common::Scene::MeshSceneNode {
             protected:
-                WS2Common::Resource::ResourceMesh *mesh;
+                ResourceMesh *mesh;
+                ResourceScene *scene;
                 btCollisionShape *physicsCollisionShape;
                 btDefaultMotionState *physicsMotionState;
                 btRigidBody *physicsRigidBody;
@@ -37,8 +44,9 @@ namespace WS2Editor {
                  *       Use `getRigidBody()` to get the rigid body, and add it to a dynamics world.
                  *
                  * @param name The name of the node
+                 * @param scene The scene this mesh is a part of
                  */
-                EditorMeshSceneNode(const QString name);
+                EditorMeshSceneNode(const QString name, ResourceScene *scene);
 
                 /**
                  * @brief Constructs a EditorMeshSceneNode with a mesh
@@ -47,9 +55,10 @@ namespace WS2Editor {
                  *       Use `getRigidBody()` to get the rigid body, and add it to a dynamics world.
                  *
                  * @param name The name of the node
+                 * @param scene The scene this mesh is a part of
                  * @param mesh A pointer to the mesh to set
                  */
-                EditorMeshSceneNode(const QString name, WS2Common::Resource::ResourceMesh *mesh);
+                EditorMeshSceneNode(const QString name, ResourceScene *scene, WS2Common::Resource::ResourceMesh *mesh);
 
                 /**
                  * @brief Frees up resources

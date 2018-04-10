@@ -104,7 +104,25 @@ namespace WS2Editor {
             if (WS2Editor::qAppRunning) endInsertRows();
         }
 
-        void ModelOutliner::selectionChanged(QVector<SceneNode*>& selectedObjects) {
+        void ModelOutliner::removeNode(SceneNode *node) {
+            //Remove ndoes from the selection (If they are even selected)
+            Project::ProjectManager::getActiveProject()->getScene()->getSelectionManager()->deselect(node);
+
+            //Check if the QApplication is running else we would crash
+            if (WS2Editor::qAppRunning) {
+                QModelIndex index = findIndexFromNode(node);
+                QModelIndex parentIndex = index.parent();
+                int removedIndex = index.row();
+
+                beginRemoveRows(parentIndex, removedIndex, removedIndex);
+            }
+
+            node->removeFromParent();
+
+            if (WS2Editor::qAppRunning) endRemoveRows();
+        }
+
+        void ModelOutliner::selectionChanged(QVector<SceneNode*>& selectedObjects, bool emitOnSelectionChanged) {
             QVector<QModelIndex> indices;
 
             for (int i = 0; i < selectedObjects.size(); i++) {
@@ -112,7 +130,7 @@ namespace WS2Editor {
                 indices.append(modelIdx);
             }
 
-            emit onSelectionChanged(indices);
+            if (emitOnSelectionChanged) emit onSelectionChanged(indices);
         }
 
     }

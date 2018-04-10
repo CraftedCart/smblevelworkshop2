@@ -116,6 +116,21 @@ namespace WS2Common {
                 virtual void addChild(SceneNode *child);
 
                 /**
+                 * @brief Removes a child node from this node and optionally deletes it
+                 *
+                 * @param child The child node to remove and delete
+                 * @param shouldDelete Whether the object should be deleted
+                 *
+                 * @return The number of nodes removed
+                 */
+                virtual int removeChild(SceneNode *child, bool shouldDelete = true);
+
+                /**
+                 * @brief Removes this node from its parent - this will delete it
+                 */
+                virtual void removeFromParent();
+
+                /**
                  * @brief Gets the number of children that belong to this node
                  *
                  * @return The number of children that belong to this node

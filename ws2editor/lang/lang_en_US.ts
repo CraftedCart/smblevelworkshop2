@@ -1188,22 +1188,22 @@ Public License instead of this License.  But first, please read
 <context>
     <name>WS2Editor::UI::StageEditorWindow</name>
     <message>
-        <location filename="../src/ws2editor/ui/StageEditorWindow.cpp" line="84"/>
+        <location filename="../src/ws2editor/ui/StageEditorWindow.cpp" line="85"/>
         <source>Delta: %1ms / Framerate: %2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/ws2editor/ui/StageEditorWindow.cpp" line="93"/>
+        <location filename="../src/ws2editor/ui/StageEditorWindow.cpp" line="94"/>
         <source>Import files</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/ws2editor/ui/StageEditorWindow.cpp" line="95"/>
+        <location filename="../src/ws2editor/ui/StageEditorWindow.cpp" line="96"/>
         <source>All supported file types (*.fbx *.dae *.gltf *.glb *.blend *.3ds *.ase *.obj *.ifc *.xgl *.zgl *.ply *.dxf *.lwo *.lws *.lxo *.stl *.x *.ac *ms3d *.cob *.scn *.mesh.xml *.irrmesh *.irr *.mdl *.md2 *.md3 *.pk3 *.mdc *.md5* *.smd *.vta *.ogex *.3d *.b3d *.q3d *.q3s *.nff *.off *.raw *.ter *.hmp *.ndo *.txt *.xml);;3D models (*.fbx *.dae *.gltf *.glb *.blend *.3ds *.ase *.obj *.ifc *.xgl *.zgl *.ply *.dxf *.lwo *.lws *.lxo *.stl *.x *.ac *ms3d *.cob *.scn *.mesh.xml *.irrmesh *.irr *.mdl *.md2 *.md3 *.pk3 *.mdc *.md5* *.smd *.vta *.ogex *.3d *.b3d *.q3d *.q3s *.nff *.off *.raw *.ter *.hmp *.ndo);;Stage configurations (*.txt *.xml);;All files (*)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/ws2editor/ui/StageEditorWindow.cpp" line="123"/>
+        <location filename="../src/ws2editor/ui/StageEditorWindow.cpp" line="124"/>
         <source>New Node</source>
         <translation type="unfinished"></translation>
     </message>

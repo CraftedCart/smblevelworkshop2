@@ -52,11 +52,19 @@ namespace WS2Editor {
                 void addNode(SceneNode *node, SceneNode *parentNode);
 
                 /**
+                 * @brief Removes a node from its parent and updates the model
+                 *
+                 * @param node The new node to remove
+                 */
+                void removeNode(SceneNode *node);
+
+                /**
                  * @brief Call this when the selection changes
                  *
                  * @param selectedObjects A vector of selected objects
+                 * @param emitOnSelectionChanged Should onSelectionChanged be emitted? (Used to prevent inf. loops)
                  */
-                void selectionChanged(QVector<SceneNode*>& selectedObjects);
+                void selectionChanged(QVector<SceneNode*>& selectedObjects, bool emitOnSelectionChanged = true);
 
             signals:
                 /**

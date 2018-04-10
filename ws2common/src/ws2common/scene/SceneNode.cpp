@@ -61,6 +61,17 @@ namespace WS2Common {
             children.append(child);
         }
 
+        int SceneNode::removeChild(SceneNode *child, bool shouldDelete) {
+            int removed = children.removeAll(child);
+            if (shouldDelete) delete child;
+
+            return removed;
+        }
+
+        void SceneNode::removeFromParent() {
+            parent->removeChild(this);
+        }
+
         int SceneNode::getChildCount() const {
             return children.size();
         }

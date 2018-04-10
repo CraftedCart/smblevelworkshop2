@@ -40,6 +40,11 @@ namespace WS2Editor {
                 void addSceneNode();
 
                 /**
+                 * @brief Deletes selected nodes
+                 */
+                void deleteSelected();
+
+                /**
                  * @brief Shows the settings dialog
                  */
                 void showSettings();

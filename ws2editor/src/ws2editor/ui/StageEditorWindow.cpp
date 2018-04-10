@@ -49,6 +49,7 @@ namespace WS2Editor {
             connect(ui->actionQuit, &QAction::triggered, QApplication::instance(), QApplication::quit);
             connect(ui->actionImport, &QAction::triggered, this, &StageEditorWindow::askImportFiles);
             connect(ui->actionNewNode, &QAction::triggered, this, &StageEditorWindow::addSceneNode);
+            connect(ui->actionDelete, &QAction::triggered, this, &StageEditorWindow::deleteSelected);
             connect(ui->actionSettings, &QAction::triggered, this, &StageEditorWindow::showSettings);
             connect(ui->actionAbout, &QAction::triggered, this, &StageEditorWindow::showAbout);
             connect(ui->actionStageIdeaGenerator, &QAction::triggered, this, &StageEditorWindow::showStageIdeaGenerator);
@@ -125,6 +126,17 @@ namespace WS2Editor {
             //ModelManager::modelOutliner->onNodeAdded(newNode); //TODO: This feels hacky
 
             ModelManager::modelOutliner->addNode(newNode, Project::ProjectManager::getActiveProject()->getScene()->getRootNode());
+        }
+
+        void StageEditorWindow::deleteSelected() {
+            using namespace WS2Common::Scene;
+            using namespace WS2Editor::Project;
+
+            QVector<SceneNode*> toDelete = ProjectManager::getActiveProject()->getScene()->getSelectionManager()->getSelectedObjects();
+
+            for (SceneNode *node : toDelete) {
+                ModelManager::modelOutliner->removeNode(node);
+            }
         }
 
         void StageEditorWindow::showSettings() {

@@ -26,6 +26,10 @@ namespace WS2Editor {
         void PhysicsManager::addRigidBody(btRigidBody *rb) {
             dynamicsWorld->addRigidBody(rb);
         }
+
+        void PhysicsManager::removeRigidBody(btRigidBody *rb) {
+            dynamicsWorld->removeRigidBody(rb);
+        }
     }
 }
 
