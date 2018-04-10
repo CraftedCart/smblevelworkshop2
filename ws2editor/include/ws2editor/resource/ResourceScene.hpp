@@ -32,7 +32,7 @@ namespace WS2Editor {
 
             public:
                 /**
-                 * @brief Constructs an empty scene with a SceneNode named `QCoreApplication::translate("SceneNode", "Static")`
+                 * @brief Constructs an empty scene with a SceneNode named `tr("Static")`
                  */
                 ResourceScene();
 
