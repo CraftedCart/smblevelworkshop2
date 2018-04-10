@@ -62,6 +62,8 @@ namespace WS2Editor {
         shaderProjID = glGetUniformLocation(progID, "projMat");
         shaderNormID = glGetUniformLocation(progID, "normMat");
         //shaderTexID = glGetUniformLocation(progID, "texSampler");
+        shaderTexInfluenceID = glGetUniformLocation(progID, "texInfluence");
+        shaderTintID = glGetUniformLocation(progID, "tint");
         shaderRenderCameraNormals = glGetUniformLocation(progID, "renderCameraNormals");
 
         //Load the physics debug shaders
@@ -496,7 +498,7 @@ namespace WS2Editor {
         //If it hasen't, we need to load it first
         if (!meshCache.contains(mesh)) loadMesh(mesh);
 
-        renderFifo.enqueue(new MeshRenderCommand(meshCache[mesh], this, transform, renderCameraNormals));
+        renderFifo.enqueue(new MeshRenderCommand(meshCache[mesh], this, transform, glm::vec4(1.0f), renderCameraNormals));
     }
 
     void RenderManager::renderQueue(GLuint targetFramebuffer) {

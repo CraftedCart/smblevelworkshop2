@@ -9,6 +9,8 @@ layout(location = 0) out vec4 color;
 layout(location = 1) out vec4 outCameraNormal;
 
 uniform sampler2D texSampler;
+uniform float texInfluence;
+uniform vec4 tint;
 
 void main() {
     vec4 lightColor = vec4(1.0f, 1.0f, 1.0f, 1.0f);
@@ -20,7 +22,9 @@ void main() {
     float diff = max(dot(norm, lightDir), 0.0f);
     vec4 diffuse = diff * lightColor;
 
-    color = (ambientLight + diffuse) * texture(texSampler, uv);
+    vec4 textureColor = mix(vec4(1.0f), texture(texSampler, uv), texInfluence);
+
+    color = (ambientLight + diffuse) * textureColor * tint;
     outCameraNormal = cameraNormal;
 }
 

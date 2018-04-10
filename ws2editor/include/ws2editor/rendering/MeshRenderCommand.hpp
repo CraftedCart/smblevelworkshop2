@@ -21,9 +21,16 @@ namespace WS2Editor {
                 RenderManager *renderManager;
                 glm::mat4 transform;
                 bool renderCameraNormals;
+                glm::vec4 tint;
 
             public:
-                MeshRenderCommand(CachedGlMesh *mesh, RenderManager *renderManager, glm::mat4 transform, bool renderCameraNormals = false);
+                MeshRenderCommand(
+                        CachedGlMesh *mesh,
+                        RenderManager *renderManager,
+                        glm::mat4 transform = glm::mat4(1.0f),
+                        glm::vec4 tint = glm::vec4(1.0f),
+                        bool renderCameraNormals = false
+                        );
 
                 virtual void draw() override;
         };

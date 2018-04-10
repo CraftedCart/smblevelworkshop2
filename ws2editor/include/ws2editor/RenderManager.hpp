@@ -71,6 +71,8 @@ namespace WS2Editor {
             GLuint shaderViewID;
             GLuint shaderProjID;
             GLuint shaderNormID;
+            GLuint shaderTexInfluenceID;
+            GLuint shaderTintID;
             //GLuint shaderTexID;
             GLuint shaderRenderCameraNormals;
 
