@@ -476,6 +476,7 @@ namespace WS2Editor {
             const Scene::SceneSelectionManager *selectionManager,
             const glm::mat4 parentTransform) {
         using namespace WS2Editor::Scene;
+        using namespace WS2Common;
 
         glm::mat4 transform = parentTransform;
         transform = glm::translate(transform, node->getPosition());
@@ -495,9 +496,22 @@ namespace WS2Editor {
         } else if (const GoalSceneNode *goal = dynamic_cast<const GoalSceneNode*>(node)) {
             bool isSelected = selectionManager->isSelected(node);
 
+            glm::vec4 goalColor;
+            switch (goal->getType()) {
+                case EnumGoalType::BLUE:
+                    goalColor = glm::vec4(0.13f, 0.59f, 0.95f, 1.0f); break;
+                case EnumGoalType::GREEN:
+                    goalColor = glm::vec4(0.30f, 0.69f, 0.51f, 1.0f); break;
+                case EnumGoalType::RED:
+                    goalColor = glm::vec4(0.95f, 0.26f, 0.21f, 1.0f); break;
+                default:
+                    //This should never happen!
+                    goalColor = glm::vec4(1.0f, 0.0, 1.0f, 1.0f); break;
+            }
+
             for (const ResourceMesh *mesh : goalMesh) {
                 for (const MeshSegment *segment : mesh->getMeshSegments()) {
-                    enqueueRenderMesh(segment, transform, glm::vec4(1.0f), isSelected);
+                    enqueueRenderMesh(segment, transform, goalColor, isSelected);
                 }
             }
         }

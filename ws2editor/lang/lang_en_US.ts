@@ -1203,44 +1203,44 @@ Public License instead of this License.  But first, please read
 <context>
     <name>WS2Editor::UI::StageEditorWindow</name>
     <message>
-        <location filename="../src/ws2editor/ui/StageEditorWindow.cpp" line="89"/>
+        <location filename="../src/ws2editor/ui/StageEditorWindow.cpp" line="88"/>
         <source>Delta: %1ms / Framerate: %2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/ws2editor/ui/StageEditorWindow.cpp" line="98"/>
+        <location filename="../src/ws2editor/ui/StageEditorWindow.cpp" line="97"/>
         <source>Import files</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/ws2editor/ui/StageEditorWindow.cpp" line="100"/>
+        <location filename="../src/ws2editor/ui/StageEditorWindow.cpp" line="99"/>
         <source>All supported file types (*.fbx *.dae *.gltf *.glb *.blend *.3ds *.ase *.obj *.ifc *.xgl *.zgl *.ply *.dxf *.lwo *.lws *.lxo *.stl *.x *.ac *ms3d *.cob *.scn *.mesh.xml *.irrmesh *.irr *.mdl *.md2 *.md3 *.pk3 *.mdc *.md5* *.smd *.vta *.ogex *.3d *.b3d *.q3d *.q3s *.nff *.off *.raw *.ter *.hmp *.ndo *.txt *.xml);;3D models (*.fbx *.dae *.gltf *.glb *.blend *.3ds *.ase *.obj *.ifc *.xgl *.zgl *.ply *.dxf *.lwo *.lws *.lxo *.stl *.x *.ac *ms3d *.cob *.scn *.mesh.xml *.irrmesh *.irr *.mdl *.md2 *.md3 *.pk3 *.mdc *.md5* *.smd *.vta *.ogex *.3d *.b3d *.q3d *.q3s *.nff *.off *.raw *.ter *.hmp *.ndo);;Stage configurations (*.txt *.xml);;All files (*)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/ws2editor/ui/StageEditorWindow.cpp" line="128"/>
+        <location filename="../src/ws2editor/ui/StageEditorWindow.cpp" line="127"/>
         <source>New Node</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/ws2editor/ui/StageEditorWindow.cpp" line="162"/>
+        <location filename="../src/ws2editor/ui/StageEditorWindow.cpp" line="161"/>
         <source>New Blue Goal</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/ws2editor/ui/StageEditorWindow.cpp" line="180"/>
+        <location filename="../src/ws2editor/ui/StageEditorWindow.cpp" line="179"/>
         <source>New Green Goal</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/ws2editor/ui/StageEditorWindow.cpp" line="199"/>
+        <location filename="../src/ws2editor/ui/StageEditorWindow.cpp" line="198"/>
         <source>New Red Goal</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/ws2editor/ui/StageEditorWindow.cpp" line="168"/>
-        <location filename="../src/ws2editor/ui/StageEditorWindow.cpp" line="187"/>
-        <location filename="../src/ws2editor/ui/StageEditorWindow.cpp" line="206"/>
+        <location filename="../src/ws2editor/ui/StageEditorWindow.cpp" line="167"/>
+        <location filename="../src/ws2editor/ui/StageEditorWindow.cpp" line="186"/>
+        <location filename="../src/ws2editor/ui/StageEditorWindow.cpp" line="205"/>
         <source>Static</source>
         <translation type="unfinished"></translation>
     </message>

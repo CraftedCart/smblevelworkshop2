@@ -16,7 +16,7 @@ namespace WS2Common {
                 /**
                  * @brief The type that this node is
                  */
-                EnumGoalType type;
+                EnumGoalType type = EnumGoalType::BLUE;
 
             public:
                 GoalSceneNode(const QString name);
