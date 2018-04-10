@@ -6,18 +6,21 @@
 #ifndef SMBLEVELWORKSHOP2_WS2EDITOR_RENDERMANAGER_HPP
 #define SMBLEVELWORKSHOP2_WS2EDITOR_RENDERMANAGER_HPP
 
-#include "ws2common/model/MeshSegment.hpp"
 #include "ws2editor/CachedGlMesh.hpp"
 #include "ws2editor/CachedGlTexture.hpp"
 #include "ws2editor/rendering/IRenderCommand.hpp"
+#include "ws2editor/scene/SceneSelectionManager.hpp"
+#include "ws2common/scene/SceneNode.hpp"
+#include "ws2common/model/MeshSegment.hpp"
 #include <QFile>
 #include <QQueue>
 #include <QHash>
 
 namespace WS2Editor {
+    using namespace WS2Editor::Rendering;
     using namespace WS2Common::Model;
     using namespace WS2Common::Resource;
-    using namespace WS2Editor::Rendering;
+    using namespace WS2Common::Scene;
 
     /**
      * @brief Don't forget to call init after constructig this
@@ -142,12 +145,34 @@ namespace WS2Editor {
             GLuint loadShaders(QFile *vertFile, QFile *fragFile);
 
             /**
+             * @brief Adds render commands to the render fifo for the node and all it's children recursively
+             *
+             * @param rootNode The node to start searching from
+             * @param selectionManager The scene selection manager - used to determine what objects to render as selected or not
+             */
+            void enqueueRenderScene(SceneNode *rootNode, const Scene::SceneSelectionManager *selectionManager);
+
+            /**
+             * @brief Recursively queues up the node and all the node's children to draw
+             *
+             * @param node The node to queue up and/or recursively iterate over its children to queue
+             * @param selectionManager The scene selection manager - used to determine what objects to render as selected or not
+             * @param transform The world transform of the parent node
+             */
+            void recursiveEnqueueSceneNode(
+                    WS2Common::Scene::SceneNode *node,
+                    const Scene::SceneSelectionManager *selectionManager,
+                    const glm::mat4 parentTransform
+                    );
+
+            /**
              * @brief Adds a RenderMesh command to the render fifo, to be rendered later with renderQueue()
              *
-             * @param mesh
+             * @param mesh The mesh to render
+             * @param transform The world transform of this mesh
              * @param renderCameraNormals Used for the selection outline
              */
-            void enqueueRenderMesh(const MeshSegment *mesh, bool renderCameraNormals);
+            void enqueueRenderMesh(const MeshSegment *mesh, glm::mat4 transform, bool renderCameraNormals);
 
             /**
              * @brief Renders all meshes in the render fifo

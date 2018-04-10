@@ -2,9 +2,10 @@
 
 namespace WS2Editor {
     namespace Rendering {
-        MeshRenderCommand::MeshRenderCommand(CachedGlMesh *mesh, RenderManager *renderManager, bool renderCameraNormals) :
+        MeshRenderCommand::MeshRenderCommand(CachedGlMesh *mesh, RenderManager *renderManager, glm::mat4 transform, bool renderCameraNormals) :
             mesh(mesh),
             renderManager(renderManager),
+            transform(transform),
             renderCameraNormals(renderCameraNormals) {}
 
         void MeshRenderCommand::draw() {
@@ -21,6 +22,7 @@ namespace WS2Editor {
                 glBindTexture(GL_TEXTURE_2D, 0);
             }
 
+            glUniformMatrix4fv(renderManager->shaderModelID, 1, GL_FALSE, &transform[0][0]);
             glUniform1i(renderManager->shaderRenderCameraNormals, renderCameraNormals);
 
             //Draw the segment

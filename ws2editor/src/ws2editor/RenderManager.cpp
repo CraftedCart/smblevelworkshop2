@@ -3,7 +3,9 @@
 #include "ws2editor/rendering/MeshRenderCommand.hpp"
 #include "ws2editor/task/LoadGlTextureTask.hpp"
 #include "ws2editor/task/TaskManager.hpp"
+#include "ws2editor/scene/EditorMeshSceneNode.hpp"
 #include "ws2editor/WS2Editor.hpp"
+#include <glm/gtx/transform.hpp>
 #include <QElapsedTimer>
 #include <QDebug>
 
@@ -457,12 +459,44 @@ namespace WS2Editor {
         return programID;
     }
 
-    void RenderManager::enqueueRenderMesh(const MeshSegment *mesh, bool renderCameraNormals) {
+    void RenderManager::enqueueRenderScene(SceneNode *rootNode, const Scene::SceneSelectionManager *selectionManager) {
+        recursiveEnqueueSceneNode(rootNode, selectionManager, glm::mat4(1.0f));
+    }
+
+    void RenderManager::recursiveEnqueueSceneNode(
+            WS2Common::Scene::SceneNode *node,
+            const Scene::SceneSelectionManager *selectionManager,
+            const glm::mat4 parentTransform) {
+        using namespace WS2Editor::Scene;
+
+        glm::mat4 transform = parentTransform;
+        transform = glm::translate(transform, node->getPosition());
+        transform = glm::rotate(transform, node->getRotation().x, glm::vec3(1.0f, 0.0f, 0.0f));
+        transform = glm::rotate(transform, node->getRotation().y, glm::vec3(0.0f, 1.0f, 0.0f));
+        transform = glm::rotate(transform, node->getRotation().z, glm::vec3(0.0f, 0.0f, 1.0f));
+        transform = glm::scale(transform, node->getScale());
+
+        //Check if this is a renderable object, and enqueue it for rendering if so
+        if (const EditorMeshSceneNode *mesh = dynamic_cast<const EditorMeshSceneNode*>(node)) {
+            const QVector<WS2Common::Model::MeshSegment*>& segments = mesh->getMesh()->getMeshSegments();
+            for (int i = 0; i < segments.size(); i++) {
+                bool isSelected = selectionManager->isSelected(node);
+                enqueueRenderMesh(segments[i], transform, isSelected);
+            }
+        }
+
+        //Check children to recirsively render
+        for (int i = 0; i < node->getChildren().size(); i++) {
+            recursiveEnqueueSceneNode(node->getChildren().at(i), selectionManager, transform);
+        }
+    }
+
+    void RenderManager::enqueueRenderMesh(const MeshSegment *mesh, glm::mat4 transform, bool renderCameraNormals) {
         //First check if the mesh has been cached already
         //If it hasen't, we need to load it first
         if (!meshCache.contains(mesh)) loadMesh(mesh);
 
-        renderFifo.enqueue(new MeshRenderCommand(meshCache[mesh], this, renderCameraNormals));
+        renderFifo.enqueue(new MeshRenderCommand(meshCache[mesh], this, transform, renderCameraNormals));
     }
 
     void RenderManager::renderQueue(GLuint targetFramebuffer) {

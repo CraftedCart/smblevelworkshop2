@@ -19,10 +19,11 @@ namespace WS2Editor {
             protected:
                 CachedGlMesh *mesh;
                 RenderManager *renderManager;
+                glm::mat4 transform;
                 bool renderCameraNormals;
 
             public:
-                MeshRenderCommand(CachedGlMesh *mesh, RenderManager *renderManager, bool renderCameraNormals = false);
+                MeshRenderCommand(CachedGlMesh *mesh, RenderManager *renderManager, glm::mat4 transform, bool renderCameraNormals = false);
 
                 virtual void draw() override;
         };

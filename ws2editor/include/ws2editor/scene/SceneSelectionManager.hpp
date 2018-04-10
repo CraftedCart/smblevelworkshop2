@@ -33,7 +33,7 @@ namespace WS2Editor {
                  *
                  * @return Whether the node is selected or not
                  */
-                bool isSelected(WS2Common::Scene::SceneNode *node);
+                bool isSelected(WS2Common::Scene::SceneNode *node) const;
 
                 /**
                  * @brief Selects the given object and deselects all other objects

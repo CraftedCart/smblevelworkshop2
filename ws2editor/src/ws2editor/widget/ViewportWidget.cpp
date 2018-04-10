@@ -2,7 +2,6 @@
 #include "ws2common/MathUtils.hpp"
 #include "ws2editor/project/ProjectManager.hpp"
 #include "ws2editor/resource/ResourceManager.hpp"
-#include "ws2editor/scene/EditorMeshSceneNode.hpp"
 #include "ws2editor/physics/PhysicsManger.hpp"
 #include "ws2editor/PhysicsDebugDrawer.hpp"
 #include "ws2editor/Config.hpp"
@@ -287,7 +286,10 @@ namespace WS2Editor {
             Resource::ResourceScene *scene = Project::ProjectManager::getActiveProject()->getScene();
 
             if (scene != nullptr) {
-                recursiveDrawSceneNode(scene->getRootNode(), glm::mat4(1.0f));
+                renderManager->enqueueRenderScene(
+                        scene->getRootNode(),
+                        Project::ProjectManager::getActiveProject()->getScene()->getSelectionManager()
+                        );
             }
 
             renderManager->renderQueue(defaultFramebufferObject());
@@ -350,29 +352,6 @@ namespace WS2Editor {
 
             //Emit the frameRendered Signal
             emit frameRendered(deltaNanoseconds);
-        }
-
-        void ViewportWidget::recursiveDrawSceneNode(WS2Common::Scene::SceneNode *node, const glm::mat4 parentTransform) const {
-            glm::mat4 transform = parentTransform;
-            transform = glm::translate(transform, node->getPosition());
-            transform = glm::rotate(transform, node->getRotation().x, glm::vec3(1.0f, 0.0f, 0.0f));
-            transform = glm::rotate(transform, node->getRotation().y, glm::vec3(0.0f, 1.0f, 0.0f));
-            transform = glm::rotate(transform, node->getRotation().z, glm::vec3(0.0f, 0.0f, 1.0f));
-            transform = glm::scale(transform, node->getScale());
-
-            if (const Scene::EditorMeshSceneNode *mesh = dynamic_cast<const Scene::EditorMeshSceneNode*>(node)) {
-                glUniformMatrix4fv(renderManager->shaderModelID, 1, GL_FALSE, &transform[0][0]);
-
-                const QVector<WS2Common::Model::MeshSegment*>& segments = mesh->getMesh()->getMeshSegments();
-                for (int i = 0; i < segments.size(); i++) {
-                    bool isSelected = Project::ProjectManager::getActiveProject()->getScene()->getSelectionManager()->isSelected(node);
-                    renderManager->enqueueRenderMesh(segments[i], isSelected);
-                }
-            }
-
-            for (int i = 0; i < node->getChildren().size(); i++) {
-                recursiveDrawSceneNode(node->getChildren().at(i), transform);
-            }
         }
 
         void ViewportWidget::drawObjectTooltipAtPos(QPainter &painter, glm::vec2 pos) {

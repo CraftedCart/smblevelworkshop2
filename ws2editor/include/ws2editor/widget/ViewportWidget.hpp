@@ -127,13 +127,6 @@ namespace WS2Editor {
                  */
                 void drawText(QPainter &painter, const glm::vec3 &pos, const QString &str, const QColor &col);
 
-                /**
-                 * @brief Recursively draws the node and all the node's children
-                 *
-                 * @param node The node to draw and/or recursively iterate over its children to draw
-                 * @param transform The world transform of the parent node
-                 */
-                void recursiveDrawSceneNode(WS2Common::Scene::SceneNode *node, const glm::mat4 parentTransform) const;
 
                 /**
                  * @brief Draws info on the viewport (such as a tip of the day)
