@@ -11,12 +11,18 @@ namespace WS2Editor {
             mesh->updateAccessTimer();
 
             //Set up textures
-            for (int i = 0; i < mesh->getTextures().size(); i++) {
+            for (int i = 0; i < renderManager->MAX_SHADER_TEXTURES; i++) {
                 glActiveTexture(GL_TEXTURE0 + i);
-                CachedGlTexture *tex = renderManager->getTextureForResourceTexture(mesh->getTextures().at(i));
-                tex->updateAccessTimer();
-                glBindTexture(GL_TEXTURE_2D, tex->getTextureId());
+
+                if (i < mesh->getTextures().size()) {
+                    CachedGlTexture *tex = renderManager->getTextureForResourceTexture(mesh->getTextures().at(i));
+                    tex->updateAccessTimer();
+                    glBindTexture(GL_TEXTURE_2D, tex->getTextureId());
+                } else {
+                    glBindTexture(GL_TEXTURE_2D, 0);
+                }
             }
+
             static const int texIDs[32] = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31};
             glUniform1iv(renderManager->shaderTexID, renderManager->MAX_SHADER_TEXTURES, texIDs);
             glUniform1i(renderManager->shaderRenderCameraNormals, renderCameraNormals);
