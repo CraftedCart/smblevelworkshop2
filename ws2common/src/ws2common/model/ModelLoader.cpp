@@ -1,4 +1,5 @@
 #include "ws2common/model/ModelLoader.hpp"
+#include "ws2common/exception/IOException.hpp"
 #include "ws2common/exception/ModelLoadingException.hpp"
 #include "ws2common/MathUtils.hpp"
 #include <assimp/Importer.hpp>
@@ -8,22 +9,27 @@
 namespace WS2Common {
     namespace Model {
         namespace ModelLoader {
-                /**
-                 * @throws IOException When failing to read the file
-                 * @throws RuntimeException When Assimp fails to generate an aiScene
-                 */
                 QVector<WS2Common::Resource::ResourceMesh*> loadModel(
                         QFile &file,
                         QVector<Resource::AbstractResource*> *resources,
                         QMutex *resourcesMutex
                         ) {
-                    //The file is from elsewhere - Assume it's from the local filesystem, and pass it to Assimp
-                    return addModelFromFile(file.fileName().toLatin1().constData(), resources, resourcesMutex);
+                    QString fileName = file.fileName();
+
+                    if (fileName.startsWith(":")) {
+                        //Is's from the resources - we must load binary data outselves
+                        if (!file.open(QIODevice::ReadOnly)) {
+                            throw WS2Common::Exception::IOException("Failed to open the resource file for reading");
+                        }
+
+                        QByteArray bytes = file.readAll();
+                        return addModelFromMemory(bytes.data(), bytes.size(), resources, resourcesMutex);
+                    } else {
+                        //The file is from elsewhere - Assume it's from the local filesystem, and pass it to Assimp
+                        return addModelFromFile(fileName.toLatin1().constData(), resources, resourcesMutex);
+                    }
                 }
 
-                /**
-                 * @throws ModelLoadingException When Assimp fails to generate an aiScene
-                 */
                 QVector<WS2Common::Resource::ResourceMesh*> addModelFromFile(
                         const char *filePath,
                         QVector<Resource::AbstractResource*> *resources,
@@ -49,6 +55,35 @@ namespace WS2Common {
                     const glm::mat4 globalTransform = MathUtils::toGlmMat4(scene->mRootNode->mTransformation);
                     const QString filePathStr(filePath);
                     processNode(scene->mRootNode, scene, globalTransform, &filePathStr, &parentDir, meshVector, resources, resourcesMutex);
+
+                    return meshVector;
+                }
+
+                QVector<WS2Common::Resource::ResourceMesh*> addModelFromMemory(
+                        const void *bytes,
+                        size_t byteCount,
+                        QVector<Resource::AbstractResource*> *resources,
+                        QMutex *resourcesMutex
+                        ) {
+                    Assimp::Importer importer;
+                    const aiScene *scene = importer.ReadFileFromMemory(
+                            bytes,
+                            byteCount,
+                            aiProcess_Triangulate | aiProcess_GenNormals
+                            );
+
+                    //Check if stuff went wrong
+                    if (!scene || scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE || !scene->mRootNode) {
+                        //Oh noes!
+                        throw WS2Common::Exception::ModelLoadingException(QString(importer.GetErrorString()));
+                    }
+
+                    QVector<WS2Common::Resource::ResourceMesh*> meshVector;
+
+                    const glm::mat4 globalTransform = MathUtils::toGlmMat4(scene->mRootNode->mTransformation);
+                    QString filePath;
+                    QDir parentDir;
+                    processNode(scene->mRootNode, scene, globalTransform, &filePath, &parentDir, meshVector, resources, resourcesMutex);
 
                     return meshVector;
                 }

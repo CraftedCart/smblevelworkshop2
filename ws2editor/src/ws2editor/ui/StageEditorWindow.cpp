@@ -8,6 +8,7 @@
 #include "ws2editor/task/ImportFileTask.hpp"
 #include "ws2editor/WS2Editor.hpp"
 #include "ws2common/scene/GroupSceneNode.hpp"
+#include "ws2common/scene/GoalSceneNode.hpp"
 #include <QFontDatabase>
 #include <Qt>
 #include <QFileDialog>
@@ -54,6 +55,9 @@ namespace WS2Editor {
             connect(ui->actionAbout, &QAction::triggered, this, &StageEditorWindow::showAbout);
             connect(ui->actionStageIdeaGenerator, &QAction::triggered, this, &StageEditorWindow::showStageIdeaGenerator);
             connect(ui->actionWorkshopDiscord, &QAction::triggered, [](){ QDesktopServices::openUrl(QUrl("https://discord.gg/CEYjvDj")); });
+            connect(ui->actionAddGoalBlue, &QAction::triggered, this, &StageEditorWindow::addGoalBlue);
+            connect(ui->actionAddGoalGreen, &QAction::triggered, this, &StageEditorWindow::addGoalGreen);
+            connect(ui->actionAddGoalRed, &QAction::triggered, this, &StageEditorWindow::addGoalRed);
 
 
             //Debug menu
@@ -122,9 +126,6 @@ namespace WS2Editor {
 
         void StageEditorWindow::addSceneNode() {
             WS2Common::Scene::GroupSceneNode *newNode = new WS2Common::Scene::GroupSceneNode(tr("New Node"));
-            //Project::ProjectManager::getActiveProject()->getScene()->getRootNode()->addChild(newNode);
-            //ModelManager::modelOutliner->onNodeAdded(newNode); //TODO: This feels hacky
-
             ModelManager::modelOutliner->addNode(newNode, Project::ProjectManager::getActiveProject()->getScene()->getRootNode());
         }
 
@@ -152,6 +153,61 @@ namespace WS2Editor {
         void StageEditorWindow::showStageIdeaGenerator() {
             StageIdeaGeneratorWindow *win = new StageIdeaGeneratorWindow();
             win->show();
+        }
+
+        void StageEditorWindow::addGoalBlue() {
+            using namespace WS2Editor::Resource;
+            using namespace WS2Common::Scene;
+
+            GoalSceneNode *newNode = new WS2Common::Scene::GoalSceneNode(tr("New Blue Goal"));
+            ResourceScene *scene = Project::ProjectManager::getActiveProject()->getScene();
+            SceneNode *staticNode = scene->getStaticNode();
+
+            if (staticNode == nullptr) {
+                //No static nodes exist - create one
+                staticNode = new WS2Common::Scene::GroupSceneNode(tr("Static"));
+                ModelManager::modelOutliner->addNode(newNode, Project::ProjectManager::getActiveProject()->getScene()->getRootNode());
+            }
+
+            ModelManager::modelOutliner->addNode(newNode, staticNode);
+        }
+
+        void StageEditorWindow::addGoalGreen() {
+            using namespace WS2Editor::Resource;
+            using namespace WS2Common::Scene;
+            using namespace WS2Common;
+
+            GoalSceneNode *newNode = new WS2Common::Scene::GoalSceneNode(tr("New Green Goal"));
+            newNode->setType(EnumGoalType::GREEN);
+            ResourceScene *scene = Project::ProjectManager::getActiveProject()->getScene();
+            SceneNode *staticNode = scene->getStaticNode();
+
+            if (staticNode == nullptr) {
+                //No static nodes exist - create one
+                staticNode = new WS2Common::Scene::GroupSceneNode(tr("Static"));
+                ModelManager::modelOutliner->addNode(newNode, Project::ProjectManager::getActiveProject()->getScene()->getRootNode());
+            }
+
+            ModelManager::modelOutliner->addNode(newNode, staticNode);
+        }
+
+        void StageEditorWindow::addGoalRed() {
+            using namespace WS2Editor::Resource;
+            using namespace WS2Common::Scene;
+            using namespace WS2Common;
+
+            GoalSceneNode *newNode = new WS2Common::Scene::GoalSceneNode(tr("New Red Goal"));
+            newNode->setType(EnumGoalType::RED);
+            ResourceScene *scene = Project::ProjectManager::getActiveProject()->getScene();
+            SceneNode *staticNode = scene->getStaticNode();
+
+            if (staticNode == nullptr) {
+                //No static nodes exist - create one
+                staticNode = new WS2Common::Scene::GroupSceneNode(tr("Static"));
+                ModelManager::modelOutliner->addNode(newNode, Project::ProjectManager::getActiveProject()->getScene()->getRootNode());
+            }
+
+            ModelManager::modelOutliner->addNode(newNode, staticNode);
         }
     }
 }

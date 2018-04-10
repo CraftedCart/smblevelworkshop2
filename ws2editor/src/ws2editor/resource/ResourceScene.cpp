@@ -41,6 +41,18 @@ namespace WS2Editor {
             return rootNode;
         }
 
+        WS2Common::Scene::SceneNode* ResourceScene::getStaticNode() {
+            using namespace WS2Common::Scene;
+
+            //Search for non-animated nodes
+            for (SceneNode *node : rootNode->getChildren()) {
+                if (node->getTransformAnimation() == nullptr) return node;
+            }
+
+            //Nothing found
+            return nullptr;
+        }
+
         Scene::SceneSelectionManager* ResourceScene::getSelectionManager() {
             return selectionManager;
         }

@@ -156,6 +156,10 @@
    <addaction name="actionPaste"/>
    <addaction name="separator"/>
    <addaction name="actionDelete"/>
+   <addaction name="separator"/>
+   <addaction name="actionAddGoalBlue"/>
+   <addaction name="actionAddGoalGreen"/>
+   <addaction name="actionAddGoalRed"/>
   </widget>
   <widget class="QStatusBar" name="statusBar"/>
   <widget class="QDockWidget" name="outlinerDockWidget">
@@ -558,6 +562,33 @@
   <action name="actionClearAllRenderManagerCaches">
    <property name="text">
     <string>Clear all RenderManager caches</string>
+   </property>
+  </action>
+  <action name="actionAddGoalBlue">
+   <property name="icon">
+    <iconset resource="../../../resources/Workshop2/Workshop2Resources.qrc">
+     <normaloff>:/Workshop2/Icons/GoalBlue.png</normaloff>:/Workshop2/Icons/GoalBlue.png</iconset>
+   </property>
+   <property name="text">
+    <string>Add Blue Goal</string>
+   </property>
+  </action>
+  <action name="actionAddGoalGreen">
+   <property name="icon">
+    <iconset resource="../../../resources/Workshop2/Workshop2Resources.qrc">
+     <normaloff>:/Workshop2/Icons/GoalGreen.png</normaloff>:/Workshop2/Icons/GoalGreen.png</iconset>
+   </property>
+   <property name="text">
+    <string>Add Green Goal</string>
+   </property>
+  </action>
+  <action name="actionAddGoalRed">
+   <property name="icon">
+    <iconset resource="../../../resources/Workshop2/Workshop2Resources.qrc">
+     <normaloff>:/Workshop2/Icons/GoalRed.png</normaloff>:/Workshop2/Icons/GoalRed.png</iconset>
+   </property>
+   <property name="text">
+    <string>Add Red Goal</string>
    </property>
   </action>
  </widget>

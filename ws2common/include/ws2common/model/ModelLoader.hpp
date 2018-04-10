@@ -26,6 +26,9 @@ namespace WS2Common {
                  * @param resourcesMutex A mutex to prevent multiple threads from writing to resources simultaneously (optional)
                  *
                  * @return A vector of added meshes
+                 *
+                 * @throws IOException When failing to read the file
+                 * @throws RuntimeException When Assimp fails to generate an aiScene
                  */
                 QVector<WS2Common::Resource::ResourceMesh*> loadModel(
                         QFile &file,
@@ -42,9 +45,30 @@ namespace WS2Common {
                  * @param resourcesMutex A mutex to prevent multiple threads from writing to resources simultaneously (optional)
                  *
                  * @return A vector of added meshes
+                 *
+                 * @throws ModelLoadingException When Assimp fails to generate an aiScene
                  */
                 QVector<WS2Common::Resource::ResourceMesh*> addModelFromFile(
                         const char *filePath,
+                        QVector<Resource::AbstractResource*> *resources = nullptr,
+                        QMutex *resourcesMutex = nullptr
+                        );
+
+                /**
+                 * @brief Append a model to the scene from the binary data given
+                 *
+                 * @param filePath The file path to the model file to append
+                 * @param resources A vector of resources (Optional) - Used to prevent creating duplicate resources, and
+                 *                  is appended to when loading models and textures
+                 * @param resourcesMutex A mutex to prevent multiple threads from writing to resources simultaneously (optional)
+                 *
+                 * @return A vector of added meshes
+                 *
+                 * @throws ModelLoadingException When Assimp fails to generate an aiScene
+                 */
+                QVector<WS2Common::Resource::ResourceMesh*> addModelFromMemory(
+                        const void *bytes,
+                        size_t byteCount,
                         QVector<Resource::AbstractResource*> *resources = nullptr,
                         QMutex *resourcesMutex = nullptr
                         );

@@ -5,6 +5,8 @@
 #include "ws2editor/task/TaskManager.hpp"
 #include "ws2editor/scene/EditorMeshSceneNode.hpp"
 #include "ws2editor/WS2Editor.hpp"
+#include "ws2common/model/ModelLoader.hpp"
+#include "ws2common/scene/GoalSceneNode.hpp"
 #include <glm/gtx/transform.hpp>
 #include <QElapsedTimer>
 #include <QDebug>
@@ -81,6 +83,10 @@ namespace WS2Editor {
         compositeShaderProg = loadShaders(&compositeVertFile, &compositeFragFile);
         compositeShaderTextureId = glGetUniformLocation(compositeShaderProg, "texSampler");
         compositeShaderCameraNormalsTextureId = glGetUniformLocation(compositeShaderProg, "cameraNormalsTexSampler");
+
+        //Load default models
+        QFile goalFile(":/Workshop2/Models/goal.fbx");
+        goalMesh = WS2Common::Model::ModelLoader::loadModel(goalFile);
 
         checkErrors("After RenderManager::init()");
     }
@@ -481,9 +487,18 @@ namespace WS2Editor {
         //Check if this is a renderable object, and enqueue it for rendering if so
         if (const EditorMeshSceneNode *mesh = dynamic_cast<const EditorMeshSceneNode*>(node)) {
             const QVector<WS2Common::Model::MeshSegment*>& segments = mesh->getMesh()->getMeshSegments();
-            for (int i = 0; i < segments.size(); i++) {
-                bool isSelected = selectionManager->isSelected(node);
-                enqueueRenderMesh(segments[i], transform, isSelected);
+            bool isSelected = selectionManager->isSelected(node);
+
+            for (const MeshSegment *segment : segments) {
+                enqueueRenderMesh(segment, transform, glm::vec4(1.0f), isSelected);
+            }
+        } else if (const GoalSceneNode *goal = dynamic_cast<const GoalSceneNode*>(node)) {
+            bool isSelected = selectionManager->isSelected(node);
+
+            for (const ResourceMesh *mesh : goalMesh) {
+                for (const MeshSegment *segment : mesh->getMeshSegments()) {
+                    enqueueRenderMesh(segment, transform, glm::vec4(1.0f), isSelected);
+                }
             }
         }
 
@@ -493,12 +508,12 @@ namespace WS2Editor {
         }
     }
 
-    void RenderManager::enqueueRenderMesh(const MeshSegment *mesh, glm::mat4 transform, bool renderCameraNormals) {
+    void RenderManager::enqueueRenderMesh(const MeshSegment *mesh, glm::mat4 transform, glm::vec4 tint, bool renderCameraNormals) {
         //First check if the mesh has been cached already
         //If it hasen't, we need to load it first
         if (!meshCache.contains(mesh)) loadMesh(mesh);
 
-        renderFifo.enqueue(new MeshRenderCommand(meshCache[mesh], this, transform, glm::vec4(1.0f), renderCameraNormals));
+        renderFifo.enqueue(new MeshRenderCommand(meshCache[mesh], this, transform, tint, renderCameraNormals));
     }
 
     void RenderManager::renderQueue(GLuint targetFramebuffer) {

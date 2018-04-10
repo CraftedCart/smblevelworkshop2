@@ -73,6 +73,13 @@ namespace WS2Editor {
                 WS2Common::Scene::SceneNode* getRootNode();
 
                 /**
+                 * @brief Fetches the first static node it can find, or nullptr if one doesn't exist
+                 *
+                 * @return This scene's first static node, or nullptr is there are none
+                 */
+                WS2Common::Scene::SceneNode* getStaticNode();
+
+                /**
                  * @brief Getter for selectionManager
                  *
                  * @return This scene's selection manager

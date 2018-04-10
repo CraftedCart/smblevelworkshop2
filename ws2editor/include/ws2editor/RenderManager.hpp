@@ -11,7 +11,7 @@
 #include "ws2editor/rendering/IRenderCommand.hpp"
 #include "ws2editor/scene/SceneSelectionManager.hpp"
 #include "ws2common/scene/SceneNode.hpp"
-#include "ws2common/model/MeshSegment.hpp"
+#include "ws2common/resource/ResourceMesh.hpp"
 #include <QFile>
 #include <QQueue>
 #include <QHash>
@@ -64,6 +64,9 @@ namespace WS2Editor {
 
             int viewportWidth;
             int viewportHeight;
+
+            //Default models
+            QVector<ResourceMesh*> goalMesh;
 
         public:
             GLuint progID;
@@ -174,7 +177,12 @@ namespace WS2Editor {
              * @param transform The world transform of this mesh
              * @param renderCameraNormals Used for the selection outline
              */
-            void enqueueRenderMesh(const MeshSegment *mesh, glm::mat4 transform, bool renderCameraNormals);
+            void enqueueRenderMesh(
+                    const MeshSegment *mesh,
+                    glm::mat4 transform,
+                    glm::vec4 tint = glm::vec4(1.0f),
+                    bool renderCameraNormals = false
+                    );
 
             /**
              * @brief Renders all meshes in the render fifo

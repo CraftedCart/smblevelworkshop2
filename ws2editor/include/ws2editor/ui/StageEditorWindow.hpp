@@ -59,6 +59,10 @@ namespace WS2Editor {
                  */
                 void showStageIdeaGenerator();
 
+                void addGoalBlue();
+                void addGoalGreen();
+                void addGoalRed();
+
             private:
                 Ui::StageEditorWindow *ui;
         };
