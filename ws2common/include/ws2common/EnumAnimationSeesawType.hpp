@@ -6,6 +6,8 @@
 #ifndef SMBLEVELWORKSHOP2_WS2COMMON_ENUMANIMATIONSEESAWTYPE_HPP
 #define SMBLEVELWORKSHOP2_WS2COMMON_ENUMANIMATIONSEESAWTYPE_HPP
 
+#include <QString>
+
 namespace WS2Common {
 
     /**
@@ -17,6 +19,10 @@ namespace WS2Common {
         ANIMATION,
         SEESAW
     };
+
+    namespace AnimationSeesawType {
+        QString toString(EnumAnimationSeesawType type);
+    }
 }
 
 #endif

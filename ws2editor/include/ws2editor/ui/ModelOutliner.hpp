@@ -8,6 +8,7 @@
 
 #include "ws2common/scene/SceneNode.hpp"
 #include <QAbstractTableModel>
+#include <QMimeData>
 
 namespace WS2Editor {
     namespace UI {
@@ -33,6 +34,22 @@ namespace WS2Editor {
                 virtual QModelIndex parent(const QModelIndex &parent = QModelIndex()) const override;
                 virtual Qt::ItemFlags flags(const QModelIndex &index) const override;
                 //QVariant headerData(int section, Qt::Orientation orientation, int role = Qt::DisplayRole) const override;
+                virtual QStringList mimeTypes() const override;
+                virtual QMimeData* mimeData(const QModelIndexList &indexes) const override;
+                virtual bool canDropMimeData(
+                        const QMimeData *data,
+                        Qt::DropAction action,
+                        int row,
+                        int column,
+                        const QModelIndex &parent
+                        ) const override;
+                virtual bool dropMimeData(
+                        const QMimeData *data,
+                        Qt::DropAction action,
+                        int row,
+                        int column,
+                        const QModelIndex &parent
+                        ) override;
 
                 /**
                  * @brief Returns the model index for a given node

@@ -10,6 +10,7 @@
 #include "ws2common/EnumAnimationSeesawType.hpp"
 #include <glm/glm.hpp>
 #include <QVector>
+#include <QXmlStreamWriter>
 
 namespace WS2Common {
     namespace Scene {
@@ -42,7 +43,28 @@ namespace WS2Common {
                 float seesawResetStiffness = 0.0f;
                 float seesawRotationBounds = 0.0f;
 
+            protected:
+                /**
+                 * @brief Serializes the data stored in this node to an XML format
+                 *
+                 * @note When overriding this, you must call the super
+                 *
+                 * @param sT he XML stream writer to write to
+                 */
+                virtual void serializeNodeDataXml(QXmlStreamWriter &s) const;
+
+                /**
+                 * @brief This returns the identifier used to serialize this node class
+                 *
+                 * This should be just the class name in camelCase
+                 *
+                 * @return The identifier used to serialize this node class
+                 */
+                virtual const QString getSerializableName() const;
+
             public:
+                SceneNode() = default;
+
                 /**
                  * @brief Constructs a new SceneNode with the name specified
                  *
@@ -54,6 +76,13 @@ namespace WS2Common {
                  * @brief Deletes all children
                  */
                 virtual ~SceneNode();
+
+                /**
+                 * @brief Serializes the data stored in this node to an XML format
+                 *
+                 * @param stream The XML stream writer to write to
+                 */
+                void serializeXml(QXmlStreamWriter &stream) const;
 
                 /**
                  * @brief Getter for WS2::Scene::SceneNode::name

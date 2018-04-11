@@ -1,4 +1,5 @@
 #include "ws2common/scene/SceneNode.hpp"
+#include "ws2common/SerializeUtils.hpp"
 #include <QtAlgorithms>
 
 namespace WS2Common {
@@ -187,6 +188,50 @@ namespace WS2Common {
 
         void SceneNode::setSeesawRotationBounds(float value) {
             seesawRotationBounds = value;
+        }
+
+        void SceneNode::serializeXml(QXmlStreamWriter &s) const {
+            s.writeStartElement("node-" + getSerializableName());
+
+            s.writeStartElement("data");
+            serializeNodeDataXml(s);
+            s.writeEndElement();
+
+            s.writeStartElement("children");
+            for (SceneNode *child : children) child->serializeXml(s);
+            s.writeEndElement();
+
+            s.writeEndElement();
+        }
+
+        const QString SceneNode::getSerializableName() const {
+            return "sceneNode";
+        }
+
+        void SceneNode::serializeNodeDataXml(QXmlStreamWriter &s) const {
+            s.writeStartElement("data-" + SceneNode::getSerializableName());
+
+            s.writeTextElement("name", name);
+
+            SerializeUtils::writeVec3(s, "originPosition", originPosition);
+            SerializeUtils::writeVec3(s, "originRotation", originRotation);
+
+            SerializeUtils::writeVec3(s, "position", position);
+            SerializeUtils::writeVec3(s, "rotation", rotation);
+            SerializeUtils::writeVec3(s, "scale", scale);
+
+            SerializeUtils::writeVec3(s, "conveyorSpeed", conveyorSpeed);
+
+            //TODO: Transform animation
+
+            s.writeTextElement("animationGroupId", QString::number(animationGroupId));
+            s.writeTextElement("animationSeesawType", AnimationSeesawType::toString(animationSeesawType));
+
+            s.writeTextElement("seesawSensitivity", QString::number(seesawSensitivity));
+            s.writeTextElement("seesawResetStiffness", QString::number(seesawResetStiffness));
+            s.writeTextElement("seesawRotationBounds", QString::number(seesawRotationBounds));
+
+            s.writeEndElement();
         }
     }
 }
