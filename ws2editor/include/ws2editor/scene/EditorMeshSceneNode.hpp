@@ -23,7 +23,7 @@ namespace WS2Editor {
          * @brief Extends on the MeshSceneNode, providing extra functionality to integrate it into WS2Editor, such as
          *        a renderable mesh and collision shape for raycasting.
          */
-        class EditorMeshSceneNode : public WS2Common::Scene::MeshSceneNode {
+        class __attribute__((deprecated("EditorMeshSceneNode is about to be deleted"))) EditorMeshSceneNode : public WS2Common::Scene::MeshSceneNode {
             protected:
                 ResourceScene *scene;
 
@@ -42,7 +42,7 @@ namespace WS2Editor {
                  * @param name The name of the node
                  * @param scene The scene this mesh is a part of
                  */
-                EditorMeshSceneNode(const QString name, ResourceScene *scene);
+                EditorMeshSceneNode(const QString name, ResourceScene *scene) __attribute__((deprecated("EditorMeshSceneNode is about to be deleted")));
 
                 /**
                  * @brief Constructs a EditorMeshSceneNode with a mesh
@@ -54,26 +54,26 @@ namespace WS2Editor {
                  * @param scene The scene this mesh is a part of
                  * @param mesh A pointer to the mesh to set
                  */
-                EditorMeshSceneNode(const QString name, ResourceScene *scene, WS2Common::Resource::ResourceMesh *mesh);
+                EditorMeshSceneNode(const QString name, ResourceScene *scene, WS2Common::Resource::ResourceMesh *mesh) __attribute__((deprecated("EditorMeshSceneNode is about to be deleted")));
 
                 /**
                  * @brief Frees up resources
                  */
-                ~EditorMeshSceneNode();
+                ~EditorMeshSceneNode() __attribute__((deprecated("EditorMeshSceneNode is about to be deleted")));
 
                 /**
                  * @brief Getter for WS2Editor::Scene::EditorMeshSceneNode::mesh
                  *
                  * @return A pointer to the mesh
                  */
-                const WS2Common::Resource::ResourceMesh* getMesh() const;
+                const WS2Common::Resource::ResourceMesh* getMesh() const __attribute__((deprecated("EditorMeshSceneNode is about to be deleted")));
 
                 /**
                  * @brief Getter for WS2Editor::Scene::EditorMeshSceneNode::physicsRigidBody
                  *
                  * @return A pointer to this node's rigid body
                  */
-                btRigidBody* getPhysicsRigidBody();
+                btRigidBody* getPhysicsRigidBody() __attribute__((deprecated("EditorMeshSceneNode is about to be deleted")));
         };
     }
 }
