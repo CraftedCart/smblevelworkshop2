@@ -1,7 +1,7 @@
 #include "ws2editor/resource/ResourceScene.hpp"
 #include "ws2editor/resource/ResourceManager.hpp"
-#include "ws2editor/scene/EditorMeshSceneNode.hpp"
 #include "ws2editor/ui/ModelManager.hpp"
+#include "ws2common/scene/MeshSceneNode.hpp"
 #include "ws2common/scene/GroupSceneNode.hpp"
 #include <QByteArray>
 #include <QFileInfo>
@@ -25,6 +25,7 @@ namespace WS2Editor {
             delete selectionManager;
             delete physicsManager;
             if (physicsDebugDrawer != nullptr) delete physicsDebugDrawer;
+            qDeleteAll(nodeMeshData.values());
         }
 
         void ResourceScene::initPhysicsDebugDrawer() {
@@ -57,8 +58,39 @@ namespace WS2Editor {
             return selectionManager;
         }
 
+        const Scene::SceneSelectionManager* ResourceScene::getSelectionManager() const {
+            return selectionManager;
+        }
+
         Physics::PhysicsManager* ResourceScene::getPhysicsManager() {
             return physicsManager;
+        }
+
+        void ResourceScene::addMeshNodeData(const WS2Common::Scene::SceneNode *node, MeshNodeData *data) {
+            nodeMeshData[node] = data;
+
+            physicsManager->addRigidBody(data->getPhysicsContainer()->getRigidBody());
+        }
+
+        bool ResourceScene::removeMeshNodeData(const WS2Common::Scene::SceneNode *node) {
+            MeshNodeData *data = nodeMeshData.take(node);
+
+            if (data != nullptr) {
+                physicsManager->removeRigidBody(data->getPhysicsContainer()->getRigidBody());
+
+                delete data;
+                return true;
+            } else {
+                return false;
+            }
+        }
+
+        MeshNodeData* ResourceScene::getMeshNodeData(const WS2Common::Scene::SceneNode *node) {
+            return nodeMeshData[node];
+        }
+
+        const MeshNodeData* ResourceScene::getMeshNodeData(const WS2Common::Scene::SceneNode *node) const {
+            return nodeMeshData[node];
         }
 
         /**
@@ -80,10 +112,10 @@ namespace WS2Editor {
                 //The .split("@")[0] gets the part of the name before the @ symbol, which should be the name of the mesh
                 //TODO: Make ResourceMesh store the name of a mesh, instead of doing string manip to get the name
                 QString meshName = meshes.at(i)->getId().split("@")[0];
-                EditorMeshSceneNode *meshNode = new EditorMeshSceneNode(meshName, this, meshes.at(i));
+                MeshSceneNode *meshNode = new MeshSceneNode(meshName);
                 meshNode->setMeshName(meshName);
 
-                UI::ModelManager::modelOutliner->addNode(meshNode, staticNode);
+                UI::ModelManager::modelOutliner->addNodeWithMesh(meshNode, staticNode, meshes.at(i));
             }
         }
 
