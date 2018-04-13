@@ -100,28 +100,36 @@ namespace WS2Common {
             this->originRotation = originRotation;
         }
 
+        const Transform& SceneNode::getTransform() const {
+            return transform;
+        }
+
+        Transform& SceneNode::getTransform() {
+            return transform;
+        }
+
         glm::vec3 SceneNode::getPosition() const {
-            return position;
+            return transform.getPosition();
         }
 
         void SceneNode::setPosition(const glm::vec3 position) {
-            this->position = position;
+            transform.setPosition(position);
         }
 
         glm::vec3 SceneNode::getRotation() const {
-            return rotation;
+            return transform.getRotation();
         }
 
         void SceneNode::setRotation(const glm::vec3 rotation) {
-            this->rotation = rotation;
+            transform.setRotation(rotation);
         }
 
         glm::vec3 SceneNode::getScale() const {
-            return scale;
+            return transform.getScale();
         }
 
         void SceneNode::setScale(const glm::vec3 scale) {
-            this->scale = scale;
+            transform.setScale(scale);
         }
 
         glm::vec3 SceneNode::getConveyorSpeed() const {
