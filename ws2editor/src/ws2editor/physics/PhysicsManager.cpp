@@ -1,4 +1,4 @@
-#include "ws2editor/physics/PhysicsManger.hpp"
+#include "ws2editor/physics/PhysicsManager.hpp"
 
 namespace WS2Editor {
     namespace Physics {

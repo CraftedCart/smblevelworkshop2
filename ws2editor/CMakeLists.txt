@@ -99,7 +99,7 @@ set(HEADER_FILES
     ./include/ws2editor/WS2Editor.hpp
     ./include/ws2editor/scene/EditorMeshSceneNode.hpp
     ./include/ws2editor/scene/SceneSelectionManager.hpp
-    ./include/ws2editor/physics/PhysicsManger.hpp
+    ./include/ws2editor/physics/PhysicsManager.hpp
     ./include/ws2editor/PhysicsDebugDrawer.hpp
     ./include/ws2editor/Config.hpp
     ./include/ws2editor/Progress.hpp

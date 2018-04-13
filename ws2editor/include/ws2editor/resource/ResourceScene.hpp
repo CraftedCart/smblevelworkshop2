@@ -7,7 +7,7 @@
 #define SMBLEVELWORKSHOP2_WS2EDITOR_RESOURCE_RESOURCESCENE_HPP
 
 #include "ws2editor/scene/SceneSelectionManager.hpp"
-#include "ws2editor/physics/PhysicsManger.hpp"
+#include "ws2editor/physics/PhysicsManager.hpp"
 #include "ws2editor/PhysicsDebugDrawer.hpp"
 #include "ws2common/resource/AbstractResource.hpp"
 #include "ws2common/scene/SceneNode.hpp"
