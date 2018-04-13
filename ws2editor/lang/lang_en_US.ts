@@ -1147,8 +1147,8 @@ Public License instead of this License.  But first, please read
     <name>WS2Editor::Resource::ResourceScene</name>
     <message>
         <location filename="../src/ws2editor/resource/ResourceScene.cpp" line="13"/>
-        <location filename="../src/ws2editor/resource/ResourceScene.cpp" line="72"/>
-        <location filename="../src/ws2editor/resource/ResourceScene.cpp" line="75"/>
+        <location filename="../src/ws2editor/resource/ResourceScene.cpp" line="100"/>
+        <location filename="../src/ws2editor/resource/ResourceScene.cpp" line="103"/>
         <source>Static</source>
         <translation type="unfinished"></translation>
     </message>

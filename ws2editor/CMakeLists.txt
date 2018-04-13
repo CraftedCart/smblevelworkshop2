@@ -78,6 +78,7 @@ set(SOURCE_FILES
     ./src/ws2editor/CachedGlMesh.cpp
     ./src/ws2editor/CachedGlTexture.cpp
     ./src/ws2editor/rendering/MeshRenderCommand.cpp
+    ./src/ws2editor/MeshNodeData.cpp
     )
 
 set(HEADER_FILES
@@ -114,6 +115,7 @@ set(HEADER_FILES
     ./include/ws2editor/CachedGlTexture.hpp
     ./include/ws2editor/rendering/IRenderCommand.hpp
     ./include/ws2editor/rendering/MeshRenderCommand.hpp
+    ./include/ws2editor/MeshNodeData.hpp
     )
 
 set(UI_FILES

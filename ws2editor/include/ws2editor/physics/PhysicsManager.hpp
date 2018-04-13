@@ -6,7 +6,9 @@
 #ifndef SMBLEVELWORKSHOP2_WS2EDITOR_PHYSICS_PHYSICSMANAGER_HPP
 #define SMBLEVELWORKSHOP2_WS2EDITOR_PHYSICS_PHYSICSMANAGER_HPP
 
+#include "ws2common/scene/SceneNode.hpp"
 #include <btBulletDynamicsCommon.h>
+#include <QHash>
 
 namespace WS2Editor {
     namespace Physics {
@@ -51,6 +53,8 @@ namespace WS2Editor {
                  * @param rb The rigid body to remove
                  */
                 void removeRigidBody(btRigidBody *rb);
+
+                //void addNode(SceneNode *node, )
         };
     }
 }

@@ -25,6 +25,7 @@ namespace WS2Editor {
             delete selectionManager;
             delete physicsManager;
             if (physicsDebugDrawer != nullptr) delete physicsDebugDrawer;
+            qDeleteAll(nodeMeshData.values());
         }
 
         void ResourceScene::initPhysicsDebugDrawer() {
@@ -59,6 +60,33 @@ namespace WS2Editor {
 
         Physics::PhysicsManager* ResourceScene::getPhysicsManager() {
             return physicsManager;
+        }
+
+        void ResourceScene::addMeshNodeData(const WS2Common::Scene::SceneNode *node, MeshNodeData *data) {
+            nodeMeshData[node] = data;
+
+            physicsManager->addRigidBody(data->getPhysicsContainer()->getRigidBody());
+        }
+
+        bool ResourceScene::removeMeshNodeData(const WS2Common::Scene::SceneNode *node) {
+            MeshNodeData *data = nodeMeshData.take(node);
+
+            if (data != nullptr) {
+                physicsManager->removeRigidBody(data->getPhysicsContainer()->getRigidBody());
+
+                delete data;
+                return true;
+            } else {
+                return false;
+            }
+        }
+
+        MeshNodeData* ResourceScene::getMeshNodeData(const WS2Common::Scene::SceneNode *node) {
+            return nodeMeshData[node];
+        }
+
+        const MeshNodeData* ResourceScene::getMeshNodeData(const WS2Common::Scene::SceneNode *node) const {
+            return nodeMeshData[node];
         }
 
         /**
