@@ -1228,6 +1228,13 @@ Public License instead of this License.  But first, please read
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <location filename="../src/ws2editor/ui/StageEditorWindow.cpp" line="167"/>
+        <location filename="../src/ws2editor/ui/StageEditorWindow.cpp" line="186"/>
+        <location filename="../src/ws2editor/ui/StageEditorWindow.cpp" line="205"/>
+        <source>Static</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <location filename="../src/ws2editor/ui/StageEditorWindow.cpp" line="179"/>
         <source>New Green Goal</source>
         <translation type="unfinished"></translation>
@@ -1235,13 +1242,6 @@ Public License instead of this License.  But first, please read
     <message>
         <location filename="../src/ws2editor/ui/StageEditorWindow.cpp" line="198"/>
         <source>New Red Goal</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../src/ws2editor/ui/StageEditorWindow.cpp" line="167"/>
-        <location filename="../src/ws2editor/ui/StageEditorWindow.cpp" line="186"/>
-        <location filename="../src/ws2editor/ui/StageEditorWindow.cpp" line="205"/>
-        <source>Static</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
