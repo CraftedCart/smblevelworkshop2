@@ -216,6 +216,12 @@ namespace WS2Editor {
             if (WS2Editor::qAppRunning) endInsertRows();
         }
 
+        void ModelOutliner::addNodeWithMesh(SceneNode *node, SceneNode *parentNode, ResourceMesh *mesh) {
+            addNode(node, parentNode);
+
+            Project::ProjectManager::getActiveProject()->getScene()->addMeshNodeData(node, new MeshNodeData(node, mesh));
+        }
+
         void ModelOutliner::removeNode(SceneNode *node) {
             //Remove nodes from the selection (If they are even selected)
             Project::ProjectManager::getActiveProject()->getScene()->getSelectionManager()->deselect(node);
@@ -230,6 +236,9 @@ namespace WS2Editor {
             }
 
             node->removeFromParent();
+
+            //Also remove mesh data, if any exists
+            Project::ProjectManager::getActiveProject()->getScene()->removeMeshNodeData(node);
 
             if (WS2Editor::qAppRunning) endRemoveRows();
         }

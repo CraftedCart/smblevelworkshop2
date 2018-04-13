@@ -8,6 +8,7 @@
 
 #include "ws2common/animation/TransformAnimation.hpp"
 #include "ws2common/EnumAnimationSeesawType.hpp"
+#include "ws2common/Transform.hpp"
 #include <glm/glm.hpp>
 #include <QVector>
 #include <QXmlStreamWriter>
@@ -29,9 +30,7 @@ namespace WS2Common {
                 glm::vec3 originPosition = glm::vec3(0.0f, 0.0f, 0.0f);
                 glm::vec3 originRotation = glm::vec3(0.0f, 0.0f, 0.0f);
 
-                glm::vec3 position = glm::vec3(0.0f, 0.0f, 0.0f);
-                glm::vec3 rotation = glm::vec3(0.0f, 0.0f, 0.0f);
-                glm::vec3 scale = glm::vec3(1.0f, 1.0f, 1.0f);
+                Transform transform;
 
                 glm::vec3 conveyorSpeed = glm::vec3(0.0f, 0.0f, 0.0f);
 
@@ -207,6 +206,20 @@ namespace WS2Common {
                  * @param position The new origin point to set
                  */
                 void setOriginRotation(const glm::vec3 originRotationPosition);
+
+                /**
+                 * @brief Getter for transform
+                 *
+                 * @return The transform of the node relative to its parent
+                 */
+                const Transform& getTransform() const;
+
+                /**
+                 * @brief Const getter for transform
+                 *
+                 * @return The transform of the node relative to its parent
+                 */
+                Transform& getTransform();
 
                 /**
                  * @brief Getter for position

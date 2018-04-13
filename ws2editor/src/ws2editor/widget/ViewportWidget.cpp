@@ -2,7 +2,7 @@
 #include "ws2common/MathUtils.hpp"
 #include "ws2editor/project/ProjectManager.hpp"
 #include "ws2editor/resource/ResourceManager.hpp"
-#include "ws2editor/physics/PhysicsManger.hpp"
+#include "ws2editor/physics/PhysicsManager.hpp"
 #include "ws2editor/PhysicsDebugDrawer.hpp"
 #include "ws2editor/Config.hpp"
 #include "ws2editor/task/ImportFileTask.hpp"
@@ -288,7 +288,7 @@ namespace WS2Editor {
             if (scene != nullptr) {
                 renderManager->enqueueRenderScene(
                         scene->getRootNode(),
-                        Project::ProjectManager::getActiveProject()->getScene()->getSelectionManager()
+                        Project::ProjectManager::getActiveProject()->getScene()
                         );
             }
 

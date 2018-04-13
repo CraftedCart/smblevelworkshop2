@@ -41,6 +41,7 @@ set(SOURCE_FILES
     ./src/ws2common/Stage.cpp
     ./src/ws2common/CollisionGrid.cpp
     ./src/ws2common/SerializeUtils.cpp
+    ./src/ws2common/Transform.cpp
     ./src/ws2common/scene/SceneNode.cpp
     ./src/ws2common/scene/StartSceneNode.cpp
     ./src/ws2common/scene/GroupSceneNode.cpp
@@ -83,6 +84,7 @@ set(HEADER_FILES
     ./include/ws2common/Stage.hpp
     ./include/ws2common/CollisionGrid.hpp
     ./include/ws2common/SerializeUtils.hpp
+    ./include/ws2common/Transform.hpp
     ./include/ws2common/scene/SceneNode.hpp
     ./include/ws2common/scene/StartSceneNode.hpp
     ./include/ws2common/scene/GroupSceneNode.hpp

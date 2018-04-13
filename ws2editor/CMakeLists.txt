@@ -63,9 +63,9 @@ set(SOURCE_FILES
     ./src/ws2editor/ui/ModelResources.cpp
     ./src/ws2editor/ui/ModelOutliner.cpp
     ./src/ws2editor/WS2Editor.cpp
-    ./src/ws2editor/scene/EditorMeshSceneNode.cpp
     ./src/ws2editor/scene/SceneSelectionManager.cpp
     ./src/ws2editor/physics/PhysicsManager.cpp
+    ./src/ws2editor/physics/PhysicsContainer.cpp
     ./src/ws2editor/PhysicsDebugDrawer.cpp
     ./src/ws2editor/Config.cpp
     ./src/ws2editor/Progress.cpp
@@ -77,6 +77,7 @@ set(SOURCE_FILES
     ./src/ws2editor/CachedGlMesh.cpp
     ./src/ws2editor/CachedGlTexture.cpp
     ./src/ws2editor/rendering/MeshRenderCommand.cpp
+    ./src/ws2editor/MeshNodeData.cpp
     )
 
 set(HEADER_FILES
@@ -97,9 +98,9 @@ set(HEADER_FILES
     ./include/ws2editor/ui/ModelResources.hpp
     ./include/ws2editor/ui/ModelOutliner.hpp
     ./include/ws2editor/WS2Editor.hpp
-    ./include/ws2editor/scene/EditorMeshSceneNode.hpp
     ./include/ws2editor/scene/SceneSelectionManager.hpp
-    ./include/ws2editor/physics/PhysicsManger.hpp
+    ./include/ws2editor/physics/PhysicsManager.hpp
+    ./include/ws2editor/physics/PhysicsContainer.hpp
     ./include/ws2editor/PhysicsDebugDrawer.hpp
     ./include/ws2editor/Config.hpp
     ./include/ws2editor/Progress.hpp
@@ -112,6 +113,7 @@ set(HEADER_FILES
     ./include/ws2editor/CachedGlTexture.hpp
     ./include/ws2editor/rendering/IRenderCommand.hpp
     ./include/ws2editor/rendering/MeshRenderCommand.hpp
+    ./include/ws2editor/MeshNodeData.hpp
     )
 
 set(UI_FILES

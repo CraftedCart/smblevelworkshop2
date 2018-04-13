@@ -3,9 +3,9 @@
 #include "ws2editor/rendering/MeshRenderCommand.hpp"
 #include "ws2editor/task/LoadGlTextureTask.hpp"
 #include "ws2editor/task/TaskManager.hpp"
-#include "ws2editor/scene/EditorMeshSceneNode.hpp"
 #include "ws2editor/WS2Editor.hpp"
 #include "ws2common/model/ModelLoader.hpp"
+#include "ws2common/scene/MeshSceneNode.hpp"
 #include "ws2common/scene/GoalSceneNode.hpp"
 #include <glm/gtx/transform.hpp>
 #include <QElapsedTimer>
@@ -467,13 +467,13 @@ namespace WS2Editor {
         return programID;
     }
 
-    void RenderManager::enqueueRenderScene(SceneNode *rootNode, const Scene::SceneSelectionManager *selectionManager) {
-        recursiveEnqueueSceneNode(rootNode, selectionManager, glm::mat4(1.0f));
+    void RenderManager::enqueueRenderScene(SceneNode *rootNode, const ResourceScene *scene) {
+        recursiveEnqueueSceneNode(rootNode, scene, glm::mat4(1.0f));
     }
 
     void RenderManager::recursiveEnqueueSceneNode(
             WS2Common::Scene::SceneNode *node,
-            const Scene::SceneSelectionManager *selectionManager,
+            const ResourceScene *scene,
             const glm::mat4 parentTransform) {
         using namespace WS2Editor::Scene;
         using namespace WS2Common;
@@ -486,15 +486,16 @@ namespace WS2Editor {
         transform = glm::scale(transform, node->getScale());
 
         //Check if this is a renderable object, and enqueue it for rendering if so
-        if (const EditorMeshSceneNode *mesh = dynamic_cast<const EditorMeshSceneNode*>(node)) {
-            const QVector<WS2Common::Model::MeshSegment*>& segments = mesh->getMesh()->getMeshSegments();
-            bool isSelected = selectionManager->isSelected(node);
+        if (const MeshSceneNode *mesh = dynamic_cast<const MeshSceneNode*>(node)) {
+            const QVector<WS2Common::Model::MeshSegment*>& segments = scene->getMeshNodeData(mesh)->getMesh()->getMeshSegments();
+
+            bool isSelected = scene->getSelectionManager()->isSelected(node);
 
             for (const MeshSegment *segment : segments) {
                 enqueueRenderMesh(segment, transform, glm::vec4(1.0f), isSelected);
             }
         } else if (const GoalSceneNode *goal = dynamic_cast<const GoalSceneNode*>(node)) {
-            bool isSelected = selectionManager->isSelected(node);
+            bool isSelected = scene->getSelectionManager()->isSelected(node);
 
             glm::vec4 goalColor;
             switch (goal->getType()) {
@@ -518,7 +519,7 @@ namespace WS2Editor {
 
         //Check children to recirsively render
         for (int i = 0; i < node->getChildren().size(); i++) {
-            recursiveEnqueueSceneNode(node->getChildren().at(i), selectionManager, transform);
+            recursiveEnqueueSceneNode(node->getChildren().at(i), scene, transform);
         }
     }
 

@@ -7,8 +7,9 @@
 #define SMBLEVELWORKSHOP2_WS2EDITOR_RESOURCE_RESOURCESCENE_HPP
 
 #include "ws2editor/scene/SceneSelectionManager.hpp"
-#include "ws2editor/physics/PhysicsManger.hpp"
+#include "ws2editor/physics/PhysicsManager.hpp"
 #include "ws2editor/PhysicsDebugDrawer.hpp"
+#include "ws2editor/MeshNodeData.hpp"
 #include "ws2common/resource/AbstractResource.hpp"
 #include "ws2common/scene/SceneNode.hpp"
 #include "ws2common/resource/ResourceMesh.hpp"
@@ -29,6 +30,11 @@ namespace WS2Editor {
                 Scene::SceneSelectionManager *selectionManager;
                 Physics::PhysicsManager *physicsManager;
                 PhysicsDebugDrawer *physicsDebugDrawer = nullptr;
+
+                /**
+                 * @brief This ties nodes to mesh data - used for rendering and ray tracing
+                 */
+                QHash<const WS2Common::Scene::SceneNode*, MeshNodeData*> nodeMeshData;
 
             public:
                 /**
@@ -87,11 +93,54 @@ namespace WS2Editor {
                 Scene::SceneSelectionManager* getSelectionManager();
 
                 /**
+                 * @brief Const getter for selectionManager
+                 *
+                 * @return This scene's selection manager
+                 */
+                const Scene::SceneSelectionManager* getSelectionManager() const;
+
+                /**
                  * @brief Getter for physicsManager
                  *
                  * @return This scene's physics manager
                  */
                 Physics::PhysicsManager* getPhysicsManager();
+
+                /**
+                 * @brief Stores mesh node data in the scene and registers it with the scene physics manager
+                 *
+                 * @param node The node to store data about
+                 * @param data The mesh data to store
+                 */
+                void addMeshNodeData(const WS2Common::Scene::SceneNode *node, MeshNodeData *data);
+
+                /**
+                 * @brief Removes and deletes stored mesh node data from the scene and unregisters it from the scene's
+                 *        physics manager, or does nothing if the node doesn't have mesh data
+                 *
+                 * @param node The node to remove stored data about
+                 *
+                 * @return Whether the node was found and therefore removed or not
+                 */
+                bool removeMeshNodeData(const WS2Common::Scene::SceneNode *node);
+
+                /**
+                 * @brief Retrieves mesh data for a given node
+                 *
+                 * @param node The node to retieve data about
+                 *
+                 * @return The mesh data for the node given, or nullptr is no mesh data is stored for the given node
+                 */
+                MeshNodeData* getMeshNodeData(const WS2Common::Scene::SceneNode *node);
+
+                /**
+                 * @brief Retrieves mesh data for a given node - const edition
+                 *
+                 * @param node The node to retieve data about
+                 *
+                 * @return The mesh data for the node given, or nullptr is no mesh data is stored for the given node
+                 */
+                const MeshNodeData* getMeshNodeData(const WS2Common::Scene::SceneNode *node) const;
 
             public slots:
                 /**

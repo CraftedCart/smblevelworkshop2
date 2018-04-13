@@ -7,12 +7,14 @@
 #define SMBLEVELWORKSHOP2_WS2EDITOR_UI_MODELOUTLINER_HPP
 
 #include "ws2common/scene/SceneNode.hpp"
+#include "ws2common/resource/ResourceMesh.hpp"
 #include <QAbstractTableModel>
 #include <QMimeData>
 
 namespace WS2Editor {
     namespace UI {
         using namespace WS2Common::Scene;
+        using namespace WS2Common::Resource;
 
         class ModelOutliner : public QAbstractTableModel {
             Q_OBJECT
@@ -67,6 +69,15 @@ namespace WS2Editor {
                  * @param parentNode The node to parent the new node to
                  */
                 void addNode(SceneNode *node, SceneNode *parentNode);
+
+                /**
+                 * @brief Adds a node to the parent, registers the mesh with the scene, and updates the model
+                 *
+                 * @param node The new node to add
+                 * @param parentNode The node to parent the new node to
+                 * @param mesh The mesh to register with the scene
+                 */
+                void addNodeWithMesh(SceneNode *node, SceneNode *parentNode, ResourceMesh *mesh);
 
                 /**
                  * @brief Removes a node from its parent and updates the model
