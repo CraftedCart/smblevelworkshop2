@@ -93,6 +93,13 @@ namespace WS2Editor {
                 Scene::SceneSelectionManager* getSelectionManager();
 
                 /**
+                 * @brief Const getter for selectionManager
+                 *
+                 * @return This scene's selection manager
+                 */
+                const Scene::SceneSelectionManager* getSelectionManager() const;
+
+                /**
                  * @brief Getter for physicsManager
                  *
                  * @return This scene's physics manager

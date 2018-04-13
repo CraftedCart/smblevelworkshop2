@@ -9,7 +9,7 @@
 #include "ws2editor/CachedGlMesh.hpp"
 #include "ws2editor/CachedGlTexture.hpp"
 #include "ws2editor/rendering/IRenderCommand.hpp"
-#include "ws2editor/scene/SceneSelectionManager.hpp"
+#include "ws2editor/resource/ResourceScene.hpp"
 #include "ws2common/scene/SceneNode.hpp"
 #include "ws2common/resource/ResourceMesh.hpp"
 #include <QFile>
@@ -18,6 +18,7 @@
 
 namespace WS2Editor {
     using namespace WS2Editor::Rendering;
+    using namespace WS2Editor::Resource;
     using namespace WS2Common::Model;
     using namespace WS2Common::Resource;
     using namespace WS2Common::Scene;
@@ -153,20 +154,20 @@ namespace WS2Editor {
              * @brief Adds render commands to the render fifo for the node and all it's children recursively
              *
              * @param rootNode The node to start searching from
-             * @param selectionManager The scene selection manager - used to determine what objects to render as selected or not
+             * @param scene The scene
              */
-            void enqueueRenderScene(SceneNode *rootNode, const Scene::SceneSelectionManager *selectionManager);
+            void enqueueRenderScene(SceneNode *rootNode, const ResourceScene *scene);
 
             /**
              * @brief Recursively queues up the node and all the node's children to draw
              *
              * @param node The node to queue up and/or recursively iterate over its children to queue
-             * @param selectionManager The scene selection manager - used to determine what objects to render as selected or not
+             * @param selectionManager The scene
              * @param transform The world transform of the parent node
              */
             void recursiveEnqueueSceneNode(
                     WS2Common::Scene::SceneNode *node,
-                    const Scene::SceneSelectionManager *selectionManager,
+                    const ResourceScene *scene,
                     const glm::mat4 parentTransform
                     );
 

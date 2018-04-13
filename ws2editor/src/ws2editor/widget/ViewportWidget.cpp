@@ -288,7 +288,7 @@ namespace WS2Editor {
             if (scene != nullptr) {
                 renderManager->enqueueRenderScene(
                         scene->getRootNode(),
-                        Project::ProjectManager::getActiveProject()->getScene()->getSelectionManager()
+                        Project::ProjectManager::getActiveProject()->getScene()
                         );
             }
 
