@@ -31,7 +31,7 @@ namespace WS2Editor {
         }
 
         void EditorMeshSceneNode::initPhysics() {
-            glm::quat rotQuat = glm::quat(rotation);
+            glm::quat rotQuat = glm::quat(transform.getRotation());
 
             //Construct mesh collision shape
             btTriangleMesh *triMesh = new btTriangleMesh();
@@ -55,7 +55,7 @@ namespace WS2Editor {
 
             physicsMotionState = new btDefaultMotionState(btTransform(
                         btQuaternion(rotQuat.x, rotQuat.y, rotQuat.z, rotQuat.w),
-                        btVector3(position.x, position.y, position.z)
+                        btVector3(transform.getPosition().x, transform.getPosition().y, transform.getPosition().z)
                         ));
 
             btRigidBody::btRigidBodyConstructionInfo constructionInfo(
