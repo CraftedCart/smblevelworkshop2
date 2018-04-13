@@ -3,6 +3,9 @@
  * @brief Header for the Transform class
  */
 
+#ifndef SMBLEVELWORKSHOP2_WS2COMMON_TRANSFORM_HPP
+#define SMBLEVELWORKSHOP2_WS2COMMON_TRANSFORM_HPP
+
 #include <glm/glm.hpp>
 
 namespace WS2Common {
@@ -56,4 +59,6 @@ namespace WS2Common {
             void setScale(const glm::vec3 scale);
     };
 }
+
+#endif
 
