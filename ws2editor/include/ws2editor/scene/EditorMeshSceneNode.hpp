@@ -6,6 +6,7 @@
 #ifndef SMBLEVELWORKSHOP2_WS2EDITOR_SCENE_MESHSCEHENODE_HPP
 #define SMBLEVELWORKSHOP2_WS2EDITOR_SCENE_MESHSCEHENODE_HPP
 
+#include "ws2editor/physics/PhysicsContainer.hpp"
 #include "ws2common/scene/MeshSceneNode.hpp"
 #include "ws2common/resource/ResourceMesh.hpp"
 #include <btBulletDynamicsCommon.h>
@@ -17,6 +18,7 @@ namespace WS2Editor {
 
     namespace Scene {
         using namespace WS2Editor::Resource;
+        using namespace WS2Editor::Physics;
         using namespace WS2Common::Resource;
 
         /**
@@ -27,9 +29,7 @@ namespace WS2Editor {
             protected:
                 ResourceMesh *mesh;
                 ResourceScene *scene;
-                btCollisionShape *physicsCollisionShape;
-                btDefaultMotionState *physicsMotionState;
-                btRigidBody *physicsRigidBody;
+                PhysicsContainer *physicsContainer;
 
                 /**
                  * @brief Initializes physics for the mesh
