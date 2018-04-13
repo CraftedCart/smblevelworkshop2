@@ -224,9 +224,9 @@ namespace WS2Common {
             SerializeUtils::writeVec3(s, "originPosition", originPosition);
             SerializeUtils::writeVec3(s, "originRotation", originRotation);
 
-            SerializeUtils::writeVec3(s, "position", position);
-            SerializeUtils::writeVec3(s, "rotation", rotation);
-            SerializeUtils::writeVec3(s, "scale", scale);
+            SerializeUtils::writeVec3(s, "position", transform.getPosition());
+            SerializeUtils::writeVec3(s, "rotation", transform.getRotation());
+            SerializeUtils::writeVec3(s, "scale", transform.getScale());
 
             SerializeUtils::writeVec3(s, "conveyorSpeed", conveyorSpeed);
 
