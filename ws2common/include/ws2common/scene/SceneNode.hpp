@@ -12,6 +12,7 @@
 #include <glm/glm.hpp>
 #include <QVector>
 #include <QXmlStreamWriter>
+#include <QUuid>
 
 namespace WS2Common {
     namespace Scene {
@@ -23,6 +24,15 @@ namespace WS2Common {
         class SceneNode {
             protected:
                 QString name;
+
+                /**
+                 * @brief A unique identifier for this node
+                 *
+                 * Guaranteed to be 99.99% unique!
+                 *
+                 * @todo Check for collisions... maybe... It would likely be a waste of time tbh
+                 */
+                QUuid uuid = QUuid::createUuid();
 
                 QVector<SceneNode*> children;
                 SceneNode *parent;
@@ -96,6 +106,20 @@ namespace WS2Common {
                  * @param name The new name to set for the node
                  */
                 void setName(const QString name);
+
+                /**
+                 * @brief Getter for uuid
+                 *
+                 * @return The uuid of this node
+                 */
+                const QUuid getUuid() const;
+
+                /**
+                 * @brief Setter for uuid
+                 *
+                 * @param uuid The new uuid to set for the node
+                 */
+                void setUuid(const QUuid uuid);
 
                 /**
                  * @brief Getter for WS2::Scene::SceneNode::children

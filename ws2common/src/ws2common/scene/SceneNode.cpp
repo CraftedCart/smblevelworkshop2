@@ -21,6 +21,14 @@ namespace WS2Common {
             this->name = name;
         }
 
+        const QUuid SceneNode::getUuid() const {
+            return uuid;
+        }
+
+        void SceneNode::setUuid(const QUuid uuid) {
+            this->uuid = uuid;
+        }
+
         QVector<SceneNode*>& SceneNode::getChildren() {
             return children;
         }
@@ -220,6 +228,7 @@ namespace WS2Common {
             s.writeStartElement("data-" + SceneNode::getSerializableName());
 
             s.writeTextElement("name", name);
+            s.writeTextElement("uuid", uuid.toString());
 
             SerializeUtils::writeVec3(s, "originPosition", originPosition);
             SerializeUtils::writeVec3(s, "originRotation", originRotation);

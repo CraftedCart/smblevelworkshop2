@@ -11,6 +11,20 @@ namespace WS2Common {
         const QString MeshSceneNode::getMeshName() const {
             return meshName;
         }
+
+        const QString MeshSceneNode::getSerializableName() const {
+            return "meshSceneNode";
+        }
+
+        void MeshSceneNode::serializeNodeDataXml(QXmlStreamWriter &s) const {
+            SceneNode::serializeNodeDataXml(s);
+
+            s.writeStartElement("data-" + MeshSceneNode::getSerializableName());
+
+            s.writeTextElement("meshName", meshName);
+
+            s.writeEndElement();
+        }
     }
 }
 

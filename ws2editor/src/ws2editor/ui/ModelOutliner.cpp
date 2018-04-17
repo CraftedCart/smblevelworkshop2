@@ -168,6 +168,9 @@ namespace WS2Editor {
                     qCritical().noquote() << "Node deserialization returned nullptr when dropping";
                 }
 
+                //Recreate the mesh node data
+                recursiveTransferMeshNodeDataOwner(node);
+
                 if (parent.isValid()) {
                     addNode(node, static_cast<SceneNode*>(parent.internalPointer()));
                 } else {
@@ -239,7 +242,7 @@ namespace WS2Editor {
         void ModelOutliner::addNodeWithMesh(SceneNode *node, SceneNode *parentNode, ResourceMesh *mesh) {
             addNode(node, parentNode);
 
-            Project::ProjectManager::getActiveProject()->getScene()->addMeshNodeData(node, new MeshNodeData(node, mesh));
+            Project::ProjectManager::getActiveProject()->getScene()->addMeshNodeData(node->getUuid(), new MeshNodeData(node, mesh));
         }
 
         void ModelOutliner::removeNode(SceneNode *node) {
@@ -255,10 +258,11 @@ namespace WS2Editor {
                 beginRemoveRows(parentIndex, removedIndex, removedIndex);
             }
 
-            node->removeFromParent();
+            //Remove mesh data, if any exists **and it's bound to this node**
+            //If it's not bound to this node, it likely just got recreated from a drag-n-drop operation
+            recursiveConditionalDestroyMeshNodeData(node);
 
-            //Also remove mesh data, if any exists
-            Project::ProjectManager::getActiveProject()->getScene()->removeMeshNodeData(node);
+            node->removeFromParent();
 
             if (WS2Editor::qAppRunning) endRemoveRows();
         }
@@ -272,6 +276,35 @@ namespace WS2Editor {
             }
 
             if (emitOnSelectionChanged) emit onSelectionChanged(indices);
+        }
+
+        void ModelOutliner::recursiveTransferMeshNodeDataOwner(SceneNode *node) {
+            MeshNodeData *meshData = Project::ProjectManager::getActiveProject()->getScene()->getMeshNodeData(node->getUuid());
+
+            if (meshData != nullptr) {
+                ResourceMesh *mesh = Project::ProjectManager::getActiveProject()->getScene()->getMeshNodeData(node->getUuid())->getMesh();
+                Project::ProjectManager::getActiveProject()->getScene()->removeMeshNodeData(node->getUuid());
+
+                Project::ProjectManager::getActiveProject()->getScene()->addMeshNodeData(node->getUuid(), new MeshNodeData(node, mesh));
+            }
+
+            //Recursively call this function on children
+            for (SceneNode *child : node->getChildren()) {
+                recursiveTransferMeshNodeDataOwner(child);
+            }
+        }
+
+        void ModelOutliner::recursiveConditionalDestroyMeshNodeData(SceneNode *node) {
+            MeshNodeData *meshData = Project::ProjectManager::getActiveProject()->getScene()->getMeshNodeData(node->getUuid());
+
+            if (meshData != nullptr && meshData->getNode() == node) {
+                Project::ProjectManager::getActiveProject()->getScene()->removeMeshNodeData(node->getUuid());
+            }
+
+            //Recursively call this function on children
+            for (SceneNode *child : node->getChildren()) {
+                recursiveConditionalDestroyMeshNodeData(child);
+            }
         }
 
     }

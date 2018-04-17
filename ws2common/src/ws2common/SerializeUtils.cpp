@@ -9,9 +9,12 @@ namespace WS2Common {
             if (xml.name() == "node-sceneNode") {
                 SceneNode *node = new SceneNode();
                 parseSceneNode(xml, node);
-
                 if (parent != nullptr) parent->addChild(node);
-
+                return node;
+            } else if (xml.name() == "node-meshSceneNode") {
+                MeshSceneNode *node = new MeshSceneNode();
+                parseMeshSceneNode(xml, node);
+                if (parent != nullptr) parent->addChild(node);
                 return node;
             }
 
@@ -24,7 +27,6 @@ namespace WS2Common {
                 if (!xml.isStartElement()) continue; //Ignore all end elements
 
                 if (xml.name() == "data") {
-
                     while (!(xml.isEndElement() && xml.name() == "data")) {
                         xml.readNext();
                         if (!xml.isStartElement()) continue; //Ignore all end elements
@@ -44,13 +46,6 @@ namespace WS2Common {
             }
         }
 
-        void parseChildren(QXmlStreamReader &xml, SceneNode *node) {
-            while (!(xml.isEndElement() && xml.name() == "children")) {
-                xml.readNext();
-                deserializeNodeFromXml(xml, node);
-            }
-        }
-
         void parseSceneNodeData(QXmlStreamReader &xml, SceneNode *node) {
             while (!(xml.isEndElement() && xml.name() == "data-sceneNode")) {
                 xml.readNext();
@@ -58,9 +53,58 @@ namespace WS2Common {
 
                 if (xml.name() == "name") {
                     node->setName(xml.readElementText());
+                } else if (xml.name() == "uuid") {
+                    node->setUuid(QUuid(xml.readElementText()));
                 } else {
                     qCritical().noquote() << "Invalid element data-sceneNode > " + xml.name();
                 }
+            }
+        }
+
+        void parseMeshSceneNode(QXmlStreamReader &xml, MeshSceneNode *node) {
+            while (!(xml.isEndElement() && xml.name() == "node-meshSceneNode")) {
+                xml.readNext();
+                if (!xml.isStartElement()) continue; //Ignore all end elements
+
+                if (xml.name() == "data") {
+                    while (!(xml.isEndElement() && xml.name() == "data")) {
+                        xml.readNext();
+                        if (!xml.isStartElement()) continue; //Ignore all end elements
+
+                        if (xml.name() == "data-sceneNode") {
+                            parseSceneNodeData(xml, node);
+                        } else if (xml.name() == "data-meshSceneNode") {
+                            parseMeshSceneNodeData(xml, node);
+                        } else {
+                            qCritical().noquote() << "Invalid element data > " + xml.name();
+                        }
+                    }
+
+                } else if (xml.name() == "children") {
+                    parseChildren(xml, node);
+                } else {
+                    qCritical().noquote() << "Invalid element node-meshSceneNode > " + xml.name();
+                }
+            }
+        }
+
+        void parseMeshSceneNodeData(QXmlStreamReader &xml, MeshSceneNode *node) {
+            while (!(xml.isEndElement() && xml.name() == "data-meshSceneNode")) {
+                xml.readNext();
+                if (!xml.isStartElement()) continue; //Ignore all end elements
+
+                if (xml.name() == "meshName") {
+                    node->setMeshName(xml.readElementText());
+                } else {
+                    qCritical().noquote() << "Invalid element data-meshSceneNode > " + xml.name();
+                }
+            }
+        }
+
+        void parseChildren(QXmlStreamReader &xml, SceneNode *node) {
+            while (!(xml.isEndElement() && xml.name() == "children")) {
+                xml.readNext();
+                deserializeNodeFromXml(xml, node);
             }
         }
 

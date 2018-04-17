@@ -66,14 +66,14 @@ namespace WS2Editor {
             return physicsManager;
         }
 
-        void ResourceScene::addMeshNodeData(const WS2Common::Scene::SceneNode *node, MeshNodeData *data) {
-            nodeMeshData[node] = data;
+        void ResourceScene::addMeshNodeData(const QUuid &uuid, MeshNodeData *data) {
+            nodeMeshData[uuid] = data;
 
             physicsManager->addRigidBody(data->getPhysicsContainer()->getRigidBody());
         }
 
-        bool ResourceScene::removeMeshNodeData(const WS2Common::Scene::SceneNode *node) {
-            MeshNodeData *data = nodeMeshData.take(node);
+        bool ResourceScene::removeMeshNodeData(const QUuid &uuid) {
+            MeshNodeData *data = nodeMeshData.take(uuid);
 
             if (data != nullptr) {
                 physicsManager->removeRigidBody(data->getPhysicsContainer()->getRigidBody());
@@ -85,12 +85,12 @@ namespace WS2Editor {
             }
         }
 
-        MeshNodeData* ResourceScene::getMeshNodeData(const WS2Common::Scene::SceneNode *node) {
-            return nodeMeshData[node];
+        MeshNodeData* ResourceScene::getMeshNodeData(const QUuid &uuid) {
+            return nodeMeshData[uuid];
         }
 
-        const MeshNodeData* ResourceScene::getMeshNodeData(const WS2Common::Scene::SceneNode *node) const {
-            return nodeMeshData[node];
+        const MeshNodeData* ResourceScene::getMeshNodeData(const QUuid &uuid) const {
+            return nodeMeshData[uuid];
         }
 
         /**

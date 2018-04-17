@@ -27,6 +27,20 @@ namespace WS2Editor {
                  */
                 SceneNode* getRootNode() const;
 
+                /**
+                 * @brief Finds mesh node data entries with matching UUIDs recursively and sets the node to the one given
+                 *
+                 * @param node The new node to make the owner of
+                 */
+                void recursiveTransferMeshNodeDataOwner(SceneNode *node);
+
+                /**
+                 * @brief Finds mesh node data matching the node's UUID and removes it if the node owner matched the one given
+                 *
+                 * @param node The node to check against
+                 */
+                void recursiveConditionalDestroyMeshNodeData(SceneNode *node);
+
             public:
                 ModelOutliner(QObject *parent);
                 virtual int rowCount(const QModelIndex &parent = QModelIndex()) const override;
