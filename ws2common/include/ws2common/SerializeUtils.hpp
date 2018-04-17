@@ -21,6 +21,8 @@ namespace WS2Common {
         void parseSceneNode(QXmlStreamReader &xml, SceneNode *node);
         void parseSceneNodeData(QXmlStreamReader &xml, SceneNode *node);
 
+        void parseChildren(QXmlStreamReader &xml, SceneNode *node);
+
         void writeVec2(
                 QXmlStreamWriter &xml,
                 QString name,

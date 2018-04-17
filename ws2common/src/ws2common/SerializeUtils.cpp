@@ -8,9 +8,10 @@ namespace WS2Common {
         SceneNode* deserializeNodeFromXml(QXmlStreamReader &xml, SceneNode *parent) {
             if (xml.name() == "node-sceneNode") {
                 SceneNode *node = new SceneNode();
-                node->setParent(parent);
-
                 parseSceneNode(xml, node);
+
+                if (parent != nullptr) parent->addChild(node);
+
                 return node;
             }
 
@@ -36,10 +37,17 @@ namespace WS2Common {
                     }
 
                 } else if (xml.name() == "children") {
-
+                    parseChildren(xml, node);
                 } else {
                     qCritical().noquote() << "Invalid element node-sceneNode > " + xml.name();
                 }
+            }
+        }
+
+        void parseChildren(QXmlStreamReader &xml, SceneNode *node) {
+            while (!(xml.isEndElement() && xml.name() == "children")) {
+                xml.readNext();
+                deserializeNodeFromXml(xml, node);
             }
         }
 
