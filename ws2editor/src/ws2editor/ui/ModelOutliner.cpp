@@ -186,6 +186,26 @@ namespace WS2Editor {
             return true;
         }
 
+        Qt::DropActions ModelOutliner::supportedDropActions() const {
+            return Qt::MoveAction;
+        }
+
+        bool ModelOutliner::removeRows(int row, int count, const QModelIndex &parent) {
+            SceneNode *parentNode;
+
+            if (parent.isValid()) {
+                parentNode = static_cast<SceneNode*>(parent.internalPointer());
+            } else {
+                parentNode = getRootNode();
+            }
+
+            for (int i = 0; i < count; i++) {
+                removeNode(parentNode->getChildByIndex(row));
+            }
+
+            return true;
+        }
+
         QModelIndex ModelOutliner::findIndexFromNode(SceneNode *node) {
             QVector<int> indexPath;
             SceneNode *pathNode = node;

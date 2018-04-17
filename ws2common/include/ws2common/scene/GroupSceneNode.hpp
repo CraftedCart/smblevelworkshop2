@@ -13,7 +13,7 @@ namespace WS2Common {
     namespace Scene {
         class GroupSceneNode : public SceneNode {
             protected:
-                CollisionGrid *collisionGrid;
+                CollisionGrid *collisionGrid = nullptr;
 
             public:
                 GroupSceneNode(const QString name);

@@ -52,6 +52,8 @@ namespace WS2Editor {
                         int column,
                         const QModelIndex &parent
                         ) override;
+                virtual Qt::DropActions supportedDropActions() const override;
+                virtual bool removeRows(int row, int count, const QModelIndex &parent = QModelIndex()) override;
 
                 /**
                  * @brief Returns the model index for a given node
