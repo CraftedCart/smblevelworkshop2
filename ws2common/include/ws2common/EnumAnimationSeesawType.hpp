@@ -22,6 +22,15 @@ namespace WS2Common {
 
     namespace AnimationSeesawType {
         QString toString(EnumAnimationSeesawType type);
+
+        /**
+         * @brief Converts a string to an EnumAnimationSeesawType
+         *
+         * @param str The string
+         *
+         * @return The EnumAnimationSeesawTyoe for the string. If the string is invalid, ANIMATION will be returned.
+         */
+        EnumAnimationSeesawType fromString(QString str);
     }
 }
 

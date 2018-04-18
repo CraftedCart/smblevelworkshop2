@@ -15,6 +15,14 @@ namespace WS2Common {
                     return "ANIMATION";
             }
         }
+
+        EnumAnimationSeesawType fromString(QString str) {
+            if (str == "SEESAW") {
+                return SEESAW;
+            } else {
+                return ANIMATION;
+            }
+        }
     }
 }
 

@@ -60,6 +60,30 @@ namespace WS2Common {
                     node->setName(xml.readElementText());
                 } else if (xml.name() == "uuid") {
                     node->setUuid(QUuid(xml.readElementText()));
+                } else if (xml.name() == "originPosition") {
+                    node->setOriginPosition(getVec3Attributes(xml.attributes()));
+                } else if (xml.name() == "originRotation") {
+                    node->setOriginRotation(getVec3Attributes(xml.attributes()));
+                } else if (xml.name() == "position") {
+                    node->setPosition(getVec3Attributes(xml.attributes()));
+                } else if (xml.name() == "rotation") {
+                    node->setRotation(getVec3Attributes(xml.attributes()));
+                } else if (xml.name() == "scale") {
+                    node->setScale(getVec3Attributes(xml.attributes()));
+                } else if (xml.name() == "conveyorSpeed") {
+                    node->setConveyorSpeed(getVec3Attributes(xml.attributes()));
+                } else if (xml.name() == "transformAnimation") {
+                    qWarning() << "data-sceneNode > transformAnimation not yet implemented!"; //TODO
+                } else if (xml.name() == "animationGroupId") {
+                    node->setAnimationGroupId(xml.readElementText().toUInt());
+                } else if (xml.name() == "animationSeesawType") {
+                    node->setAnimationSeesawType(AnimationSeesawType::fromString(xml.readElementText()));
+                } else if (xml.name() == "seesawSensitivity") {
+                    node->setSeesawSensitivity(xml.readElementText().toFloat());
+                } else if (xml.name() == "seesawResetStiffness") {
+                    node->setSeesawResetStiffness(xml.readElementText().toFloat());
+                } else if (xml.name() == "seesawRotationBounds") {
+                    node->setSeesawRotationBounds(xml.readElementText().toFloat());
                 } else {
                     qWarning().noquote() << "Unrecognised tag: data-sceneNode > " + xml.name();
                 }
