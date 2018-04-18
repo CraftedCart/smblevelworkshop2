@@ -13,9 +13,14 @@ namespace WS2Common {
     namespace Scene {
         class GroupSceneNode : public SceneNode {
             protected:
-                CollisionGrid *collisionGrid = nullptr;
+                CollisionGrid *collisionGrid = new CollisionGrid();
+
+            protected:
+                virtual void serializeNodeDataXml(QXmlStreamWriter &s) const;
+                virtual const QString getSerializableName() const;
 
             public:
+                GroupSceneNode() = default;
                 GroupSceneNode(const QString name);
                 ~GroupSceneNode();
 

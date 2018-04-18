@@ -1,5 +1,6 @@
 #include "ws2common/config/XMLConfigParser.hpp"
 #include "ws2common/scene/MeshCollisionSceneNode.hpp"
+#include "ws2common/SerializeUtils.hpp"
 #include <QXmlStreamReader>
 #include <QDebug>
 #include <QCoreApplication>
@@ -30,7 +31,7 @@ namespace WS2Common {
                         } else if (xml.name() == "backgroundModel") {
                             stage->getFirstBackgroundGroup(true)->addChild(parseBackgroundModel(xml));
                         } else if (xml.name() == "falloutPlane") {
-                            stage->setFalloutY(getAttribute(xml.attributes(), "y").toFloat());
+                            stage->setFalloutY(SerializeUtils::getAttribute(xml.attributes(), "y").toFloat());
                         } else if (xml.name() == "fog") {
                             qWarning() << "fog not yet implemented!";
                             xml.skipCurrentElement();
@@ -112,9 +113,9 @@ namespace WS2Common {
                 if (xml.name() == "name") {
                     start->setName(xml.readElementText());
                 } else if (xml.name() == "position") {
-                    start->setPosition(getVec3Attributes(xml.attributes()));
+                    start->setPosition(SerializeUtils::getVec3Attributes(xml.attributes()));
                 } else if (xml.name() == "rotation") {
-                    start->setRotation(getVec3Attributes(xml.attributes()));
+                    start->setRotation(SerializeUtils::getVec3Attributes(xml.attributes()));
                 } else {
                     qWarning().noquote() << "Unrecognised tag: start >" << xml.name();
                 }
@@ -137,11 +138,11 @@ namespace WS2Common {
                     bg->setName(name);
                     bg->setMeshName(name);
                 } else if (xml.name() == "position") {
-                    bg->setPosition(getVec3Attributes(xml.attributes()));
+                    bg->setPosition(SerializeUtils::getVec3Attributes(xml.attributes()));
                 } else if (xml.name() == "rotation") {
-                    bg->setRotation(getVec3Attributes(xml.attributes()));
+                    bg->setRotation(SerializeUtils::getVec3Attributes(xml.attributes()));
                 } else if (xml.name() == "scale") {
-                    bg->setScale(getVec3Attributes(xml.attributes()));
+                    bg->setScale(SerializeUtils::getVec3Attributes(xml.attributes()));
                 } else if (xml.name() == "animKeyframes") { //TODO
                     qWarning() << "backgroundModel > animKeyframes not yet implemented!";
                     xml.skipCurrentElement();
@@ -176,15 +177,15 @@ namespace WS2Common {
                 if (xml.name() == "name") {
                     group->setName(xml.readElementText());
                 } else if (xml.name() == "rotationCenter") { //TODO
-                    group->setOriginPosition(getVec3Attributes(xml.attributes()));
+                    group->setOriginPosition(SerializeUtils::getVec3Attributes(xml.attributes()));
                 } else if (xml.name() == "initialRotation") { //TODO
-                    group->setOriginRotation(getVec3Attributes(xml.attributes()));
+                    group->setOriginRotation(SerializeUtils::getVec3Attributes(xml.attributes()));
                 } else if (xml.name() == "animSeesawType") { //TODO
                     QPair<EnumAnimationSeesawType, Animation::EnumLoopType> type = parseAnimLoopType(xml);
                     group->setAnimationSeesawType(type.first);
                     loopType = type.second; //loopType will be linked with an animation later if needed
                 } else if (xml.name() == "conveyorSpeed") {
-                    group->setConveyorSpeed(getVec3Attributes(xml.attributes()));
+                    group->setConveyorSpeed(SerializeUtils::getVec3Attributes(xml.attributes()));
                 } else if (xml.name() == "seesawSensitivity") {
                     group->setSeesawSensitivity(xml.readElementText().toFloat()); //TODO: Error checking
                 } else if (xml.name() == "seesawResetStiffness") {
@@ -248,9 +249,9 @@ namespace WS2Common {
                 if (xml.name() == "name") {
                     goal->setName(xml.readElementText());
                 } else if (xml.name() == "position") {
-                    goal->setPosition(getVec3Attributes(xml.attributes()));
+                    goal->setPosition(SerializeUtils::getVec3Attributes(xml.attributes()));
                 } else if (xml.name() == "rotation") {
-                    goal->setRotation(getVec3Attributes(xml.attributes()));
+                    goal->setRotation(SerializeUtils::getVec3Attributes(xml.attributes()));
                 } else if (xml.name() == "type") {
                     goal->setType(GoalType::fromString(xml.readElementText()));
                 } else {
@@ -275,11 +276,11 @@ namespace WS2Common {
                 if (xml.name() == "name") {
                     bumper->setName(xml.readElementText());
                 } else if (xml.name() == "position") {
-                    bumper->setPosition(getVec3Attributes(xml.attributes()));
+                    bumper->setPosition(SerializeUtils::getVec3Attributes(xml.attributes()));
                 } else if (xml.name() == "rotation") {
-                    bumper->setRotation(getVec3Attributes(xml.attributes()));
+                    bumper->setRotation(SerializeUtils::getVec3Attributes(xml.attributes()));
                 } else if (xml.name() == "scale") {
-                    bumper->setScale(getVec3Attributes(xml.attributes()));
+                    bumper->setScale(SerializeUtils::getVec3Attributes(xml.attributes()));
                 } else {
                     qWarning().noquote() << "Unrecognised tag: bumper >" << xml.name();
                 }
@@ -302,11 +303,11 @@ namespace WS2Common {
                 if (xml.name() == "name") {
                     jamabar->setName(xml.readElementText());
                 } else if (xml.name() == "position") {
-                    jamabar->setPosition(getVec3Attributes(xml.attributes()));
+                    jamabar->setPosition(SerializeUtils::getVec3Attributes(xml.attributes()));
                 } else if (xml.name() == "rotation") {
-                    jamabar->setRotation(getVec3Attributes(xml.attributes()));
+                    jamabar->setRotation(SerializeUtils::getVec3Attributes(xml.attributes()));
                 } else if (xml.name() == "scale") {
-                    jamabar->setScale(getVec3Attributes(xml.attributes()));
+                    jamabar->setScale(SerializeUtils::getVec3Attributes(xml.attributes()));
                 } else {
                     qWarning().noquote() << "Unrecognised tag: jamabar >" << xml.name();
                 }
@@ -329,7 +330,7 @@ namespace WS2Common {
                 if (xml.name() == "name") {
                     banana->setName(xml.readElementText());
                 } else if (xml.name() == "position") {
-                    banana->setPosition(getVec3Attributes(xml.attributes()));
+                    banana->setPosition(SerializeUtils::getVec3Attributes(xml.attributes()));
                 } else if (xml.name() == "type") {
                     banana->setType(BananaType::fromString(xml.readElementText()));
                 } else {
@@ -354,11 +355,11 @@ namespace WS2Common {
                 if (xml.name() == "name") {
                     volume->setName(xml.readElementText());
                 } else if (xml.name() == "position") {
-                    volume->setPosition(getVec3Attributes(xml.attributes()));
+                    volume->setPosition(SerializeUtils::getVec3Attributes(xml.attributes()));
                 } else if (xml.name() == "rotation") {
-                    volume->setRotation(getVec3Attributes(xml.attributes()));
+                    volume->setRotation(SerializeUtils::getVec3Attributes(xml.attributes()));
                 } else if (xml.name() == "scale") {
-                    volume->setScale(getVec3Attributes(xml.attributes()));
+                    volume->setScale(SerializeUtils::getVec3Attributes(xml.attributes()));
                 } else {
                     qWarning().noquote() << "Unrecognised tag: falloutVolume >" << xml.name();
                 }
@@ -381,9 +382,9 @@ namespace WS2Common {
                 if (xml.name() == "name") {
                     wh->setName(xml.readElementText());
                 } else if (xml.name() == "position") {
-                    wh->setPosition(getVec3Attributes(xml.attributes()));
+                    wh->setPosition(SerializeUtils::getVec3Attributes(xml.attributes()));
                 } else if (xml.name() == "rotation") {
-                    wh->setRotation(getVec3Attributes(xml.attributes()));
+                    wh->setRotation(SerializeUtils::getVec3Attributes(xml.attributes()));
                 } else if (xml.name() == "destinationName") {
                     wormholeDestMap[wh] = xml.readElementText();
                 } else {
@@ -409,9 +410,9 @@ namespace WS2Common {
                 if (xml.name() == "name") {
                     sw->setName(xml.readElementText());
                 } else if (xml.name() == "position") {
-                    sw->setPosition(getVec3Attributes(xml.attributes()));
+                    sw->setPosition(SerializeUtils::getVec3Attributes(xml.attributes()));
                 } else if (xml.name() == "rotation") {
-                    sw->setRotation(getVec3Attributes(xml.attributes()));
+                    sw->setRotation(SerializeUtils::getVec3Attributes(xml.attributes()));
                 } else if (xml.name() == "type") {
                     sw->setType(PlaybackState::fromString(xml.readElementText()));
                 } else if (xml.name() == "animGroupId") {
@@ -457,11 +458,11 @@ namespace WS2Common {
                 if (!xml.isStartElement()) continue; //Ignore all end elements
 
                 if (xml.name() == "start") {
-                    grid->setGridStart(getVec2Attributes(xml.attributes(), "x", "z"));
+                    grid->setGridStart(SerializeUtils::getVec2Attributes(xml.attributes(), "x", "z"));
                 } else if (xml.name() == "step") {
-                    grid->setGridStep(getVec2Attributes(xml.attributes(), "x", "z"));
+                    grid->setGridStep(SerializeUtils::getVec2Attributes(xml.attributes(), "x", "z"));
                 } else if (xml.name() == "count") {
-                    grid->setGridStepCount(getUvec2Attributes(xml.attributes(), "x", "z"));
+                    grid->setGridStepCount(SerializeUtils::getUVec2Attributes(xml.attributes(), "x", "z"));
                 } else {
                     qWarning().noquote() << "Unrecognised tag: collisionGrid >" << xml.name();
                 }
@@ -550,49 +551,6 @@ namespace WS2Common {
                     qWarning().noquote() << "Unrecognised tag: [keyframeIdentier] >" << xml.name();
                 }
             }
-        }
-
-        QStringRef XMLConfigParser::getAttribute(const QXmlStreamAttributes &attrs, const QString attrName) {
-            foreach(const QXmlStreamAttribute &attr, attrs) {
-                if (attr.name() == attrName) return attr.value();
-            }
-
-            //Oh noes - not found
-            return QStringRef();
-        }
-
-        glm::vec3 XMLConfigParser::getVec3Attributes(const QXmlStreamAttributes &attrs,
-                const QString x, const QString y, const QString z) {
-            glm::vec3 vec;
-            foreach(const QXmlStreamAttribute &attr, attrs) {
-                if (attr.name() == x) vec.x = attr.value().toFloat();
-                else if (attr.name() == y) vec.y = attr.value().toFloat();
-                else if (attr.name() == z) vec.z = attr.value().toFloat();
-            }
-
-            return vec;
-        }
-
-        glm::vec2 XMLConfigParser::getVec2Attributes(const QXmlStreamAttributes &attrs,
-                const QString x, const QString y) {
-            glm::vec2 vec;
-            foreach(const QXmlStreamAttribute &attr, attrs) {
-                if (attr.name() == x) vec.x = attr.value().toFloat();
-                else if (attr.name() == y) vec.y = attr.value().toFloat();
-            }
-
-            return vec;
-        }
-
-        glm::uvec2 XMLConfigParser::getUvec2Attributes(const QXmlStreamAttributes &attrs,
-                const QString x, const QString y) {
-            glm::uvec2 vec;
-            foreach(const QXmlStreamAttribute &attr, attrs) {
-                if (attr.name() == x) vec.x = attr.value().toFloat();
-                else if (attr.name() == y) vec.y = attr.value().toFloat();
-            }
-
-            return vec;
         }
     }
 }

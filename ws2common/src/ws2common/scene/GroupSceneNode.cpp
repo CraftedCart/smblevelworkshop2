@@ -9,6 +9,7 @@ namespace WS2Common {
         }
 
         void GroupSceneNode::setCollisionGrid(CollisionGrid *collisionGrid) {
+            delete collisionGrid; //Delete the old grid
             this->collisionGrid = collisionGrid;
         }
 
@@ -18,6 +19,22 @@ namespace WS2Common {
 
         const CollisionGrid* GroupSceneNode::getCollisionGrid() const {
             return collisionGrid;
+        }
+
+        const QString GroupSceneNode::getSerializableName() const {
+            return "groupSceneNode";
+        }
+
+        void GroupSceneNode::serializeNodeDataXml(QXmlStreamWriter &s) const {
+            SceneNode::serializeNodeDataXml(s);
+
+            s.writeStartElement("data-" + GroupSceneNode::getSerializableName());
+
+            s.writeStartElement("collisionGrid");
+            collisionGrid->serializeDataXml(s);
+            s.writeEndElement();
+
+            s.writeEndElement();
         }
     }
 }

@@ -16,6 +16,11 @@ namespace WS2Common {
                 parseMeshSceneNode(xml, node);
                 if (parent != nullptr) parent->addChild(node);
                 return node;
+            } else if (xml.name() == "node-groupSceneNode") {
+                GroupSceneNode *node = new GroupSceneNode();
+                parseGroupSceneNode(xml, node);
+                if (parent != nullptr) parent->addChild(node);
+                return node;
             }
 
             return nullptr; //Failed to deserialize
@@ -101,6 +106,46 @@ namespace WS2Common {
             }
         }
 
+        void parseGroupSceneNode(QXmlStreamReader &xml, GroupSceneNode *node) {
+            while (!(xml.isEndElement() && xml.name() == "node-groupSceneNode")) {
+                xml.readNext();
+                if (!xml.isStartElement()) continue; //Ignore all end elements
+
+                if (xml.name() == "data") {
+                    while (!(xml.isEndElement() && xml.name() == "data")) {
+                        xml.readNext();
+                        if (!xml.isStartElement()) continue; //Ignore all end elements
+
+                        if (xml.name() == "data-sceneNode") {
+                            parseSceneNodeData(xml, node);
+                        } else if (xml.name() == "data-groupSceneNode") {
+                            parseGroupSceneNodeData(xml, node);
+                        } else {
+                            qCritical().noquote() << "Invalid element data > " + xml.name();
+                        }
+                    }
+
+                } else if (xml.name() == "children") {
+                    parseChildren(xml, node);
+                } else {
+                    qCritical().noquote() << "Invalid element node-groupSceneNode > " + xml.name();
+                }
+            }
+        }
+
+        void parseGroupSceneNodeData(QXmlStreamReader &xml, GroupSceneNode *node) {
+            while (!(xml.isEndElement() && xml.name() == "data-groupSceneNode")) {
+                xml.readNext();
+                if (!xml.isStartElement()) continue; //Ignore all end elements
+
+                if (xml.name() == "collisionGrid") {
+                    node->setCollisionGrid(CollisionGrid::deserializeDataXml(xml));
+                } else {
+                    qCritical().noquote() << "Invalid element data-groupSceneNode > " + xml.name();
+                }
+            }
+        }
+
         void parseChildren(QXmlStreamReader &xml, SceneNode *node) {
             while (!(xml.isEndElement() && xml.name() == "children")) {
                 xml.readNext();
@@ -112,6 +157,19 @@ namespace WS2Common {
                 QXmlStreamWriter &xml,
                 QString name,
                 glm::vec2 vec,
+                QString xAttrName,
+                QString yAttrName
+                ) {
+            xml.writeStartElement(name);
+            xml.writeAttribute(xAttrName, QString::number(vec.x));
+            xml.writeAttribute(yAttrName, QString::number(vec.y));
+            xml.writeEndElement();
+        }
+
+        void writeUVec2(
+                QXmlStreamWriter &xml,
+                QString name,
+                glm::uvec2 vec,
                 QString xAttrName,
                 QString yAttrName
                 ) {
@@ -134,6 +192,49 @@ namespace WS2Common {
             xml.writeAttribute(yAttrName, QString::number(vec.y));
             xml.writeAttribute(zAttrName, QString::number(vec.z));
             xml.writeEndElement();
+        }
+
+        QStringRef getAttribute(const QXmlStreamAttributes &attrs, const QString attrName) {
+            foreach(const QXmlStreamAttribute &attr, attrs) {
+                if (attr.name() == attrName) return attr.value();
+            }
+
+            //Oh noes - not found
+            return QStringRef();
+        }
+
+        glm::vec3 getVec3Attributes(const QXmlStreamAttributes &attrs,
+                const QString x, const QString y, const QString z) {
+            glm::vec3 vec;
+            foreach(const QXmlStreamAttribute &attr, attrs) {
+                if (attr.name() == x) vec.x = attr.value().toFloat();
+                else if (attr.name() == y) vec.y = attr.value().toFloat();
+                else if (attr.name() == z) vec.z = attr.value().toFloat();
+            }
+
+            return vec;
+        }
+
+        glm::vec2 getVec2Attributes(const QXmlStreamAttributes &attrs,
+                const QString x, const QString y) {
+            glm::vec2 vec;
+            foreach(const QXmlStreamAttribute &attr, attrs) {
+                if (attr.name() == x) vec.x = attr.value().toFloat();
+                else if (attr.name() == y) vec.y = attr.value().toFloat();
+            }
+
+            return vec;
+        }
+
+        glm::uvec2 getUVec2Attributes(const QXmlStreamAttributes &attrs,
+                const QString x, const QString y) {
+            glm::uvec2 vec;
+            foreach(const QXmlStreamAttribute &attr, attrs) {
+                if (attr.name() == x) vec.x = attr.value().toFloat();
+                else if (attr.name() == y) vec.y = attr.value().toFloat();
+            }
+
+            return vec;
         }
     }
 }
