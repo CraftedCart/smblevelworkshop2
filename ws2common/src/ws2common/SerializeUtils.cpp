@@ -39,14 +39,14 @@ namespace WS2Common {
                         if (xml.name() == "data-sceneNode") {
                             parseSceneNodeData(xml, node);
                         } else {
-                            qCritical().noquote() << "Invalid element data > " + xml.name();
+                            qWarning().noquote() << "Unrecognised tag: data > " + xml.name();
                         }
                     }
 
                 } else if (xml.name() == "children") {
                     parseChildren(xml, node);
                 } else {
-                    qCritical().noquote() << "Invalid element node-sceneNode > " + xml.name();
+                    qWarning().noquote() << "Unrecognised tag: node-sceneNode > " + xml.name();
                 }
             }
         }
@@ -61,7 +61,7 @@ namespace WS2Common {
                 } else if (xml.name() == "uuid") {
                     node->setUuid(QUuid(xml.readElementText()));
                 } else {
-                    qCritical().noquote() << "Invalid element data-sceneNode > " + xml.name();
+                    qWarning().noquote() << "Unrecognised tag: data-sceneNode > " + xml.name();
                 }
             }
         }
@@ -81,14 +81,14 @@ namespace WS2Common {
                         } else if (xml.name() == "data-meshSceneNode") {
                             parseMeshSceneNodeData(xml, node);
                         } else {
-                            qCritical().noquote() << "Invalid element data > " + xml.name();
+                            qWarning().noquote() << "Unrecognised tag: data > " + xml.name();
                         }
                     }
 
                 } else if (xml.name() == "children") {
                     parseChildren(xml, node);
                 } else {
-                    qCritical().noquote() << "Invalid element node-meshSceneNode > " + xml.name();
+                    qWarning().noquote() << "Unrecognised tag: node-meshSceneNode > " + xml.name();
                 }
             }
         }
@@ -101,7 +101,7 @@ namespace WS2Common {
                 if (xml.name() == "meshName") {
                     node->setMeshName(xml.readElementText());
                 } else {
-                    qCritical().noquote() << "Invalid element data-meshSceneNode > " + xml.name();
+                    qWarning().noquote() << "Unrecognised tag: data-meshSceneNode > " + xml.name();
                 }
             }
         }
@@ -121,14 +121,14 @@ namespace WS2Common {
                         } else if (xml.name() == "data-groupSceneNode") {
                             parseGroupSceneNodeData(xml, node);
                         } else {
-                            qCritical().noquote() << "Invalid element data > " + xml.name();
+                            qWarning().noquote() << "Unrecognised tag: data > " + xml.name();
                         }
                     }
 
                 } else if (xml.name() == "children") {
                     parseChildren(xml, node);
                 } else {
-                    qCritical().noquote() << "Invalid element node-groupSceneNode > " + xml.name();
+                    qWarning().noquote() << "Unrecognised tag: node-groupSceneNode > " + xml.name();
                 }
             }
         }
@@ -141,7 +141,7 @@ namespace WS2Common {
                 if (xml.name() == "collisionGrid") {
                     node->setCollisionGrid(CollisionGrid::deserializeDataXml(xml));
                 } else {
-                    qCritical().noquote() << "Invalid element data-groupSceneNode > " + xml.name();
+                    qWarning().noquote() << "Unrecognised tag: data-groupSceneNode > " + xml.name();
                 }
             }
         }
