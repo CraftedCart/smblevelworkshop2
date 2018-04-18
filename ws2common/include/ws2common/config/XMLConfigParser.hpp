@@ -182,7 +182,7 @@ namespace WS2Common {
                  *
                  * @return The collision parsed from the config
                  */
-                CollisionGrid* parseCollisionGrid(QXmlStreamReader &xml);
+                CollisionGrid parseCollisionGrid(QXmlStreamReader &xml);
 
                 /**
                  * @brief Parses the animation/seesaw type in an XML config

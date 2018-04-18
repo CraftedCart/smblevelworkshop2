@@ -13,7 +13,7 @@ namespace WS2Common {
     namespace Scene {
         class GroupSceneNode : public SceneNode {
             protected:
-                CollisionGrid *collisionGrid = new CollisionGrid();
+                CollisionGrid collisionGrid;
 
             protected:
                 virtual void serializeNodeDataXml(QXmlStreamWriter &s) const;
@@ -22,28 +22,34 @@ namespace WS2Common {
             public:
                 GroupSceneNode() = default;
                 GroupSceneNode(const QString name);
-                ~GroupSceneNode();
 
                 /**
                  * @brief Setter for collisionGrid
                  *
                  * @param collisionGrid The collision grid this GroupSceneNode should have
                  */
-                void setCollisionGrid(CollisionGrid *collisionGrid);
+                void setCollisionGrid(CollisionGrid &collisionGrid);
+
+                /**
+                 * @brief Setter for collisionGrid
+                 *
+                 * @param collisionGrid The collision grid this GroupSceneNode should have
+                 */
+                void setCollisionGrid(CollisionGrid collisionGrid);
 
                 /**
                  * @brief Getter for collisionGrid
                  *
                  * @return collisionGrid The collision grid this GroupSceneNode has
                  */
-                CollisionGrid* getCollisionGrid();
+                CollisionGrid& getCollisionGrid();
 
                 /**
                  * @brief Const getter for collisionGrid
                  *
                  * @return collisionGrid The collision grid this GroupSceneNode has
                  */
-                const CollisionGrid* getCollisionGrid() const;
+                const CollisionGrid& getCollisionGrid() const;
         };
     }
 }

@@ -60,7 +60,7 @@ namespace WS2Common {
             const glm::uvec2 getGridStepCount() const;
 
             void serializeDataXml(QXmlStreamWriter &s) const;
-            static CollisionGrid* deserializeDataXml(QXmlStreamReader &xml);
+            static CollisionGrid deserializeDataXml(QXmlStreamReader &xml);
     };
 }
 

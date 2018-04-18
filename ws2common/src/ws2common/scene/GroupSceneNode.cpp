@@ -4,20 +4,19 @@ namespace WS2Common {
     namespace Scene {
         GroupSceneNode::GroupSceneNode(const QString name) : SceneNode(name) {}
 
-        GroupSceneNode::~GroupSceneNode() {
-            delete collisionGrid;
-        }
-
-        void GroupSceneNode::setCollisionGrid(CollisionGrid *collisionGrid) {
-            delete collisionGrid; //Delete the old grid
+        void GroupSceneNode::setCollisionGrid(CollisionGrid &collisionGrid) {
             this->collisionGrid = collisionGrid;
         }
 
-        CollisionGrid* GroupSceneNode::getCollisionGrid() {
+        void GroupSceneNode::setCollisionGrid(CollisionGrid collisionGrid) {
+            this->collisionGrid = collisionGrid;
+        }
+
+        CollisionGrid& GroupSceneNode::getCollisionGrid() {
             return collisionGrid;
         }
 
-        const CollisionGrid* GroupSceneNode::getCollisionGrid() const {
+        const CollisionGrid& GroupSceneNode::getCollisionGrid() const {
             return collisionGrid;
         }
 
@@ -31,7 +30,7 @@ namespace WS2Common {
             s.writeStartElement("data-" + GroupSceneNode::getSerializableName());
 
             s.writeStartElement("collisionGrid");
-            collisionGrid->serializeDataXml(s);
+            collisionGrid.serializeDataXml(s);
             s.writeEndElement();
 
             s.writeEndElement();

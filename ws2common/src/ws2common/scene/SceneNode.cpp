@@ -1,6 +1,7 @@
 #include "ws2common/scene/SceneNode.hpp"
 #include "ws2common/SerializeUtils.hpp"
 #include <QtAlgorithms>
+#include <QDebug>
 
 namespace WS2Common {
     namespace Scene {
@@ -240,6 +241,8 @@ namespace WS2Common {
             SerializeUtils::writeVec3(s, "conveyorSpeed", conveyorSpeed);
 
             //TODO: Transform animation
+            //Note: #include <QDebug> can be removed after deleting the below line
+            qWarning() << "Serializing animation not yet implemented!";
 
             s.writeTextElement("animationGroupId", QString::number(animationGroupId));
             s.writeTextElement("animationSeesawType", AnimationSeesawType::toString(animationSeesawType));

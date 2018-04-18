@@ -450,19 +450,19 @@ namespace WS2Common {
             return mesh;
         }
 
-        CollisionGrid* XMLConfigParser::parseCollisionGrid(QXmlStreamReader &xml) {
-            CollisionGrid *grid = new CollisionGrid();
+        CollisionGrid XMLConfigParser::parseCollisionGrid(QXmlStreamReader &xml) {
+            CollisionGrid grid;
 
             while (!(xml.isEndElement() && xml.name() == "collisionGrid")) {
                 xml.readNext();
                 if (!xml.isStartElement()) continue; //Ignore all end elements
 
                 if (xml.name() == "start") {
-                    grid->setGridStart(SerializeUtils::getVec2Attributes(xml.attributes(), "x", "z"));
+                    grid.setGridStart(SerializeUtils::getVec2Attributes(xml.attributes(), "x", "z"));
                 } else if (xml.name() == "step") {
-                    grid->setGridStep(SerializeUtils::getVec2Attributes(xml.attributes(), "x", "z"));
+                    grid.setGridStep(SerializeUtils::getVec2Attributes(xml.attributes(), "x", "z"));
                 } else if (xml.name() == "count") {
-                    grid->setGridStepCount(SerializeUtils::getUVec2Attributes(xml.attributes(), "x", "z"));
+                    grid.setGridStepCount(SerializeUtils::getUVec2Attributes(xml.attributes(), "x", "z"));
                 } else {
                     qWarning().noquote() << "Unrecognised tag: collisionGrid >" << xml.name();
                 }
