@@ -127,7 +127,7 @@ namespace WS2Lz {
                 TriangleIntersectionGrid *intGrid = new TriangleIntersectionGrid(
                         allVertices,
                         allIndices,
-                        *groupNode->getCollisionGrid()
+                        groupNode->getCollisionGrid()
                         );
 
                 //Store it
@@ -168,8 +168,8 @@ namespace WS2Lz {
         //This is for Collision Triangle Pointers
         forEachGroup(group) {
             gridTriangleListPointersOffsetMap.insert(nextOffset, group);
-            const CollisionGrid *grid = group->getCollisionGrid();
-            nextOffset += COLLISION_TRIANGLE_LIST_POINTER_LENGTH * grid->getGridStepCount().x * grid->getGridStepCount().y;
+            const CollisionGrid &grid = group->getCollisionGrid();
+            nextOffset += COLLISION_TRIANGLE_LIST_POINTER_LENGTH * grid.getGridStepCount().x * grid.getGridStepCount().y;
         }
 
         //Iterate over all GroupSceneNodes/collision headers, and fill the gridTriangleListOffsetMap
@@ -535,9 +535,9 @@ namespace WS2Lz {
         dev << node->getConveyorSpeed();
         dev << gridTriangleListOffsetMap.key(node);
         dev << gridTriangleListPointersOffsetMap.key(node);
-        dev << node->getCollisionGrid()->getGridStart();
-        dev << node->getCollisionGrid()->getGridStep();
-        dev << node->getCollisionGrid()->getGridStepCount();
+        dev << node->getCollisionGrid().getGridStart();
+        dev << node->getCollisionGrid().getGridStep();
+        dev << node->getCollisionGrid().getGridStepCount();
         dev << goalCountMap.value(node);
         dev << goalOffsetMap.key(node);
         dev << bumperCountMap.value(node);
@@ -601,7 +601,7 @@ namespace WS2Lz {
     }
 
     void SMB2LzExporter::writeCollisionTriangleIndexListPointers(QDataStream &dev, const Scene::GroupSceneNode *node) {
-        unsigned int totalTiles = node->getCollisionGrid()->getGridStepCount().x * node->getCollisionGrid()->getGridStepCount().y;
+        unsigned int totalTiles = node->getCollisionGrid().getGridStepCount().x * node->getCollisionGrid().getGridStepCount().y;
         for (unsigned int i = 0; i < totalTiles; i++) {
             dev << gridTriangleIndexListOffsetMap[node][i];
         }

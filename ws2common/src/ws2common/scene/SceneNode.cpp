@@ -1,5 +1,7 @@
 #include "ws2common/scene/SceneNode.hpp"
+#include "ws2common/SerializeUtils.hpp"
 #include <QtAlgorithms>
+#include <QDebug>
 
 namespace WS2Common {
     namespace Scene {
@@ -18,6 +20,14 @@ namespace WS2Common {
 
         void SceneNode::setName(const QString name) {
             this->name = name;
+        }
+
+        const QUuid SceneNode::getUuid() const {
+            return uuid;
+        }
+
+        void SceneNode::setUuid(const QUuid uuid) {
+            this->uuid = uuid;
         }
 
         QVector<SceneNode*>& SceneNode::getChildren() {
@@ -195,6 +205,53 @@ namespace WS2Common {
 
         void SceneNode::setSeesawRotationBounds(float value) {
             seesawRotationBounds = value;
+        }
+
+        void SceneNode::serializeXml(QXmlStreamWriter &s) const {
+            s.writeStartElement("node-" + getSerializableName());
+
+            s.writeStartElement("data");
+            serializeNodeDataXml(s);
+            s.writeEndElement();
+
+            s.writeStartElement("children");
+            for (SceneNode *child : children) child->serializeXml(s);
+            s.writeEndElement();
+
+            s.writeEndElement();
+        }
+
+        const QString SceneNode::getSerializableName() const {
+            return "sceneNode";
+        }
+
+        void SceneNode::serializeNodeDataXml(QXmlStreamWriter &s) const {
+            s.writeStartElement("data-" + SceneNode::getSerializableName());
+
+            s.writeTextElement("name", name);
+            s.writeTextElement("uuid", uuid.toString());
+
+            SerializeUtils::writeVec3(s, "originPosition", originPosition);
+            SerializeUtils::writeVec3(s, "originRotation", originRotation);
+
+            SerializeUtils::writeVec3(s, "position", transform.getPosition());
+            SerializeUtils::writeVec3(s, "rotation", transform.getRotation());
+            SerializeUtils::writeVec3(s, "scale", transform.getScale());
+
+            SerializeUtils::writeVec3(s, "conveyorSpeed", conveyorSpeed);
+
+            //TODO: Transform animation
+            //Note: #include <QDebug> can be removed after deleting the below line
+            qWarning() << "Serializing animation not yet implemented!";
+
+            s.writeTextElement("animationGroupId", QString::number(animationGroupId));
+            s.writeTextElement("animationSeesawType", AnimationSeesawType::toString(animationSeesawType));
+
+            s.writeTextElement("seesawSensitivity", QString::number(seesawSensitivity));
+            s.writeTextElement("seesawResetStiffness", QString::number(seesawResetStiffness));
+            s.writeTextElement("seesawRotationBounds", QString::number(seesawRotationBounds));
+
+            s.writeEndElement();
         }
     }
 }

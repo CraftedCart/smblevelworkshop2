@@ -1,6 +1,8 @@
 #include "ws2editor/ui/ModelOutliner.hpp"
 #include "ws2editor/project/ProjectManager.hpp"
 #include "ws2editor/WS2Editor.hpp"
+#include "ws2common/SerializeUtils.hpp"
+#include <QDebug>
 
 namespace WS2Editor {
     namespace UI {
@@ -70,8 +72,141 @@ namespace WS2Editor {
         }
 
         Qt::ItemFlags ModelOutliner::flags(const QModelIndex &index) const {
-            if (!index.isValid()) return 0;
-            return QAbstractItemModel::flags(index);
+            if (!index.isValid()) return QAbstractItemModel::flags(index) | Qt::ItemIsDropEnabled;
+
+            return QAbstractItemModel::flags(index) | Qt::ItemIsDropEnabled | Qt::ItemIsDragEnabled;
+        }
+
+        QStringList ModelOutliner::mimeTypes() const {
+            QStringList types;
+            types << "text/xml";
+            return types;
+        }
+
+        QMimeData* ModelOutliner::mimeData(const QModelIndexList &indexes) const {
+            QMimeData *mimeData = new QMimeData();
+            QByteArray encodedData;
+            QXmlStreamWriter stream(&encodedData);
+
+            stream.setAutoFormatting(true);
+            stream.writeStartDocument();
+
+            stream.writeStartElement("root");
+            for (const QModelIndex &index : indexes) {
+                if (index.isValid()) {
+                    static_cast<SceneNode*>(index.internalPointer())->serializeXml(stream);
+                }
+            }
+            stream.writeEndElement();
+
+            stream.writeEndDocument();
+
+            mimeData->setData("text/xml", encodedData);
+            return mimeData;
+        }
+
+        bool ModelOutliner::canDropMimeData(
+                const QMimeData *data,
+                Qt::DropAction action,
+                int row,
+                int column,
+                const QModelIndex &parent
+                ) const {
+            Q_UNUSED(action);
+            Q_UNUSED(row);
+            Q_UNUSED(parent);
+
+            if (!data->hasFormat("text/xml")) return false;
+            if (column > 0) return false;
+
+            return true;
+        }
+
+        bool ModelOutliner::dropMimeData(
+                const QMimeData *data,
+                Qt::DropAction action,
+                int row,
+                int column,
+                const QModelIndex &parent
+                ) {
+            using namespace WS2Common;
+
+            if (!canDropMimeData(data, action, row, column, parent))
+                return false;
+
+            if (action == Qt::IgnoreAction)
+                return true;
+
+            int beginRow;
+
+            if (row != -1) {
+                beginRow = row;
+            } else if (parent.isValid()) {
+                beginRow = parent.row();
+            } else {
+                beginRow = rowCount(QModelIndex());
+            }
+
+            QByteArray encodedData = data->data("text/xml");
+            qDebug().noquote().nospace() << data->data("text/xml");
+            QXmlStreamReader xml(encodedData);
+
+            while (!(xml.isEndElement() && xml.name() == "root")) {
+                //Keep reading until the </root> tag
+                xml.readNext();
+                if (!xml.isStartElement()) continue; //Ignore all end elements
+
+                if (!xml.name().startsWith("node-")) {
+                    if (xml.name() == "root") continue; //Don't yell at me in the logs if this is the root node
+                    qCritical().noquote() << "Error when parsing node XML - Expected \"node-*\" but got \"" + xml.name() + "\"";
+                    continue;
+                }
+
+                SceneNode *node = SerializeUtils::deserializeNodeFromXml(xml);
+
+                if (node == nullptr) {
+                    qCritical().noquote() << "Node deserialization returned nullptr when dropping";
+                }
+
+                //Recreate the mesh node data
+                recursiveTransferMeshNodeDataOwner(node);
+
+                if (parent.isValid()) {
+                    addNode(node, static_cast<SceneNode*>(parent.internalPointer()));
+                } else {
+                    addNode(node, getRootNode());
+                }
+            }
+
+            //insertRows(beginRow, rows, QModelIndex());
+
+            //foreach (const QString &text, newItems) {
+                //QModelIndex idx = index(beginRow, 0, QModelIndex());
+                //setData(idx, text);
+                //beginRow++;
+            //}
+
+            return true;
+        }
+
+        Qt::DropActions ModelOutliner::supportedDropActions() const {
+            return Qt::MoveAction;
+        }
+
+        bool ModelOutliner::removeRows(int row, int count, const QModelIndex &parent) {
+            SceneNode *parentNode;
+
+            if (parent.isValid()) {
+                parentNode = static_cast<SceneNode*>(parent.internalPointer());
+            } else {
+                parentNode = getRootNode();
+            }
+
+            for (int i = 0; i < count; i++) {
+                removeNode(parentNode->getChildByIndex(row));
+            }
+
+            return true;
         }
 
         QModelIndex ModelOutliner::findIndexFromNode(SceneNode *node) {
@@ -107,7 +242,7 @@ namespace WS2Editor {
         void ModelOutliner::addNodeWithMesh(SceneNode *node, SceneNode *parentNode, ResourceMesh *mesh) {
             addNode(node, parentNode);
 
-            Project::ProjectManager::getActiveProject()->getScene()->addMeshNodeData(node, new MeshNodeData(node, mesh));
+            Project::ProjectManager::getActiveProject()->getScene()->addMeshNodeData(node->getUuid(), new MeshNodeData(node, mesh));
         }
 
         void ModelOutliner::removeNode(SceneNode *node) {
@@ -123,10 +258,11 @@ namespace WS2Editor {
                 beginRemoveRows(parentIndex, removedIndex, removedIndex);
             }
 
-            node->removeFromParent();
+            //Remove mesh data, if any exists **and it's bound to this node**
+            //If it's not bound to this node, it likely just got recreated from a drag-n-drop operation
+            recursiveConditionalDestroyMeshNodeData(node);
 
-            //Also remove mesh data, if any exists
-            Project::ProjectManager::getActiveProject()->getScene()->removeMeshNodeData(node);
+            node->removeFromParent();
 
             if (WS2Editor::qAppRunning) endRemoveRows();
         }
@@ -140,6 +276,35 @@ namespace WS2Editor {
             }
 
             if (emitOnSelectionChanged) emit onSelectionChanged(indices);
+        }
+
+        void ModelOutliner::recursiveTransferMeshNodeDataOwner(SceneNode *node) {
+            MeshNodeData *meshData = Project::ProjectManager::getActiveProject()->getScene()->getMeshNodeData(node->getUuid());
+
+            if (meshData != nullptr) {
+                ResourceMesh *mesh = Project::ProjectManager::getActiveProject()->getScene()->getMeshNodeData(node->getUuid())->getMesh();
+                Project::ProjectManager::getActiveProject()->getScene()->removeMeshNodeData(node->getUuid());
+
+                Project::ProjectManager::getActiveProject()->getScene()->addMeshNodeData(node->getUuid(), new MeshNodeData(node, mesh));
+            }
+
+            //Recursively call this function on children
+            for (SceneNode *child : node->getChildren()) {
+                recursiveTransferMeshNodeDataOwner(child);
+            }
+        }
+
+        void ModelOutliner::recursiveConditionalDestroyMeshNodeData(SceneNode *node) {
+            MeshNodeData *meshData = Project::ProjectManager::getActiveProject()->getScene()->getMeshNodeData(node->getUuid());
+
+            if (meshData != nullptr && meshData->getNode() == node) {
+                Project::ProjectManager::getActiveProject()->getScene()->removeMeshNodeData(node->getUuid());
+            }
+
+            //Recursively call this function on children
+            for (SceneNode *child : node->getChildren()) {
+                recursiveConditionalDestroyMeshNodeData(child);
+            }
         }
 
     }

@@ -6,6 +6,8 @@
 #ifndef SMBLEVELWORKSHOP2_WS2COMMON_ENUMANIMATIONSEESAWTYPE_HPP
 #define SMBLEVELWORKSHOP2_WS2COMMON_ENUMANIMATIONSEESAWTYPE_HPP
 
+#include <QString>
+
 namespace WS2Common {
 
     /**
@@ -17,6 +19,19 @@ namespace WS2Common {
         ANIMATION,
         SEESAW
     };
+
+    namespace AnimationSeesawType {
+        QString toString(EnumAnimationSeesawType type);
+
+        /**
+         * @brief Converts a string to an EnumAnimationSeesawType
+         *
+         * @param str The string
+         *
+         * @return The EnumAnimationSeesawTyoe for the string. If the string is invalid, ANIMATION will be returned.
+         */
+        EnumAnimationSeesawType fromString(QString str);
+    }
 }
 
 #endif

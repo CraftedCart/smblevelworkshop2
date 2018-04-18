@@ -37,8 +37,10 @@ set(SOURCE_FILES
     ./src/ws2common/EnumGoalType.cpp
     ./src/ws2common/EnumBananaType.cpp
     ./src/ws2common/EnumPlaybackState.cpp
+    ./src/ws2common/EnumAnimationSeesawType.cpp
     ./src/ws2common/Stage.cpp
     ./src/ws2common/CollisionGrid.cpp
+    ./src/ws2common/SerializeUtils.cpp
     ./src/ws2common/Transform.cpp
     ./src/ws2common/scene/SceneNode.cpp
     ./src/ws2common/scene/StartSceneNode.cpp
@@ -81,6 +83,7 @@ set(HEADER_FILES
     ./include/ws2common/EnumAnimationSeesawType.hpp
     ./include/ws2common/Stage.hpp
     ./include/ws2common/CollisionGrid.hpp
+    ./include/ws2common/SerializeUtils.hpp
     ./include/ws2common/Transform.hpp
     ./include/ws2common/scene/SceneNode.hpp
     ./include/ws2common/scene/StartSceneNode.hpp

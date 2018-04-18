@@ -15,12 +15,14 @@ namespace WS2Editor {
 
     class MeshNodeData {
         protected:
+            const SceneNode *node;
             ResourceMesh *mesh;
             PhysicsContainer *physicsContainer;
 
         public:
             MeshNodeData(SceneNode *node, ResourceMesh *mesh);
 
+            const SceneNode* getNode() const;
             ResourceMesh* getMesh();
             const ResourceMesh* getMesh() const;
             PhysicsContainer* getPhysicsContainer();

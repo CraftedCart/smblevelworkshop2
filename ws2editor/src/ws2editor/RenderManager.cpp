@@ -487,7 +487,7 @@ namespace WS2Editor {
 
         //Check if this is a renderable object, and enqueue it for rendering if so
         if (const MeshSceneNode *mesh = dynamic_cast<const MeshSceneNode*>(node)) {
-            const QVector<WS2Common::Model::MeshSegment*>& segments = scene->getMeshNodeData(mesh)->getMesh()->getMeshSegments();
+            const QVector<WS2Common::Model::MeshSegment*>& segments = scene->getMeshNodeData(mesh->getUuid())->getMesh()->getMeshSegments();
 
             bool isSelected = scene->getSelectionManager()->isSelected(node);
 
