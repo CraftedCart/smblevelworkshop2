@@ -21,6 +21,11 @@ namespace WS2Common {
                 parseGroupSceneNode(xml, node);
                 if (parent != nullptr) parent->addChild(node);
                 return node;
+            } else if (xml.name() == "node-goalSceneNode") {
+                GoalSceneNode *node = new GoalSceneNode();
+                parseGoalSceneNode(xml, node);
+                if (parent != nullptr) parent->addChild(node);
+                return node;
             }
 
             return nullptr; //Failed to deserialize
@@ -166,6 +171,46 @@ namespace WS2Common {
                     node->setCollisionGrid(CollisionGrid::deserializeDataXml(xml));
                 } else {
                     qWarning().noquote() << "Unrecognised tag: data-groupSceneNode > " + xml.name();
+                }
+            }
+        }
+
+        void parseGoalSceneNode(QXmlStreamReader &xml, GoalSceneNode *node) {
+            while (!(xml.isEndElement() && xml.name() == "node-goalSceneNode")) {
+                xml.readNext();
+                if (!xml.isStartElement()) continue; //Ignore all end elements
+
+                if (xml.name() == "data") {
+                    while (!(xml.isEndElement() && xml.name() == "data")) {
+                        xml.readNext();
+                        if (!xml.isStartElement()) continue; //Ignore all end elements
+
+                        if (xml.name() == "data-sceneNode") {
+                            parseSceneNodeData(xml, node);
+                        } else if (xml.name() == "data-goalSceneNode") {
+                            parseGoalSceneNodeData(xml, node);
+                        } else {
+                            qWarning().noquote() << "Unrecognised tag: data > " + xml.name();
+                        }
+                    }
+
+                } else if (xml.name() == "children") {
+                    parseChildren(xml, node);
+                } else {
+                    qWarning().noquote() << "Unrecognised tag: node-goalSceneNode > " + xml.name();
+                }
+            }
+        }
+
+        void parseGoalSceneNodeData(QXmlStreamReader &xml, GoalSceneNode *node) {
+            while (!(xml.isEndElement() && xml.name() == "data-goalSceneNode")) {
+                xml.readNext();
+                if (!xml.isStartElement()) continue; //Ignore all end elements
+
+                if (xml.name() == "type") {
+                    node->setType(GoalType::fromString(xml.readElementText()));
+                } else {
+                    qWarning().noquote() << "Unrecognised tag: data-goalSceneNode > " + xml.name();
                 }
             }
         }

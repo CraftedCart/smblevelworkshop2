@@ -9,6 +9,7 @@
 
 #include "ws2common/scene/MeshSceneNode.hpp"
 #include "ws2common/scene/GroupSceneNode.hpp"
+#include "ws2common/scene/GoalSceneNode.hpp"
 #include <glm/glm.hpp>
 #include <QXmlStreamReader>
 #include <QXmlStreamWriter>
@@ -25,6 +26,8 @@ namespace WS2Common {
         void parseMeshSceneNodeData(QXmlStreamReader &xml, MeshSceneNode *node);
         void parseGroupSceneNode(QXmlStreamReader &xml, GroupSceneNode *node);
         void parseGroupSceneNodeData(QXmlStreamReader &xml, GroupSceneNode *node);
+        void parseGoalSceneNode(QXmlStreamReader &xml, GoalSceneNode *node);
+        void parseGoalSceneNodeData(QXmlStreamReader &xml, GoalSceneNode *node);
 
         void parseChildren(QXmlStreamReader &xml, SceneNode *node);
 

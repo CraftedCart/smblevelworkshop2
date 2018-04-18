@@ -22,6 +22,8 @@ namespace WS2Common {
     };
 
     namespace GoalType {
+        QString toString(EnumGoalType type);
+
         /**
          * @brief Converts a string to an EnumGoalType
          *

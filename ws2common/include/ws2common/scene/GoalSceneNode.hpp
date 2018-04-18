@@ -18,7 +18,12 @@ namespace WS2Common {
                  */
                 EnumGoalType type = EnumGoalType::BLUE;
 
+            protected:
+                virtual void serializeNodeDataXml(QXmlStreamWriter &s) const;
+                virtual const QString getSerializableName() const;
+
             public:
+                GoalSceneNode() = default;
                 GoalSceneNode(const QString name);
 
                 /**
