@@ -95,14 +95,14 @@ namespace WS2Editor {
 
             CommandReply reply = CommandInterpreter::getInstance()->runCommand(lineEdit->text());
 
-            if (reply.getSuccess()) {
+            if (reply.getTranslatedMessage().length() == 0) {
                 close();
             } else {
                 delete lineEdit;
 
-                QLabel *errorLabel = new QLabel(this);
-                errorLabel->setText(reply.getTranslatedErrorString());
-                layout()->addWidget(errorLabel);
+                QLabel *messageLabel = new QLabel(this);
+                messageLabel->setText(reply.getTranslatedMessage());
+                layout()->addWidget(messageLabel);
             }
         }
     }

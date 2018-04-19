@@ -1,4 +1,5 @@
 #include "ws2editor/command/CommandInterpreter.hpp"
+#include "ws2editor/command/ListCommandsCommand.hpp"
 #include "ws2editor/command/QuitCommand.hpp"
 #include "ws2editor/command/RestartCommand.hpp"
 #include <QStringList>
@@ -25,6 +26,7 @@ namespace WS2Editor {
         CommandInterpreter::CommandInterpreter() {
             //Register built-in commands
 
+            registerCommand(new ListCommandsCommand);
             registerCommand(new QuitCommand);
             registerCommand(new RestartCommand);
         }

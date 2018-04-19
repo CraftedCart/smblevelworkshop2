@@ -13,13 +13,13 @@ namespace WS2Editor {
         class CommandReply {
             protected:
                 bool success;
-                QString translatedErrorString;
+                QString translatedMessage;
 
             public:
-                CommandReply(bool success, QString translatedErrorString = "");
+                CommandReply(bool success, QString translatedMessage = "");
 
                 bool getSuccess();
-                QString getTranslatedErrorString();
+                QString getTranslatedMessage();
         };
     }
 }

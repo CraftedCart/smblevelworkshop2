@@ -81,6 +81,7 @@ set(SOURCE_FILES
     ./src/ws2editor/MeshNodeData.cpp
     ./src/ws2editor/command/CommandInterpreter.cpp
     ./src/ws2editor/command/CommandReply.cpp
+    ./src/ws2editor/command/ListCommandsCommand.cpp
     ./src/ws2editor/command/QuitCommand.cpp
     ./src/ws2editor/command/RestartCommand.cpp
     )
@@ -123,6 +124,8 @@ set(HEADER_FILES
     ./include/ws2editor/command/CommandInterpreter.hpp
     ./include/ws2editor/command/CommandReply.hpp
     ./include/ws2editor/command/ICommandHandler.hpp
+    ./include/ws2editor/command/ListCommandsCommand.hpp
+    ./include/ws2editor/command/QuitCommand.hpp
     ./include/ws2editor/command/RestartCommand.hpp
     )
 

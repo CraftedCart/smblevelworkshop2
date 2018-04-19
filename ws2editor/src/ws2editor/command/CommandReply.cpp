@@ -2,16 +2,16 @@
 
 namespace WS2Editor {
     namespace Command {
-        CommandReply::CommandReply(bool success, QString translatedErrorString) :
+        CommandReply::CommandReply(bool success, QString translatedMessage) :
             success(success),
-            translatedErrorString(translatedErrorString) {}
+            translatedMessage(translatedMessage) {}
 
         bool CommandReply::getSuccess() {
             return success;
         }
 
-        QString CommandReply::getTranslatedErrorString() {
-            return translatedErrorString;
+        QString CommandReply::getTranslatedMessage() {
+            return translatedMessage;
         }
     }
 }
