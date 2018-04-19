@@ -9,6 +9,10 @@ namespace WS2Common {
         this->position = position;
     }
 
+    void Transform::translate(const glm::vec3 delta) {
+        position += delta;
+    }
+
     glm::vec3 Transform::getRotation() const {
         return rotation;
     }

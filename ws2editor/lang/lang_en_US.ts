@@ -752,7 +752,7 @@ Public License instead of this License.  But first, please read
 <context>
     <name>CommandInterpreter</name>
     <message>
-        <location filename="../src/ws2editor/command/CommandInterpreter.cpp" line="61"/>
+        <location filename="../src/ws2editor/command/CommandInterpreter.cpp" line="63"/>
         <source>Command not found: %1</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1158,6 +1158,29 @@ Public License instead of this License.  But first, please read
     <message>
         <location filename="../src/ws2editor/ui/StageIdeaGeneratorWindow.ui" line="82"/>
         <source>For an extra challenge, try utilising multiple mechanics!</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>TranslateSelectedCommand</name>
+    <message>
+        <location filename="../src/ws2editor/command/TranslateSelectedCommand.cpp" line="20"/>
+        <source>Expected 3 args: delta-x delta-y delta-z</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/ws2editor/command/TranslateSelectedCommand.cpp" line="30"/>
+        <source>Failed to parse delta-x</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/ws2editor/command/TranslateSelectedCommand.cpp" line="35"/>
+        <source>Failed to parse delta-y</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/ws2editor/command/TranslateSelectedCommand.cpp" line="40"/>
+        <source>Failed to parse delta-z</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
