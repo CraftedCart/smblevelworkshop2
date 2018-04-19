@@ -84,6 +84,8 @@ namespace WS2Editor {
         }
 
         void CommandWidget::keyPressEvent(QKeyEvent *event) {
+            QWidget::keyPressEvent(event);
+
             //Close the window if we're focus but the line edit isn't focused on return
             if (event->key() == Qt::Key_Return) close();
         }

@@ -1200,7 +1200,7 @@ Public License instead of this License.  But first, please read
 <context>
     <name>WS2Editor::UI::CommandWidget</name>
     <message>
-        <location filename="../src/ws2editor/ui/CommandWidget.cpp" line="102"/>
+        <location filename="../src/ws2editor/ui/CommandWidget.cpp" line="104"/>
         <source>Failed to execute command</source>
         <translation type="unfinished"></translation>
     </message>
