@@ -750,6 +750,14 @@ Public License instead of this License.  But first, please read
     </message>
 </context>
 <context>
+    <name>CommandInterpreter</name>
+    <message>
+        <location filename="../src/ws2editor/command/CommandInterpreter.cpp" line="59"/>
+        <source>Command not found: %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>Project</name>
     <message>
         <location filename="../src/ws2editor/project/Project.cpp" line="9"/>
@@ -1194,14 +1202,6 @@ Public License instead of this License.  But first, please read
     <message>
         <location filename="../src/ws2editor/ui/AboutWindow.cpp" line="12"/>
         <source>Compiled on </source>
-        <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
-    <name>WS2Editor::UI::CommandWidget</name>
-    <message>
-        <location filename="../src/ws2editor/ui/CommandWidget.cpp" line="104"/>
-        <source>Failed to execute command</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

@@ -6,6 +6,7 @@
 #ifndef SMBLEVELWORKSHOP2_WS2EDITOR_COMMAND_ICOMMANDHANDLER_HPP
 #define SMBLEVELWORKSHOP2_WS2EDITOR_COMMAND_ICOMMANDHANDLER_HPP
 
+#include "ws2editor/command/CommandReply.hpp"
 #include <QString>
 
 namespace WS2Editor {
@@ -23,7 +24,7 @@ namespace WS2Editor {
                  *
                  * @return Whether it succeeded or not
                  */
-                virtual bool executeCommand(QString command) = 0;
+                virtual CommandReply executeCommand(QString command) = 0;
         };
     }
 }

@@ -2,6 +2,7 @@
 #include "ws2editor/command/QuitCommand.hpp"
 #include "ws2editor/command/RestartCommand.hpp"
 #include <QStringList>
+#include <QCoreApplication>
 #include <QDebug>
 
 namespace WS2Editor {
@@ -41,7 +42,7 @@ namespace WS2Editor {
             return commands;
         }
 
-        bool CommandInterpreter::runCommand(QString command) {
+        CommandReply CommandInterpreter::runCommand(QString command) {
             qDebug().noquote() << QString("Command: %1").arg(command);
 
             QString first = command.split(" ").at(0); //Get the first word
@@ -55,7 +56,7 @@ namespace WS2Editor {
             }
 
             //Couldn't find any matching commands
-            return false;
+            return CommandReply(false, QCoreApplication::translate("CommandInterpreter", "Command not found: %1").arg(first));
         }
     }
 }

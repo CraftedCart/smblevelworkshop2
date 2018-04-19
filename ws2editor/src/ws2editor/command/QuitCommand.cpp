@@ -7,11 +7,11 @@ namespace WS2Editor {
             return "quit";
         }
 
-        bool QuitCommand::executeCommand(QString command) {
+        CommandReply QuitCommand::executeCommand(QString command) {
             Q_UNUSED(command);
 
             QApplication::exit();
-            return true;
+            return CommandReply(true);
         }
     }
 }

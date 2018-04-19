@@ -13,7 +13,7 @@ namespace WS2Editor {
         class QuitCommand : public ICommandHandler {
             public:
                 virtual QString getCommand() override;
-                virtual bool executeCommand(QString command) override;
+                virtual CommandReply executeCommand(QString command) override;
         };
     }
 }

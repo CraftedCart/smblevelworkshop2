@@ -8,12 +8,12 @@ namespace WS2Editor {
             return "restart";
         }
 
-        bool RestartCommand::executeCommand(QString command) {
+        CommandReply RestartCommand::executeCommand(QString command) {
             Q_UNUSED(command);
 
             QApplication::exit();
             QProcess::startDetached(QApplication::arguments()[0], QApplication::arguments());
-            return true;
+            return CommandReply(true);
         }
     }
 }

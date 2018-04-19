@@ -93,15 +93,15 @@ namespace WS2Editor {
         void CommandWidget::executeCommand() {
             using namespace WS2Editor::Command;
 
-            bool success = CommandInterpreter::getInstance()->runCommand(lineEdit->text());
+            CommandReply reply = CommandInterpreter::getInstance()->runCommand(lineEdit->text());
 
-            if (success) {
+            if (reply.getSuccess()) {
                 close();
             } else {
                 delete lineEdit;
 
                 QLabel *errorLabel = new QLabel(this);
-                errorLabel->setText(tr("Failed to execute command"));
+                errorLabel->setText(reply.getTranslatedErrorString());
                 layout()->addWidget(errorLabel);
             }
         }

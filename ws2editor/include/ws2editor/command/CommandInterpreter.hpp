@@ -7,6 +7,7 @@
 #define SMBLEVELWORKSHOP2_WS2EDITOR_COMMAND_COMMANDINTERPRETER_HPP
 
 #include "ws2editor/command/ICommandHandler.hpp"
+#include "ws2editor/command/CommandReply.hpp"
 #include <QString>
 #include <QVector>
 
@@ -36,7 +37,7 @@ namespace WS2Editor {
                  *
                  * @return Whether it succeeded or not
                  */
-                bool runCommand(QString command);
+                CommandReply runCommand(QString command);
         };
     }
 }
