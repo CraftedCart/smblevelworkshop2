@@ -21,6 +21,7 @@
         <file>Icons/GoalBlue.png</file>
         <file>Icons/GoalGreen.png</file>
         <file>Icons/GoalRed.png</file>
+        <file>Icons/Console.png</file>
         <file>Shaders/stage.vert</file>
         <file>Shaders/stage.frag</file>
         <file>Shaders/physicsDebug.vert</file>

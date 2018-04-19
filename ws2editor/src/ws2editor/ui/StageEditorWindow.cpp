@@ -5,6 +5,7 @@
 #include "ws2editor/ui/SettingsDialog.hpp"
 #include "ws2editor/ui/AboutWindow.hpp"
 #include "ws2editor/ui/StageIdeaGeneratorWindow.hpp"
+#include "ws2editor/ui/CommandWidget.hpp"
 #include "ws2editor/task/ImportFileTask.hpp"
 #include "ws2editor/WS2Editor.hpp"
 #include "ws2common/scene/GroupSceneNode.hpp"
@@ -49,6 +50,7 @@ namespace WS2Editor {
             connect(ui->viewportWidget, &Widget::ViewportWidget::frameRendered, this, &StageEditorWindow::viewportFrameRendered);
             connect(ui->actionQuit, &QAction::triggered, QApplication::instance(), QApplication::quit);
             connect(ui->actionImport, &QAction::triggered, this, &StageEditorWindow::askImportFiles);
+            connect(ui->actionRunCommand, &QAction::triggered, this, &StageEditorWindow::showCommandLine);
             connect(ui->actionNewNode, &QAction::triggered, this, &StageEditorWindow::addSceneNode);
             connect(ui->actionDelete, &QAction::triggered, this, &StageEditorWindow::deleteSelected);
             connect(ui->actionSettings, &QAction::triggered, this, &StageEditorWindow::showSettings);
@@ -207,6 +209,11 @@ namespace WS2Editor {
             }
 
             ModelManager::modelOutliner->addNode(newNode, staticNode);
+        }
+
+        void StageEditorWindow::showCommandLine() {
+            CommandWidget *widget = new CommandWidget(QCursor::pos(), this);
+            widget->show();
         }
     }
 }

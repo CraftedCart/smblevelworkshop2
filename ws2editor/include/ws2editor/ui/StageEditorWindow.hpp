@@ -59,6 +59,11 @@ namespace WS2Editor {
                  */
                 void showStageIdeaGenerator();
 
+                /**
+                 * @brief Shows the command line widget as a pop-up
+                 */
+                void showCommandLine();
+
                 void addGoalBlue();
                 void addGoalGreen();
                 void addGoalRed();

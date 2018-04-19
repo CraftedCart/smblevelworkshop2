@@ -57,6 +57,8 @@
     <addaction name="actionImport"/>
     <addaction name="actionExport"/>
     <addaction name="separator"/>
+    <addaction name="actionRunCommand"/>
+    <addaction name="separator"/>
     <addaction name="actionQuit"/>
    </widget>
    <widget class="QMenu" name="menuEdit">
@@ -595,6 +597,18 @@
    </property>
    <property name="text">
     <string>Add Red Goal</string>
+   </property>
+  </action>
+  <action name="actionRunCommand">
+   <property name="icon">
+    <iconset resource="../../../resources/Workshop2/Workshop2Resources.qrc">
+     <normaloff>:/Workshop2/Icons/Console.png</normaloff>:/Workshop2/Icons/Console.png</iconset>
+   </property>
+   <property name="text">
+    <string>Run command</string>
+   </property>
+   <property name="shortcut">
+    <string>:</string>
    </property>
   </action>
  </widget>

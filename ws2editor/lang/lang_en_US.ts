@@ -823,295 +823,305 @@ Public License instead of this License.  But first, please read
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/ws2editor/ui/StageEditorWindow.ui" line="64"/>
+        <location filename="../src/ws2editor/ui/StageEditorWindow.ui" line="66"/>
         <source>Edit</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/ws2editor/ui/StageEditorWindow.ui" line="85"/>
-        <location filename="../src/ws2editor/ui/StageEditorWindow.ui" line="107"/>
+        <location filename="../src/ws2editor/ui/StageEditorWindow.ui" line="87"/>
+        <location filename="../src/ws2editor/ui/StageEditorWindow.ui" line="109"/>
         <source>View</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/ws2editor/ui/StageEditorWindow.ui" line="95"/>
+        <location filename="../src/ws2editor/ui/StageEditorWindow.ui" line="97"/>
         <source>Help</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/ws2editor/ui/StageEditorWindow.ui" line="103"/>
+        <location filename="../src/ws2editor/ui/StageEditorWindow.ui" line="105"/>
         <source>Debug</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/ws2editor/ui/StageEditorWindow.ui" line="113"/>
+        <location filename="../src/ws2editor/ui/StageEditorWindow.ui" line="115"/>
         <source>Rendering</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/ws2editor/ui/StageEditorWindow.ui" line="130"/>
-        <location filename="../src/ws2editor/ui/StageEditorWindow.ui" line="451"/>
+        <location filename="../src/ws2editor/ui/StageEditorWindow.ui" line="132"/>
+        <location filename="../src/ws2editor/ui/StageEditorWindow.ui" line="453"/>
         <source>Toolbar</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/ws2editor/ui/StageEditorWindow.ui" line="167"/>
-        <location filename="../src/ws2editor/ui/StageEditorWindow.ui" line="459"/>
+        <location filename="../src/ws2editor/ui/StageEditorWindow.ui" line="169"/>
+        <location filename="../src/ws2editor/ui/StageEditorWindow.ui" line="461"/>
         <source>Outliner</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/ws2editor/ui/StageEditorWindow.ui" line="210"/>
-        <location filename="../src/ws2editor/ui/StageEditorWindow.ui" line="467"/>
+        <location filename="../src/ws2editor/ui/StageEditorWindow.ui" line="212"/>
+        <location filename="../src/ws2editor/ui/StageEditorWindow.ui" line="469"/>
         <source>Properties</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/ws2editor/ui/StageEditorWindow.ui" line="219"/>
-        <location filename="../src/ws2editor/ui/StageEditorWindow.ui" line="475"/>
+        <location filename="../src/ws2editor/ui/StageEditorWindow.ui" line="221"/>
+        <location filename="../src/ws2editor/ui/StageEditorWindow.ui" line="477"/>
         <source>Timeline</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/ws2editor/ui/StageEditorWindow.ui" line="231"/>
+        <location filename="../src/ws2editor/ui/StageEditorWindow.ui" line="233"/>
         <source>Debug: Resources</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/ws2editor/ui/StageEditorWindow.ui" line="284"/>
+        <location filename="../src/ws2editor/ui/StageEditorWindow.ui" line="286"/>
         <source>New</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/ws2editor/ui/StageEditorWindow.ui" line="287"/>
+        <location filename="../src/ws2editor/ui/StageEditorWindow.ui" line="289"/>
         <source>Ctrl+N</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/ws2editor/ui/StageEditorWindow.ui" line="296"/>
+        <location filename="../src/ws2editor/ui/StageEditorWindow.ui" line="298"/>
         <source>Open</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/ws2editor/ui/StageEditorWindow.ui" line="299"/>
+        <location filename="../src/ws2editor/ui/StageEditorWindow.ui" line="301"/>
         <source>Ctrl+O</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/ws2editor/ui/StageEditorWindow.ui" line="308"/>
+        <location filename="../src/ws2editor/ui/StageEditorWindow.ui" line="310"/>
         <source>Quit</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/ws2editor/ui/StageEditorWindow.ui" line="311"/>
+        <location filename="../src/ws2editor/ui/StageEditorWindow.ui" line="313"/>
         <source>Ctrl+Q</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/ws2editor/ui/StageEditorWindow.ui" line="320"/>
+        <location filename="../src/ws2editor/ui/StageEditorWindow.ui" line="322"/>
         <source>Undo</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/ws2editor/ui/StageEditorWindow.ui" line="323"/>
+        <location filename="../src/ws2editor/ui/StageEditorWindow.ui" line="325"/>
         <source>Ctrl+Z</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/ws2editor/ui/StageEditorWindow.ui" line="332"/>
+        <location filename="../src/ws2editor/ui/StageEditorWindow.ui" line="334"/>
         <source>Redo</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/ws2editor/ui/StageEditorWindow.ui" line="335"/>
+        <location filename="../src/ws2editor/ui/StageEditorWindow.ui" line="337"/>
         <source>Ctrl+Shift+Z</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/ws2editor/ui/StageEditorWindow.ui" line="344"/>
+        <location filename="../src/ws2editor/ui/StageEditorWindow.ui" line="346"/>
         <source>Cut</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/ws2editor/ui/StageEditorWindow.ui" line="347"/>
+        <location filename="../src/ws2editor/ui/StageEditorWindow.ui" line="349"/>
         <source>Ctrl+X</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/ws2editor/ui/StageEditorWindow.ui" line="356"/>
+        <location filename="../src/ws2editor/ui/StageEditorWindow.ui" line="358"/>
         <source>Copy</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/ws2editor/ui/StageEditorWindow.ui" line="359"/>
+        <location filename="../src/ws2editor/ui/StageEditorWindow.ui" line="361"/>
         <source>Ctrl+C</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/ws2editor/ui/StageEditorWindow.ui" line="368"/>
+        <location filename="../src/ws2editor/ui/StageEditorWindow.ui" line="370"/>
         <source>Paste</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/ws2editor/ui/StageEditorWindow.ui" line="371"/>
+        <location filename="../src/ws2editor/ui/StageEditorWindow.ui" line="373"/>
         <source>Ctrl+V</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/ws2editor/ui/StageEditorWindow.ui" line="380"/>
+        <location filename="../src/ws2editor/ui/StageEditorWindow.ui" line="382"/>
         <source>Select All</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/ws2editor/ui/StageEditorWindow.ui" line="383"/>
+        <location filename="../src/ws2editor/ui/StageEditorWindow.ui" line="385"/>
         <source>Ctrl+A</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/ws2editor/ui/StageEditorWindow.ui" line="392"/>
+        <location filename="../src/ws2editor/ui/StageEditorWindow.ui" line="394"/>
         <source>Duplicate</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/ws2editor/ui/StageEditorWindow.ui" line="395"/>
+        <location filename="../src/ws2editor/ui/StageEditorWindow.ui" line="397"/>
         <source>Ctrl+D</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/ws2editor/ui/StageEditorWindow.ui" line="404"/>
+        <location filename="../src/ws2editor/ui/StageEditorWindow.ui" line="406"/>
         <source>Delete</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/ws2editor/ui/StageEditorWindow.ui" line="407"/>
+        <location filename="../src/ws2editor/ui/StageEditorWindow.ui" line="409"/>
         <source>Del</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/ws2editor/ui/StageEditorWindow.ui" line="416"/>
+        <location filename="../src/ws2editor/ui/StageEditorWindow.ui" line="418"/>
         <source>Focus Selected</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/ws2editor/ui/StageEditorWindow.ui" line="419"/>
+        <location filename="../src/ws2editor/ui/StageEditorWindow.ui" line="421"/>
         <source>F</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/ws2editor/ui/StageEditorWindow.ui" line="428"/>
+        <location filename="../src/ws2editor/ui/StageEditorWindow.ui" line="430"/>
         <source>Save</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/ws2editor/ui/StageEditorWindow.ui" line="431"/>
+        <location filename="../src/ws2editor/ui/StageEditorWindow.ui" line="433"/>
         <source>Ctrl+S</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/ws2editor/ui/StageEditorWindow.ui" line="440"/>
+        <location filename="../src/ws2editor/ui/StageEditorWindow.ui" line="442"/>
         <source>Save As</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/ws2editor/ui/StageEditorWindow.ui" line="443"/>
+        <location filename="../src/ws2editor/ui/StageEditorWindow.ui" line="445"/>
         <source>Ctrl+Shift+S</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/ws2editor/ui/StageEditorWindow.ui" line="484"/>
-        <location filename="../src/ws2editor/ui/StageEditorWindow.ui" line="487"/>
+        <location filename="../src/ws2editor/ui/StageEditorWindow.ui" line="486"/>
+        <location filename="../src/ws2editor/ui/StageEditorWindow.ui" line="489"/>
         <source>Import</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/ws2editor/ui/StageEditorWindow.ui" line="490"/>
+        <location filename="../src/ws2editor/ui/StageEditorWindow.ui" line="492"/>
         <source>Ctrl+I</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/ws2editor/ui/StageEditorWindow.ui" line="499"/>
-        <location filename="../src/ws2editor/ui/StageEditorWindow.ui" line="502"/>
+        <location filename="../src/ws2editor/ui/StageEditorWindow.ui" line="501"/>
+        <location filename="../src/ws2editor/ui/StageEditorWindow.ui" line="504"/>
         <source>Export</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/ws2editor/ui/StageEditorWindow.ui" line="505"/>
+        <location filename="../src/ws2editor/ui/StageEditorWindow.ui" line="507"/>
         <source>Ctrl+E</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/ws2editor/ui/StageEditorWindow.ui" line="513"/>
+        <location filename="../src/ws2editor/ui/StageEditorWindow.ui" line="515"/>
         <source>Resources</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/ws2editor/ui/StageEditorWindow.ui" line="522"/>
+        <location filename="../src/ws2editor/ui/StageEditorWindow.ui" line="524"/>
         <source>New Group Node</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/ws2editor/ui/StageEditorWindow.ui" line="525"/>
+        <location filename="../src/ws2editor/ui/StageEditorWindow.ui" line="527"/>
         <source>Adds a new empty node to the scene</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/ws2editor/ui/StageEditorWindow.ui" line="528"/>
+        <location filename="../src/ws2editor/ui/StageEditorWindow.ui" line="530"/>
         <source>Ctrl+B</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/ws2editor/ui/StageEditorWindow.ui" line="533"/>
+        <location filename="../src/ws2editor/ui/StageEditorWindow.ui" line="535"/>
         <source>About</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/ws2editor/ui/StageEditorWindow.ui" line="542"/>
+        <location filename="../src/ws2editor/ui/StageEditorWindow.ui" line="544"/>
         <source>Settings</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/ws2editor/ui/StageEditorWindow.ui" line="547"/>
+        <location filename="../src/ws2editor/ui/StageEditorWindow.ui" line="549"/>
         <source>Stage Idea Generator</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/ws2editor/ui/StageEditorWindow.ui" line="550"/>
+        <location filename="../src/ws2editor/ui/StageEditorWindow.ui" line="552"/>
         <source>Randomly select a theme and mechanic for stages</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/ws2editor/ui/StageEditorWindow.ui" line="555"/>
+        <location filename="../src/ws2editor/ui/StageEditorWindow.ui" line="557"/>
         <source>Workshop 2 on Discord</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/ws2editor/ui/StageEditorWindow.ui" line="560"/>
+        <location filename="../src/ws2editor/ui/StageEditorWindow.ui" line="562"/>
         <source>Clear RenderManager::meshCache</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/ws2editor/ui/StageEditorWindow.ui" line="565"/>
+        <location filename="../src/ws2editor/ui/StageEditorWindow.ui" line="567"/>
         <source>Clear RenderManager::textureCache</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/ws2editor/ui/StageEditorWindow.ui" line="570"/>
+        <location filename="../src/ws2editor/ui/StageEditorWindow.ui" line="572"/>
         <source>Clear all RenderManager caches</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/ws2editor/ui/StageEditorWindow.ui" line="579"/>
+        <location filename="../src/ws2editor/ui/StageEditorWindow.ui" line="581"/>
         <source>Add Blue Goal</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/ws2editor/ui/StageEditorWindow.ui" line="588"/>
+        <location filename="../src/ws2editor/ui/StageEditorWindow.ui" line="590"/>
         <source>Add Green Goal</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/ws2editor/ui/StageEditorWindow.ui" line="597"/>
+        <location filename="../src/ws2editor/ui/StageEditorWindow.ui" line="599"/>
         <source>Add Red Goal</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/ws2editor/ui/StageEditorWindow.ui" line="608"/>
+        <source>Run command</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/ws2editor/ui/StageEditorWindow.ui" line="611"/>
+        <source>:</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -1188,6 +1198,14 @@ Public License instead of this License.  But first, please read
     </message>
 </context>
 <context>
+    <name>WS2Editor::UI::CommandWidget</name>
+    <message>
+        <location filename="../src/ws2editor/ui/CommandWidget.cpp" line="102"/>
+        <source>Failed to execute command</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>WS2Editor::UI::ModelResources</name>
     <message>
         <location filename="../src/ws2editor/ui/ModelResources.cpp" line="53"/>
@@ -1203,44 +1221,44 @@ Public License instead of this License.  But first, please read
 <context>
     <name>WS2Editor::UI::StageEditorWindow</name>
     <message>
-        <location filename="../src/ws2editor/ui/StageEditorWindow.cpp" line="88"/>
+        <location filename="../src/ws2editor/ui/StageEditorWindow.cpp" line="90"/>
         <source>Delta: %1ms / Framerate: %2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/ws2editor/ui/StageEditorWindow.cpp" line="97"/>
+        <location filename="../src/ws2editor/ui/StageEditorWindow.cpp" line="99"/>
         <source>Import files</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/ws2editor/ui/StageEditorWindow.cpp" line="99"/>
+        <location filename="../src/ws2editor/ui/StageEditorWindow.cpp" line="101"/>
         <source>All supported file types (*.fbx *.dae *.gltf *.glb *.blend *.3ds *.ase *.obj *.ifc *.xgl *.zgl *.ply *.dxf *.lwo *.lws *.lxo *.stl *.x *.ac *ms3d *.cob *.scn *.mesh.xml *.irrmesh *.irr *.mdl *.md2 *.md3 *.pk3 *.mdc *.md5* *.smd *.vta *.ogex *.3d *.b3d *.q3d *.q3s *.nff *.off *.raw *.ter *.hmp *.ndo *.txt *.xml);;3D models (*.fbx *.dae *.gltf *.glb *.blend *.3ds *.ase *.obj *.ifc *.xgl *.zgl *.ply *.dxf *.lwo *.lws *.lxo *.stl *.x *.ac *ms3d *.cob *.scn *.mesh.xml *.irrmesh *.irr *.mdl *.md2 *.md3 *.pk3 *.mdc *.md5* *.smd *.vta *.ogex *.3d *.b3d *.q3d *.q3s *.nff *.off *.raw *.ter *.hmp *.ndo);;Stage configurations (*.txt *.xml);;All files (*)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/ws2editor/ui/StageEditorWindow.cpp" line="127"/>
+        <location filename="../src/ws2editor/ui/StageEditorWindow.cpp" line="129"/>
         <source>New Node</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/ws2editor/ui/StageEditorWindow.cpp" line="161"/>
+        <location filename="../src/ws2editor/ui/StageEditorWindow.cpp" line="163"/>
         <source>New Blue Goal</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/ws2editor/ui/StageEditorWindow.cpp" line="167"/>
-        <location filename="../src/ws2editor/ui/StageEditorWindow.cpp" line="186"/>
-        <location filename="../src/ws2editor/ui/StageEditorWindow.cpp" line="205"/>
+        <location filename="../src/ws2editor/ui/StageEditorWindow.cpp" line="169"/>
+        <location filename="../src/ws2editor/ui/StageEditorWindow.cpp" line="188"/>
+        <location filename="../src/ws2editor/ui/StageEditorWindow.cpp" line="207"/>
         <source>Static</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/ws2editor/ui/StageEditorWindow.cpp" line="179"/>
+        <location filename="../src/ws2editor/ui/StageEditorWindow.cpp" line="181"/>
         <source>New Green Goal</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/ws2editor/ui/StageEditorWindow.cpp" line="198"/>
+        <location filename="../src/ws2editor/ui/StageEditorWindow.cpp" line="200"/>
         <source>New Red Goal</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1289,22 +1307,22 @@ Public License instead of this License.  But first, please read
 <context>
     <name>main</name>
     <message>
-        <location filename="../src/ws2editor/main.cpp" line="36"/>
+        <location filename="../src/ws2editor/main.cpp" line="40"/>
         <source>Initializing WS2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/ws2editor/main.cpp" line="39"/>
+        <location filename="../src/ws2editor/main.cpp" line="43"/>
         <source>Setting default OpenGL format</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/ws2editor/main.cpp" line="55"/>
+        <location filename="../src/ws2editor/main.cpp" line="59"/>
         <source>Setting style</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/ws2editor/main.cpp" line="65"/>
+        <location filename="../src/ws2editor/main.cpp" line="69"/>
         <source>Initializing Stage Editor</source>
         <translation type="unfinished"></translation>
     </message>
