@@ -267,6 +267,21 @@ namespace WS2Editor {
             if (WS2Editor::qAppRunning) endRemoveRows();
         }
 
+        void ModelOutliner::onNodeModified(SceneNode *node) {
+            for (SceneNode *child : node->getChildren()) onNodeModified(child);
+
+            //Update the physics data (if any exists)
+            MeshNodeData *meshData = Project::ProjectManager::getActiveProject()->getScene()->getMeshNodeData(node->getUuid());
+
+            if (meshData != nullptr) {
+                meshData->getPhysicsContainer()->updateTransform(node->getTransform());
+            }
+
+            //Signal the data change
+            QModelIndex index = findIndexFromNode(node);
+            emit dataChanged(index, index);
+        }
+
         void ModelOutliner::selectionChanged(QVector<SceneNode*>& selectedObjects, bool emitOnSelectionChanged) {
             QVector<QModelIndex> indices;
 

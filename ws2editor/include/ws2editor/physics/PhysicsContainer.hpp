@@ -32,6 +32,8 @@ namespace WS2Editor {
                 PhysicsContainer(SceneNode *node, ResourceMesh *mesh, Transform &transform);
                 ~PhysicsContainer();
 
+                void updateTransform(Transform &transform);
+
                 btRigidBody* getRigidBody();
         };
     }

@@ -1,5 +1,6 @@
 #include "ws2editor/command/TranslateSelectedCommand.hpp"
 #include "ws2editor/project/ProjectManager.hpp"
+#include "ws2editor/ui/ModelManager.hpp"
 #include <QCoreApplication>
 
 namespace WS2Editor {
@@ -45,6 +46,7 @@ namespace WS2Editor {
 
             for (SceneNode *node : selected) {
                 node->getTransform().translate(delta);
+                UI::ModelManager::modelOutliner->onNodeModified(node);
             }
 
             return CommandReply(true);

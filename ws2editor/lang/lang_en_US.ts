@@ -1164,22 +1164,22 @@ Public License instead of this License.  But first, please read
 <context>
     <name>TranslateSelectedCommand</name>
     <message>
-        <location filename="../src/ws2editor/command/TranslateSelectedCommand.cpp" line="20"/>
+        <location filename="../src/ws2editor/command/TranslateSelectedCommand.cpp" line="21"/>
         <source>Expected 3 args: delta-x delta-y delta-z</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/ws2editor/command/TranslateSelectedCommand.cpp" line="30"/>
+        <location filename="../src/ws2editor/command/TranslateSelectedCommand.cpp" line="31"/>
         <source>Failed to parse delta-x</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/ws2editor/command/TranslateSelectedCommand.cpp" line="35"/>
+        <location filename="../src/ws2editor/command/TranslateSelectedCommand.cpp" line="36"/>
         <source>Failed to parse delta-y</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/ws2editor/command/TranslateSelectedCommand.cpp" line="40"/>
+        <location filename="../src/ws2editor/command/TranslateSelectedCommand.cpp" line="41"/>
         <source>Failed to parse delta-z</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1302,27 +1302,27 @@ Public License instead of this License.  But first, please read
 <context>
     <name>WS2Editor::Widget::ViewportWidget</name>
     <message>
-        <location filename="../src/ws2editor/widget/ViewportWidget.cpp" line="35"/>
+        <location filename="../src/ws2editor/widget/ViewportWidget.cpp" line="36"/>
         <source>:/Workshop2/Lang/tips-en_US.txt</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/ws2editor/widget/ViewportWidget.cpp" line="332"/>
+        <location filename="../src/ws2editor/widget/ViewportWidget.cpp" line="330"/>
         <source>Drop to import files</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/ws2editor/widget/ViewportWidget.cpp" line="385"/>
+        <location filename="../src/ws2editor/widget/ViewportWidget.cpp" line="383"/>
         <source>SMB Level Workshop 2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/ws2editor/widget/ViewportWidget.cpp" line="386"/>
+        <location filename="../src/ws2editor/widget/ViewportWidget.cpp" line="384"/>
         <source>Tip of the day</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/ws2editor/widget/ViewportWidget.cpp" line="390"/>
+        <location filename="../src/ws2editor/widget/ViewportWidget.cpp" line="388"/>
         <source>Open a project or import models to get started</source>
         <translation type="unfinished"></translation>
     </message>

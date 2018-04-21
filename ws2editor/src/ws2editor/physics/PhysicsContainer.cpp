@@ -29,8 +29,9 @@ namespace WS2Editor {
 
             physicsMotionState = new btDefaultMotionState(btTransform(
                         btQuaternion(rotQuat.x, rotQuat.y, rotQuat.z, rotQuat.w),
-                        btVector3(transform.getPosition().x, transform.getPosition().y, transform.getPosition().z)
+                        btVector3(MathUtils::toBtVector3(transform.getPosition()))
                         ));
+            physicsCollisionShape->setLocalScaling(MathUtils::toBtVector3(transform.getScale()));
 
             btRigidBody::btRigidBodyConstructionInfo constructionInfo(
                     0, //kg mass - 0 = static object
@@ -48,6 +49,20 @@ namespace WS2Editor {
             delete physicsCollisionShape;
             delete physicsMotionState;
             delete physicsRigidBody;
+        }
+
+        void PhysicsContainer::updateTransform(Transform &transform) {
+            glm::quat rotQuat = glm::quat(transform.getRotation());
+            btTransform bulletTransform(
+                    btQuaternion(rotQuat.x, rotQuat.y, rotQuat.z, rotQuat.w),
+                    btVector3(MathUtils::toBtVector3(transform.getPosition()))
+                    );
+
+            //TODO: Not world
+            physicsMotionState->setWorldTransform(bulletTransform);
+            physicsRigidBody->setWorldTransform(bulletTransform);
+
+            physicsCollisionShape->setLocalScaling(MathUtils::toBtVector3(transform.getScale()));
         }
 
         btRigidBody* PhysicsContainer::getRigidBody() {

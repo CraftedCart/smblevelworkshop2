@@ -70,13 +70,13 @@ namespace WS2Editor {
 
         //Load the physics debug shaders
         //TODO: Make loading this an option
-        //QFile physVertFile(":/Workshop2/Shaders/physicsDebug.vert");
-        //QFile physFragFile(":/Workshop2/Shaders/physicsDebug.frag");
-        //physicsDebugProgID = GLManager::loadShaders(&physVertFile, &physFragFile);
+        QFile physVertFile(":/Workshop2/Shaders/physicsDebug.vert");
+        QFile physFragFile(":/Workshop2/Shaders/physicsDebug.frag");
+        physicsDebugProgID = loadShaders(&physVertFile, &physFragFile);
 
         //Get uniform IDs
-        //physicsDebugShaderViewID = glGetUniformLocation(physicsDebugProgID, "viewMat");
-        //physicsDebugShaderProjID = glGetUniformLocation(physicsDebugProgID, "projMat");
+        physicsDebugShaderViewID = glGetUniformLocation(physicsDebugProgID, "viewMat");
+        physicsDebugShaderProjID = glGetUniformLocation(physicsDebugProgID, "projMat");
 
         QFile compositeVertFile(":/Workshop2/Shaders/composite.vert");
         QFile compositeFragFile(":/Workshop2/Shaders/composite.frag");
@@ -94,7 +94,7 @@ namespace WS2Editor {
     void RenderManager::destroy() {
         clearAllCaches(); //Unload all render objects
         unloadShaders();
-        //unloadPhysicsDebugShaders();
+        unloadPhysicsDebugShaders();
 
         GLuint texturesToDelete[] = {defaultTexture->getTextureId(), fboColorTexture, fboCameraNormalTexture};
         glDeleteTextures(3, texturesToDelete);
@@ -148,8 +148,6 @@ namespace WS2Editor {
         viewportWidth = width;
         viewportHeight = height;
 
-        //destroyFboAttachments();
-        //generateFboAttachments(width, height);
         //Color texture
         glBindTexture(GL_TEXTURE_2D, fboColorTexture);
         glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, 0);
@@ -531,6 +529,10 @@ namespace WS2Editor {
         renderFifo.enqueue(new MeshRenderCommand(meshCache[mesh], this, transform, tint, renderCameraNormals));
     }
 
+    void RenderManager::enqueueRenderCommand(IRenderCommand *command) {
+        renderFifo.append(command);
+    }
+
     void RenderManager::renderQueue(GLuint targetFramebuffer) {
         using namespace WS2Editor::Rendering;
 
@@ -708,6 +710,10 @@ namespace WS2Editor {
     void RenderManager::unloadShaders() {
         glDeleteProgram(progID);
         glDeleteProgram(compositeShaderProg);
+    }
+
+    void RenderManager::unloadPhysicsDebugShaders() {
+        glDeleteProgram(physicsDebugProgID);
     }
 
     void RenderManager::addTexture(const QImage image, const ResourceTexture *tex) {
