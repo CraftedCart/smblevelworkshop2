@@ -31,6 +31,13 @@ namespace WS2Common {
             void setPosition(const glm::vec3 position);
 
             /**
+             * @brief Offsets the position by the delta
+             *
+             * @param delta The amount to offset position by
+             */
+            void translate(const glm::vec3 delta);
+
+            /**
              * @brief Getter for rotation
              *
              * @return The rotation of the transform

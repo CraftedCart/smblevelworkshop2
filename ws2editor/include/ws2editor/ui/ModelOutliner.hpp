@@ -103,6 +103,13 @@ namespace WS2Editor {
                 void removeNode(SceneNode *node);
 
                 /**
+                 * @brief Informs that model that a node has been changed, and updates the node + children recursively
+                 *
+                 * @param node The modified node
+                 */
+                void onNodeModified(SceneNode *node);
+
+                /**
                  * @brief Call this when the selection changes
                  *
                  * @param selectedObjects A vector of selected objects

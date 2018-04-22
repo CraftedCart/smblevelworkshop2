@@ -4,6 +4,7 @@
 #include "ws2editor/resource/ResourceManager.hpp"
 #include "ws2editor/physics/PhysicsManager.hpp"
 #include "ws2editor/PhysicsDebugDrawer.hpp"
+#include "ws2editor/rendering/DebugRenderCommand.hpp"
 #include "ws2editor/Config.hpp"
 #include "ws2editor/task/ImportFileTask.hpp"
 #include "ws2editor/WS2Editor.hpp"
@@ -100,7 +101,7 @@ namespace WS2Editor {
             Project::ProjectManager::getActiveProject()->getScene()->load();
 
             //TODO: Make the debug drawer an option, and if enabled, load for each scene
-            //Project::ProjectManager::getActiveProject()->getScene()->initPhysicsDebugDrawer();
+            Project::ProjectManager::getActiveProject()->getScene()->initPhysicsDebugDrawer();
 
             //Start the elapsed timer
             elapsedTimer.start();
@@ -218,6 +219,10 @@ namespace WS2Editor {
             cameraPos = glm::mix(cameraPos, targetCameraPos, qBound(0.0f, Config::cameraInertia * deltaSeconds, 1.0f));
 
             calcVectors();
+
+            //Update bullet physics
+            btDynamicsWorld *dynamicsWorld = Project::ProjectManager::getActiveProject()->getScene()->getPhysicsManager()->getDynamicsWorld();
+            dynamicsWorld->updateAabbs();
         }
 
         glm::vec3 ViewportWidget::calcForwardVector(glm::vec2 &rot) {
@@ -292,21 +297,14 @@ namespace WS2Editor {
                         );
             }
 
-            renderManager->renderQueue(defaultFramebufferObject());
-
             //Physics debug drawing
             PhysicsDebugDrawer *physicsDebugDrawer = Project::ProjectManager::getActiveProject()->getScene()->getPhysicsDebugDrawer();
-            if (physicsDebugDrawer != nullptr) {
-                glUseProgram(renderManager->physicsDebugProgID);
-
-                //Give the matrices to the bound shader
-                glUniformMatrix4fv(renderManager->physicsDebugShaderModelID, 1, GL_FALSE, &model[0][0]);
-                glUniformMatrix4fv(renderManager->physicsDebugShaderViewID, 1, GL_FALSE, &view[0][0]);
-                glUniformMatrix4fv(renderManager->physicsDebugShaderProjID, 1, GL_FALSE, &proj[0][0]);
-
-                Project::ProjectManager::getActiveProject()->getScene()->getPhysicsManager()->getDynamicsWorld()->debugDrawWorld();
-                physicsDebugDrawer->drawAll();
+            if (Config::enablePhysicsDebugDrawing && physicsDebugDrawer != nullptr) {
+                btDynamicsWorld *dynamicsWorld = Project::ProjectManager::getActiveProject()->getScene()->getPhysicsManager()->getDynamicsWorld();
+                renderManager->enqueueRenderCommand(new DebugRenderCommand(renderManager, view, proj, dynamicsWorld, physicsDebugDrawer));
             }
+
+            renderManager->renderQueue(defaultFramebufferObject());
 
             //Painter
             //Need to reset some OpenGL stuff before using QPainter is sane

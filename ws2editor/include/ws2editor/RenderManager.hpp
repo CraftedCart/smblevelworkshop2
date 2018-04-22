@@ -159,6 +159,13 @@ namespace WS2Editor {
             void enqueueRenderScene(SceneNode *rootNode, const ResourceScene *scene);
 
             /**
+             * @brief Adds the given render command to the render fifo
+             *
+             * @param command The render command
+             */
+            void enqueueRenderCommand(IRenderCommand *command);
+
+            /**
              * @brief Recursively queues up the node and all the node's children to draw
              *
              * @param node The node to queue up and/or recursively iterate over its children to queue
@@ -203,6 +210,11 @@ namespace WS2Editor {
              * @brief Unloads all shaders used in regular rendering (This does not include physics debug shaders)
              */
             void unloadShaders();
+
+            /**
+             * @brief Unloads all shaders used in physics debug rendering
+             */
+            void unloadPhysicsDebugShaders();
 
             void addTexture(const QImage image, const ResourceTexture *tex);
 

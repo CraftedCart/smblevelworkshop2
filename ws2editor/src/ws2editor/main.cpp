@@ -2,6 +2,7 @@
 #include "ws2editor/ui/StageEditorWindow.hpp"
 #include "ws2editor/ui/ModelManager.hpp"
 #include "ws2editor/resource/ResourceManager.hpp"
+#include "ws2editor/command/CommandInterpreter.hpp"
 #include "ws2common/MessageHandler.hpp"
 #include <QFile>
 #include <QSurfaceFormat>
@@ -28,6 +29,9 @@ int main(int argc, char *argv[]) {
         //If we can't find a suitable translation, try en_US - if not intalled
         WS2Editor::ws2App->installTranslator(&translator);
     }
+
+    //Init command interpreter
+    WS2Editor::Command::CommandInterpreter::createInstance();
 
     //Splash screen
     QPixmap pixmap(":/Workshop2/Images/banner.png");
@@ -79,6 +83,7 @@ int main(int argc, char *argv[]) {
     WS2Editor::UI::ModelManager::destruct();
     delete w;
 
+    WS2Editor::Command::CommandInterpreter::destroyInstance();
     WS2Editor::ws2Destroy();
 
     return ret;

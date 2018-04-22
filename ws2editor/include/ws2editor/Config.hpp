@@ -19,6 +19,7 @@ namespace WS2Editor {
         extern float cameraFov;
         extern float cameraNear;
         extern float cameraFar;
+        extern bool enablePhysicsDebugDrawing;
     }
 }
 

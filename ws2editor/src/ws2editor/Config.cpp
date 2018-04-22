@@ -10,6 +10,8 @@ namespace WS2Editor {
         float cameraFov = 90.0f;
         float cameraNear = 0.1f;
         float cameraFar = 2000.0f;
+
+        bool enablePhysicsDebugDrawing = false;
     }
 }
 

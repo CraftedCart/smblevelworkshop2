@@ -52,6 +52,7 @@ set(SOURCE_FILES
     ./src/ws2editor/ui/AboutWindow.cpp
     ./src/ws2editor/ui/StageIdeaGeneratorWindow.cpp
     ./src/ws2editor/ui/SettingsDialog.cpp
+    ./src/ws2editor/ui/CommandWidget.cpp
     ./src/ws2editor/widget/ViewportWidget.cpp
     ./src/ws2editor/widget/OutlinerWidget.cpp
     ./src/ws2editor/MathUtils.cpp
@@ -77,7 +78,15 @@ set(SOURCE_FILES
     ./src/ws2editor/CachedGlMesh.cpp
     ./src/ws2editor/CachedGlTexture.cpp
     ./src/ws2editor/rendering/MeshRenderCommand.cpp
+    ./src/ws2editor/rendering/DebugRenderCommand.cpp
     ./src/ws2editor/MeshNodeData.cpp
+    ./src/ws2editor/command/CommandInterpreter.cpp
+    ./src/ws2editor/command/CommandReply.cpp
+    ./src/ws2editor/command/ListCommandsCommand.cpp
+    ./src/ws2editor/command/QuitCommand.cpp
+    ./src/ws2editor/command/RestartCommand.cpp
+    ./src/ws2editor/command/TranslateSelectedCommand.cpp
+    ./src/ws2editor/command/ToggleDebugDrawingCommand.cpp
     )
 
 set(HEADER_FILES
@@ -85,6 +94,7 @@ set(HEADER_FILES
     ./include/ws2editor/ui/AboutWindow.hpp
     ./include/ws2editor/ui/StageIdeaGeneratorWindow.hpp
     ./include/ws2editor/ui/SettingsDialog.hpp
+    ./include/ws2editor/ui/CommandWidget.hpp
     ./include/ws2editor/widget/ViewportWidget.hpp
     ./include/ws2editor/widget/OutlinerWidget.hpp
     ./include/ws2editor/EnumCameraNav.hpp
@@ -113,7 +123,16 @@ set(HEADER_FILES
     ./include/ws2editor/CachedGlTexture.hpp
     ./include/ws2editor/rendering/IRenderCommand.hpp
     ./include/ws2editor/rendering/MeshRenderCommand.hpp
+    ./include/ws2editor/rendering/DebugRenderCommand.hpp
     ./include/ws2editor/MeshNodeData.hpp
+    ./include/ws2editor/command/CommandInterpreter.hpp
+    ./include/ws2editor/command/CommandReply.hpp
+    ./include/ws2editor/command/ICommandHandler.hpp
+    ./include/ws2editor/command/ListCommandsCommand.hpp
+    ./include/ws2editor/command/QuitCommand.hpp
+    ./include/ws2editor/command/RestartCommand.hpp
+    ./include/ws2editor/command/TranslateSelectedCommand.hpp
+    ./include/ws2editor/command/ToggleDebugDrawingCommand.hpp
     )
 
 set(UI_FILES
