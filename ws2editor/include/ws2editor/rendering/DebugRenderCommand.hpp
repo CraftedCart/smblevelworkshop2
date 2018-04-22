@@ -12,9 +12,6 @@
 
 namespace WS2Editor {
     namespace Rendering {
-        /**
-         * @note The destructor will not delete mesh - this is expected to be cached elsewhere, and manually deleted when no longer in use
-         */
         class DebugRenderCommand : public IRenderCommand {
             protected:
                 RenderManager *renderManager;
