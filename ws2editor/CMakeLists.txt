@@ -86,6 +86,7 @@ set(SOURCE_FILES
     ./src/ws2editor/command/QuitCommand.cpp
     ./src/ws2editor/command/RestartCommand.cpp
     ./src/ws2editor/command/TranslateSelectedCommand.cpp
+    ./src/ws2editor/command/ToggleDebugDrawingCommand.cpp
     )
 
 set(HEADER_FILES
@@ -131,6 +132,7 @@ set(HEADER_FILES
     ./include/ws2editor/command/QuitCommand.hpp
     ./include/ws2editor/command/RestartCommand.hpp
     ./include/ws2editor/command/TranslateSelectedCommand.hpp
+    ./include/ws2editor/command/ToggleDebugDrawingCommand.hpp
     )
 
 set(UI_FILES

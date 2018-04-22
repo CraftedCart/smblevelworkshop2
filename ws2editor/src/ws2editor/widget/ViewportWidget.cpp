@@ -299,7 +299,7 @@ namespace WS2Editor {
 
             //Physics debug drawing
             PhysicsDebugDrawer *physicsDebugDrawer = Project::ProjectManager::getActiveProject()->getScene()->getPhysicsDebugDrawer();
-            if (physicsDebugDrawer != nullptr) {
+            if (Config::enablePhysicsDebugDrawing && physicsDebugDrawer != nullptr) {
                 btDynamicsWorld *dynamicsWorld = Project::ProjectManager::getActiveProject()->getScene()->getPhysicsManager()->getDynamicsWorld();
                 renderManager->enqueueRenderCommand(new DebugRenderCommand(renderManager, view, proj, dynamicsWorld, physicsDebugDrawer));
             }

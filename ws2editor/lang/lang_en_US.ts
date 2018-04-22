@@ -752,7 +752,7 @@ Public License instead of this License.  But first, please read
 <context>
     <name>CommandInterpreter</name>
     <message>
-        <location filename="../src/ws2editor/command/CommandInterpreter.cpp" line="63"/>
+        <location filename="../src/ws2editor/command/CommandInterpreter.cpp" line="65"/>
         <source>Command not found: %1</source>
         <translation type="unfinished"></translation>
     </message>
