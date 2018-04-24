@@ -53,7 +53,7 @@ namespace WS2Editor {
 
         qDebug() << "Creating shaders";
 
-        //Load the shaders
+        //Load the stage shaders
         QFile stageVertFile(":/Workshop2/Shaders/stage.vert");
         QFile stageFragFile(":/Workshop2/Shaders/stage.frag");
         progID = loadShaders(&stageVertFile, &stageFragFile);
@@ -67,6 +67,17 @@ namespace WS2Editor {
         shaderTexInfluenceID = glGetUniformLocation(progID, "texInfluence");
         shaderTintID = glGetUniformLocation(progID, "tint");
         shaderRenderCameraNormals = glGetUniformLocation(progID, "renderCameraNormals");
+
+        //Load the unlit shaders
+        QFile unlitVertFile(":/Workshop2/Shaders/unlit.vert");
+        QFile unlitFragFile(":/Workshop2/Shaders/unlit.frag");
+        unlitProgID = loadShaders(&unlitVertFile, &unlitFragFile);
+
+        //Get uniform IDs
+        unlitShaderModelID = glGetUniformLocation(unlitProgID, "modelMat");
+        unlitShaderViewID = glGetUniformLocation(unlitProgID, "viewMat");
+        unlitShaderProjID = glGetUniformLocation(unlitProgID, "projMat");
+        unlitShaderTintID = glGetUniformLocation(unlitProgID, "tint");
 
         //Load the physics debug shaders
         //TODO: Make loading this an option
@@ -88,6 +99,16 @@ namespace WS2Editor {
         QFile goalFile(":/Workshop2/Models/goal.fbx");
         goalMesh = WS2Common::Model::ModelLoader::loadModel(goalFile);
 
+        Vertex lineVertA;
+        lineVertA.position = glm::vec3(0.0f, 0.0f, 0.0f);
+        Vertex lineVertB;
+        lineVertB.position = glm::vec3(0.0f, 1.0f, 0.0f);
+        lineMeshSegment = new MeshSegment(
+                QVector<Vertex> {lineVertA, lineVertB},
+                QVector<unsigned int> {0, 1},
+                QVector<ResourceTexture*> {}
+                );
+
         checkErrors("After RenderManager::init()");
     }
 
@@ -95,6 +116,10 @@ namespace WS2Editor {
         clearAllCaches(); //Unload all render objects
         unloadShaders();
         unloadPhysicsDebugShaders();
+
+        //Delete default models
+        qDeleteAll(goalMesh);
+        delete lineMeshSegment;
 
         GLuint texturesToDelete[] = {defaultTexture->getTextureId(), fboColorTexture, fboCameraNormalTexture};
         glDeleteTextures(3, texturesToDelete);
@@ -709,6 +734,7 @@ namespace WS2Editor {
 
     void RenderManager::unloadShaders() {
         glDeleteProgram(progID);
+        glDeleteProgram(unlitProgID);
         glDeleteProgram(compositeShaderProg);
     }
 
@@ -718,6 +744,11 @@ namespace WS2Editor {
 
     void RenderManager::addTexture(const QImage image, const ResourceTexture *tex) {
         textureCache[tex] = loadTexture(image);
+    }
+
+    CachedGlMesh* RenderManager::getCachedGlMesh(MeshSegment *mesh) {
+        if (!meshCache.contains(mesh)) loadMesh(mesh);
+        return meshCache[mesh];
     }
 
 }

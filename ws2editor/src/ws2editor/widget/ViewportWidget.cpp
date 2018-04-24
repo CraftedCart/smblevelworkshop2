@@ -4,6 +4,7 @@
 #include "ws2editor/resource/ResourceManager.hpp"
 #include "ws2editor/physics/PhysicsManager.hpp"
 #include "ws2editor/PhysicsDebugDrawer.hpp"
+#include "ws2editor/rendering/TranslateGizmoRenderCommand.hpp"
 #include "ws2editor/rendering/DebugRenderCommand.hpp"
 #include "ws2editor/Config.hpp"
 #include "ws2editor/task/ImportFileTask.hpp"
@@ -291,10 +292,20 @@ namespace WS2Editor {
             Resource::ResourceScene *scene = Project::ProjectManager::getActiveProject()->getScene();
 
             if (scene != nullptr) {
+                //Render the scene
                 renderManager->enqueueRenderScene(
                         scene->getRootNode(),
                         Project::ProjectManager::getActiveProject()->getScene()
                         );
+
+                //Render the gizmos
+                renderManager->enqueueRenderCommand(new TranslateGizmoRenderCommand(
+                            renderManager,
+                            glm::mat4(1.0f),
+                            view,
+                            proj,
+                            cameraPos
+                            ));
             }
 
             //Physics debug drawing

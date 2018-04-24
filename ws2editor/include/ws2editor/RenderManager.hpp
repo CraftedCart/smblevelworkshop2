@@ -51,7 +51,6 @@ namespace WS2Editor {
              * @brief Used while a texture is loading/missing texture/etc.
              */
             CachedGlTexture *defaultTexture;
-
             GLuint fbo;
             GLuint fboColorTexture;
             GLuint fboCameraNormalTexture;
@@ -80,10 +79,19 @@ namespace WS2Editor {
             //GLuint shaderTexID;
             GLuint shaderRenderCameraNormals;
 
+            GLuint unlitProgID;
+            GLuint unlitShaderModelID;
+            GLuint unlitShaderViewID;
+            GLuint unlitShaderProjID;
+            GLuint unlitShaderTintID;
+
             GLuint physicsDebugProgID;
             GLuint physicsDebugShaderModelID;
             GLuint physicsDebugShaderViewID;
             GLuint physicsDebugShaderProjID;
+
+            //More default models
+            MeshSegment *lineMeshSegment;
 
         protected:
             //Copied straight from Qt QGL
@@ -217,6 +225,16 @@ namespace WS2Editor {
             void unloadPhysicsDebugShaders();
 
             void addTexture(const QImage image, const ResourceTexture *tex);
+
+            /**
+             * @brief Fetches a cached renderable mesh for the given mesh segment, or leads the mesh if it's not already
+             *        cached
+             *
+             * @param mesh The mesh segment to fetch the CachedGlMesh for
+             *
+             * @return A model with OpenGL buffer data
+             */
+            CachedGlMesh* getCachedGlMesh(MeshSegment *mesh);
 
             /**
              * @brief Checks for OpenGL errors and logs them if any are found
