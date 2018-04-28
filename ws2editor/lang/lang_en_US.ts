@@ -1302,27 +1302,27 @@ Public License instead of this License.  But first, please read
 <context>
     <name>WS2Editor::Widget::ViewportWidget</name>
     <message>
-        <location filename="../src/ws2editor/widget/ViewportWidget.cpp" line="38"/>
+        <location filename="../src/ws2editor/widget/ViewportWidget.cpp" line="55"/>
         <source>:/Workshop2/Lang/tips-en_US.txt</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/ws2editor/widget/ViewportWidget.cpp" line="371"/>
+        <location filename="../src/ws2editor/widget/ViewportWidget.cpp" line="435"/>
         <source>Drop to import files</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/ws2editor/widget/ViewportWidget.cpp" line="424"/>
+        <location filename="../src/ws2editor/widget/ViewportWidget.cpp" line="488"/>
         <source>SMB Level Workshop 2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/ws2editor/widget/ViewportWidget.cpp" line="425"/>
+        <location filename="../src/ws2editor/widget/ViewportWidget.cpp" line="489"/>
         <source>Tip of the day</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/ws2editor/widget/ViewportWidget.cpp" line="429"/>
+        <location filename="../src/ws2editor/widget/ViewportWidget.cpp" line="493"/>
         <source>Open a project or import models to get started</source>
         <translation type="unfinished"></translation>
     </message>

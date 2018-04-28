@@ -27,9 +27,21 @@ namespace WS2Editor {
                 /**
                  * @brief Constructor for PhysicsContainer that generates physics objects given the mesh and transform
                  *
+                 * @param node
                  * @param mesh
+                 * @param transform
                  */
                 PhysicsContainer(SceneNode *node, ResourceMesh *mesh, Transform &transform);
+
+                /**
+                 * @brief Constructor for PhysicsContainer that generates physics objects given an AABB and transform
+                 *
+                 * @param aabb
+                 * @param transform
+                 *
+                 */
+                PhysicsContainer(AABB3 &aabb, Transform &transform);
+
                 ~PhysicsContainer();
 
                 void updateTransform(Transform &transform);

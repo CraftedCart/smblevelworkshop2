@@ -26,6 +26,23 @@
 namespace WS2Editor {
     namespace Widget {
         ViewportWidget::ViewportWidget(QWidget *parent) : QOpenGLWidget(parent) {
+            AABB3 yGizmoAabb(
+                    glm::vec3(-0.1f, 0.0f, -0.1f),
+                    glm::vec3(0.1f, 1.2f, 0.1f)
+                 );
+            AABB3 xGizmoAabb(
+                    glm::vec3(0.0f, -0.1f, -0.1f),
+                    glm::vec3(1.2f, 0.1f, 0.1f)
+                 );
+            AABB3 zGizmoAabb(
+                    glm::vec3(-0.1f, -0.1f, 0.0f),
+                    glm::vec3(0.1f, 0.1f, 1.2f)
+                 );
+            Transform emptyTransform;
+            gizmoYPhysics = new PhysicsContainer(yGizmoAabb, emptyTransform);
+            gizmoXPhysics = new PhysicsContainer(xGizmoAabb, emptyTransform);
+            gizmoZPhysics = new PhysicsContainer(zGizmoAabb, emptyTransform);
+
             QTimer *updateTimer = new QTimer(this);
             connect(updateTimer, SIGNAL(timeout()), this, SLOT(update()));
             updateTimer->start(1000.0f / 60.0f); //Cap the framerate at 60FPS TODO: Make this adjustable
@@ -58,6 +75,10 @@ namespace WS2Editor {
             delete renderManager;
             delete tooltipPixmap;
             delete importPixmap;
+
+            delete gizmoYPhysics;
+            delete gizmoXPhysics;
+            delete gizmoZPhysics;
 
             RenderManager::checkErrors("End of ~ViewportWidget");
         }
@@ -227,6 +248,85 @@ namespace WS2Editor {
             dynamicsWorld->updateAabbs();
         }
 
+        void ViewportWidget::updateGizmos() {
+            using namespace WS2Editor::Scene;
+            using namespace WS2Common::Resource;
+
+            ResourceScene *scene = Project::ProjectManager::getActiveProject()->getScene();
+            SceneSelectionManager *selectionManager = scene->getSelectionManager();
+
+            if (selectionManager->getSelectedObjects().size() > 0) {
+                //Add the collision rigid bodies to the world if they aren't in there already
+                if (!isGizmoPhysicsInWorld) {
+                    scene->getPhysicsManager()->addRigidBody(gizmoYPhysics->getRigidBody());
+                    scene->getPhysicsManager()->addRigidBody(gizmoXPhysics->getRigidBody());
+                    scene->getPhysicsManager()->addRigidBody(gizmoZPhysics->getRigidBody());
+
+                    isGizmoPhysicsInWorld = true;
+                }
+
+                //Merge all selected objects'/positions AABBs into one
+                SceneNode *initialNode = selectionManager->getSelectedObjects().at(0);
+                MeshNodeData *initialMeshData = scene->getMeshNodeData(initialNode->getUuid());
+
+                AABB3 aabb;
+                if (initialMeshData != nullptr) {
+                    aabb = initialMeshData->getMesh()->getAabb();
+                    aabb.offsetBy(initialNode->getPosition());
+                } else {
+                    aabb = AABB3(initialNode->getPosition(), initialNode->getPosition());
+                }
+
+                for (SceneNode *node : selectionManager->getSelectedObjects()) {
+                    MeshNodeData *meshData = scene->getMeshNodeData(node->getUuid());
+
+                    if (meshData != nullptr) {
+                        AABB3 newAabb = meshData->getMesh()->getAabb();
+                        newAabb.offsetBy(node->getPosition());
+                        aabb.mergeWith(newAabb);
+                    } else {
+                        aabb.mergeWith(node->getPosition());
+                    }
+                }
+
+                //Get the middle point of the AABB, and draw the gizmo there
+                const glm::vec3 center = aabb.getCenter();
+                renderManager->enqueueRenderCommand(new TranslateGizmoRenderCommand(
+                            renderManager,
+                            glm::translate(center),
+                            view,
+                            proj,
+                            cameraPos
+                            ));
+
+                //Also update the hitbox collision
+                float distanceFromCamera = glm::distance(cameraPos, center);
+                Transform t;
+                t.setScale(glm::vec3(0.2f) * distanceFromCamera);
+
+                //Y
+                t.setPosition(center + glm::vec3(0.0f, 0.1f, 0.0f) * distanceFromCamera);
+                gizmoYPhysics->updateTransform(t);
+
+                //X
+                t.setPosition(center + glm::vec3(0.1f, 0.0f, 0.0f) * distanceFromCamera);
+                gizmoXPhysics->updateTransform(t);
+
+                //Z
+                t.setPosition(center + glm::vec3(0.0f, 0.0f, 0.1f) * distanceFromCamera);
+                gizmoZPhysics->updateTransform(t);
+            } else {
+                //Nothing's selected, so disable the gizmos
+                if (isGizmoPhysicsInWorld) {
+                    scene->getPhysicsManager()->removeRigidBody(gizmoYPhysics->getRigidBody());
+                    scene->getPhysicsManager()->removeRigidBody(gizmoXPhysics->getRigidBody());
+                    scene->getPhysicsManager()->removeRigidBody(gizmoZPhysics->getRigidBody());
+
+                    isGizmoPhysicsInWorld = false;
+                }
+            }
+        }
+
         glm::vec3 ViewportWidget::calcForwardVector(glm::vec2 &rot) {
             return glm::vec3(
                     glm::cos(rot.y) * glm::sin(rot.x),
@@ -290,9 +390,7 @@ namespace WS2Editor {
             glUniformMatrix4fv(renderManager->shaderProjID, 1, GL_FALSE, &proj[0][0]);
             glUniformMatrix3fv(renderManager->shaderNormID, 1, GL_FALSE, &norm[0][0]);
 
-            Resource::ResourceScene *scene = Project::ProjectManager::getActiveProject()->getScene();
-            Scene::SceneSelectionManager *selectionManager = scene->getSelectionManager();
-
+            ResourceScene *scene = Project::ProjectManager::getActiveProject()->getScene();
             if (scene != nullptr) {
                 //Render the scene
                 renderManager->enqueueRenderScene(
@@ -301,41 +399,7 @@ namespace WS2Editor {
                         );
 
                 //Render the gizmos
-                if (selectionManager->getSelectedObjects().size() > 0) {
-                    //First merge all selected objects'/positions AABBs into one
-                    SceneNode *initialNode = selectionManager->getSelectedObjects().at(0);
-                    MeshNodeData *initialMeshData = scene->getMeshNodeData(initialNode->getUuid());
-
-                    AABB3 aabb;
-                    if (initialMeshData != nullptr) {
-                        aabb = initialMeshData->getMesh()->getAabb();
-                        aabb.offsetBy(initialNode->getPosition());
-                    } else {
-                        aabb = AABB3(initialNode->getPosition(), initialNode->getPosition());
-                    }
-
-                    for (SceneNode *node : selectionManager->getSelectedObjects()) {
-                        MeshNodeData *meshData = scene->getMeshNodeData(node->getUuid());
-
-                        if (meshData != nullptr) {
-                            AABB3 newAabb = meshData->getMesh()->getAabb();
-                            newAabb.offsetBy(node->getPosition());
-                            aabb.mergeWith(newAabb);
-                        } else {
-                            aabb.mergeWith(node->getPosition());
-                        }
-                    }
-
-                    //Get the middle point of the AABB, and draw the gizmo there
-                    const glm::vec3 center = aabb.getCenter();
-                    renderManager->enqueueRenderCommand(new TranslateGizmoRenderCommand(
-                                renderManager,
-                                glm::translate(center),
-                                view,
-                                proj,
-                                cameraPos
-                                ));
-                }
+                updateGizmos();
             }
 
             //Physics debug drawing

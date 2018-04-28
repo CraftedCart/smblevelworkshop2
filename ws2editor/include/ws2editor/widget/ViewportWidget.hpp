@@ -60,6 +60,12 @@ namespace WS2Editor {
                  */
                 QString tip;
 
+                //Gizmo collision bounds
+                bool isGizmoPhysicsInWorld = false;
+                PhysicsContainer *gizmoYPhysics;
+                PhysicsContainer *gizmoXPhysics;
+                PhysicsContainer *gizmoZPhysics;
+
             public:
                 explicit ViewportWidget(QWidget *parent = nullptr);
                 ~ViewportWidget();
@@ -113,6 +119,11 @@ namespace WS2Editor {
                  * @brief Called before drawing with OpenGL
                  */
                 void preDraw();
+
+                /**
+                 * @brief Updates the transformation gizmos and enqueues a draw command for it (If need be)
+                 */
+                void updateGizmos();
 
                 /**
                  * @brief Draws 2D text at the 3D point
