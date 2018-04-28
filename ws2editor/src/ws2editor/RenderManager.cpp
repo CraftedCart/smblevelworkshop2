@@ -521,6 +521,21 @@ namespace WS2Editor {
             for (const MeshSegment *segment : segments) {
                 enqueueRenderMesh(segment, transform, glm::vec4(1.0f), isSelected);
             }
+
+            //Draw AABBs
+            //Note: This doesn't account for transforms
+            //PhysicsDebugDrawer *physicsDebugDrawer = Project::ProjectManager::getActiveProject()->getScene()->getPhysicsDebugDrawer();
+            //Scene::SceneSelectionManager *selMan = Project::ProjectManager::getActiveProject()->getScene()->getSelectionManager();
+            //const AABB3 &aabb = scene->getMeshNodeData(mesh->getUuid())->getMesh()->getAabb();
+
+            //btVector3 col;
+            //if (selMan->isSelected(node)) {
+                //col = btVector3(1.0f, 0.0f, 1.0f);
+            //} else {
+                //col = btVector3(0.0f, 0.0f, 1.0f);
+            //}
+
+            //physicsDebugDrawer->drawAabb(MathUtils::toBtVector3(aabb.a), MathUtils::toBtVector3(aabb.b), col);
         } else if (const GoalSceneNode *goal = dynamic_cast<const GoalSceneNode*>(node)) {
             bool isSelected = scene->getSelectionManager()->isSelected(node);
 

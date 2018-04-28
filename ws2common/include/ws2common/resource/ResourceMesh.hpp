@@ -24,6 +24,11 @@ namespace WS2Common {
                  */
                 QVector<Model::MeshSegment*> meshSegments;
 
+                /**
+                 * @brief This mesh's bounding box
+                 */
+                AABB3 aabb;
+
             public:
                 /**
                  * @brief Create an empty mesh
@@ -51,6 +56,13 @@ namespace WS2Common {
                  * @param segment The segment to add
                  */
                 void addMeshSegment(Model::MeshSegment *segment);
+
+                /**
+                 * @brief Gets the bounding box for this mesh
+                 *
+                 * @return This mesh's axis aligned bounding box
+                 */
+                const AABB3& getAabb() const;
         };
 
     }
