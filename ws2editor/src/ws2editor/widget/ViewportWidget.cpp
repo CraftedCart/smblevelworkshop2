@@ -1,4 +1,5 @@
 #include "ws2editor/widget/ViewportWidget.hpp"
+#include "ws2common/scene/MeshSceneNode.hpp"
 #include "ws2common/MathUtils.hpp"
 #include "ws2editor/project/ProjectManager.hpp"
 #include "ws2editor/resource/ResourceManager.hpp"
@@ -290,6 +291,7 @@ namespace WS2Editor {
             glUniformMatrix3fv(renderManager->shaderNormID, 1, GL_FALSE, &norm[0][0]);
 
             Resource::ResourceScene *scene = Project::ProjectManager::getActiveProject()->getScene();
+            Scene::SceneSelectionManager *selectionManager = scene->getSelectionManager();
 
             if (scene != nullptr) {
                 //Render the scene
@@ -299,13 +301,41 @@ namespace WS2Editor {
                         );
 
                 //Render the gizmos
-                renderManager->enqueueRenderCommand(new TranslateGizmoRenderCommand(
-                            renderManager,
-                            glm::mat4(1.0f),
-                            view,
-                            proj,
-                            cameraPos
-                            ));
+                if (selectionManager->getSelectedObjects().size() > 0) {
+                    //First merge all selected objects'/positions AABBs into one
+                    SceneNode *initialNode = selectionManager->getSelectedObjects().at(0);
+                    MeshNodeData *initialMeshData = scene->getMeshNodeData(initialNode->getUuid());
+
+                    AABB3 aabb;
+                    if (initialMeshData != nullptr) {
+                        aabb = initialMeshData->getMesh()->getAabb();
+                        aabb.offsetBy(initialNode->getPosition());
+                    } else {
+                        aabb = AABB3(initialNode->getPosition(), initialNode->getPosition());
+                    }
+
+                    for (SceneNode *node : selectionManager->getSelectedObjects()) {
+                        MeshNodeData *meshData = scene->getMeshNodeData(node->getUuid());
+
+                        if (meshData != nullptr) {
+                            AABB3 newAabb = meshData->getMesh()->getAabb();
+                            newAabb.offsetBy(node->getPosition());
+                            aabb.mergeWith(newAabb);
+                        } else {
+                            aabb.mergeWith(node->getPosition());
+                        }
+                    }
+
+                    //Get the middle point of the AABB, and draw the gizmo there
+                    const glm::vec3 center = aabb.getCenter();
+                    renderManager->enqueueRenderCommand(new TranslateGizmoRenderCommand(
+                                renderManager,
+                                glm::translate(center),
+                                view,
+                                proj,
+                                cameraPos
+                                ));
+                }
             }
 
             //Physics debug drawing

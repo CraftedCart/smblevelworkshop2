@@ -83,6 +83,19 @@ namespace WS2Common {
             b.y = std::max(b.y, other.y);
             b.z = std::max(b.z, other.z);
         }
+
+        const glm::vec3 getCenter() const {
+            return glm::vec3(
+                    (a.x + b.x) / 2,
+                    (a.y + b.y) / 2,
+                    (a.z + b.z) / 2
+                    );
+        }
+
+        void offsetBy(const glm::vec3 &offset) {
+            a += offset;
+            b += offset;
+        }
     };
 }
 
