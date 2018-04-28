@@ -56,7 +56,30 @@ namespace WS2Editor {
             glUniform4fv(renderManager->unlitShaderTintID, 1, &bTint[0]);
             glDrawElements(GL_LINES, mesh->getTriCount(), GL_UNSIGNED_INT, 0);
 
-            //Don't draw
+            //Draw the cones
+            for (ResourceMesh *coneResourceMesh : renderManager->gizmoConeMesh) {
+                for (MeshSegment *segment : coneResourceMesh->getMeshSegments()) {
+                    CachedGlMesh *coneMesh = renderManager->getCachedGlMesh(segment);
+                    glBindVertexArray(coneMesh->getVao());
+
+                    glm::mat4 yConeModel = glm::translate(glm::vec3(0.0f, 0.2f, 0.0f) * dist) * transform;
+                    glUniformMatrix4fv(renderManager->unlitShaderModelID, 1, GL_FALSE, &yConeModel[0][0]);
+                    glUniform4fv(renderManager->unlitShaderTintID, 1, &gTint[0]);
+                    glDrawElements(GL_TRIANGLES, coneMesh->getTriCount(), GL_UNSIGNED_INT, 0);
+
+                    glm::mat4 xConeModel = glm::rotate(glm::half_pi<float>(), glm::vec3(0.0f, 0.0f, -1.0f)) * yConeModel;
+                    glUniformMatrix4fv(renderManager->unlitShaderModelID, 1, GL_FALSE, &xConeModel[0][0]);
+                    glUniform4fv(renderManager->unlitShaderTintID, 1, &rTint[0]);
+                    glDrawElements(GL_TRIANGLES, coneMesh->getTriCount(), GL_UNSIGNED_INT, 0);
+
+                    glm::mat4 zConeModel = glm::rotate(glm::half_pi<float>(), glm::vec3(1.0f, 0.0f, 0.0f)) * yConeModel;
+                    glUniformMatrix4fv(renderManager->unlitShaderModelID, 1, GL_FALSE, &zConeModel[0][0]);
+                    glUniform4fv(renderManager->unlitShaderTintID, 1, &bTint[0]);
+                    glDrawElements(GL_TRIANGLES, coneMesh->getTriCount(), GL_UNSIGNED_INT, 0);
+                }
+            }
+
+            //Draw to the camera normal tex again
             glColorMaski(1, GL_TRUE, GL_TRUE, GL_TRUE, GL_TRUE);
 
             glBindVertexArray(0);

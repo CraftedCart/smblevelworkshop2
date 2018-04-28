@@ -109,6 +109,9 @@ namespace WS2Editor {
                 QVector<ResourceTexture*> {}
                 );
 
+        QFile gizmoCone(":/Workshop2/Models/gizmoCone.fbx");
+        gizmoConeMesh = WS2Common::Model::ModelLoader::loadModel(gizmoCone);
+
         checkErrors("After RenderManager::init()");
     }
 
@@ -120,6 +123,7 @@ namespace WS2Editor {
         //Delete default models
         qDeleteAll(goalMesh);
         delete lineMeshSegment;
+        qDeleteAll(gizmoConeMesh);
 
         GLuint texturesToDelete[] = {defaultTexture->getTextureId(), fboColorTexture, fboCameraNormalTexture};
         glDeleteTextures(3, texturesToDelete);
@@ -748,7 +752,10 @@ namespace WS2Editor {
 
     CachedGlMesh* RenderManager::getCachedGlMesh(MeshSegment *mesh) {
         if (!meshCache.contains(mesh)) loadMesh(mesh);
-        return meshCache[mesh];
+
+        CachedGlMesh *glMesh = meshCache[mesh];
+        glMesh->updateAccessTimer();
+        return glMesh;
     }
 
 }
