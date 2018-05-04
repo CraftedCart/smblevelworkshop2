@@ -1,6 +1,12 @@
 SMB Level Workshop 2 (WS2)
 ==========================
 
+Linux/macOS builds: [![Travis CI build status](https://travis-ci.org/CraftedCart/smblevelworkshop2.svg?branch=master)](https://travis-ci.org/CraftedCart/smblevelworkshop2)
+Windows builds: [![Appveyor build status](https://ci.appveyor.com/api/projects/status/xgkxkfuh5r8tu9is/branch/master?svg=true)](https://ci.appveyor.com/project/CraftedCart/smblevelworkshop2/branch/master)
+Development downloads: [![Development downloads](https://api.bintray.com/packages/craftedcart/the-workshop/smblevelworkshop2-develop/images/download.svg)](https://bintray.com/craftedcart/the-workshop/smblevelworkshop2-develop/_latestVersion)
+
+---
+
 Another installment in Super Monkey Ball hacking - SMB Level Workshop 2 is a stage editor for SMB 1 and 2.
 
 WS2 is very early in development for now, and is not at all useable as a level editor. It may not be ready for a while, with me needing to learn and apply modern OpenGL and Qt 5. In the meanwhile, I refer you to the [original SMB Level Workshop](https://github.com/CraftedCart/SMBLevelWorkshop).
