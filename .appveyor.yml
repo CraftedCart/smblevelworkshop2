@@ -1,0 +1,50 @@
+environment:
+  matrix:
+    - compiler: msys2
+      ARCH: x64
+      MSYS2_ARCH: x86_64
+      MSYS2_DIR: msys64
+      MSYSTEM: mingw64
+
+build_script:
+  - PATH C:\%MSYS2_DIR%\%MSYSTEM%\bin;C:\%MSYS2_DIR%\usr\bin;%PATH%
+
+    #Install deps
+  - bash -lc "pacman -Syu --noconfirm"
+  - bash -lc "pacman -Syu --noconfirm"
+  - bash -lc "pacman -S --noconfirm mingw-w64-x86_64-cmake make mingw-w64-x86_64-clang mingw-w64-x86_64-qt5 mingw-w64-x86_64-glew mingw-w64-x86_64-glm mingw-w64-x86_64-assimp mingw-w64-x86_64-bullet mingw-w64-x86_64-ninja"
+
+    #Build and install
+  - bash -lc "mkdir \"$APPVEYOR_BUILD_FOLDER/ws2install\""
+  - bash -lc "export PATH=/mingw64/bin:$PATH && export CC=clang && export CXX=clang++ && cd \"$APPVEYOR_BUILD_FOLDER\" && mkdir build && cd build && cmake -G \"Ninja\" -DCMAKE_INSTALL_PREFIX=\"install\" -DCMAKE_BUILD_TYPE=\"RelWithDebInfo\" .. && ninja && ninja install && cp -r install installnodeps && ninja installprerequisites && cp -r install installwithdeps"
+  - xcopy "%APPVEYOR_BUILD_FOLDER%\build\installnodeps" "%APPVEYOR_BUILD_FOLDER%\ws2install\smblevelworkshop2-nodeps" /s/h/e/k/f/c/i
+  - xcopy "%APPVEYOR_BUILD_FOLDER%\build\installwithdeps" "%APPVEYOR_BUILD_FOLDER%\ws2install\smblevelworkshop2-withdeps" /s/h/e/k/f/c/i
+
+    #Compress dirs to deployment
+  - mkdir deploy
+  - cd ws2install
+  - 7z a -tzip -mx9 ..\deploy\smblevelworkshop2-develop-nodeps-win-x86_64-%APPVEYOR_REPO_COMMIT%.zip smblevelworkshop2-nodeps
+  - 7z a -tzip -mx9 ..\deploy\smblevelworkshop2-develop-withdeps-win-x86_64-%APPVEYOR_REPO_COMMIT%.zip smblevelworkshop2-withdeps
+  - cd ..
+  - mkdir smblevelworkshop2-develop\%APPVEYOR_REPO_COMMIT%
+  - move %APPVEYOR_BUILD_FOLDER%\deploy\* %APPVEYOR_BUILD_FOLDER%\smblevelworkshop2-develop\%APPVEYOR_REPO_COMMIT%
+  - 7z a -tzip -mx9 deploy\combo.zip smblevelworkshop2-develop
+
+artifacts:
+  - path: deploy\combo.zip
+    name: combo
+
+deploy:
+  - provider: BinTray
+    on:
+      branch: master
+    username: craftedcart
+    api_key:
+      secure: DPSKtQQggDgMOwGEMlBxXQOjxRBcFoNR6VFDppGfdiBra+4+3xC7U3hwwbmTSvzU
+    subject: craftedcart
+    repo: the-workshop
+    package: smblevelworkshop2-develop
+    version: $(APPVEYOR_REPO_COMMIT)
+    publish: true
+    explode: true
+

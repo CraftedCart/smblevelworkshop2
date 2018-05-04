@@ -1,0 +1,25 @@
+{
+    "package": {
+        "name": "smblevelworkshop2-develop",
+        "repo": "the-workshop",
+        "subject": "craftedcart",
+        "desc": "Automatic uploads are pushed here from Travis CI, taken from the GitHub repo",
+        "website_url": "",
+        "issue_tracker_url": "https://github.com/CraftedCart/smblevelworkshop2/issues",
+        "vcs_url": "https://github.com/CraftedCart/smblevelworkshop2.git",
+        "licenses": ["GPL-3.0"],
+        "labels": ["hacking", "modding", "super monkey ball"],
+        "public_download_numbers": true,
+        "public_stats": true,
+        "attributes": [{"name": "maturity", "value": "Development"}]
+    },
+    "version": {
+        "name": "|||COMMIT|||",
+        "desc": "Bleeding edge development build from GitHub commit |||COMMIT|||"
+    },
+    "files": [
+        {"includePattern": "ws2install/deploy/(.*).tar.gz",  "uploadPattern": "smblevelworkshop2-develop/|||COMMIT|||/$1-|||ARCH|||-|||COMMIT|||.tar.gz"}
+    ],
+    "publish": true
+}
+
