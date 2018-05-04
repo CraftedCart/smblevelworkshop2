@@ -1,8 +1,8 @@
 SMB Level Workshop 2 (WS2)
 ==========================
 
-Linux/macOS builds: [![Travis CI build status](https://travis-ci.org/CraftedCart/smblevelworkshop2.svg?branch=master)](https://travis-ci.org/CraftedCart/smblevelworkshop2)
-Windows builds: [![Appveyor build status](https://ci.appveyor.com/api/projects/status/xgkxkfuh5r8tu9is/branch/master?svg=true)](https://ci.appveyor.com/project/CraftedCart/smblevelworkshop2/branch/master)
+Linux/macOS builds: [![Travis CI build status](https://travis-ci.org/CraftedCart/smblevelworkshop2.svg?branch=master)](https://travis-ci.org/CraftedCart/smblevelworkshop2)  
+Windows builds: [![Appveyor build status](https://ci.appveyor.com/api/projects/status/xgkxkfuh5r8tu9is/branch/master?svg=true)](https://ci.appveyor.com/project/CraftedCart/smblevelworkshop2/branch/master)  
 Development downloads: [![Development downloads](https://api.bintray.com/packages/craftedcart/the-workshop/smblevelworkshop2-develop/images/download.svg)](https://bintray.com/craftedcart/the-workshop/smblevelworkshop2-develop/_latestVersion)
 
 ---
