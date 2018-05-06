@@ -72,6 +72,10 @@ namespace WS2Editor {
             return renderManager;
         }
 
+        Profiler& ViewportWidget::getProfiler() {
+            return profiler;
+        }
+
         void ViewportWidget::makeCurrentContext() {
             makeCurrent();
         }
@@ -249,7 +253,11 @@ namespace WS2Editor {
         }
 
         void ViewportWidget::paintGL() {
+            profiler.nextFrame();
+
+            profiler.nextSegment("ViewportWidget::preDraw()");
             preDraw();
+            profiler.nextSegment("ViewportWidget::paintGL() > draw setup");
 
             //Calculate delta time
             qint64 elapsedNanoseconds = elapsedTimer.nsecsElapsed();
@@ -290,7 +298,9 @@ namespace WS2Editor {
 
             Resource::ResourceScene *scene = Project::ProjectManager::getActiveProject()->getScene();
 
+
             if (scene != nullptr) {
+                profiler.nextSegment("ViewportWidget::paintGL() > enqueue scene render commands");
                 renderManager->enqueueRenderScene(
                         scene->getRootNode(),
                         Project::ProjectManager::getActiveProject()->getScene()
@@ -300,11 +310,16 @@ namespace WS2Editor {
             //Physics debug drawing
             PhysicsDebugDrawer *physicsDebugDrawer = Project::ProjectManager::getActiveProject()->getScene()->getPhysicsDebugDrawer();
             if (Config::enablePhysicsDebugDrawing && physicsDebugDrawer != nullptr) {
+                profiler.nextSegment("ViewportWidget::paintGL() > enqueue debug render commands");
                 btDynamicsWorld *dynamicsWorld = Project::ProjectManager::getActiveProject()->getScene()->getPhysicsManager()->getDynamicsWorld();
                 renderManager->enqueueRenderCommand(new DebugRenderCommand(renderManager, view, proj, dynamicsWorld, physicsDebugDrawer));
             }
 
+            profiler.nextSegment("ViewportWidget::paintGL() > render queue");
+
             renderManager->renderQueue(defaultFramebufferObject());
+
+            profiler.nextSegment("ViewportWidget::paintGL() > painter");
 
             //Painter
             //Need to reset some OpenGL stuff before using QPainter is sane
@@ -350,6 +365,8 @@ namespace WS2Editor {
 
             //Emit the frameRendered Signal
             emit frameRendered(deltaNanoseconds);
+
+            profiler.nextSegment("Wait");
         }
 
         void ViewportWidget::drawObjectTooltipAtPos(QPainter &painter, glm::vec2 pos) {

@@ -55,6 +55,7 @@ set(SOURCE_FILES
     ./src/ws2editor/ui/CommandWidget.cpp
     ./src/ws2editor/widget/ViewportWidget.cpp
     ./src/ws2editor/widget/OutlinerWidget.cpp
+    ./src/ws2editor/widget/ProfilerWidget.cpp
     ./src/ws2editor/MathUtils.cpp
     ./src/ws2editor/resource/ResourceManager.cpp
     ./src/ws2editor/resource/ResourceScene.cpp
@@ -97,6 +98,7 @@ set(HEADER_FILES
     ./include/ws2editor/ui/CommandWidget.hpp
     ./include/ws2editor/widget/ViewportWidget.hpp
     ./include/ws2editor/widget/OutlinerWidget.hpp
+    ./include/ws2editor/widget/ProfilerWidget.hpp
     ./include/ws2editor/EnumCameraNav.hpp
     ./include/ws2editor/MathUtils.hpp
     ./include/ws2editor/resource/ResourceManager.hpp

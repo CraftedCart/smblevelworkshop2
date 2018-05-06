@@ -8,10 +8,13 @@
 
 #include "ws2common/profile/ProfileSegment.hpp"
 #include <QVector>
+#include <QObject>
 
 namespace WS2Common {
     namespace Profile {
-        class Profiler {
+        class Profiler : public QObject {
+            Q_OBJECT
+
             protected:
                 /**
                  * @brief Timing segments for the current frame
@@ -35,6 +38,26 @@ namespace WS2Common {
                  * @param name The segment name
                  */
                 void nextSegment(QString name);
+
+                /**
+                 * @brief Getter for committedSegments
+                 */
+                QVector<ProfileSegment*>& getCommittedSegments();
+
+                /**
+                 * @brief Get the total time profiled
+                 *
+                 * @return The sum of all committed times for each committed segment
+                 */
+                qint64 getTotalCommittedNanoseconds();
+
+            signals:
+                /**
+                 * @brief Emitted whenever nextFrame has been called, at the end of the function
+                 *
+                 * @param profiler A reference to this profiler
+                 */
+                void onProfilerNextFrame(Profiler &profiler);
         };
     }
 }

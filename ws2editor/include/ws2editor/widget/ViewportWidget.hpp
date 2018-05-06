@@ -1,6 +1,7 @@
 #ifndef SMBLEVELWORKSHOP2_WS2EDITOR_WIDGET_VIEWPORTWIDGET_HPP
 #define SMBLEVELWORKSHOP2_WS2EDITOR_WIDGET_VIEWPORTWIDGET_HPP
 
+#include "ws2common/profile/Profiler.hpp"
 #include "ws2editor/glplatform.hpp"
 #include "ws2editor/EnumCameraNav.hpp"
 #include "ws2editor/resource/ResourceScene.hpp"
@@ -15,6 +16,8 @@
 
 namespace WS2Editor {
     namespace Widget {
+        using namespace WS2Common::Profile;
+
         class ViewportWidget : public QOpenGLWidget {
             Q_OBJECT
 
@@ -60,6 +63,8 @@ namespace WS2Editor {
                  */
                 QString tip;
 
+                Profiler profiler;
+
             public:
                 explicit ViewportWidget(QWidget *parent = nullptr);
                 ~ViewportWidget();
@@ -68,6 +73,7 @@ namespace WS2Editor {
                 float getDeltaSeconds();
 
                 RenderManager* getRenderManager();
+                Profiler& getProfiler();
 
                 void makeCurrentContext();
 

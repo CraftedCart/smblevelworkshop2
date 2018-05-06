@@ -12,11 +12,11 @@ namespace WS2Common {
             committedNanoseconds = timer.nsecsElapsed();
         }
 
-        QString ProfileSegment::getName() {
+        const QString ProfileSegment::getName() const {
             return name;
         }
 
-        qint64 ProfileSegment::getCommittedNanoseconds() {
+        qint64 ProfileSegment::getCommittedNanoseconds() const {
             return committedNanoseconds;
         }
     }

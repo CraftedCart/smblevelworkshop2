@@ -109,6 +109,7 @@
       <string>View</string>
      </property>
      <addaction name="actionToggleViewResources"/>
+     <addaction name="actionToggleViewProfiler"/>
     </widget>
     <widget class="QMenu" name="menuRendering">
      <property name="title">
@@ -272,6 +273,73 @@
        <attribute name="verticalHeaderDefaultSectionSize">
         <number>16</number>
        </attribute>
+      </widget>
+     </item>
+    </layout>
+   </widget>
+  </widget>
+  <widget class="QDockWidget" name="profilerDockWidget">
+   <property name="windowTitle">
+    <string>Profiler</string>
+   </property>
+   <attribute name="dockWidgetArea">
+    <number>8</number>
+   </attribute>
+   <widget class="QWidget" name="profilerContentsWidget">
+    <layout class="QGridLayout" name="gridLayout_4">
+     <property name="leftMargin">
+      <number>0</number>
+     </property>
+     <property name="topMargin">
+      <number>0</number>
+     </property>
+     <property name="rightMargin">
+      <number>0</number>
+     </property>
+     <property name="bottomMargin">
+      <number>0</number>
+     </property>
+     <property name="spacing">
+      <number>0</number>
+     </property>
+     <item row="0" column="0">
+      <widget class="QScrollArea" name="profilerScrollArea">
+       <property name="horizontalScrollBarPolicy">
+        <enum>Qt::ScrollBarAlwaysOff</enum>
+       </property>
+       <property name="widgetResizable">
+        <bool>true</bool>
+       </property>
+       <widget class="QWidget" name="profilerScrollAreaContents">
+        <property name="geometry">
+         <rect>
+          <x>0</x>
+          <y>0</y>
+          <width>144</width>
+          <height>58</height>
+         </rect>
+        </property>
+        <layout class="QGridLayout" name="gridLayout_5">
+         <property name="leftMargin">
+          <number>0</number>
+         </property>
+         <property name="topMargin">
+          <number>0</number>
+         </property>
+         <property name="rightMargin">
+          <number>0</number>
+         </property>
+         <property name="bottomMargin">
+          <number>0</number>
+         </property>
+         <property name="spacing">
+          <number>0</number>
+         </property>
+         <item row="0" column="0">
+          <widget class="WS2Editor::Widget::ProfilerWidget" name="profilerWidget" native="true"/>
+         </item>
+        </layout>
+       </widget>
       </widget>
      </item>
     </layout>
@@ -611,6 +679,14 @@
     <string>:</string>
    </property>
   </action>
+  <action name="actionToggleViewProfiler">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Profiler</string>
+   </property>
+  </action>
  </widget>
  <layoutdefault spacing="6" margin="11"/>
  <customwidgets>
@@ -623,6 +699,12 @@
    <class>WS2Editor::Widget::ViewportWidget</class>
    <extends>QOpenGLWidget</extends>
    <header>ws2editor/widget/ViewportWidget.hpp</header>
+  </customwidget>
+  <customwidget>
+   <class>WS2Editor::Widget::ProfilerWidget</class>
+   <extends>QWidget</extends>
+   <header>ws2editor/widget/ProfilerWidget.hpp</header>
+   <container>1</container>
   </customwidget>
  </customwidgets>
  <resources>
@@ -782,6 +864,38 @@
     <hint type="sourcelabel">
      <x>127</x>
      <y>354</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>actionToggleViewProfiler</sender>
+   <signal>triggered(bool)</signal>
+   <receiver>profilerDockWidget</receiver>
+   <slot>setVisible(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>1207</x>
+     <y>656</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>profilerDockWidget</sender>
+   <signal>visibilityChanged(bool)</signal>
+   <receiver>actionToggleViewProfiler</receiver>
+   <slot>setChecked(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>1207</x>
+     <y>656</y>
     </hint>
     <hint type="destinationlabel">
      <x>-1</x>

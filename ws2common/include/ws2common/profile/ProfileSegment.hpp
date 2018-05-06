@@ -23,8 +23,8 @@ namespace WS2Common {
                 void startTimer();
                 void commitTime();
 
-                QString getName();
-                qint64 getCommittedNanoseconds();
+                const QString getName() const;
+                qint64 getCommittedNanoseconds() const;
         };
     }
 }

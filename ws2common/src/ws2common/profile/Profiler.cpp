@@ -11,6 +11,8 @@ namespace WS2Common {
             committedSegments.clear();
             committedSegments.append(segments);
             segments.clear();
+
+            emit onProfilerNextFrame(*this);
         }
 
         void Profiler::nextSegment(QString name) {
@@ -18,6 +20,19 @@ namespace WS2Common {
             ProfileSegment *segment = new ProfileSegment(name);
             segment->startTimer();
             segments.append(segment);
+        }
+
+        QVector<ProfileSegment*>& Profiler::getCommittedSegments() {
+            return committedSegments;
+        }
+
+        qint64 Profiler::getTotalCommittedNanoseconds() {
+            qint64 time = 0;
+            for (ProfileSegment *s : committedSegments) {
+                time += s->getCommittedNanoseconds();
+            }
+
+            return time;
         }
     }
 }

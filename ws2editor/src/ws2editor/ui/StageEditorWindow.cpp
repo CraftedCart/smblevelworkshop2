@@ -20,6 +20,8 @@
 namespace WS2Editor {
     namespace UI {
         StageEditorWindow::StageEditorWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::StageEditorWindow) {
+            using namespace WS2Editor::Widget;
+
             ui->setupUi(this);
 
             setDockOptions(
@@ -44,8 +46,12 @@ namespace WS2Editor {
             connect(UI::ModelManager::modelOutliner, &UI::ModelOutliner::onSelectionChanged,
                     ui->outlinerTreeView, &Widget::OutlinerWidget::onSelectionChanged);
 
+            //Update the profiler every frame
+            connect(&ui->viewportWidget->getProfiler(), &Profiler::onProfilerNextFrame, ui->profilerWidget, &ProfilerWidget::onProfilerNextFrame);
+
             //Hide the following dock widgets on start
             ui->resourcesDockWidget->hide();
+            ui->profilerDockWidget->hide();
 
             connect(ui->viewportWidget, &Widget::ViewportWidget::frameRendered, this, &StageEditorWindow::viewportFrameRendered);
             connect(ui->actionQuit, &QAction::triggered, QApplication::instance(), QApplication::quit);
