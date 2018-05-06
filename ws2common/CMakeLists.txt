@@ -69,6 +69,8 @@ set(SOURCE_FILES
     ./src/ws2common/animation/EnumEasing.cpp
     ./src/ws2common/animation/EnumLoopType.cpp
     ./src/ws2common/animation/TransformAnimation.cpp
+    ./src/ws2common/profile/Profiler.cpp
+    ./src/ws2common/profile/ProfileSegment.cpp
     )
 
 set(HEADER_FILES
@@ -117,6 +119,8 @@ set(HEADER_FILES
     ./include/ws2common/animation/Keyframe.hpp
     ./include/ws2common/animation/Keyframe.ipp
     ./include/ws2common/animation/TransformAnimation.hpp
+    ./include/ws2common/profile/Profiler.hpp
+    ./include/ws2common/profile/ProfileSegment.hpp
     )
 
 set(RESOURCE_FILES
