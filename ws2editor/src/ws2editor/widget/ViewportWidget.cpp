@@ -4,6 +4,7 @@
 #include "ws2editor/project/ProjectManager.hpp"
 #include "ws2editor/resource/ResourceManager.hpp"
 #include "ws2editor/physics/PhysicsManager.hpp"
+#include "ws2editor/physics/PhysicsUtils.hpp"
 #include "ws2editor/PhysicsDebugDrawer.hpp"
 #include "ws2editor/rendering/TranslateGizmoRenderCommand.hpp"
 #include "ws2editor/rendering/DebugRenderCommand.hpp"
@@ -38,10 +39,6 @@ namespace WS2Editor {
                     glm::vec3(-0.1f, -0.1f, 0.0f),
                     glm::vec3(0.1f, 0.1f, 1.2f)
                  );
-            Transform emptyTransform;
-            gizmoYPhysics = new PhysicsContainer(yGizmoAabb, emptyTransform);
-            gizmoXPhysics = new PhysicsContainer(xGizmoAabb, emptyTransform);
-            gizmoZPhysics = new PhysicsContainer(zGizmoAabb, emptyTransform);
 
             QTimer *updateTimer = new QTimer(this);
             connect(updateTimer, SIGNAL(timeout()), this, SLOT(update()));
@@ -125,6 +122,11 @@ namespace WS2Editor {
 
             //TODO: Make the debug drawer an option, and if enabled, load for each scene
             Project::ProjectManager::getActiveProject()->getScene()->initPhysicsDebugDrawer();
+            Transform t;
+
+            gizmoYPhysics = new PhysicsContainer(nullptr, renderManager->cubeMesh.at(0), t);
+            gizmoXPhysics = new PhysicsContainer(nullptr, renderManager->cubeMesh.at(0), t);
+            gizmoZPhysics = new PhysicsContainer(nullptr, renderManager->cubeMesh.at(0), t);
 
             //Start the elapsed timer
             elapsedTimer.start();
@@ -296,24 +298,29 @@ namespace WS2Editor {
                             glm::translate(center),
                             view,
                             proj,
-                            cameraPos
+                            cameraPos,
+                            highlightGizmoX,
+                            highlightGizmoY,
+                            highlightGizmoZ
                             ));
 
                 //Also update the hitbox collision
                 float distanceFromCamera = glm::distance(cameraPos, center);
                 Transform t;
-                t.setScale(glm::vec3(0.2f) * distanceFromCamera);
 
                 //Y
                 t.setPosition(center + glm::vec3(0.0f, 0.1f, 0.0f) * distanceFromCamera);
+                t.setScale(0.2f * glm::vec3(0.2f, 1.2f, 0.2f) * distanceFromCamera);
                 gizmoYPhysics->updateTransform(t);
 
                 //X
                 t.setPosition(center + glm::vec3(0.1f, 0.0f, 0.0f) * distanceFromCamera);
+                t.setScale(0.2f * glm::vec3(1.2f, 0.2f, 0.2f) * distanceFromCamera);
                 gizmoXPhysics->updateTransform(t);
 
                 //Z
                 t.setPosition(center + glm::vec3(0.0f, 0.0f, 0.1f) * distanceFromCamera);
+                t.setScale(0.2f * glm::vec3(0.2f, 0.2f, 1.2f) * distanceFromCamera);
                 gizmoZPhysics->updateTransform(t);
             } else {
                 //Nothing's selected, so disable the gizmos
@@ -411,6 +418,9 @@ namespace WS2Editor {
 
             renderManager->renderQueue(defaultFramebufferObject());
 
+            //Clear the debug drawer queue in case debug drawing is not enabled
+            physicsDebugDrawer->clearBuffers();
+
             //Painter
             //Need to reset some OpenGL stuff before using QPainter is sane
             glDisable(GL_CULL_FACE);
@@ -458,7 +468,7 @@ namespace WS2Editor {
         }
 
         void ViewportWidget::drawObjectTooltipAtPos(QPainter &painter, glm::vec2 pos) {
-            btCollisionWorld::ClosestRayResultCallback* rayCallback = ndcRaycast(
+            btCollisionWorld::AllHitsRayResultCallback *rayCallback = ndcRaycast(
                     glm::vec2(
                         (pos.x / width() - 0.5f) * 2.0f,
                         -(pos.y / height() - 0.5f) * 2.0f
@@ -467,8 +477,36 @@ namespace WS2Editor {
                     );
 
             if (rayCallback->hasHit()) {
+                //First check if any of the gizmos were hit, regardless of whether it was the closest objects or not
+                if (PhysicsUtils::doesAlignedObjectArrayContain(
+                            rayCallback->m_collisionObjects, (const btCollisionObject*) gizmoYPhysics->getRigidBody())) {
+                    highlightGizmoY = true;
+                    highlightGizmoX = false;
+                    highlightGizmoZ = false;
+                    return;
+                } else if (PhysicsUtils::doesAlignedObjectArrayContain(
+                            rayCallback->m_collisionObjects, (const btCollisionObject*) gizmoXPhysics->getRigidBody())) {
+                    highlightGizmoY = false;
+                    highlightGizmoX = true;
+                    highlightGizmoZ = false;
+                    return;
+                } else if (PhysicsUtils::doesAlignedObjectArrayContain(
+                            rayCallback->m_collisionObjects, (const btCollisionObject*) gizmoZPhysics->getRigidBody())) {
+                    highlightGizmoY = false;
+                    highlightGizmoX = false;
+                    highlightGizmoZ = true;
+                    return;
+                } else {
+                    highlightGizmoY = false;
+                    highlightGizmoX = false;
+                    highlightGizmoZ = false;
+                }
+
+                QVector<int> indices = sortAllHitsRayResultCallback(rayCallback);
+                const btCollisionObject *closestObject = rayCallback->m_collisionObjects[indices.at(0)];
+
                 WS2Common::Scene::SceneNode *node =
-                    static_cast<WS2Common::Scene::SceneNode*>(rayCallback->m_collisionObject->getUserPointer());
+                    static_cast<WS2Common::Scene::SceneNode*>(closestObject->getUserPointer());
 
                 painter.drawPixmap(pos.x, pos.y - tooltipPixmap->height(), *tooltipPixmap);
 
@@ -579,7 +617,7 @@ namespace WS2Editor {
             return WS2Common::MathUtils::toGlmVec2(relCursorPosQt);
         }
 
-        btCollisionWorld::ClosestRayResultCallback* ViewportWidget::ndcRaycast(const glm::vec2 pos, const glm::vec3 startPos,
+        btCollisionWorld::AllHitsRayResultCallback* ViewportWidget::ndcRaycast(const glm::vec2 pos, const glm::vec3 startPos,
                 const float distance, const glm::mat4 proj, const glm::mat4 view) {
             //NDC = Normalized device coordinates
             glm::vec4 rayStartNdc(
@@ -611,7 +649,7 @@ namespace WS2Editor {
             //Raycast
             glm::vec3 raycastEnd = startPos + rayDirWorld * distance;
 
-            btCollisionWorld::ClosestRayResultCallback *rayCallback = new btCollisionWorld::ClosestRayResultCallback(
+            btCollisionWorld::AllHitsRayResultCallback *rayCallback = new btCollisionWorld::AllHitsRayResultCallback(
                     btVector3(WS2Common::MathUtils::toBtVector3(startPos)),
                     btVector3(WS2Common::MathUtils::toBtVector3(raycastEnd))
                     );
@@ -623,11 +661,44 @@ namespace WS2Editor {
                     *rayCallback
                     );
 
+
+            if (rayCallback->hasHit()) {
+                for (int i = 0; i < rayCallback->m_collisionObjects.size(); i++) {
+                    btVector3 hitPoint = rayCallback->m_hitPointWorld[i];
+                    btVector3 hitNorm = rayCallback->m_hitNormalWorld[i];
+
+                    Project::ProjectManager::getActiveProject()->getScene()->getPhysicsDebugDrawer()->drawLine(
+                            hitPoint,
+                            hitPoint + hitNorm * 10.0f,
+                            btVector3(1.0f, 0.0f, 1.0f)
+                            );
+                }
+            }
+
             return rayCallback;
         }
 
+        QVector<int> ViewportWidget::sortAllHitsRayResultCallback(const btCollisionWorld::AllHitsRayResultCallback *rayCallback) {
+            //Create an indices array and fill it incrementally(0, 1, 2, 3, etc. for as many hit objects as there are)
+            QVector<int> indices(rayCallback->m_hitFractions.size());
+            std::iota(indices.begin(), indices.end(), 0);
+
+            //Sort the indices array based on the fractions
+            class SortIndices {
+                private:
+                    const btScalar *arr;
+
+                public:
+                    SortIndices(const btScalar *arr) : arr(arr) {}
+                    bool operator()(int a, int b) const { return arr[a] < arr[b]; }
+            };
+            std::sort(indices.begin(), indices.end(), SortIndices(&rayCallback->m_hitFractions[0]));
+
+            return indices;
+        }
+
         void ViewportWidget::selectNodeAtScreenPos(const glm::vec2 pos, bool toggleSelect) {
-            btCollisionWorld::ClosestRayResultCallback* rayCallback = ndcRaycast(
+            btCollisionWorld::AllHitsRayResultCallback *rayCallback = ndcRaycast(
                     glm::vec2(
                         (pos.x / width() - 0.5f) * 2.0f,
                         -(pos.y / height() - 0.5f) * 2.0f
@@ -636,9 +707,27 @@ namespace WS2Editor {
                     );
 
             if (rayCallback->hasHit()) {
+                //First check if any of the gizmos were hit, regardless of whether it was the closest objects or not
+                if (PhysicsUtils::doesAlignedObjectArrayContain(
+                            rayCallback->m_collisionObjects, (const btCollisionObject*) gizmoYPhysics->getRigidBody())) {
+                    qDebug() << "Gizmo transform Y NYI";
+                    return;
+                } else if (PhysicsUtils::doesAlignedObjectArrayContain(
+                            rayCallback->m_collisionObjects, (const btCollisionObject*) gizmoXPhysics->getRigidBody())) {
+                    qDebug() << "Gizmo transform X NYI";
+                    return;
+                } else if (PhysicsUtils::doesAlignedObjectArrayContain(
+                            rayCallback->m_collisionObjects, (const btCollisionObject*) gizmoZPhysics->getRigidBody())) {
+                    qDebug() << "Gizmo transform Z NYI";
+                    return;
+                }
+
+                //Fetch the closest node
+                QVector<int> indices = sortAllHitsRayResultCallback(rayCallback);
+
                 //Select the hit node
                 WS2Common::Scene::SceneNode *node =
-                    static_cast<WS2Common::Scene::SceneNode*>(rayCallback->m_collisionObject->getUserPointer());
+                    static_cast<WS2Common::Scene::SceneNode*>(rayCallback->m_collisionObjects[indices.at(0)]->getUserPointer());
 
                 if (toggleSelect) {
                     Project::ProjectManager::getActiveProject()->getScene()->getSelectionManager()->toggleSelect(node);

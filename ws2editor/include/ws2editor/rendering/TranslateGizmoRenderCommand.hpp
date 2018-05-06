@@ -19,6 +19,9 @@ namespace WS2Editor {
                 glm::mat4 viewMatrix;
                 glm::mat4 projMatrix;
                 glm::vec3 cameraPos;
+                bool highlightGizmoX;
+                bool highlightGizmoY;
+                bool highlightGizmoZ;
 
             public:
                 TranslateGizmoRenderCommand(
@@ -26,7 +29,10 @@ namespace WS2Editor {
                         glm::mat4 transform,
                         glm::mat4 viewMatrix,
                         glm::mat4 projMatrix,
-                        glm::vec3 cameraPos
+                        glm::vec3 cameraPos,
+                        bool highlightGizmoX,
+                        bool highlightGizmoY,
+                        bool highlightGizmoZ
                         );
 
                 virtual void draw() override;

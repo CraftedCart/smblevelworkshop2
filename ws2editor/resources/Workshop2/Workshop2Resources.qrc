@@ -38,6 +38,7 @@
         <file>Lang/stageMechanics-en_US.txt</file>
         <file>Models/goal.fbx</file>
         <file>Models/gizmoCone.fbx</file>
+        <file>Models/cube.fbx</file>
     </qresource>
 </RCC>
 

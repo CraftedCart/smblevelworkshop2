@@ -40,6 +40,11 @@ namespace WS2Editor {
              * @note This assumes an appropriate shader is already bound and its uniforms specified
              */
             void drawAll();
+
+            /**
+             * @brief Clears any queued data to be drawn
+             */
+            void clearBuffers();
     };
 }
 

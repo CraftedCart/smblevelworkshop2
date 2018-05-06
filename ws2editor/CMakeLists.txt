@@ -67,6 +67,7 @@ set(SOURCE_FILES
     ./src/ws2editor/scene/SceneSelectionManager.cpp
     ./src/ws2editor/physics/PhysicsManager.cpp
     ./src/ws2editor/physics/PhysicsContainer.cpp
+    ./src/ws2editor/physics/PhysicsUtils.cpp
     ./src/ws2editor/PhysicsDebugDrawer.cpp
     ./src/ws2editor/Config.cpp
     ./src/ws2editor/Progress.cpp
@@ -112,6 +113,8 @@ set(HEADER_FILES
     ./include/ws2editor/scene/SceneSelectionManager.hpp
     ./include/ws2editor/physics/PhysicsManager.hpp
     ./include/ws2editor/physics/PhysicsContainer.hpp
+    ./include/ws2editor/physics/PhysicsUtils.hpp
+    ./include/ws2editor/physics/PhysicsUtils.ipp
     ./include/ws2editor/PhysicsDebugDrawer.hpp
     ./include/ws2editor/Config.hpp
     ./include/ws2editor/Progress.hpp

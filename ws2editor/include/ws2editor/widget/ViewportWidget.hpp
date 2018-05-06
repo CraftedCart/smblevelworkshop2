@@ -60,11 +60,14 @@ namespace WS2Editor {
                  */
                 QString tip;
 
-                //Gizmo collision bounds
+                //Gizmo collision bounds & highlight
                 bool isGizmoPhysicsInWorld = false;
                 PhysicsContainer *gizmoYPhysics;
+                bool highlightGizmoY;
                 PhysicsContainer *gizmoXPhysics;
+                bool highlightGizmoX;
                 PhysicsContainer *gizmoZPhysics;
+                bool highlightGizmoZ;
 
             public:
                 explicit ViewportWidget(QWidget *parent = nullptr);
@@ -170,8 +173,19 @@ namespace WS2Editor {
                  *
                  * @return A pointer to the raycast callback (Don't forget to delete this when you're done!)
                  */
-                btCollisionWorld::ClosestRayResultCallback* ndcRaycast(const glm::vec2 pos, const glm::vec3 startPos,
+                btCollisionWorld::AllHitsRayResultCallback* ndcRaycast(const glm::vec2 pos, const glm::vec3 startPos,
                         const float distance, const glm::mat4 proj, const glm::mat4 view);
+
+                /**
+                 * @brief Sorts the ray callback result values by each hit point's distance from sourcePoint and returns an indices vector
+                 *
+                 * Elements are not directly sorted in the rayCallback. Rather, an indices vector is created, sorted based on the fractions in the ray callback, and returned
+                 *
+                 * @param rayCallback The ray callback result to sort the returned indices vector
+                 *
+                 * @return An indices array sorted based on distance
+                 */
+                QVector<int> sortAllHitsRayResultCallback(const btCollisionWorld::AllHitsRayResultCallback *rayCallback);
 
                 /**
                  * @brief Selects the node at the given gcreen position

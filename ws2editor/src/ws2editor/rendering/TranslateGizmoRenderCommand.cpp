@@ -8,13 +8,19 @@ namespace WS2Editor {
                 glm::mat4 transform,
                 glm::mat4 viewMatrix,
                 glm::mat4 projMatrix,
-                glm::vec3 cameraPos
+                glm::vec3 cameraPos,
+                bool highlightGizmoX,
+                bool highlightGizmoY,
+                bool highlightGizmoZ
                 ) :
         renderManager(renderManager),
         transform(transform),
         viewMatrix(viewMatrix),
         projMatrix(projMatrix),
-        cameraPos(cameraPos) {}
+        cameraPos(cameraPos),
+        highlightGizmoX(highlightGizmoX),
+        highlightGizmoY(highlightGizmoY),
+        highlightGizmoZ(highlightGizmoZ) {}
 
         void TranslateGizmoRenderCommand::draw() {
             //Scale the object so that it's the same scale regardless of distance from the camera
@@ -31,6 +37,11 @@ namespace WS2Editor {
             glm::vec4 rTint(1.0f, 0.0f, 0.0f, 1.0f);
             glm::vec4 gTint(0.0f, 1.0f, 0.0f, 1.0f);
             glm::vec4 bTint(0.0f, 0.0f, 1.0f, 1.0f);
+
+            //Highlight selected gizmos in yellow
+            if (highlightGizmoX) rTint = glm::vec4(1.0f, 0.92f, 0.23f, 1.0f);
+            if (highlightGizmoY) gTint = glm::vec4(1.0f, 0.92f, 0.23f, 1.0f);
+            if (highlightGizmoZ) bTint = glm::vec4(1.0f, 0.92f, 0.23f, 1.0f);
 
             glUniformMatrix4fv(renderManager->unlitShaderViewID, 1, GL_FALSE, &viewMatrix[0][0]);
             glUniformMatrix4fv(renderManager->unlitShaderProjID, 1, GL_FALSE, &projMatrix[0][0]);

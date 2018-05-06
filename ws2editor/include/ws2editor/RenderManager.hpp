@@ -93,6 +93,7 @@ namespace WS2Editor {
             //More default models
             MeshSegment *lineMeshSegment;
             QVector<ResourceMesh*> gizmoConeMesh;
+            QVector<ResourceMesh*> cubeMesh;
 
         protected:
             //Copied straight from Qt QGL

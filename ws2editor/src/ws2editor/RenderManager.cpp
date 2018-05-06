@@ -109,8 +109,11 @@ namespace WS2Editor {
                 QVector<ResourceTexture*> {}
                 );
 
-        QFile gizmoCone(":/Workshop2/Models/gizmoCone.fbx");
-        gizmoConeMesh = WS2Common::Model::ModelLoader::loadModel(gizmoCone);
+        QFile gizmoConeFile(":/Workshop2/Models/gizmoCone.fbx");
+        gizmoConeMesh = WS2Common::Model::ModelLoader::loadModel(gizmoConeFile);
+
+        QFile cubeFile(":/Workshop2/Models/cube.fbx");
+        cubeMesh = WS2Common::Model::ModelLoader::loadModel(cubeFile);
 
         checkErrors("After RenderManager::init()");
     }
