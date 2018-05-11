@@ -305,22 +305,22 @@ namespace WS2Editor {
                             ));
 
                 //Also update the hitbox collision
-                float distanceFromCamera = glm::distance(cameraPos, center);
+                float distanceFromCamera = glm::length(proj * view * glm::vec4(center, 1.0f));
                 Transform t;
 
                 //Y
-                t.setPosition(center + glm::vec3(0.0f, 0.1f, 0.0f) * distanceFromCamera);
-                t.setScale(0.2f * glm::vec3(0.2f, 1.2f, 0.2f) * distanceFromCamera);
+                t.setPosition(center + glm::vec3(0.0f, 0.05f, 0.0f) * distanceFromCamera);
+                t.setScale(0.1f * glm::vec3(0.2f, 1.2f, 0.2f) * distanceFromCamera);
                 gizmoYPhysics->updateTransform(t);
 
                 //X
-                t.setPosition(center + glm::vec3(0.1f, 0.0f, 0.0f) * distanceFromCamera);
-                t.setScale(0.2f * glm::vec3(1.2f, 0.2f, 0.2f) * distanceFromCamera);
+                t.setPosition(center + glm::vec3(0.05f, 0.0f, 0.0f) * distanceFromCamera);
+                t.setScale(0.1f * glm::vec3(1.2f, 0.2f, 0.2f) * distanceFromCamera);
                 gizmoXPhysics->updateTransform(t);
 
                 //Z
-                t.setPosition(center + glm::vec3(0.0f, 0.0f, 0.1f) * distanceFromCamera);
-                t.setScale(0.2f * glm::vec3(0.2f, 0.2f, 1.2f) * distanceFromCamera);
+                t.setPosition(center + glm::vec3(0.0f, 0.0f, 0.05f) * distanceFromCamera);
+                t.setScale(0.1f * glm::vec3(0.2f, 0.2f, 1.2f) * distanceFromCamera);
                 gizmoZPhysics->updateTransform(t);
             } else {
                 //Nothing's selected, so disable the gizmos

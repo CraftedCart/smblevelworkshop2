@@ -25,8 +25,8 @@ namespace WS2Editor {
         void TranslateGizmoRenderCommand::draw() {
             //Scale the object so that it's the same scale regardless of distance from the camera
             glm::vec3 transformPos = glm::vec3(transform[3]);
-            float dist = glm::distance(transformPos, cameraPos);
-            glm::mat4 scale = glm::scale(glm::vec3(dist * 0.2f));
+            float dist = glm::length(projMatrix * viewMatrix * glm::vec4(transformPos, 1.0f));
+            glm::mat4 scale = glm::scale(glm::vec3(dist * 0.1f));
 
             glUseProgram(renderManager->unlitProgID);
 
@@ -74,19 +74,19 @@ namespace WS2Editor {
                     CachedGlMesh *coneMesh = renderManager->getCachedGlMesh(segment);
                     glBindVertexArray(coneMesh->getVao());
 
-                    glm::mat4 yConeTranslateMat = glm::translate(glm::vec3(0.0f, 0.2f, 0.0f) * dist);
+                    glm::mat4 yConeTranslateMat = glm::translate(glm::vec3(0.0f, 0.1f, 0.0f) * dist);
                     glm::mat4 yConeModel = transform * yConeTranslateMat * scale;
                     glUniformMatrix4fv(renderManager->unlitShaderModelID, 1, GL_FALSE, &yConeModel[0][0]);
                     glUniform4fv(renderManager->unlitShaderTintID, 1, &gTint[0]);
                     glDrawElements(GL_TRIANGLES, coneMesh->getTriCount(), GL_UNSIGNED_INT, 0);
 
-                    glm::mat4 xConeTranslateMat = glm::translate(glm::vec3(0.2f, 0.0f, 0.0f) * dist);
+                    glm::mat4 xConeTranslateMat = glm::translate(glm::vec3(0.1f, 0.0f, 0.0f) * dist);
                     glm::mat4 xConeModel = transform * xConeTranslateMat * scale * glm::rotate(glm::half_pi<float>(), glm::vec3(0.0f, 0.0f, -1.0f));
                     glUniformMatrix4fv(renderManager->unlitShaderModelID, 1, GL_FALSE, &xConeModel[0][0]);
                     glUniform4fv(renderManager->unlitShaderTintID, 1, &rTint[0]);
                     glDrawElements(GL_TRIANGLES, coneMesh->getTriCount(), GL_UNSIGNED_INT, 0);
 
-                    glm::mat4 zConeTranslateMat = glm::translate(glm::vec3(0.0f, 0.0f, 0.2f) * dist);
+                    glm::mat4 zConeTranslateMat = glm::translate(glm::vec3(0.0f, 0.0f, 0.1f) * dist);
                     glm::mat4 zConeModel = transform * zConeTranslateMat * scale * glm::rotate(glm::half_pi<float>(), glm::vec3(1.0f, 0.0f, 0.0f));
                     glUniformMatrix4fv(renderManager->unlitShaderModelID, 1, GL_FALSE, &xConeModel[0][0]);
                     glUniformMatrix4fv(renderManager->unlitShaderModelID, 1, GL_FALSE, &zConeModel[0][0]);
