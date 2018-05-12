@@ -5,6 +5,7 @@
 #include "ws2editor/ui/SettingsDialog.hpp"
 #include "ws2editor/ui/AboutWindow.hpp"
 #include "ws2editor/ui/StageIdeaGeneratorWindow.hpp"
+#include "ws2editor/ui/PluginsWindow.hpp"
 #include "ws2editor/ui/CommandWidget.hpp"
 #include "ws2editor/task/ImportFileTask.hpp"
 #include "ws2editor/WS2Editor.hpp"
@@ -56,6 +57,7 @@ namespace WS2Editor {
             connect(ui->actionSettings, &QAction::triggered, this, &StageEditorWindow::showSettings);
             connect(ui->actionAbout, &QAction::triggered, this, &StageEditorWindow::showAbout);
             connect(ui->actionStageIdeaGenerator, &QAction::triggered, this, &StageEditorWindow::showStageIdeaGenerator);
+            connect(ui->actionViewPlugins, &QAction::triggered, this, &StageEditorWindow::showPlugins);
             connect(ui->actionWorkshopDiscord, &QAction::triggered, [](){ QDesktopServices::openUrl(QUrl("https://discord.gg/CEYjvDj")); });
             connect(ui->actionAddGoalBlue, &QAction::triggered, this, &StageEditorWindow::addGoalBlue);
             connect(ui->actionAddGoalGreen, &QAction::triggered, this, &StageEditorWindow::addGoalGreen);
@@ -142,17 +144,22 @@ namespace WS2Editor {
         }
 
         void StageEditorWindow::showSettings() {
-            SettingsDialog *win = new SettingsDialog();
+            SettingsDialog *win = new SettingsDialog(this);
             win->show();
         }
 
         void StageEditorWindow::showAbout() {
-            AboutWindow *win = new AboutWindow();
+            AboutWindow *win = new AboutWindow(this);
             win->show();
         }
 
         void StageEditorWindow::showStageIdeaGenerator() {
-            StageIdeaGeneratorWindow *win = new StageIdeaGeneratorWindow();
+            StageIdeaGeneratorWindow *win = new StageIdeaGeneratorWindow(this);
+            win->show();
+        }
+
+        void StageEditorWindow::showPlugins() {
+            PluginsWindow *win = new PluginsWindow(this);
             win->show();
         }
 

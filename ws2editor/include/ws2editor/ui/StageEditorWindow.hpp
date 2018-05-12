@@ -60,6 +60,11 @@ namespace WS2Editor {
                 void showStageIdeaGenerator();
 
                 /**
+                 * @brief Shows the plugins dialog
+                 */
+                void showPlugins();
+
+                /**
                  * @brief Shows the command line widget as a pop-up
                  */
                 void showCommandLine();
