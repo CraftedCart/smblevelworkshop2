@@ -388,6 +388,11 @@ namespace WS2Editor {
             painter.drawText(24, 66, tr("Open a project or import models to get started"));
             painter.drawText(QRectF(24, 124, width() - 48, height() - 124 - 24), tip);
 
+            //Plugin info
+            painter.drawText(24, height() - 24, tr("%1 / %2 plugins initialized, %n plugin(s) failed to load", "", ws2GetFailedPlugins().size())
+                    .arg(ws2GetInitializedPlugins().size())
+                    .arg(ws2GetLoadedPlugins().size())
+                    );
         }
 
         void ViewportWidget::keyPressEvent(QKeyEvent *event) {

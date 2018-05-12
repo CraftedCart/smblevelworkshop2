@@ -1326,26 +1326,49 @@ Public License instead of this License.  But first, please read
         <source>Open a project or import models to get started</source>
         <translation type="unfinished"></translation>
     </message>
+    <message numerus="yes">
+        <location filename="../src/ws2editor/widget/ViewportWidget.cpp" line="392"/>
+        <source>%1 / %2 plugins initialized, %n plugin(s) failed to load</source>
+        <translation type="unfinished">
+            <numerusform>%1 / %2 plugins initialized, %n plugin failed to load</numerusform>
+            <numerusform>%1 / %2 plugins initialized, %n plugins failed to load</numerusform>
+        </translation>
+    </message>
 </context>
 <context>
     <name>main</name>
     <message>
-        <location filename="../src/ws2editor/main.cpp" line="40"/>
+        <location filename="../src/ws2editor/main.cpp" line="41"/>
         <source>Initializing WS2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/ws2editor/main.cpp" line="43"/>
+        <location filename="../src/ws2editor/main.cpp" line="44"/>
         <source>Setting default OpenGL format</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/ws2editor/main.cpp" line="59"/>
+        <location filename="../src/ws2editor/main.cpp" line="60"/>
         <source>Setting style</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/ws2editor/main.cpp" line="69"/>
+        <location filename="../src/ws2editor/main.cpp" line="70"/>
+        <source>Finding plugins</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/ws2editor/main.cpp" line="84"/>
+        <source>Loading plugin %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/ws2editor/main.cpp" line="103"/>
+        <source>Initializing plugin %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/ws2editor/main.cpp" line="114"/>
         <source>Initializing Stage Editor</source>
         <translation type="unfinished"></translation>
     </message>

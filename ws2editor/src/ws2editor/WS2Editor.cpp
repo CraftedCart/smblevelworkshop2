@@ -19,6 +19,23 @@ namespace WS2Editor {
     void ws2Destroy() {
         delete ws2TaskManager;
         delete ws2App;
+
+        //Application termination will unload the plugins
+    }
+
+    QVector<QPluginLoader*>& ws2GetLoadedPlugins() {
+        static QVector<QPluginLoader*> loadedPlugins;
+        return loadedPlugins;
+    }
+
+    QVector<QPluginLoader*>& ws2GetInitializedPlugins() {
+        static QVector<QPluginLoader*> initializedPlugins;
+        return initializedPlugins;
+    }
+
+    QVector<QPluginLoader*>& ws2GetFailedPlugins() {
+        static QVector<QPluginLoader*> failedPlugins;
+        return failedPlugins;
     }
 }
 

@@ -133,6 +133,7 @@ set(HEADER_FILES
     ./include/ws2editor/command/RestartCommand.hpp
     ./include/ws2editor/command/TranslateSelectedCommand.hpp
     ./include/ws2editor/command/ToggleDebugDrawingCommand.hpp
+    ./include/ws2editor/plugin/IEditorPlugin.hpp
     )
 
 set(UI_FILES
@@ -168,6 +169,9 @@ target_include_directories(${PROJECT_NAME} PUBLIC
     $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
     $<INSTALL_INTERFACE:include>
     PRIVATE src)
+
+#Enable symbol exporting for plugins
+set_target_properties(${PROJECT_NAME} PROPERTIES ENABLE_EXPORTS 1)
 
 install(TARGETS ${PROJECT_NAME} DESTINATION bin)
 

@@ -44,6 +44,9 @@ add_subdirectory(./ws2lz)
 add_subdirectory(./ws2lzfrontend)
 add_subdirectory(./ws2editor)
 
+#Editor plugins
+add_subdirectory(./ws2editorplugins/ws2editorexampleplugin)
+
 if(APPLE)
     set(CPACK_GENERATOR Bundle)
     set(CPACK_BUNDLE_NAME "ws2editor")

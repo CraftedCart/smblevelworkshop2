@@ -3,6 +3,7 @@
 #include "ws2editor/ui/ModelManager.hpp"
 #include "ws2editor/resource/ResourceManager.hpp"
 #include "ws2editor/command/CommandInterpreter.hpp"
+#include "ws2editor/plugin/IEditorPlugin.hpp"
 #include "ws2common/MessageHandler.hpp"
 #include <QFile>
 #include <QSurfaceFormat>
@@ -64,6 +65,50 @@ int main(int argc, char *argv[]) {
     QString style(styleFile.readAll());
     styleFile.close();
     WS2Editor::ws2App->setStyleSheet(style);
+
+    //Load plugins
+    splash.showMessage(QApplication::translate("main", "Finding plugins"), Qt::AlignRight | Qt::AlignBottom, Qt::white);
+    WS2Editor::ws2App->processEvents();
+
+    qDebug() << "Loading plugins";
+    QDir pluginsDir = QDir(QApplication::applicationDirPath());
+    pluginsDir.cdUp();
+    pluginsDir.cd("share");
+    pluginsDir.cd("ws2editor");
+    //Try and make the plugins dir if it doesn't exist
+    pluginsDir.mkdir("plugins");
+    pluginsDir.cd("plugins");
+
+    for (QString fileName : pluginsDir.entryList(QDir::Files)) {
+        qDebug().noquote() << "Loading plugin" << fileName;
+        splash.showMessage(QApplication::translate("main", "Loading plugin %1").arg(fileName), Qt::AlignRight | Qt::AlignBottom, Qt::white);
+        WS2Editor::ws2App->processEvents();
+
+        QPluginLoader *loader = new QPluginLoader(pluginsDir.absoluteFilePath(fileName));
+        QObject *plugin = loader->instance();
+
+        if (plugin) {
+            WS2Editor::ws2GetLoadedPlugins() << loader;
+        } else {
+            qDebug().noquote() << "Failed to load plugin" << fileName << "-" << loader->errorString();
+            loader->unload();
+
+            WS2Editor::ws2GetFailedPlugins() << loader;
+        }
+    }
+
+    //Now that we've loaded all the plugins, try to initialize them
+    for (QPluginLoader *loader : WS2Editor::ws2GetLoadedPlugins()) {
+        qDebug().noquote() << "Initializing plugin" << loader->fileName();
+        splash.showMessage(QApplication::translate("main", "Initializing plugin %1").arg(loader->fileName()), Qt::AlignRight | Qt::AlignBottom, Qt::white);
+        WS2Editor::ws2App->processEvents();
+
+        if (WS2Editor::Plugin::IEditorPlugin *editorPlugin = qobject_cast<WS2Editor::Plugin::IEditorPlugin*>(loader->instance())) {
+            if (editorPlugin->init()) {
+                WS2Editor::ws2GetInitializedPlugins() << loader;
+            }
+        }
+    }
 
     //Splash message
     splash.showMessage(QApplication::translate("main", "Initializing Stage Editor"), Qt::AlignRight | Qt::AlignBottom, Qt::white);
