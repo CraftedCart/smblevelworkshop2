@@ -1,6 +1,6 @@
 #include "ws2editor/ui/ModelOutliner.hpp"
 #include "ws2editor/project/ProjectManager.hpp"
-#include "ws2editor/WS2Editor.hpp"
+#include "ws2editor/WS2EditorInstance.hpp"
 #include "ws2common/SerializeUtils.hpp"
 #include <QDebug>
 
@@ -227,7 +227,7 @@ namespace WS2Editor {
 
         void ModelOutliner::addNode(SceneNode *node, SceneNode *parentNode) {
             //Check if the QApplication is running else we would crash
-            if (WS2Editor::qAppRunning) {
+            if (WS2EditorInstance::getInstance() != nullptr) {
                 QModelIndex parentIndex = findIndexFromNode(parentNode);
                 int index = parentNode->getChildCount();
 
@@ -236,7 +236,7 @@ namespace WS2Editor {
 
             parentNode->addChild(node);
 
-            if (WS2Editor::qAppRunning) endInsertRows();
+            if (WS2EditorInstance::getInstance() != nullptr) endInsertRows();
         }
 
         void ModelOutliner::addNodeWithMesh(SceneNode *node, SceneNode *parentNode, ResourceMesh *mesh) {
@@ -250,7 +250,7 @@ namespace WS2Editor {
             Project::ProjectManager::getActiveProject()->getScene()->getSelectionManager()->deselect(node);
 
             //Check if the QApplication is running else we would crash
-            if (WS2Editor::qAppRunning) {
+            if (WS2EditorInstance::getInstance() != nullptr) {
                 QModelIndex index = findIndexFromNode(node);
                 QModelIndex parentIndex = index.parent();
                 int removedIndex = index.row();
@@ -264,7 +264,7 @@ namespace WS2Editor {
 
             node->removeFromParent();
 
-            if (WS2Editor::qAppRunning) endRemoveRows();
+            if (WS2EditorInstance::getInstance() != nullptr) endRemoveRows();
         }
 
         void ModelOutliner::onNodeModified(SceneNode *node) {

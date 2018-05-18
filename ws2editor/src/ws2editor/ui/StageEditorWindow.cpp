@@ -8,7 +8,7 @@
 #include "ws2editor/ui/PluginsWindow.hpp"
 #include "ws2editor/ui/CommandWidget.hpp"
 #include "ws2editor/task/ImportFileTask.hpp"
-#include "ws2editor/WS2Editor.hpp"
+#include "ws2editor/WS2EditorInstance.hpp"
 #include "ws2common/scene/GroupSceneNode.hpp"
 #include "ws2common/scene/GoalSceneNode.hpp"
 #include <QFontDatabase>
@@ -31,7 +31,7 @@ namespace WS2Editor {
                     );
 
             ui->statusBar->addWidget(statusTaskLabel);
-            connect(ws2TaskManager, &Task::TaskManager::messageChanged, statusTaskLabel, &QLabel::setText);
+            connect(WS2EditorInstance::getInstance()->getTaskManager(), &Task::TaskManager::messageChanged, statusTaskLabel, &QLabel::setText);
 
             const QFont fixedFont = QFontDatabase::systemFont(QFontDatabase::FixedFont);
             statusFramerateLabel->setFont(fixedFont);
@@ -124,7 +124,7 @@ namespace WS2Editor {
                 tasks.append(new Task::ImportFileTask(f));
             }
 
-            ws2TaskManager->enqueueTasks(tasks);
+            WS2EditorInstance::getInstance()->getTaskManager()->enqueueTasks(tasks);
         }
 
         void StageEditorWindow::addSceneNode() {

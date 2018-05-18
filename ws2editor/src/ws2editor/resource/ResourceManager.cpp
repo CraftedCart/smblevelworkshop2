@@ -1,4 +1,4 @@
-#include "ws2editor/WS2Editor.hpp"
+#include "ws2editor/WS2EditorInstance.hpp"
 #include "ws2editor/resource/ResourceManager.hpp"
 #include "ws2editor/ui/ModelManager.hpp"
 #include "ws2common/MathUtils.hpp"
@@ -28,7 +28,7 @@ namespace WS2Editor {
                 getResources().append(res);
                 resourcesMutex.unlock();
 
-                if (qAppRunning) UI::ModelManager::modelResources->onResourceAdded();
+                if (WS2EditorInstance::getInstance() != nullptr) UI::ModelManager::modelResources->onResourceAdded();
             }
 
             void unloadAllResources() {

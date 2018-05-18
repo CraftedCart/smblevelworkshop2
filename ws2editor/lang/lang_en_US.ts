@@ -1212,7 +1212,7 @@ Public License instead of this License.  But first, please read
         <translation type="unfinished"></translation>
     </message>
     <message numerus="yes">
-        <location filename="../src/ws2editor/task/TaskManager.cpp" line="24"/>
+        <location filename="../src/ws2editor/task/TaskManager.cpp" line="23"/>
         <source>%n background task(s)</source>
         <translation type="unfinished">
             <numerusform></numerusform>
@@ -1220,7 +1220,7 @@ Public License instead of this License.  But first, please read
         </translation>
     </message>
     <message>
-        <location filename="../src/ws2editor/task/TaskManager.cpp" line="28"/>
+        <location filename="../src/ws2editor/task/TaskManager.cpp" line="27"/>
         <source>All tasks completed</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1340,7 +1340,7 @@ Public License instead of this License.  But first, please read
         <translation type="unfinished"></translation>
     </message>
     <message numerus="yes">
-        <location filename="../src/ws2editor/widget/ViewportWidget.cpp" line="392"/>
+        <location filename="../src/ws2editor/widget/ViewportWidget.cpp" line="393"/>
         <source>%1 / %2 plugins initialized, %n plugin(s) failed to load</source>
         <translation type="unfinished">
             <numerusform>%1 / %2 plugins initialized, %n plugin failed to load</numerusform>
@@ -1351,37 +1351,37 @@ Public License instead of this License.  But first, please read
 <context>
     <name>main</name>
     <message>
-        <location filename="../src/ws2editor/main.cpp" line="41"/>
+        <location filename="../src/ws2editor/main.cpp" line="44"/>
         <source>Initializing WS2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/ws2editor/main.cpp" line="44"/>
+        <location filename="../src/ws2editor/main.cpp" line="47"/>
         <source>Setting default OpenGL format</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/ws2editor/main.cpp" line="60"/>
+        <location filename="../src/ws2editor/main.cpp" line="63"/>
         <source>Setting style</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/ws2editor/main.cpp" line="70"/>
+        <location filename="../src/ws2editor/main.cpp" line="73"/>
         <source>Finding plugins</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/ws2editor/main.cpp" line="84"/>
+        <location filename="../src/ws2editor/main.cpp" line="87"/>
         <source>Loading plugin %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/ws2editor/main.cpp" line="103"/>
+        <location filename="../src/ws2editor/main.cpp" line="106"/>
         <source>Initializing plugin %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/ws2editor/main.cpp" line="114"/>
+        <location filename="../src/ws2editor/main.cpp" line="117"/>
         <source>Initializing Stage Editor</source>
         <translation type="unfinished"></translation>
     </message>

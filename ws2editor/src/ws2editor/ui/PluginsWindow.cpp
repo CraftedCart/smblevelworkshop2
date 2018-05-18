@@ -1,5 +1,5 @@
 #include "ws2editor/ui/PluginsWindow.hpp"
-#include "ws2editor/WS2Editor.hpp"
+#include "ws2editor/WS2EditorInstance.hpp"
 #include <QGridLayout>
 #include <QListWidget>
 #include <QPainter>
@@ -39,10 +39,11 @@ namespace WS2Editor {
             QIcon failedIcon(failedPixmap);
 
             //Fetch plugins and add themto the list
-            for (QPluginLoader *loader : ws2GetLoadedPlugins()) {
+            WS2EditorInstance *ws2Instance = WS2EditorInstance::getInstance();
+            for (QPluginLoader *loader : ws2Instance->getLoadedPlugins()) {
                 listWidget->addItem(loader->fileName());
 
-                if (ws2GetInitializedPlugins().contains(loader)) {
+                if (ws2Instance->getInitializedPlugins().contains(loader)) {
                     //It's been initialized
                     listWidget->item(listWidget->count() - 1)->setIcon(initializedIcon);
                 } else {
@@ -51,7 +52,7 @@ namespace WS2Editor {
                 }
             }
 
-            for (QPluginLoader *loader : ws2GetFailedPlugins()) {
+            for (QPluginLoader *loader : ws2Instance->getFailedPlugins()) {
                 listWidget->addItem(loader->fileName());
                 listWidget->item(listWidget->count() - 1)->setIcon(failedIcon);
             }

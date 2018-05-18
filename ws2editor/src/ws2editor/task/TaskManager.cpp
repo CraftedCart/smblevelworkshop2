@@ -1,5 +1,4 @@
 #include "ws2editor/task/TaskManager.hpp"
-#include "ws2editor/WS2Editor.hpp"
 #include <QThreadPool>
 #include <QDebug>
 
