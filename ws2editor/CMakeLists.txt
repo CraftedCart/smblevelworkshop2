@@ -174,6 +174,19 @@ target_include_directories(${PROJECT_NAME} PUBLIC
 
 #Enable symbol exporting for plugins
 set_target_properties(${PROJECT_NAME} PROPERTIES ENABLE_EXPORTS 1)
+#I don't think this actually does anything except on the MSVC compiler
+#set_target_properties(${PROJECT_NAME} PROPERTIES WINDOWS_EXPORT_ALL_SYMBOLS 1)
+
+if(WIN32)
+    #Invoke ar to generate a .dll.a from the .obj files, required to link plugins
+    add_custom_command(TARGET ${PROJECT_NAME} PRE_LINK
+        COMMAND sh -c "${CMAKE_AR} cr lib${PROJECT_NAME}.dll.a $$(find . -name '*.obj' -printf '%p ')"
+        COMMENT "Generating lib${PROJECT_NAME}.dll.a for external linking"
+        )
+
+    #Also add the install command for libws2editor.dll.a
+    install(FILES ${CMAKE_CURRENT_BINARY_DIR}/lib${PROJECT_NAME}.dll.a DESTINATION bin)
+endif(WIN32)
 
 install(TARGETS ${PROJECT_NAME} DESTINATION bin)
 
