@@ -6,6 +6,7 @@
 #ifndef SMBLEVELWORKSHOP2_WS2EDITOR_UI_MAINWINDOW_HPP
 #define SMBLEVELWORKSHOP2_WS2EDITOR_UI_MAINWINDOW_HPP
 
+#include "ws2editor/widget/ViewportWidget.hpp"
 #include <QMainWindow>
 #include <QLabel>
 #include <QProgressBar>
@@ -20,11 +21,15 @@ namespace WS2Editor {
             Q_OBJECT
 
             public:
-                explicit StageEditorWindow(QWidget *parent = 0);
-                ~StageEditorWindow();
-
                 QLabel *statusTaskLabel = new QLabel();
                 QLabel *statusFramerateLabel = new QLabel();
+
+            private:
+                Ui::StageEditorWindow *ui;
+
+            public:
+                explicit StageEditorWindow(QWidget *parent = 0);
+                ~StageEditorWindow();
 
             public slots:
                 void viewportFrameRendered(qint64 deltaNanoseconds);
@@ -72,9 +77,6 @@ namespace WS2Editor {
                 void addGoalBlue();
                 void addGoalGreen();
                 void addGoalRed();
-
-            private:
-                Ui::StageEditorWindow *ui;
         };
     }
 }

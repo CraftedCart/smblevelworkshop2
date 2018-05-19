@@ -16,6 +16,9 @@ set(CMAKE_AUTOMOC ON)
 #External dependencies
 find_package(Qt5Core REQUIRED)
 
+find_package(Bullet REQUIRED)
+include_directories(SYSTEM ${BULLET_INCLUDE_DIRS})
+
 include_directories(./include)
 include_directories(${CMAKE_BINARY_DIR})
 
@@ -33,6 +36,7 @@ add_library(${PROJECT_NAME} SHARED ${SOURCE_FILES} ${HEADER_FILES})
 target_link_libraries(${PROJECT_NAME}
     Qt5::Core
     ws2editor
+    ${BULLET_LIBRARIES}
     )
 
 #Export headers

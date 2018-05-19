@@ -118,13 +118,14 @@ int main(int argc, char *argv[]) {
     qApp->processEvents();
 
     UI::StageEditorWindow *w = new UI::StageEditorWindow();
+    emit ws2Instance->onStageEditorWindowConstructed(w);
     w->show();
     splash.finish(w);
 
     //Enter the event loop until we request to quit
     int ret = ws2Instance->execApp();
 
-    Resource::ResourceManager::unloadAllResources();
+    WS2Editor::Resource::ResourceManager::unloadAllResources();
 
     //Free resources
     UI::ModelManager::destruct();

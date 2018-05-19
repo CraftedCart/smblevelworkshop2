@@ -7,6 +7,7 @@
 #define SMBLEVELWORKSHOP2_WS2EDITOR_WS2EDITORINSTANCE_HPP
 
 #include "task/TaskManager.hpp"
+#include "ui/StageEditorWindow.hpp"
 #include <QApplication>
 #include <QPluginLoader>
 
@@ -16,7 +17,9 @@
  * WS2 is short for Workshop 2
  */
 namespace WS2Editor {
-    class WS2EditorInstance {
+    class WS2EditorInstance : public QObject {
+        Q_OBJECT
+
         private:
             /**
              * @brief The singleton instance of this object
@@ -97,6 +100,14 @@ namespace WS2Editor {
              * @return The return code for the application
              */
             int execApp();
+
+        signals:
+            /**
+             * @brief Emitted after the StageEditorWindow has been constructed
+             *
+             * @param w A pointer to the stage editor window
+             */
+            void onStageEditorWindowConstructed(UI::StageEditorWindow *w);
     };
 }
 
