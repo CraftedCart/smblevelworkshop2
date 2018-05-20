@@ -3,6 +3,6 @@ namespace WS2Editor {
 }
 
 int main(int argc, char *argv[]) {
-    WS2Editor::ws2editorLaunch(argc, argv);
+    return WS2Editor::ws2editorLaunch(argc, argv);
 }
 
