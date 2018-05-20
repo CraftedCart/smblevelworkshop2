@@ -1351,37 +1351,37 @@ Public License instead of this License.  But first, please read
 <context>
     <name>main</name>
     <message>
-        <location filename="../src/ws2editor/main.cpp" line="44"/>
+        <location filename="../src/ws2editor/main.cpp" line="45"/>
         <source>Initializing WS2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/ws2editor/main.cpp" line="47"/>
+        <location filename="../src/ws2editor/main.cpp" line="48"/>
         <source>Setting default OpenGL format</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/ws2editor/main.cpp" line="63"/>
+        <location filename="../src/ws2editor/main.cpp" line="64"/>
         <source>Setting style</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/ws2editor/main.cpp" line="73"/>
+        <location filename="../src/ws2editor/main.cpp" line="74"/>
         <source>Finding plugins</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/ws2editor/main.cpp" line="87"/>
+        <location filename="../src/ws2editor/main.cpp" line="88"/>
         <source>Loading plugin %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/ws2editor/main.cpp" line="106"/>
+        <location filename="../src/ws2editor/main.cpp" line="107"/>
         <source>Initializing plugin %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/ws2editor/main.cpp" line="117"/>
+        <location filename="../src/ws2editor/main.cpp" line="118"/>
         <source>Initializing Stage Editor</source>
         <translation type="unfinished"></translation>
     </message>

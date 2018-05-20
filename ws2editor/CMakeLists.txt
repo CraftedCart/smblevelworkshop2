@@ -154,7 +154,8 @@ set(RESOURCE_FILES
 qt5_create_translation(TRANSLATION_FILES ${SOURCE_FILES} ${HEADER_FILES} ${UI_FILES} ${TRANSLATIONS})
 qt5_add_translation(QM_FILES ${TRANSLATIONS})
 
-add_executable(${PROJECT_NAME} ${SOURCE_FILES} ${HEADER_FILES} ${RESOURCE_FILES} ${TRANSLATION_FILES})
+#The bulk of ws2editor will be in a library as trying to get plugins to work on macOS/Windows with an executable was just pain
+add_library(${PROJECT_NAME} SHARED ${SOURCE_FILES} ${HEADER_FILES} ${RESOURCE_FILES} ${TRANSLATION_FILES})
 
 #External dependencies
 target_link_libraries(${PROJECT_NAME}
@@ -172,23 +173,19 @@ target_include_directories(${PROJECT_NAME} PUBLIC
     $<INSTALL_INTERFACE:include>
     PRIVATE src)
 
-#Enable symbol exporting for plugins
-set_target_properties(${PROJECT_NAME} PROPERTIES ENABLE_EXPORTS 1)
-#I don't think this actually does anything except on the MSVC compiler
-#set_target_properties(${PROJECT_NAME} PROPERTIES WINDOWS_EXPORT_ALL_SYMBOLS 1)
+#The launcher for ws2editor
+add_executable(${PROJECT_NAME}launcher launcher/main.cpp)
+target_link_libraries(${PROJECT_NAME}launcher ws2editor)
+set_target_properties(${PROJECT_NAME}launcher PROPERTIES OUTPUT_NAME ws2editor)
 
 if(WIN32)
-    #Invoke ar to generate a .dll.a from the .obj files, required to link plugins
-    add_custom_command(TARGET ${PROJECT_NAME} PRE_LINK
-        COMMAND sh -c "${CMAKE_AR} cr lib${PROJECT_NAME}.dll.a $$(find . -name '*.obj' -printf '%p ')"
-        COMMENT "Generating lib${PROJECT_NAME}.dll.a for external linking"
-        )
-
-    #Also add the install command for libws2editor.dll.a
-    install(FILES ${CMAKE_CURRENT_BINARY_DIR}/lib${PROJECT_NAME}.dll.a DESTINATION bin)
+    #Windows has no concept of rpath, so just group all the exes/dlls in one big mess of a bin directory
+    install(TARGETS ${PROJECT_NAME} DESTINATION bin)
+else(WIN32)
+    install(TARGETS ${PROJECT_NAME} DESTINATION lib)
 endif(WIN32)
 
-install(TARGETS ${PROJECT_NAME} DESTINATION bin)
+install(TARGETS ${PROJECT_NAME}launcher DESTINATION bin)
 
 #.desktop and icon files
 if(UNIX AND NOT APPLE)
