@@ -16,6 +16,9 @@ set(CMAKE_AUTOMOC ON)
 #External dependencies
 find_package(Qt5Core REQUIRED)
 
+find_package(GLEW REQUIRED)
+include_directories(SYSTEM ${GLEW_INCLUDE_DIRS})
+
 find_package(Bullet REQUIRED)
 include_directories(SYSTEM ${BULLET_INCLUDE_DIRS})
 
@@ -37,6 +40,7 @@ target_link_libraries(${PROJECT_NAME}
     Qt5::Core
     ws2editor
     ${BULLET_LIBRARIES}
+    ${GLEW_LIBRARIES}
     )
 
 #Export headers
