@@ -1,5 +1,7 @@
+#include "ws2editor_export.h"
+
 namespace WS2Editor {
-    int ws2editorLaunch(int argc, char *argv[]);
+    WS2EDITOR_EXPORT int ws2editorLaunch(int argc, char *argv[]);
 }
 
 int main(int argc, char *argv[]) {

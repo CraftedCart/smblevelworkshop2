@@ -1,16 +1,17 @@
 /**
  * @file
- * @brief Header for the Collision Grid class
+ * @brief Header for the Collision Grid class WS2COMMON_EXPORT
  */
 
 #ifndef SMBLEVELWORKSHOP2_WS2COMMON_COLLISIONGRID_HPP
 #define SMBLEVELWORKSHOP2_WS2COMMON_COLLISIONGRID_HPP
 
+#include "ws2common_export.h"
 #include <QXmlStreamWriter>
 #include <glm/glm.hpp>
 
 namespace WS2Common {
-    class CollisionGrid {
+    class WS2COMMON_EXPORT CollisionGrid {
         protected:
             glm::vec2 gridStart = glm::vec2(-256.0f, -256.0f);
             glm::vec2 gridStep = glm::vec2(32.0f, 32.0f);

@@ -1,18 +1,19 @@
 /**
  * @file
- * @brief Header for the Keyframe template class
+ * @brief Header for the Keyframe template class WS2COMMON_EXPORT
  */
 
 #ifndef SMBLEVELWORKSHOP2_WS2COMMON_ANIMATION_KEYFRAME_HPP
 #define SMBLEVELWORKSHOP2_WS2COMMON_ANIMATION_KEYFRAME_HPP
 
+#include "ws2common_export.h"
 #include "ws2common/animation/EnumEasing.hpp"
 #include <QPair>
 
 namespace WS2Common {
     namespace Animation {
         template<typename T>
-        class Keyframe {
+        class WS2COMMON_EXPORT Keyframe {
             protected:
                 //float: Time, T: Value
                 QPair<float, T> value;

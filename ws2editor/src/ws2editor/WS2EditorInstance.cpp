@@ -7,6 +7,8 @@ namespace WS2Editor {
 
     void WS2EditorInstance::createInstance(int &argc, char *argv[]) {
         instance = new WS2EditorInstance(argc, argv);
+
+        using namespace WS2Common::Scene;
     }
 
     WS2EditorInstance* WS2EditorInstance::getInstance() {

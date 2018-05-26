@@ -6,6 +6,7 @@
 #ifndef SMBLEVELWORKSHOP2_WS2EDITOR_PROJECT_PROJECTMANAGER_HPP
 #define SMBLEVELWORKSHOP2_WS2EDITOR_PROJECT_PROJECTMANAGER_HPP
 
+#include "ws2editor_export.h"
 #include "ws2editor/project/Project.hpp"
 
 namespace WS2Editor {

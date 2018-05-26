@@ -6,6 +6,7 @@
  */
 
 #ifndef SMBLEVELWORKSHOP2_WS2EDITOR_MATHUTILS_HPP
+#include "ws2editor_export.h"
 #define SMBLEVELWORKSHOP2_WS2EDITOR_MATHUTILS_HPP
 
 #include <glm/glm.hpp>

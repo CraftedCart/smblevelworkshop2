@@ -6,6 +6,7 @@
 #ifndef SMBLEVELWORKSHOP2_WS2EDITOR_CONFIG_HPP
 #define SMBLEVELWORKSHOP2_WS2EDITOR_CONFIG_HPP
 
+#include "ws2editor_export.h"
 namespace WS2Editor {
     /**
      * @brief Stores user configurable variables

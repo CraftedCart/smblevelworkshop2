@@ -6,11 +6,12 @@
 #ifndef SMBLEVELWORKSHOP2_WS2EDITOR_PLUGIN_IEDITORPLUGIN_HPP
 #define SMBLEVELWORKSHOP2_WS2EDITOR_PLUGIN_IEDITORPLUGIN_HPP
 
+#include "ws2editor_export.h"
 #include <QtPlugin>
 
 namespace WS2Editor {
     namespace Plugin {
-        class IEditorPlugin {
+        class WS2EDITOR_EXPORT IEditorPlugin {
             public:
                 virtual ~IEditorPlugin() = default;
 

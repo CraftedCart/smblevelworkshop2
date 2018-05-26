@@ -1,16 +1,17 @@
 /**
  * @file
- * @brief Header for the PluginsWindow class
+ * @brief Header for the PluginsWindow class WS2EDITOR_EXPORT
  */
 
 #ifndef SMBLEVELWORKSHOP2_WS2EDITOR_UI_PLUGINSWINDOW_HPP
 #define SMBLEVELWORKSHOP2_WS2EDITOR_UI_PLUGINSWINDOW_HPP
 
+#include "ws2editor_export.h"
 #include <QDialog>
 
 namespace WS2Editor {
     namespace UI {
-        class PluginsWindow : public QDialog {
+        class WS2EDITOR_EXPORT PluginsWindow : public QDialog {
             Q_OBJECT
 
             public:

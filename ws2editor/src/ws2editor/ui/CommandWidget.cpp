@@ -79,7 +79,7 @@ namespace WS2Editor {
                 }
             }
 
-            //Pass the event on to the parent class
+            //Pass the event on to the parent class WS2EDITOR_EXPORT
             return QWidget::eventFilter(obj, event);
         }
 

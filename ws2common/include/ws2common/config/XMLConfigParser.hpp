@@ -1,11 +1,12 @@
 /**
  * @file
- * @brief Header for the XMLConfigParser class
+ * @brief Header for the XMLConfigParser class WS2COMMON_EXPORT
  */
 
 #include "ws2common/Stage.hpp"
 #include "ws2common/scene/StartSceneNode.hpp"
 #include "ws2common/scene/MeshSceneNode.hpp"
+#include "ws2common_export.h"
 #include "ws2common/scene/GroupSceneNode.hpp"
 #include "ws2common/scene/GoalSceneNode.hpp"
 #include "ws2common/scene/BumperSceneNode.hpp"
@@ -23,7 +24,7 @@
 
 namespace WS2Common {
     namespace Config {
-        class XMLConfigParser {
+        class WS2COMMON_EXPORT XMLConfigParser {
             protected:
                 QHash<Scene::WormholeSceneNode*, QString> wormholeDestMap;
 

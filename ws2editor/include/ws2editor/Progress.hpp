@@ -1,11 +1,12 @@
 /**
  * @file
- * @brief Header for the WS2Editor::Progress class
+ * @brief Header for the WS2Editor::Progress class WS2EDITOR_EXPORT
  */
 
 #ifndef SMBLEVELWORKSHOP2_WS2EDITOR_PROGRESS_HPP
 #define SMBLEVELWORKSHOP2_WS2EDITOR_PROGRESS_HPP
 
+#include "ws2editor_export.h"
 #include <QObject>
 #include <QStack>
 
@@ -19,7 +20,7 @@ namespace WS2Editor {
      * Tasks are nested and a new task can be started with begin(stepCount), and ended with end()
      * A task has stepCount operations to complete, and you can increment the operations done with inc()
      */
-    class Progress : public QObject {
+    class WS2EDITOR_EXPORT Progress : public QObject {
         Q_OBJECT
 
         public:

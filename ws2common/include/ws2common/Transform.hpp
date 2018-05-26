@@ -1,15 +1,16 @@
 /**
  * @file
- * @brief Header for the Transform class
+ * @brief Header for the Transform class WS2COMMON_EXPORT
  */
 
 #ifndef SMBLEVELWORKSHOP2_WS2COMMON_TRANSFORM_HPP
 #define SMBLEVELWORKSHOP2_WS2COMMON_TRANSFORM_HPP
 
+#include "ws2common_export.h"
 #include <glm/glm.hpp>
 
 namespace WS2Common {
-    class Transform {
+    class WS2COMMON_EXPORT Transform {
         protected:
             glm::vec3 position = glm::vec3(0.0f, 0.0f, 0.0f);
             glm::vec3 rotation = glm::vec3(0.0f, 0.0f, 0.0f);

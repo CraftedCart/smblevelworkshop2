@@ -1,23 +1,24 @@
 /**
  * @file
- * @brief Header for the StageEditorWindow class
+ * @brief Header for the StageEditorWindow class WS2EDITOR_EXPORT
  */
 
 #ifndef SMBLEVELWORKSHOP2_WS2EDITOR_UI_MAINWINDOW_HPP
 #define SMBLEVELWORKSHOP2_WS2EDITOR_UI_MAINWINDOW_HPP
 
+#include "ws2editor_export.h"
 #include "ws2editor/widget/ViewportWidget.hpp"
 #include <QMainWindow>
 #include <QLabel>
 #include <QProgressBar>
 
 namespace Ui {
-    class StageEditorWindow;
+    class WS2EDITOR_EXPORT StageEditorWindow;
 }
 
 namespace WS2Editor {
     namespace UI {
-        class StageEditorWindow : public QMainWindow {
+        class WS2EDITOR_EXPORT StageEditorWindow : public QMainWindow {
             Q_OBJECT
 
             public:

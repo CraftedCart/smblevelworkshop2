@@ -1,11 +1,12 @@
 /**
  * @file
- * @brief Header for the WS2Editor::Task::Task class
+ * @brief Header for the WS2Editor::Task::Task class WS2EDITOR_EXPORT
  */
 
 #ifndef SMBLEVELWORKSHOP2_WS2EDITOR_TASK_TASK_HPP
 #define SMBLEVELWORKSHOP2_WS2EDITOR_TASK_TASK_HPP
 
+#include "ws2editor_export.h"
 #include "ws2editor/Progress.hpp"
 #include <QRunnable>
 
@@ -15,7 +16,7 @@ namespace WS2Editor {
         /**
          * @brief An executable task with progress reporting and a user friendly message
          */
-        class Task : public QObject, public QRunnable {
+        class WS2EDITOR_EXPORT Task : public QObject, public QRunnable {
             Q_OBJECT
 
             protected:

@@ -6,6 +6,7 @@
 #ifndef SMBLEVELWORKSHOP2_WS2EDITOR_UI_MODELOUTLINER_HPP
 #define SMBLEVELWORKSHOP2_WS2EDITOR_UI_MODELOUTLINER_HPP
 
+#include "ws2editor_export.h"
 #include "ws2common/scene/SceneNode.hpp"
 #include "ws2common/resource/ResourceMesh.hpp"
 #include <QAbstractTableModel>
@@ -16,7 +17,7 @@ namespace WS2Editor {
         using namespace WS2Common::Scene;
         using namespace WS2Common::Resource;
 
-        class ModelOutliner : public QAbstractTableModel {
+        class WS2EDITOR_EXPORT ModelOutliner : public QAbstractTableModel {
             Q_OBJECT
 
             protected:

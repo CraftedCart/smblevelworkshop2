@@ -1,16 +1,17 @@
 /**
  * @file
- * @brief Header for the CommandReply class
+ * @brief Header for the CommandReply class WS2EDITOR_EXPORT
  */
 
 #ifndef SMBLEVELWORKSHOP2_WS2EDITOR_COMMAND_COMMANDREPLY_HPP
 #define SMBLEVELWORKSHOP2_WS2EDITOR_COMMAND_COMMANDREPLY_HPP
 
+#include "ws2editor_export.h"
 #include <QString>
 
 namespace WS2Editor {
     namespace Command {
-        class CommandReply {
+        class WS2EDITOR_EXPORT CommandReply {
             protected:
                 bool success;
                 QString translatedMessage;

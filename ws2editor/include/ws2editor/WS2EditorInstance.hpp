@@ -1,11 +1,12 @@
 /**
  * @file
- * @brief Header for the WS2EditorInstance class
+ * @brief Header for the WS2EditorInstance class WS2EDITOR_EXPORT
  */
 
 #ifndef SMBLEVELWORKSHOP2_WS2EDITOR_WS2EDITORINSTANCE_HPP
 #define SMBLEVELWORKSHOP2_WS2EDITOR_WS2EDITORINSTANCE_HPP
 
+#include "ws2editor_export.h"
 #include "task/TaskManager.hpp"
 #include "ui/StageEditorWindow.hpp"
 #include <QApplication>
@@ -17,14 +18,14 @@
  * WS2 is short for Workshop 2
  */
 namespace WS2Editor {
-    class WS2EditorInstance : public QObject {
+    class WS2EDITOR_EXPORT WS2EditorInstance : public QObject {
         Q_OBJECT
 
         private:
             /**
              * @brief The singleton instance of this object
              */
-            static WS2EditorInstance *instance;
+            WS2EDITOR_EXPORT static WS2EditorInstance *instance;
 
             QApplication *app;
             Task::TaskManager *taskManager;
@@ -42,19 +43,19 @@ namespace WS2Editor {
              * @param argc The number of command line arguments
              * @param argv[] The command line arguments
              */
-            static void createInstance(int &argc, char *argv[]);
+            WS2EDITOR_EXPORT static void createInstance(int &argc, char *argv[]);
 
             /**
              * @brief Getter for the singleton instance
              *
              * @return The singleton instance if it has been created
              */
-            static WS2EditorInstance* getInstance();
+            WS2EDITOR_EXPORT static WS2EditorInstance* getInstance();
 
             /**
              * @brief Deletes the singleton instance
              */
-            static void destroyInstance();
+            WS2EDITOR_EXPORT static void destroyInstance();
 
             /**
              * @brief Getter for the QApplication

@@ -1,3 +1,4 @@
+#include "ws2editor_export.h"
 #include "ws2editor/WS2EditorInstance.hpp"
 #include "ws2editor/ui/StageEditorWindow.hpp"
 #include "ws2editor/ui/ModelManager.hpp"
@@ -11,7 +12,7 @@
 #include <QTranslator>
 
 namespace WS2Editor {
-    int ws2editorLaunch(int argc, char *argv[]) {
+    WS2EDITOR_EXPORT int ws2editorLaunch(int argc, char *argv[]) {
         using namespace WS2Editor;
 
         qInstallMessageHandler(WS2Common::messageHandler);

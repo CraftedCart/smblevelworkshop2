@@ -1,11 +1,12 @@
 /**
  * @file
- * @brief Header for the WS2Editor::CachedGlMesh class
+ * @brief Header for the WS2Editor::CachedGlMesh class WS2EDITOR_EXPORT
  */
 
 #ifndef SMBLEVELWORKSHOP2_WS2EDITOR_CACHEDGLMESH_HPP
 #define SMBLEVELWORKSHOP2_WS2EDITOR_CACHEDGLMESH_HPP
 
+#include "ws2editor_export.h"
 #include "ws2editor/glplatform.hpp"
 #include "ws2editor/CachedGlTexture.hpp"
 #include "ws2common/resource/ResourceTexture.hpp"
@@ -17,7 +18,7 @@ namespace WS2Editor {
     /**
      * @note The destructor will not free up the buffers on the GPU - it is your job to ensure that the correct GL context is bound and delete them yourself
      */
-    class CachedGlMesh {
+    class WS2EDITOR_EXPORT CachedGlMesh {
         protected:
             QElapsedTimer lastAccessTimer;
 

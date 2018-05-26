@@ -1,11 +1,12 @@
 /**
  * @file
- * @brief Header for the Animation class
+ * @brief Header for the Animation class WS2COMMON_EXPORT
  */
 
 #ifndef SMBLEVELWORKSHOP2_WS2COMMON_ANIMATION_ANIMATION_HPP
 #define SMBLEVELWORKSHOP2_WS2COMMON_ANIMATION_ANIMATION_HPP
 
+#include "ws2common_export.h"
 #include "ws2common/EnumPlaybackState.hpp"
 #include "ws2common/animation/EnumLoopType.hpp"
 #include "ws2common/animation/Keyframe.hpp"
@@ -18,7 +19,7 @@ namespace WS2Common {
             bool operator() (const KeyframeF* lhs, const KeyframeF* rhs) const;
         };
 
-        class TransformAnimation {
+        class WS2COMMON_EXPORT TransformAnimation {
             protected:
                 EnumPlaybackState initialState;
                 EnumLoopType loopType;

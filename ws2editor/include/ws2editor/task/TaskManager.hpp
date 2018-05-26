@@ -1,18 +1,19 @@
 /**
  * @file
- * @brief Header for the WS2Editor::Task::TaskManager class
+ * @brief Header for the WS2Editor::Task::TaskManager class WS2EDITOR_EXPORT
  */
 
 #ifndef SMBLEVELWORKSHOP2_WS2EDITOR_TASK_TASKMANAGER_HPP
 #define SMBLEVELWORKSHOP2_WS2EDITOR_TASK_TASKMANAGER_HPP
 
+#include "ws2editor_export.h"
 #include "Task.hpp"
 #include <QQueue>
 #include <QHash>
 
 namespace WS2Editor {
     namespace Task {
-        class TaskManager : public QObject {
+        class WS2EDITOR_EXPORT TaskManager : public QObject {
             Q_OBJECT
 
             protected:

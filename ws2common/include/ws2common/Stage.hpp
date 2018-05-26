@@ -1,11 +1,12 @@
 /**
  * @file
- * @brief Header for the Stage class
+ * @brief Header for the Stage class WS2COMMON_EXPORT
  */
 
 #ifndef SMBLEVELWORKSHOP2_WS2COMMON_STAGE_HPP
 #define SMBLEVELWORKSHOP2_WS2COMMON_STAGE_HPP
 
+#include "ws2common_export.h"
 #include "ws2common/scene/SceneNode.hpp"
 #include "ws2common/scene/BackgroundGroupSceneNode.hpp"
 #include <glm/glm.hpp>
@@ -13,7 +14,7 @@
 #include <QUrl>
 
 namespace WS2Common {
-    class Stage {
+    class WS2COMMON_EXPORT Stage {
         protected:
             Scene::SceneNode *rootNode;
 
