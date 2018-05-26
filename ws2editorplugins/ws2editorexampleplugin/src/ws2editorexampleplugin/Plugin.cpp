@@ -24,11 +24,11 @@ namespace WS2EditorExamplePlugin {
 
         //We can whatever we want with the window now that we have a pointer to it
         //For example, show a message whenever Ctrl-P is pressed
-        QAction *a = new QAction(w); //Create the action
-        a->setShortcut(Qt::CTRL | Qt::Key_P); //Bind a shortcut to the action
-        connect(a, &QAction::triggered, this, &Plugin::showMessage); //When the action is triggered, call showMessage
+        //QAction *a = new QAction(w); //Create the action
+        //a->setShortcut(Qt::CTRL | Qt::Key_P); //Bind a shortcut to the action
+        //connect(a, &QAction::triggered, this, &Plugin::showMessage); //When the action is triggered, call showMessage
 
-        w->addAction(a); //Add the action to the window
+        //w->addAction(a); //Add the action to the window
     }
 
     void Plugin::showMessage() {
