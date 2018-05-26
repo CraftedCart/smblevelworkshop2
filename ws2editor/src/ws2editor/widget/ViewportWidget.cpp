@@ -8,6 +8,7 @@
 #include "ws2editor/Config.hpp"
 #include "ws2editor/task/ImportFileTask.hpp"
 #include "ws2editor/WS2EditorInstance.hpp"
+#define GLM_ENABLE_EXPERIMENTAL
 #include <glm/gtx/transform.hpp>
 #include <glm/gtc/constants.hpp>
 #include <BulletCollision/NarrowPhaseCollision/btRaycastCallback.h>

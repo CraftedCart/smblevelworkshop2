@@ -1315,32 +1315,32 @@ Public License instead of this License.  But first, please read
 <context>
     <name>WS2Editor::Widget::ViewportWidget</name>
     <message>
-        <location filename="../src/ws2editor/widget/ViewportWidget.cpp" line="36"/>
+        <location filename="../src/ws2editor/widget/ViewportWidget.cpp" line="37"/>
         <source>:/Workshop2/Lang/tips-en_US.txt</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/ws2editor/widget/ViewportWidget.cpp" line="330"/>
+        <location filename="../src/ws2editor/widget/ViewportWidget.cpp" line="331"/>
         <source>Drop to import files</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/ws2editor/widget/ViewportWidget.cpp" line="383"/>
+        <location filename="../src/ws2editor/widget/ViewportWidget.cpp" line="384"/>
         <source>SMB Level Workshop 2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/ws2editor/widget/ViewportWidget.cpp" line="384"/>
+        <location filename="../src/ws2editor/widget/ViewportWidget.cpp" line="385"/>
         <source>Tip of the day</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/ws2editor/widget/ViewportWidget.cpp" line="388"/>
+        <location filename="../src/ws2editor/widget/ViewportWidget.cpp" line="389"/>
         <source>Open a project or import models to get started</source>
         <translation type="unfinished"></translation>
     </message>
     <message numerus="yes">
-        <location filename="../src/ws2editor/widget/ViewportWidget.cpp" line="393"/>
+        <location filename="../src/ws2editor/widget/ViewportWidget.cpp" line="394"/>
         <source>%1 / %2 plugins initialized, %n plugin(s) failed to load</source>
         <translation type="unfinished">
             <numerusform>%1 / %2 plugins initialized, %n plugin failed to load</numerusform>

@@ -7,6 +7,7 @@
 #include "ws2common/model/ModelLoader.hpp"
 #include "ws2common/scene/MeshSceneNode.hpp"
 #include "ws2common/scene/GoalSceneNode.hpp"
+#define GLM_ENABLE_EXPERIMENTAL
 #include <glm/gtx/transform.hpp>
 #include <QElapsedTimer>
 #include <QDebug>
