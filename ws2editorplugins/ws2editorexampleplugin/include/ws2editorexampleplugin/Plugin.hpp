@@ -38,7 +38,7 @@ namespace WS2EditorExamplePlugin {
              *
              * @param w The StageEditorWindow
              */
-            void onStageEditorWindowConstructed(WS2Editor::UI::StageEditorWindow *w);
+            void onStageEditorWindowConstructed(WS2Editor::UI::StageEditorWindow &w);
 
             /**
              * @brief Shows a message box greeting the user

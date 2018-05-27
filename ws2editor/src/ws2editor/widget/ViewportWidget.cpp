@@ -4,9 +4,7 @@
 #include "ws2editor/project/ProjectManager.hpp"
 #include "ws2editor/resource/ResourceManager.hpp"
 #include "ws2editor/physics/PhysicsManager.hpp"
-#include "ws2editor/physics/PhysicsUtils.hpp"
 #include "ws2editor/PhysicsDebugDrawer.hpp"
-#include "ws2editor/rendering/TranslateGizmoRenderCommand.hpp"
 #include "ws2editor/rendering/DebugRenderCommand.hpp"
 #include "ws2editor/Config.hpp"
 #include "ws2editor/task/ImportFileTask.hpp"
@@ -28,19 +26,6 @@
 namespace WS2Editor {
     namespace Widget {
         ViewportWidget::ViewportWidget(QWidget *parent) : QOpenGLWidget(parent) {
-            AABB3 yGizmoAabb(
-                    glm::vec3(-0.1f, 0.0f, -0.1f),
-                    glm::vec3(0.1f, 1.2f, 0.1f)
-                 );
-            AABB3 xGizmoAabb(
-                    glm::vec3(0.0f, -0.1f, -0.1f),
-                    glm::vec3(1.2f, 0.1f, 0.1f)
-                 );
-            AABB3 zGizmoAabb(
-                    glm::vec3(-0.1f, -0.1f, 0.0f),
-                    glm::vec3(0.1f, 0.1f, 1.2f)
-                 );
-
             QTimer *updateTimer = new QTimer(this);
             connect(updateTimer, SIGNAL(timeout()), this, SLOT(update()));
             updateTimer->start(1000.0f / 60.0f); //Cap the framerate at 60FPS TODO: Make this adjustable
@@ -64,19 +49,19 @@ namespace WS2Editor {
                 //Pick a random tip of the day
                 tip = tips.at(WS2Common::MathUtils::randInt(0, tips.size() - 1));
             }
+
+            emit postConstruct(*this);
         }
 
         ViewportWidget::~ViewportWidget() {
             makeCurrent(); //Need to have the context active to work with GL
 
+            emit preDestroy(*this);
+
             renderManager->destroy();
             delete renderManager;
             delete tooltipPixmap;
             delete importPixmap;
-
-            delete gizmoYPhysics;
-            delete gizmoXPhysics;
-            delete gizmoZPhysics;
 
             RenderManager::checkErrors("End of ~ViewportWidget");
         }
@@ -95,6 +80,22 @@ namespace WS2Editor {
 
         void ViewportWidget::makeCurrentContext() {
             makeCurrent();
+        }
+
+        const glm::vec3 ViewportWidget::getCameraPos() {
+            return cameraPos;
+        }
+
+        const glm::vec3 ViewportWidget::getTargetCameraPos() {
+            return targetCameraPos;
+        }
+
+        const glm::mat4 ViewportWidget::getViewMatrix() {
+            return view;
+        }
+
+        const glm::mat4 ViewportWidget::getProjMatrix() {
+            return proj;
         }
 
         void ViewportWidget::initializeGL() {
@@ -123,11 +124,8 @@ namespace WS2Editor {
 
             //TODO: Make the debug drawer an option, and if enabled, load for each scene
             Project::ProjectManager::getActiveProject()->getScene()->initPhysicsDebugDrawer();
-            Transform t;
 
-            gizmoYPhysics = new PhysicsContainer(nullptr, renderManager->cubeMesh.at(0), t);
-            gizmoXPhysics = new PhysicsContainer(nullptr, renderManager->cubeMesh.at(0), t);
-            gizmoZPhysics = new PhysicsContainer(nullptr, renderManager->cubeMesh.at(0), t);
+            emit postInitializeGl(*this);
 
             //Start the elapsed timer
             elapsedTimer.start();
@@ -251,90 +249,6 @@ namespace WS2Editor {
             dynamicsWorld->updateAabbs();
         }
 
-        void ViewportWidget::updateGizmos() {
-            using namespace WS2Editor::Scene;
-            using namespace WS2Common::Resource;
-
-            ResourceScene *scene = Project::ProjectManager::getActiveProject()->getScene();
-            SceneSelectionManager *selectionManager = scene->getSelectionManager();
-
-            if (selectionManager->getSelectedObjects().size() > 0) {
-                //Add the collision rigid bodies to the world if they aren't in there already
-                if (!isGizmoPhysicsInWorld) {
-                    scene->getPhysicsManager()->addRigidBody(gizmoYPhysics->getRigidBody());
-                    scene->getPhysicsManager()->addRigidBody(gizmoXPhysics->getRigidBody());
-                    scene->getPhysicsManager()->addRigidBody(gizmoZPhysics->getRigidBody());
-
-                    isGizmoPhysicsInWorld = true;
-                }
-
-                //Merge all selected objects'/positions AABBs into one
-                SceneNode *initialNode = selectionManager->getSelectedObjects().at(0);
-                MeshNodeData *initialMeshData = scene->getMeshNodeData(initialNode->getUuid());
-
-                AABB3 aabb;
-                if (initialMeshData != nullptr) {
-                    aabb = initialMeshData->getMesh()->getAabb();
-                    aabb.offsetBy(initialNode->getPosition());
-                } else {
-                    aabb = AABB3(initialNode->getPosition(), initialNode->getPosition());
-                }
-
-                for (SceneNode *node : selectionManager->getSelectedObjects()) {
-                    MeshNodeData *meshData = scene->getMeshNodeData(node->getUuid());
-
-                    if (meshData != nullptr) {
-                        AABB3 newAabb = meshData->getMesh()->getAabb();
-                        newAabb.offsetBy(node->getPosition());
-                        aabb.mergeWith(newAabb);
-                    } else {
-                        aabb.mergeWith(node->getPosition());
-                    }
-                }
-
-                //Get the middle point of the AABB, and draw the gizmo there
-                const glm::vec3 center = aabb.getCenter();
-                renderManager->enqueueRenderCommand(new TranslateGizmoRenderCommand(
-                            renderManager,
-                            glm::translate(center),
-                            view,
-                            proj,
-                            cameraPos,
-                            highlightGizmoX,
-                            highlightGizmoY,
-                            highlightGizmoZ
-                            ));
-
-                //Also update the hitbox collision
-                float distanceFromCamera = glm::length(proj * view * glm::vec4(center, 1.0f));
-                Transform t;
-
-                //Y
-                t.setPosition(center + glm::vec3(0.0f, 0.05f, 0.0f) * distanceFromCamera);
-                t.setScale(0.1f * glm::vec3(0.2f, 1.2f, 0.2f) * distanceFromCamera);
-                gizmoYPhysics->updateTransform(t);
-
-                //X
-                t.setPosition(center + glm::vec3(0.05f, 0.0f, 0.0f) * distanceFromCamera);
-                t.setScale(0.1f * glm::vec3(1.2f, 0.2f, 0.2f) * distanceFromCamera);
-                gizmoXPhysics->updateTransform(t);
-
-                //Z
-                t.setPosition(center + glm::vec3(0.0f, 0.0f, 0.05f) * distanceFromCamera);
-                t.setScale(0.1f * glm::vec3(0.2f, 0.2f, 1.2f) * distanceFromCamera);
-                gizmoZPhysics->updateTransform(t);
-            } else {
-                //Nothing's selected, so disable the gizmos
-                if (isGizmoPhysicsInWorld) {
-                    scene->getPhysicsManager()->removeRigidBody(gizmoYPhysics->getRigidBody());
-                    scene->getPhysicsManager()->removeRigidBody(gizmoXPhysics->getRigidBody());
-                    scene->getPhysicsManager()->removeRigidBody(gizmoZPhysics->getRigidBody());
-
-                    isGizmoPhysicsInWorld = false;
-                }
-            }
-        }
-
         glm::vec3 ViewportWidget::calcForwardVector(glm::vec2 &rot) {
             return glm::vec3(
                     glm::cos(rot.y) * glm::sin(rot.x),
@@ -406,8 +320,7 @@ namespace WS2Editor {
                         Project::ProjectManager::getActiveProject()->getScene()
                         );
 
-                //Render the gizmos
-                updateGizmos();
+                emit postRenderScene(*scene);
             }
 
             //Physics debug drawing
@@ -478,30 +391,9 @@ namespace WS2Editor {
                     );
 
             if (rayCallback->hasHit()) {
-                //First check if any of the gizmos were hit, regardless of whether it was the closest objects or not
-                if (PhysicsUtils::doesAlignedObjectArrayContain(
-                            rayCallback->m_collisionObjects, (const btCollisionObject*) gizmoYPhysics->getRigidBody())) {
-                    highlightGizmoY = true;
-                    highlightGizmoX = false;
-                    highlightGizmoZ = false;
-                    return;
-                } else if (PhysicsUtils::doesAlignedObjectArrayContain(
-                            rayCallback->m_collisionObjects, (const btCollisionObject*) gizmoXPhysics->getRigidBody())) {
-                    highlightGizmoY = false;
-                    highlightGizmoX = true;
-                    highlightGizmoZ = false;
-                    return;
-                } else if (PhysicsUtils::doesAlignedObjectArrayContain(
-                            rayCallback->m_collisionObjects, (const btCollisionObject*) gizmoZPhysics->getRigidBody())) {
-                    highlightGizmoY = false;
-                    highlightGizmoX = false;
-                    highlightGizmoZ = true;
-                    return;
-                } else {
-                    highlightGizmoY = false;
-                    highlightGizmoX = false;
-                    highlightGizmoZ = false;
-                }
+                bool wasEventHandled = false;
+                emit onPhysicsObjectMouseOver(rayCallback, wasEventHandled);
+                if (wasEventHandled) return;
 
                 QVector<int> indices = sortAllHitsRayResultCallback(rayCallback);
                 const btCollisionObject *closestObject = rayCallback->m_collisionObjects[indices.at(0)];
@@ -513,6 +405,8 @@ namespace WS2Editor {
 
                 painter.setPen(Qt::white);
                 painter.drawText(WS2Common::MathUtils::toQPoint(pos + glm::vec2(20, -10)), node->getName());
+            } else {
+                emit onPhysicsObjectMouseOverNothing();
             }
 
             delete rayCallback;
@@ -714,20 +608,9 @@ namespace WS2Editor {
                     );
 
             if (rayCallback->hasHit()) {
-                //First check if any of the gizmos were hit, regardless of whether it was the closest objects or not
-                if (PhysicsUtils::doesAlignedObjectArrayContain(
-                            rayCallback->m_collisionObjects, (const btCollisionObject*) gizmoYPhysics->getRigidBody())) {
-                    qDebug() << "Gizmo transform Y NYI";
-                    return;
-                } else if (PhysicsUtils::doesAlignedObjectArrayContain(
-                            rayCallback->m_collisionObjects, (const btCollisionObject*) gizmoXPhysics->getRigidBody())) {
-                    qDebug() << "Gizmo transform X NYI";
-                    return;
-                } else if (PhysicsUtils::doesAlignedObjectArrayContain(
-                            rayCallback->m_collisionObjects, (const btCollisionObject*) gizmoZPhysics->getRigidBody())) {
-                    qDebug() << "Gizmo transform Z NYI";
-                    return;
-                }
+                bool wasEventHandled = false;
+                emit onPhysicsObjectSelected(rayCallback, wasEventHandled);
+                if (wasEventHandled) return;
 
                 //Fetch the closest node
                 QVector<int> indices = sortAllHitsRayResultCallback(rayCallback);

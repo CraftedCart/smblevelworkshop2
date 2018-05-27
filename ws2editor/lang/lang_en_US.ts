@@ -1257,44 +1257,44 @@ Public License instead of this License.  But first, please read
 <context>
     <name>WS2Editor::UI::StageEditorWindow</name>
     <message>
-        <location filename="../src/ws2editor/ui/StageEditorWindow.cpp" line="92"/>
+        <location filename="../src/ws2editor/ui/StageEditorWindow.cpp" line="96"/>
         <source>Delta: %1ms / Framerate: %2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/ws2editor/ui/StageEditorWindow.cpp" line="101"/>
+        <location filename="../src/ws2editor/ui/StageEditorWindow.cpp" line="105"/>
         <source>Import files</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/ws2editor/ui/StageEditorWindow.cpp" line="103"/>
+        <location filename="../src/ws2editor/ui/StageEditorWindow.cpp" line="107"/>
         <source>All supported file types (*.fbx *.dae *.gltf *.glb *.blend *.3ds *.ase *.obj *.ifc *.xgl *.zgl *.ply *.dxf *.lwo *.lws *.lxo *.stl *.x *.ac *ms3d *.cob *.scn *.mesh.xml *.irrmesh *.irr *.mdl *.md2 *.md3 *.pk3 *.mdc *.md5* *.smd *.vta *.ogex *.3d *.b3d *.q3d *.q3s *.nff *.off *.raw *.ter *.hmp *.ndo *.txt *.xml);;3D models (*.fbx *.dae *.gltf *.glb *.blend *.3ds *.ase *.obj *.ifc *.xgl *.zgl *.ply *.dxf *.lwo *.lws *.lxo *.stl *.x *.ac *ms3d *.cob *.scn *.mesh.xml *.irrmesh *.irr *.mdl *.md2 *.md3 *.pk3 *.mdc *.md5* *.smd *.vta *.ogex *.3d *.b3d *.q3d *.q3s *.nff *.off *.raw *.ter *.hmp *.ndo);;Stage configurations (*.txt *.xml);;All files (*)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/ws2editor/ui/StageEditorWindow.cpp" line="131"/>
+        <location filename="../src/ws2editor/ui/StageEditorWindow.cpp" line="135"/>
         <source>New Node</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/ws2editor/ui/StageEditorWindow.cpp" line="170"/>
+        <location filename="../src/ws2editor/ui/StageEditorWindow.cpp" line="174"/>
         <source>New Blue Goal</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/ws2editor/ui/StageEditorWindow.cpp" line="176"/>
-        <location filename="../src/ws2editor/ui/StageEditorWindow.cpp" line="195"/>
-        <location filename="../src/ws2editor/ui/StageEditorWindow.cpp" line="214"/>
+        <location filename="../src/ws2editor/ui/StageEditorWindow.cpp" line="180"/>
+        <location filename="../src/ws2editor/ui/StageEditorWindow.cpp" line="199"/>
+        <location filename="../src/ws2editor/ui/StageEditorWindow.cpp" line="218"/>
         <source>Static</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/ws2editor/ui/StageEditorWindow.cpp" line="188"/>
+        <location filename="../src/ws2editor/ui/StageEditorWindow.cpp" line="192"/>
         <source>New Green Goal</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/ws2editor/ui/StageEditorWindow.cpp" line="207"/>
+        <location filename="../src/ws2editor/ui/StageEditorWindow.cpp" line="211"/>
         <source>New Red Goal</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1315,32 +1315,32 @@ Public License instead of this License.  But first, please read
 <context>
     <name>WS2Editor::Widget::ViewportWidget</name>
     <message>
-        <location filename="../src/ws2editor/widget/ViewportWidget.cpp" line="53"/>
+        <location filename="../src/ws2editor/widget/ViewportWidget.cpp" line="38"/>
         <source>:/Workshop2/Lang/tips-en_US.txt</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/ws2editor/widget/ViewportWidget.cpp" line="446"/>
+        <location filename="../src/ws2editor/widget/ViewportWidget.cpp" line="359"/>
         <source>Drop to import files</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/ws2editor/widget/ViewportWidget.cpp" line="527"/>
+        <location filename="../src/ws2editor/widget/ViewportWidget.cpp" line="421"/>
         <source>SMB Level Workshop 2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/ws2editor/widget/ViewportWidget.cpp" line="528"/>
+        <location filename="../src/ws2editor/widget/ViewportWidget.cpp" line="422"/>
         <source>Tip of the day</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/ws2editor/widget/ViewportWidget.cpp" line="532"/>
+        <location filename="../src/ws2editor/widget/ViewportWidget.cpp" line="426"/>
         <source>Open a project or import models to get started</source>
         <translation type="unfinished"></translation>
     </message>
     <message numerus="yes">
-        <location filename="../src/ws2editor/widget/ViewportWidget.cpp" line="537"/>
+        <location filename="../src/ws2editor/widget/ViewportWidget.cpp" line="431"/>
         <source>%1 / %2 plugins initialized, %n plugin(s) failed to load</source>
         <translation type="unfinished">
             <numerusform></numerusform>

@@ -120,7 +120,7 @@ namespace WS2Editor {
         qApp->processEvents();
 
         UI::StageEditorWindow *w = new UI::StageEditorWindow();
-        emit ws2Instance->onStageEditorWindowConstructed(w);
+        emit ws2Instance->onStageEditorWindowConstructed(*w);
         w->show();
         splash.finish(w);
 

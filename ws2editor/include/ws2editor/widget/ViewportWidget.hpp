@@ -61,15 +61,6 @@ namespace WS2Editor {
                  */
                 QString tip;
 
-                //Gizmo collision bounds & highlight
-                bool isGizmoPhysicsInWorld = false;
-                PhysicsContainer *gizmoYPhysics;
-                bool highlightGizmoY;
-                PhysicsContainer *gizmoXPhysics;
-                bool highlightGizmoX;
-                PhysicsContainer *gizmoZPhysics;
-                bool highlightGizmoZ;
-
             public:
                 explicit ViewportWidget(QWidget *parent = nullptr);
                 ~ViewportWidget();
@@ -80,6 +71,38 @@ namespace WS2Editor {
                 RenderManager* getRenderManager();
 
                 void makeCurrentContext();
+
+                /**
+                 * @brief Gets the current camera position
+                 *
+                 * This will be interpolated every frame towards the target camera position
+                 *
+                 * @return The current camera position
+                 */
+                const glm::vec3 getCameraPos();
+
+                /**
+                 * @brief Gets the target camera position
+                 *
+                 * The current camera position will be interpolated every frame towards the target camera position
+                 *
+                 * @return The target camera positon
+                 */
+                const glm::vec3 getTargetCameraPos();
+
+                /**
+                 * @brief Gets the view matrix for the current camera
+                 *
+                 * @return The view matrix
+                 */
+                const glm::mat4 getViewMatrix();
+
+                /**
+                 * @brief Gets the projection matrix for the current camera
+                 *
+                 * @return The projection matrix
+                 */
+                const glm::mat4 getProjMatrix();
 
             protected:
                 virtual void initializeGL() override;
@@ -123,11 +146,6 @@ namespace WS2Editor {
                  * @brief Called before drawing with OpenGL
                  */
                 void preDraw();
-
-                /**
-                 * @brief Updates the transformation gizmos and enqueues a draw command for it (If need be)
-                 */
-                void updateGizmos();
 
                 /**
                  * @brief Draws 2D text at the 3D point
@@ -198,7 +216,40 @@ namespace WS2Editor {
                 void selectNodeAtScreenPos(const glm::vec2 pos, bool toggleSelect);
 
             signals:
+                void postConstruct(ViewportWidget &viewportWidget);
+                void preDestroy(ViewportWidget &viewportWidget);
+                void postInitializeGl(ViewportWidget &viewportWidget);
                 void frameRendered(qint64 deltaNanoseconds);
+                void postRenderScene(ResourceScene &scene);
+
+                /**
+                 * @brief Emitted when a physics object has been clicked on
+                 *
+                 * @note Never set outHandled to false - it defaults to false when called and you should only set it to
+                 *       true if you handle it
+                 *
+                 * @param rayCallback The raytrace callback
+                 * @param outHandled Set this reference to true if your event handler takes care of this
+                 *                   (To prevent crahing when trying to handle a SceneNode)
+                 */
+                void onPhysicsObjectSelected(btCollisionWorld::AllHitsRayResultCallback *rayCallback, bool &outHandled);
+
+                /**
+                 * @brief Emitted when a physics object is hovered over
+                 *
+                 * @note Never set outHandled to false - it defaults to false when called and you should only set it to
+                 *       true if you handle it
+                 *
+                 * @param rayCallback The raytrace callback
+                 * @param outHandled Set this reference to true if your event handler takes care of this
+                 *                   (To prevent crahing when trying to handle a SceneNode)
+                 */
+                void onPhysicsObjectMouseOver(btCollisionWorld::AllHitsRayResultCallback *rayCallback, bool &outHandled);
+
+                /**
+                 * @brief Emitted when the physics raytrace hit nothing
+                 */
+                void onPhysicsObjectMouseOverNothing();
         };
     }
 }

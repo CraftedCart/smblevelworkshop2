@@ -100,34 +100,24 @@ namespace WS2Editor {
         QFile goalFile(":/Workshop2/Models/goal.fbx");
         goalMesh = WS2Common::Model::ModelLoader::loadModel(goalFile);
 
-        Vertex lineVertA;
-        lineVertA.position = glm::vec3(0.0f, 0.0f, 0.0f);
-        Vertex lineVertB;
-        lineVertB.position = glm::vec3(0.0f, 1.0f, 0.0f);
-        lineMeshSegment = new MeshSegment(
-                QVector<Vertex> {lineVertA, lineVertB},
-                QVector<unsigned int> {0, 1},
-                QVector<ResourceTexture*> {}
-                );
-
-        QFile gizmoConeFile(":/Workshop2/Models/gizmoCone.fbx");
-        gizmoConeMesh = WS2Common::Model::ModelLoader::loadModel(gizmoConeFile);
-
-        QFile cubeFile(":/Workshop2/Models/cube.fbx");
-        cubeMesh = WS2Common::Model::ModelLoader::loadModel(cubeFile);
-
         checkErrors("After RenderManager::init()");
+
+        emit postInit(*this);
+
+        checkErrors("After RenderManager::postInit(RenderManager &renderManager)");
     }
 
     void RenderManager::destroy() {
+        emit preDestroy(*this);
+
+        checkErrors("End of RenderManager::preDestroy(RenderManager &renderManager)");
+
         clearAllCaches(); //Unload all render objects
         unloadShaders();
         unloadPhysicsDebugShaders();
 
         //Delete default models
         qDeleteAll(goalMesh);
-        delete lineMeshSegment;
-        qDeleteAll(gizmoConeMesh);
 
         GLuint texturesToDelete[] = {defaultTexture->getTextureId(), fboColorTexture, fboCameraNormalTexture};
         glDeleteTextures(3, texturesToDelete);

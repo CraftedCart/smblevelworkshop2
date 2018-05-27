@@ -92,9 +92,6 @@ namespace WS2Editor {
             GLuint physicsDebugShaderProjID;
 
             //More default models
-            MeshSegment *lineMeshSegment;
-            QVector<ResourceMesh*> gizmoConeMesh;
-            QVector<ResourceMesh*> cubeMesh;
 
         protected:
             //Copied straight from Qt QGL
@@ -247,6 +244,21 @@ namespace WS2Editor {
              *                 down issues.
              */
             WS2EDITOR_EXPORT static void checkErrors(QString location);
+
+        signals:
+            /**
+             * @brief Emitted at the end of the RenderManager's init function
+             *
+             * @param renderManager A reference to this RenderManager object
+             */
+            void postInit(RenderManager &renderManager);
+
+            /**
+             * @brief Emitted at the beginning of the RenderManager's destroy function
+             *
+             * @param renderManager A reference to this RenderManager object
+             */
+            void preDestroy(RenderManager &renderManager);
 
         public slots:
             void clearMeshCache();

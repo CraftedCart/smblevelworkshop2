@@ -106,9 +106,9 @@ namespace WS2Editor {
             /**
              * @brief Emitted after the StageEditorWindow has been constructed
              *
-             * @param w A pointer to the stage editor window
+             * @param w A reference to the stage editor window
              */
-            void onStageEditorWindowConstructed(UI::StageEditorWindow *w);
+            void onStageEditorWindowConstructed(UI::StageEditorWindow &w);
     };
 }
 

@@ -1,0 +1,9 @@
+<RCC>
+    <qresource prefix="/GizmosPlugin">
+        <file>Models/gizmoCone.fbx</file>
+        <file>Models/cube.fbx</file>
+    </qresource>
+</RCC>
+
+<!-- vim: set syntax=xml: -->
+
