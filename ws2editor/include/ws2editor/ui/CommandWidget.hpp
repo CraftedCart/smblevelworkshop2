@@ -1,17 +1,18 @@
 /**
  * @file
- * @brief Header for the CommandWidget class
+ * @brief Header for the CommandWidget class WS2EDITOR_EXPORT
  */
 
 #ifndef SMBLEVELWORKSHOP2_WS2EDITOR_UI_COMMANDWIDGET_HPP
 #define SMBLEVELWORKSHOP2_WS2EDITOR_UI_COMMANDWIDGET_HPP
 
+#include "ws2editor_export.h"
 #include <QLineEdit>
 #include <QCompleter>
 
 namespace WS2Editor {
     namespace UI {
-        class CommandWidget : public QWidget {
+        class WS2EDITOR_EXPORT CommandWidget : public QWidget {
             protected:
                 QLineEdit *lineEdit;
                 QCompleter *completer;

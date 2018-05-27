@@ -1,11 +1,12 @@
 /**
  * @file
- * @brief Header for the WS2Common::Scene::SceneNode class
+ * @brief Header for the WS2Common::Scene::SceneNode class WS2COMMON_EXPORT
  */
 
 #ifndef SMBLEVELWORKSHOP2_WS2COMMON_SCENE_SCENENODE_HPP
 #define SMBLEVELWORKSHOP2_WS2COMMON_SCENE_SCENENODE_HPP
 
+#include "ws2common_export.h"
 #include "ws2common/animation/TransformAnimation.hpp"
 #include "ws2common/EnumAnimationSeesawType.hpp"
 #include "ws2common/Transform.hpp"
@@ -21,7 +22,7 @@ namespace WS2Common {
          *
          * A node contains a transform, as well as various children which inherit the transform.
          */
-        class SceneNode {
+        class WS2COMMON_EXPORT SceneNode {
             protected:
                 QString name;
 
@@ -63,11 +64,11 @@ namespace WS2Common {
                 virtual void serializeNodeDataXml(QXmlStreamWriter &s) const;
 
                 /**
-                 * @brief This returns the identifier used to serialize this node class
+                 * @brief This returns the identifier used to serialize this node class WS2COMMON_EXPORT
                  *
-                 * This should be just the class name in camelCase
+                 * This should be just the class WS2COMMON_EXPORT name in camelCase
                  *
-                 * @return The identifier used to serialize this node class
+                 * @return The identifier used to serialize this node class WS2COMMON_EXPORT
                  */
                 virtual const QString getSerializableName() const;
 

@@ -6,6 +6,7 @@
 #ifndef SMBLEVELWORKSHOP2_WS2COMMON_MODEL_VERTEX_HPP
 #define SMBLEVELWORKSHOP2_WS2COMMON_MODEL_VERTEX_HPP
 
+#include "ws2common_export.h"
 #include <glm/glm.hpp>
 
 namespace WS2Common {

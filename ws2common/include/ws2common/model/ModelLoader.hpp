@@ -6,6 +6,7 @@
 #ifndef SMBLEVELWORKSHOP2_WS2COMMON_MODEL_MODELLOADER_HPP
 #define SMBLEVELWORKSHOP2_WS2COMMON_MODEL_MODELLOADER_HPP
 
+#include "ws2common_export.h"
 #include "ws2common/resource/ResourceMesh.hpp"
 #include <assimp/scene.h>
 #include <QVector>
@@ -30,7 +31,7 @@ namespace WS2Common {
                  * @throws IOException When failing to read the file
                  * @throws RuntimeException When Assimp fails to generate an aiScene
                  */
-                QVector<WS2Common::Resource::ResourceMesh*> loadModel(
+                WS2COMMON_EXPORT QVector<WS2Common::Resource::ResourceMesh*> loadModel(
                         QFile &file,
                         QVector<Resource::AbstractResource*> *resources = nullptr,
                         QMutex *resourcesMutex = nullptr
@@ -48,7 +49,7 @@ namespace WS2Common {
                  *
                  * @throws ModelLoadingException When Assimp fails to generate an aiScene
                  */
-                QVector<WS2Common::Resource::ResourceMesh*> addModelFromFile(
+                WS2COMMON_EXPORT QVector<WS2Common::Resource::ResourceMesh*> addModelFromFile(
                         const char *filePath,
                         QVector<Resource::AbstractResource*> *resources = nullptr,
                         QMutex *resourcesMutex = nullptr
@@ -66,7 +67,7 @@ namespace WS2Common {
                  *
                  * @throws ModelLoadingException When Assimp fails to generate an aiScene
                  */
-                QVector<WS2Common::Resource::ResourceMesh*> addModelFromMemory(
+                WS2COMMON_EXPORT QVector<WS2Common::Resource::ResourceMesh*> addModelFromMemory(
                         const void *bytes,
                         size_t byteCount,
                         QVector<Resource::AbstractResource*> *resources = nullptr,
@@ -86,7 +87,7 @@ namespace WS2Common {
                  *                  is appended to when loading models and textures
                  * @param resourcesMutex A mutex to prevent multiple threads from writing to resources simultaneously (optional)
                  */
-                void processNode(
+                WS2COMMON_EXPORT void processNode(
                         const aiNode *node,
                         const aiScene *scene,
                         const glm::mat4 globalTransform,
@@ -110,7 +111,7 @@ namespace WS2Common {
                  *
                  * @return The converted mesh
                  */
-                WS2Common::Model::MeshSegment* processMeshSegment(
+                WS2COMMON_EXPORT WS2Common::Model::MeshSegment* processMeshSegment(
                         const aiMesh *mesh,
                         const aiScene *scene,
                         const glm::mat4 globalTransform,
@@ -132,7 +133,7 @@ namespace WS2Common {
                  *
                  * @return A vector of textures
                  */
-                QVector<WS2Common::Resource::ResourceTexture*> loadMaterialTextures(
+                WS2COMMON_EXPORT QVector<WS2Common::Resource::ResourceTexture*> loadMaterialTextures(
                         aiMaterial *material,
                         aiTextureType type,
                         const QDir *parentDir,
@@ -153,7 +154,7 @@ namespace WS2Common {
                  * @return A pointer to the resource if it already exists, or nullptr otherwise
                  */
                 template <class T>
-                T getResourceFromFilePath(
+                WS2COMMON_EXPORT T getResourceFromFilePath(
                         QString filePath,
                         QVector<Resource::AbstractResource*> *resources = nullptr,
                         QMutex *resourcesMutex = nullptr

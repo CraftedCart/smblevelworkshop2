@@ -13,15 +13,14 @@
 #define SMBLEVELWORKSHOP2_WS2COMMON_MESSAGEHANDLER_HPP
 
 namespace WS2Common {
-    void messageHandler(QtMsgType type, const QMessageLogContext &context, const QString &msg);
-
+    WS2COMMON_EXPORT void messageHandler(QtMsgType type, const QMessageLogContext &context, const QString &msg);
 }
 
 //Custom types
-QDebug operator<<(QDebug debug, const glm::vec3 &vec);
-QDebug operator<<(QDebug debug, const glm::vec2 &vec);
-QDebug operator<<(QDebug debug, const glm::uvec2 &vec);
-QDebug operator<<(QDebug debug, const WS2Common::Scene::SceneNode *node);
+WS2COMMON_EXPORT QDebug operator<<(QDebug debug, const glm::vec3 &vec);
+WS2COMMON_EXPORT QDebug operator<<(QDebug debug, const glm::vec2 &vec);
+WS2COMMON_EXPORT QDebug operator<<(QDebug debug, const glm::uvec2 &vec);
+WS2COMMON_EXPORT QDebug operator<<(QDebug debug, const WS2Common::Scene::SceneNode *node);
 
 #endif
 

@@ -1,11 +1,12 @@
 /**
  * @file
- * @brief Header for the WS2Editor::RenderManager class
+ * @brief Header for the WS2Editor::RenderManager class WS2EDITOR_EXPORT
  */
 
 #ifndef SMBLEVELWORKSHOP2_WS2EDITOR_RENDERMANAGER_HPP
 #define SMBLEVELWORKSHOP2_WS2EDITOR_RENDERMANAGER_HPP
 
+#include "ws2editor_export.h"
 #include "ws2editor/CachedGlMesh.hpp"
 #include "ws2editor/CachedGlTexture.hpp"
 #include "ws2editor/rendering/IRenderCommand.hpp"
@@ -28,7 +29,7 @@ namespace WS2Editor {
      *
      * init isn't called in the constructor as the correct OpenGL context may not be bound then
      */
-    class RenderManager : public QObject {
+    class WS2EDITOR_EXPORT RenderManager : public QObject {
         Q_OBJECT
 
         public:
@@ -39,7 +40,7 @@ namespace WS2Editor {
             };
 
         protected:
-            static const qint64 CACHE_TIMEOUT = 30 * 1000; //30s = 30 * 1000 ms
+            WS2EDITOR_EXPORT static const qint64 CACHE_TIMEOUT = 30 * 1000; //30s = 30 * 1000 ms
 
             QQueue<IRenderCommand*> renderFifo;
             QQueue<IRenderCommand*> renderSelectionFifo;
@@ -97,8 +98,8 @@ namespace WS2Editor {
 
         protected:
             //Copied straight from Qt QGL
-            static void convertToGLFormatHelper(QImage &dst, const QImage &img, GLenum texture_format);
-            static QRgb qt_gl_convertToGLFormatHelper(QRgb src_pixel, GLenum texture_format);
+            WS2EDITOR_EXPORT static void convertToGLFormatHelper(QImage &dst, const QImage &img, GLenum texture_format);
+            WS2EDITOR_EXPORT static QRgb qt_gl_convertToGLFormatHelper(QRgb src_pixel, GLenum texture_format);
 
             void loadMesh(const MeshSegment *mesh);
 
@@ -131,7 +132,7 @@ namespace WS2Editor {
 
         public:
             //Copied straight from Qt QGL
-            static QImage convertToGLFormat(const QImage &img);
+            WS2EDITOR_EXPORT static QImage convertToGLFormat(const QImage &img);
 
             void init(int fboWidth, int fboHeight);
 
@@ -245,7 +246,7 @@ namespace WS2Editor {
              *                 It's recommended you put where in the code the function is called, to aid with tracking
              *                 down issues.
              */
-            static void checkErrors(QString location);
+            WS2EDITOR_EXPORT static void checkErrors(QString location);
 
         public slots:
             void clearMeshCache();

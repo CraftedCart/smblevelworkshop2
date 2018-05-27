@@ -1,11 +1,12 @@
 /**
  * @file
- * @brief Header for the MeshSegment class
+ * @brief Header for the MeshSegment class WS2COMMON_EXPORT
  */
 
 #ifndef SMBLEVELWORKSHOP2_WS2EDITOR_MODEL_MESHSEGMENT_HPP
 #define SMBLEVELWORKSHOP2_WS2EDITOR_MODEL_MESHSEGMENT_HPP
 
+#include "ws2common_export.h"
 #include "ws2common/model/Vertex.hpp"
 #include "ws2common/resource/ResourceTexture.hpp"
 #include "ws2common/AABB.hpp"
@@ -18,7 +19,7 @@ namespace WS2Common {
          *
          * @note Destroying this will not delete the textures
          */
-        class MeshSegment {
+        class WS2COMMON_EXPORT MeshSegment {
             protected:
                 QVector<Vertex> vertices;
                 QVector<unsigned int> indices;

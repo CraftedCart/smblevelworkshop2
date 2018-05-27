@@ -1,3 +1,8 @@
+/**
+ * @file
+ * @brief Header for the EnumCamerNav enum
+ */
+
 #ifndef SMBLEVELWORKSHOP2_WS2EDITOR_ENUMCAMERANAV_HPP
 #define SMBLEVELWORKSHOP2_WS2EDITOR_ENUMCAMERANAV_HPP
 

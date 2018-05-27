@@ -6,19 +6,20 @@
 #ifndef SMBLEVELWORKSHOP2_WS2EDITOR_UI_MODELMANAGER_HPP
 #define SMBLEVELWORKSHOP2_WS2EDITOR_UI_MODELMANAGER_HPP
 
+#include "ws2editor_export.h"
 #include "ws2editor/ui/ModelResources.hpp"
 #include "ws2editor/ui/ModelOutliner.hpp"
 
 namespace WS2Editor {
     namespace UI {
         namespace ModelManager {
-            extern ModelResources *modelResources;
-            extern ModelOutliner *modelOutliner;
+            WS2EDITOR_EXPORT extern ModelResources *modelResources;
+            WS2EDITOR_EXPORT extern ModelOutliner *modelOutliner;
 
             /**
              * @brief Deletes pointers belonging to WS2Editor::UI::ModelManager
              */
-            void destruct();
+            WS2EDITOR_EXPORT void destruct();
         }
     }
 }

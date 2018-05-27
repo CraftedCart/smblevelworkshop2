@@ -1,18 +1,19 @@
 /**
  * @file
- * @brief Header for the TriangleIntersrectionGrid class
+ * @brief Header for the TriangleIntersrectionGrid class WS2LZ_EXPORT
  */
 
 #ifndef SMBLEVELWORKSHOP2_WS2LZ_TRIANGLEINTERSECTIONGRID_HPP
 #define SMBLEVELWORKSHOP2_WS2LZ_TRIANGLEINTERSECTIONGRID_HPP
 
+#include "ws2lz_export.h"
 #include "ws2common/CollisionGrid.hpp"
 #include "ws2common/model/Vertex.hpp"
 #include "ws2common/AABB.hpp"
 #include <QVector>
 
 namespace WS2Lz {
-    class TriangleIntersectionGrid {
+    class WS2LZ_EXPORT TriangleIntersectionGrid {
         protected:
             /**
              * @brief 2D vector, containing triangles that intersect with the correspoding grid tile

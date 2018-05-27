@@ -1,4 +1,5 @@
 #include "ws2editor/rendering/TranslateGizmoRenderCommand.hpp"
+#define GLM_ENABLE_EXPERIMENTAL
 #include <glm/gtx/transform.hpp>
 
 namespace WS2Editor {

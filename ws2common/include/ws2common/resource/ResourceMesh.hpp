@@ -1,11 +1,12 @@
 /**
  * @file
- * @brief Header for the ResourceMesh class
+ * @brief Header for the ResourceMesh class WS2COMMON_EXPORT
  */
 
 #ifndef SMBLEVELWORKSHOP2_WS2COMMON_RESOURCE_RESOURCEMESH_HPP
 #define SMBLEVELWORKSHOP2_WS2COMMON_RESOURCE_RESOURCEMESH_HPP
 
+#include "ws2common_export.h"
 #include "ws2common/model/MeshSegment.hpp"
 #include "ws2common/resource/AbstractResource.hpp"
 #include <QVector>
@@ -15,7 +16,7 @@ namespace WS2Common {
         /**
          * @todo Load and unload functions
          */
-        class ResourceMesh : public AbstractResource {
+        class WS2COMMON_EXPORT ResourceMesh : public AbstractResource {
             Q_OBJECT
 
             protected:

@@ -6,6 +6,7 @@
 #ifndef SMBLEVELWORKSHOP2_WS2COMMON_KEYFRAME_IPP
 #define SMBLEVELWORKSHOP2_WS2COMMON_KEYFRAME_IPP
 
+#include "ws2common_export.h"
 #include "ws2common/animation/Keyframe.hpp"
 
 namespace WS2Common {

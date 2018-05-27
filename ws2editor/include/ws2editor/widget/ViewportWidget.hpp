@@ -6,6 +6,7 @@
 #include "ws2editor/resource/ResourceScene.hpp"
 #include "ws2editor/RenderManager.hpp"
 #include <QOpenGLWidget>
+#include "ws2editor_export.h"
 #include <QWidget>
 #include <QElapsedTimer>
 #include <QOpenGLTexture>
@@ -15,7 +16,7 @@
 
 namespace WS2Editor {
     namespace Widget {
-        class ViewportWidget : public QOpenGLWidget {
+        class WS2EDITOR_EXPORT ViewportWidget : public QOpenGLWidget {
             Q_OBJECT
 
             protected:

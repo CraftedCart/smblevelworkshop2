@@ -1,18 +1,19 @@
 /**
  * @file
- * @brief Header for the SceneSelectionManager class
+ * @brief Header for the SceneSelectionManager class WS2EDITOR_EXPORT
  */
 
 #ifndef SMBLEVELWORKSHOP2_WS2EDITOR_SCENE_SCENESELECTIONMANAGER_HPP
 #define SMBLEVELWORKSHOP2_WS2EDITOR_SCENE_SCENESELECTIONMANAGER_HPP
 
+#include "ws2editor_export.h"
 #include "ws2common/scene/SceneNode.hpp"
 #include <QVector>
 #include <QObject>
 
 namespace WS2Editor {
     namespace Scene {
-        class SceneSelectionManager : public QObject {
+        class WS2EDITOR_EXPORT SceneSelectionManager : public QObject {
             Q_OBJECT
 
             protected:

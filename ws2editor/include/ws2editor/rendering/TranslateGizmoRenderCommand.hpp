@@ -6,13 +6,14 @@
 #ifndef SMBLEVELWORKSHOP2_WS2EDITOR_RENDERING_TRANSLATE_GIZMORENDERCOMMAND_HPP
 #define SMBLEVELWORKSHOP2_WS2EDITOR_RENDERING_TRANSLATE_GIZMORENDERCOMMAND_HPP
 
+#include "ws2editor_export.h"
 #include "ws2editor/CachedGlMesh.hpp"
 #include "ws2editor/rendering/IRenderCommand.hpp"
 #include "ws2editor/RenderManager.hpp"
 
 namespace WS2Editor {
     namespace Rendering {
-        class TranslateGizmoRenderCommand : public IRenderCommand {
+        class WS2EDITOR_EXPORT TranslateGizmoRenderCommand : public IRenderCommand {
             protected:
                 RenderManager *renderManager;
                 glm::mat4 transform;

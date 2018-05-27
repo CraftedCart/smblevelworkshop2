@@ -10,7 +10,8 @@
 #include "ws2editor/rendering/DebugRenderCommand.hpp"
 #include "ws2editor/Config.hpp"
 #include "ws2editor/task/ImportFileTask.hpp"
-#include "ws2editor/WS2Editor.hpp"
+#include "ws2editor/WS2EditorInstance.hpp"
+#define GLM_ENABLE_EXPERIMENTAL
 #include <glm/gtx/transform.hpp>
 #include <glm/gtc/constants.hpp>
 #include <BulletCollision/NarrowPhaseCollision/btRaycastCallback.h>
@@ -531,6 +532,12 @@ namespace WS2Editor {
             painter.drawText(24, 66, tr("Open a project or import models to get started"));
             painter.drawText(QRectF(24, 124, width() - 48, height() - 124 - 24), tip);
 
+            //Plugin info
+            WS2EditorInstance *ws2Instance = WS2EditorInstance::getInstance();
+            painter.drawText(24, height() - 24, tr("%1 / %2 plugins initialized, %n plugin(s) failed to load", "", ws2Instance->getFailedPlugins().size())
+                    .arg(ws2Instance->getInitializedPlugins().size())
+                    .arg(ws2Instance->getLoadedPlugins().size())
+                    );
         }
 
         void ViewportWidget::keyPressEvent(QKeyEvent *event) {
@@ -596,7 +603,7 @@ namespace WS2Editor {
                     tasks.append(new Task::ImportFileTask(f));
                 }
 
-                ws2TaskManager->enqueueTasks(tasks);
+                WS2EditorInstance::getInstance()->getTaskManager()->enqueueTasks(tasks);
             } else {
                 qDebug() << "Invalid kind of data dropped onto the viewport";
             }

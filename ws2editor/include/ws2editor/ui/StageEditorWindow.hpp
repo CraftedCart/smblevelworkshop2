@@ -1,30 +1,36 @@
 /**
  * @file
- * @brief Header for the StageEditorWindow class
+ * @brief Header for the StageEditorWindow class WS2EDITOR_EXPORT
  */
 
 #ifndef SMBLEVELWORKSHOP2_WS2EDITOR_UI_MAINWINDOW_HPP
 #define SMBLEVELWORKSHOP2_WS2EDITOR_UI_MAINWINDOW_HPP
 
+#include "ws2editor_export.h"
+#include "ws2editor/widget/ViewportWidget.hpp"
 #include <QMainWindow>
 #include <QLabel>
 #include <QProgressBar>
 
 namespace Ui {
-    class StageEditorWindow;
+    class WS2EDITOR_EXPORT StageEditorWindow;
 }
 
 namespace WS2Editor {
     namespace UI {
-        class StageEditorWindow : public QMainWindow {
+        class WS2EDITOR_EXPORT StageEditorWindow : public QMainWindow {
             Q_OBJECT
+
+            public:
+                QLabel *statusTaskLabel = new QLabel();
+                QLabel *statusFramerateLabel = new QLabel();
+
+            private:
+                Ui::StageEditorWindow *ui;
 
             public:
                 explicit StageEditorWindow(QWidget *parent = 0);
                 ~StageEditorWindow();
-
-                QLabel *statusTaskLabel = new QLabel();
-                QLabel *statusFramerateLabel = new QLabel();
 
             public slots:
                 void viewportFrameRendered(qint64 deltaNanoseconds);
@@ -60,6 +66,11 @@ namespace WS2Editor {
                 void showStageIdeaGenerator();
 
                 /**
+                 * @brief Shows the plugins dialog
+                 */
+                void showPlugins();
+
+                /**
                  * @brief Shows the command line widget as a pop-up
                  */
                 void showCommandLine();
@@ -67,9 +78,6 @@ namespace WS2Editor {
                 void addGoalBlue();
                 void addGoalGreen();
                 void addGoalRed();
-
-            private:
-                Ui::StageEditorWindow *ui;
         };
     }
 }
