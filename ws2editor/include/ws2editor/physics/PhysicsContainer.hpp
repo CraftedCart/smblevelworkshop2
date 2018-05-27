@@ -1,11 +1,12 @@
 /**
  * @file
- * @brief Header for the PhysicsContainer class
+ * @brief Header for the PhysicsContainer class WS2EDITOR_EXPORT
  */
 
 #ifndef SMBLEVELWORKSHOP2_WS2EDITOR_PHYSICS_PHYSICSCONTAINER_HPP
 #define SMBLEVELWORKSHOP2_WS2EDITOR_PHYSICS_PHYSICSCONTAINER_HPP
 
+#include "ws2editor_export.h"
 #include "ws2common/resource/ResourceMesh.hpp"
 #include "ws2common/scene/SceneNode.hpp"
 #include "ws2common/Transform.hpp"
@@ -17,7 +18,7 @@ namespace WS2Editor {
         using namespace WS2Common::Resource;
         using namespace WS2Common::Scene;
 
-        class PhysicsContainer {
+        class WS2EDITOR_EXPORT PhysicsContainer {
             protected:
                 btCollisionShape *physicsCollisionShape;
                 btDefaultMotionState *physicsMotionState;

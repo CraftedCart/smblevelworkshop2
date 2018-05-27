@@ -7,6 +7,7 @@
 #ifndef SMBLEVELWORKSHOP2_WS2COMMON_SERIALIZEUTILS_HPP
 #define SMBLEVELWORKSHOP2_WS2COMMON_SERIALIZEUTILS_HPP
 
+#include "ws2common_export.h"
 #include "ws2common/scene/MeshSceneNode.hpp"
 #include "ws2common/scene/GroupSceneNode.hpp"
 #include "ws2common/scene/GoalSceneNode.hpp"
@@ -18,20 +19,20 @@ namespace WS2Common {
     namespace SerializeUtils {
         using namespace WS2Common::Scene;
 
-        SceneNode* deserializeNodeFromXml(QXmlStreamReader &xml, SceneNode *parent = nullptr);
+        WS2COMMON_EXPORT SceneNode* deserializeNodeFromXml(QXmlStreamReader &xml, SceneNode *parent = nullptr);
 
-        void parseSceneNode(QXmlStreamReader &xml, SceneNode *node);
-        void parseSceneNodeData(QXmlStreamReader &xml, SceneNode *node);
-        void parseMeshSceneNode(QXmlStreamReader &xml, MeshSceneNode *node);
-        void parseMeshSceneNodeData(QXmlStreamReader &xml, MeshSceneNode *node);
-        void parseGroupSceneNode(QXmlStreamReader &xml, GroupSceneNode *node);
-        void parseGroupSceneNodeData(QXmlStreamReader &xml, GroupSceneNode *node);
-        void parseGoalSceneNode(QXmlStreamReader &xml, GoalSceneNode *node);
-        void parseGoalSceneNodeData(QXmlStreamReader &xml, GoalSceneNode *node);
+        WS2COMMON_EXPORT void parseSceneNode(QXmlStreamReader &xml, SceneNode *node);
+        WS2COMMON_EXPORT void parseSceneNodeData(QXmlStreamReader &xml, SceneNode *node);
+        WS2COMMON_EXPORT void parseMeshSceneNode(QXmlStreamReader &xml, MeshSceneNode *node);
+        WS2COMMON_EXPORT void parseMeshSceneNodeData(QXmlStreamReader &xml, MeshSceneNode *node);
+        WS2COMMON_EXPORT void parseGroupSceneNode(QXmlStreamReader &xml, GroupSceneNode *node);
+        WS2COMMON_EXPORT void parseGroupSceneNodeData(QXmlStreamReader &xml, GroupSceneNode *node);
+        WS2COMMON_EXPORT void parseGoalSceneNode(QXmlStreamReader &xml, GoalSceneNode *node);
+        WS2COMMON_EXPORT void parseGoalSceneNodeData(QXmlStreamReader &xml, GoalSceneNode *node);
 
-        void parseChildren(QXmlStreamReader &xml, SceneNode *node);
+        WS2COMMON_EXPORT void parseChildren(QXmlStreamReader &xml, SceneNode *node);
 
-        void writeVec2(
+        WS2COMMON_EXPORT void writeVec2(
                 QXmlStreamWriter &xml,
                 QString name,
                 glm::vec2 vec,
@@ -39,7 +40,7 @@ namespace WS2Common {
                 QString yAttrName = "y"
                 );
 
-        void writeUVec2(
+        WS2COMMON_EXPORT void writeUVec2(
                 QXmlStreamWriter &xml,
                 QString name,
                 glm::uvec2 vec,
@@ -47,7 +48,7 @@ namespace WS2Common {
                 QString yAttrName = "y"
                 );
 
-        void writeVec3(
+        WS2COMMON_EXPORT void writeVec3(
                 QXmlStreamWriter &xml,
                 QString name,
                 glm::vec3 vec,
@@ -64,7 +65,7 @@ namespace WS2Common {
          *
          * @return The value of the attribute
          */
-        QStringRef getAttribute(const QXmlStreamAttributes &attrs, const QString attrName);
+        WS2COMMON_EXPORT QStringRef getAttribute(const QXmlStreamAttributes &attrs, const QString attrName);
 
         /**
          * @brief Gets 3 XML attributes with the names x, y, z, and puts them in a glm::vec3
@@ -76,7 +77,7 @@ namespace WS2Common {
          *
          * @return A vec3 of the float values read from the x, y, z attrubutes
          */
-        glm::vec3 getVec3Attributes(const QXmlStreamAttributes &attrs,
+        WS2COMMON_EXPORT glm::vec3 getVec3Attributes(const QXmlStreamAttributes &attrs,
                 const QString x = "x", const QString y = "y", const QString z = "z");
 
         /**
@@ -88,7 +89,7 @@ namespace WS2Common {
          *
          * @return A vec2 of the float values read from the x, y attrubutes
          */
-        glm::vec2 getVec2Attributes(const QXmlStreamAttributes &attrs,
+        WS2COMMON_EXPORT glm::vec2 getVec2Attributes(const QXmlStreamAttributes &attrs,
                 const QString x = "x", const QString y = "y");
 
         /**
@@ -100,7 +101,7 @@ namespace WS2Common {
          *
          * @return A uvec2 of the float values read from the x, y attrubutes
          */
-        glm::uvec2 getUVec2Attributes(const QXmlStreamAttributes &attrs,
+        WS2COMMON_EXPORT glm::uvec2 getUVec2Attributes(const QXmlStreamAttributes &attrs,
                 const QString x = "x", const QString y = "y");
     }
 }

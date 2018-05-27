@@ -1,11 +1,12 @@
 /**
  * @file
- * @brief Header for the Exception class
+ * @brief Header for the Exception class WS2COMMON_EXPORT
  */
 
 #ifndef SMBLEVELWORKSHOP2_WS2COMMON_EXCEPTION_EXCEPTION_HPP
 #define SMBLEVELWORKSHOP2_WS2COMMON_EXCEPTION_EXCEPTION_HPP
 
+#include "ws2common_export.h"
 #include <QException>
 #include <QString>
 
@@ -13,9 +14,9 @@ namespace WS2Common {
     namespace Exception {
 
         /**
-         * @brief Base exception class for WS2 exceptions
+         * @brief Base exception class WS2COMMON_EXPORT for WS2 exceptions
          */
-        class Exception : public QException {
+        class WS2COMMON_EXPORT Exception : public QException {
             protected:
                 QString message;
 

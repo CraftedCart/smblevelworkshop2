@@ -1,16 +1,17 @@
 /**
  * @file
- * @brief Header for the WormholeSceneNode class
+ * @brief Header for the WormholeSceneNode class WS2COMMON_EXPORT
  */
 
 #ifndef SMBLEVELWORKSHOP2_WS2COMMON_SCENE_WORMHOLESCENENODE_HPP
 #define SMBLEVELWORKSHOP2_WS2COMMON_SCENE_WORMHOLESCENENODE_HPP
 
+#include "ws2common_export.h"
 #include "ws2common/scene/SceneNode.hpp"
 
 namespace WS2Common {
     namespace Scene {
-        class WormholeSceneNode : public SceneNode {
+        class WS2COMMON_EXPORT WormholeSceneNode : public SceneNode {
             protected:
                 /**
                  * @brief Where this wormhole should lead to

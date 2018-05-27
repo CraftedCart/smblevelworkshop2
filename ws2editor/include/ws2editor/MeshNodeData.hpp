@@ -1,11 +1,12 @@
 /**
  * @file
- * @brief Heder for the MeshNodeData class
+ * @brief Heder for the MeshNodeData class WS2EDITOR_EXPORT
  */
 
 #ifndef SMBLEVELWORKSHOP2_WS2EDITOR_MESHNODEDATA_HPP
 #define SMBLEVELWORKSHOP2_WS2EDITOR_MESHNODEDATA_HPP
 
+#include "ws2editor_export.h"
 #include "ws2editor/physics/PhysicsContainer.hpp"
 #include "ws2common/resource/ResourceMesh.hpp"
 
@@ -13,7 +14,7 @@ namespace WS2Editor {
     using namespace WS2Editor::Physics;
     using namespace WS2Common::Resource;
 
-    class MeshNodeData {
+    class WS2EDITOR_EXPORT MeshNodeData {
         protected:
             const SceneNode *node;
             ResourceMesh *mesh;

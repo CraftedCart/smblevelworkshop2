@@ -6,6 +6,7 @@
 #ifndef SMBLEVELWORKSHOP2_WS2EDITOR_RESOURCEMANAGER_HPP
 #define SMBLEVELWORKSHOP2_WS2EDITOR_RESOURCEMANAGER_HPP
 
+#include "ws2editor_export.h"
 #include "ws2common/resource/ResourceMesh.hpp"
 #include <QVector>
 #include <QFile>

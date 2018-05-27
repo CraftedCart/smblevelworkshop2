@@ -1,20 +1,21 @@
 /**
  * @file
- * @brief Header for the SettingsDialog class
+ * @brief Header for the SettingsDialog class WS2EDITOR_EXPORT
  */
 
 #ifndef SMBLEVELWORKSHOP2_WS2EDITOR_UI_SETTINGSDIALOG_HPP
 #define SMBLEVELWORKSHOP2_WS2EDITOR_UI_SETTINGSDIALOG_HPP
 
+#include "ws2editor_export.h"
 #include <QDialog>
 
 namespace Ui {
-    class SettingsDialog;
+    class WS2EDITOR_EXPORT SettingsDialog;
 }
 
 namespace WS2Editor {
     namespace UI {
-        class SettingsDialog : public QDialog {
+        class WS2EDITOR_EXPORT SettingsDialog : public QDialog {
             Q_OBJECT
 
             public:

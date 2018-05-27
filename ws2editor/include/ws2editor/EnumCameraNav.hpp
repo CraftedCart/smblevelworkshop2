@@ -6,6 +6,7 @@ namespace WS2Editor {
         NAV_FIXED,
         NAV_FIRST_PERSON_FLY,
         NAV_ORBIT
+#include "ws2editor_export.h"
     };
 }
 

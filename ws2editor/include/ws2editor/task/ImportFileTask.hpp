@@ -1,11 +1,12 @@
 /**
  * @file
- * @brief Header for the WS2Editor::Task::ImportFileTask class
+ * @brief Header for the WS2Editor::Task::ImportFileTask class WS2EDITOR_EXPORT
  */
 
 #ifndef SMBLEVELWORKSHOP2_WS2EDITOR_TASK_IMPORTFILETASK_HPP
 #define SMBLEVELWORKSHOP2_WS2EDITOR_TASK_IMPORTFILETASK_HPP
 
+#include "ws2editor_export.h"
 #include "ws2editor/task/Task.hpp"
 #include "ws2common/resource/ResourceMesh.hpp"
 #include <QFile>
@@ -14,7 +15,7 @@ namespace WS2Editor {
     namespace Task {
         using namespace WS2Common::Resource;
 
-        class ImportFileTask : public Task {
+        class WS2EDITOR_EXPORT ImportFileTask : public Task {
             Q_OBJECT
 
             protected:

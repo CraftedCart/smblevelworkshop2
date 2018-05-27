@@ -59,6 +59,8 @@
     <addaction name="separator"/>
     <addaction name="actionRunCommand"/>
     <addaction name="separator"/>
+    <addaction name="actionViewPlugins"/>
+    <addaction name="separator"/>
     <addaction name="actionQuit"/>
    </widget>
    <widget class="QMenu" name="menuEdit">
@@ -609,6 +611,15 @@
    </property>
    <property name="shortcut">
     <string>:</string>
+   </property>
+  </action>
+  <action name="actionViewPlugins">
+   <property name="icon">
+    <iconset resource="../../../resources/Workshop2/Workshop2Resources.qrc">
+     <normaloff>:/Workshop2/Icons/Plugin.png</normaloff>:/Workshop2/Icons/Plugin.png</iconset>
+   </property>
+   <property name="text">
+    <string>Plugins</string>
    </property>
   </action>
  </widget>

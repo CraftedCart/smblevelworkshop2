@@ -1,20 +1,21 @@
 /**
  * @file
- * @brief Header for the StageIdeaGeneratorWindow class
+ * @brief Header for the StageIdeaGeneratorWindow class WS2EDITOR_EXPORT
  */
 
 #ifndef SMBLEVELWORKSHOP2_WS2EDITOR_UI_STAGEIDEAGENERATORWINDOW_HPP
 #define SMBLEVELWORKSHOP2_WS2EDITOR_UI_STAGEIDEAGENERATORWINDOW_HPP
 
+#include "ws2editor_export.h"
 #include <QDialog>
 
 namespace Ui {
-    class StageIdeaGeneratorWindow;
+    class WS2EDITOR_EXPORT StageIdeaGeneratorWindow;
 }
 
 namespace WS2Editor {
     namespace UI {
-        class StageIdeaGeneratorWindow : public QDialog {
+        class WS2EDITOR_EXPORT StageIdeaGeneratorWindow : public QDialog {
             Q_OBJECT
 
             public:

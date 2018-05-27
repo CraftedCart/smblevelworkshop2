@@ -6,12 +6,13 @@
 #ifndef SMBLEVELWORKSHOP2_WS2EDITOR_UI_MODELRESOURCES_HPP
 #define SMBLEVELWORKSHOP2_WS2EDITOR_UI_MODELRESOURCES_HPP
 
+#include "ws2editor_export.h"
 #include "ws2common/resource/AbstractResource.hpp"
 #include <QAbstractTableModel>
 
 namespace WS2Editor {
     namespace UI {
-        class ModelResources : public QAbstractTableModel {
+        class WS2EDITOR_EXPORT ModelResources : public QAbstractTableModel {
             Q_OBJECT
 
             public:

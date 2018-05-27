@@ -1,8 +1,12 @@
 /**
  * @file
- * @brief Header for the SMB2LzExporter class
+ * @brief Header for the SMB2LzExporter class WS2LZ_EXPORT
  */
 
+#ifndef SMBLEVELWORKSHOP2_WS2LZ_SMB2LZEXPORTER_HPP
+#define SMBLEVELWORKSHOP2_WS2LZ_SMB2LZEXPORTER_HPP
+
+#include "ws2lz_export.h"
 #include "ws2lz/TriangleIntersectionGrid.hpp"
 #include "ws2common/Stage.hpp"
 #include "ws2common/scene/GroupSceneNode.hpp"
@@ -47,7 +51,7 @@ namespace WS2Lz {
      * - Animaton headers
      * - Animation keyframes
      */
-    class SMB2LzExporter {
+    class WS2LZ_EXPORT SMB2LzExporter {
 
         protected:
             //Constants
@@ -164,7 +168,7 @@ namespace WS2Lz {
             void optimizeCollision(const Stage &stage);
 
             /**
-             * @brief Calculates offsets and item counts and writes it to class scoped variables
+             * @brief Calculates offsets and item counts and writes it to class WS2LZ_EXPORT scoped variables
              *
              * @param stage The stage to calculate offsets for
              */
@@ -247,4 +251,6 @@ namespace WS2Lz {
             float reverseAngle(float c, float s);
     };
 }
+
+#endif
 

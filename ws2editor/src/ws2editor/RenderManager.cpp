@@ -3,10 +3,11 @@
 #include "ws2editor/rendering/MeshRenderCommand.hpp"
 #include "ws2editor/task/LoadGlTextureTask.hpp"
 #include "ws2editor/task/TaskManager.hpp"
-#include "ws2editor/WS2Editor.hpp"
+#include "ws2editor/WS2EditorInstance.hpp"
 #include "ws2common/model/ModelLoader.hpp"
 #include "ws2common/scene/MeshSceneNode.hpp"
 #include "ws2common/scene/GoalSceneNode.hpp"
+#define GLM_ENABLE_EXPERIMENTAL
 #include <glm/gtx/transform.hpp>
 #include <QElapsedTimer>
 #include <QDebug>
@@ -361,7 +362,7 @@ namespace WS2Editor {
 
             LoadGlTextureTask *task = new LoadGlTextureTask(*texture);
             connect(task, &LoadGlTextureTask::addTexture, this, &RenderManager::addTexture);
-            ws2TaskManager->enqueueTask(task);
+            WS2EditorInstance::getInstance()->getTaskManager()->enqueueTask(task);
 
             textureCache[texture] = defaultTexture;
             return;

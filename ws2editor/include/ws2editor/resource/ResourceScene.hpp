@@ -1,11 +1,12 @@
 /**
  * @file
- * @brief Header for the WS2Editor::Model::Scene class
+ * @brief Header for the WS2Editor::Model::Scene class WS2EDITOR_EXPORT
  */
 
 #ifndef SMBLEVELWORKSHOP2_WS2EDITOR_RESOURCE_RESOURCESCENE_HPP
 #define SMBLEVELWORKSHOP2_WS2EDITOR_RESOURCE_RESOURCESCENE_HPP
 
+#include "ws2editor_export.h"
 #include "ws2editor/scene/SceneSelectionManager.hpp"
 #include "ws2editor/physics/PhysicsManager.hpp"
 #include "ws2editor/PhysicsDebugDrawer.hpp"
@@ -22,7 +23,7 @@ namespace WS2Editor {
         /**
          * @todo Meshes loaded should belong to ResourceManager, not ResourceScene
          */
-        class ResourceScene : public WS2Common::Resource::AbstractResource {
+        class WS2EDITOR_EXPORT ResourceScene : public WS2Common::Resource::AbstractResource {
             Q_OBJECT
 
             protected:

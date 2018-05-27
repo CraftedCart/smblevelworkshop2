@@ -1,18 +1,19 @@
 /**
  * @file
- * @brief Header for the PhysicsManager class
+ * @brief Header for the PhysicsManager class WS2EDITOR_EXPORT
  */
 
 #ifndef SMBLEVELWORKSHOP2_WS2EDITOR_PHYSICS_PHYSICSMANAGER_HPP
 #define SMBLEVELWORKSHOP2_WS2EDITOR_PHYSICS_PHYSICSMANAGER_HPP
 
+#include "ws2editor_export.h"
 #include "ws2common/scene/SceneNode.hpp"
 #include <btBulletDynamicsCommon.h>
 #include <QHash>
 
 namespace WS2Editor {
     namespace Physics {
-        class PhysicsManager {
+        class WS2EDITOR_EXPORT PhysicsManager {
             protected:
                 btBroadphaseInterface *broadphase;
                 btDefaultCollisionConfiguration *collisionConfig;

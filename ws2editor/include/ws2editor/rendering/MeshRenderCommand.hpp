@@ -1,11 +1,12 @@
 /**
  * @file
- * @brief Header for the MeshRenderCommand class
+ * @brief Header for the MeshRenderCommand class WS2EDITOR_EXPORT
  */
 
 #ifndef SMBLEVELWORKSHOP2_WS2EDITOR_RENDERING_MESHRENDERCOMMAND_HPP
 #define SMBLEVELWORKSHOP2_WS2EDITOR_RENDERING_MESHRENDERCOMMAND_HPP
 
+#include "ws2editor_export.h"
 #include "ws2editor/CachedGlMesh.hpp"
 #include "ws2editor/rendering/IRenderCommand.hpp"
 #include "ws2editor/RenderManager.hpp"
@@ -15,7 +16,7 @@ namespace WS2Editor {
         /**
          * @note The destructor will not delete mesh - this is expected to be cached elsewhere, and manually deleted when no longer in use
          */
-        class MeshRenderCommand : public IRenderCommand {
+        class WS2EDITOR_EXPORT MeshRenderCommand : public IRenderCommand {
             protected:
                 CachedGlMesh *mesh;
                 RenderManager *renderManager;

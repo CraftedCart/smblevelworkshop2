@@ -1,6 +1,13 @@
 cmake_minimum_required(VERSION 3.9.0)
 project(smblevelworkshop2)
 
+if(WIN32)
+    if("${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang")
+        #Linking doesn't work so well with Clang with the dllexport/dllimport faff
+        message(WARNING "Compiling with Clang on Windows may not work so well - Try gcc if you run into linker errors with __imp__* symbols\n(Oh and please let me know if you can get this working)")
+    endif("${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang")
+endif(WIN32)
+
 #Export compile commands for editor autocomplete
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
@@ -43,6 +50,9 @@ add_subdirectory(./ws2common)
 add_subdirectory(./ws2lz)
 add_subdirectory(./ws2lzfrontend)
 add_subdirectory(./ws2editor)
+
+#Editor plugins
+add_subdirectory(./ws2editorplugins/ws2editorexampleplugin)
 
 if(APPLE)
     set(CPACK_GENERATOR Bundle)

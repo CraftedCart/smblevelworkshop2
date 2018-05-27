@@ -6,6 +6,7 @@ namespace WS2Editor {
                 auto res = std::find_if(
                         getResources().begin(),
                         getResources().end(),
+#include "ws2editor_export.h"
                         [&filePath](const WS2Common::Resource::AbstractResource *object) { return object->getFilePaths().contains(filePath); }
                         );
 

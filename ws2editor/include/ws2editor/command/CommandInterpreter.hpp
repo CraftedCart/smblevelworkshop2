@@ -1,11 +1,12 @@
 /**
  * @file
- * @brief Header for the CommandInterpreter class
+ * @brief Header for the CommandInterpreter class WS2EDITOR_EXPORT
  */
 
 #ifndef SMBLEVELWORKSHOP2_WS2EDITOR_COMMAND_COMMANDINTERPRETER_HPP
 #define SMBLEVELWORKSHOP2_WS2EDITOR_COMMAND_COMMANDINTERPRETER_HPP
 
+#include "ws2editor_export.h"
 #include "ws2editor/command/ICommandHandler.hpp"
 #include "ws2editor/command/CommandReply.hpp"
 #include <QString>
@@ -13,9 +14,9 @@
 
 namespace WS2Editor {
     namespace Command {
-        class CommandInterpreter {
+        class WS2EDITOR_EXPORT CommandInterpreter {
             protected:
-                static CommandInterpreter *instance;
+                WS2EDITOR_EXPORT static CommandInterpreter *instance;
 
                 QVector<ICommandHandler*> commands;
 
@@ -23,9 +24,9 @@ namespace WS2Editor {
                 ~CommandInterpreter();
 
             public:
-                static void createInstance();
-                static void destroyInstance();
-                static CommandInterpreter* getInstance();
+                WS2EDITOR_EXPORT static void createInstance();
+                WS2EDITOR_EXPORT static void destroyInstance();
+                WS2EDITOR_EXPORT static CommandInterpreter* getInstance();
 
                 void registerCommand(ICommandHandler *commandHandler);
                 QVector<ICommandHandler*>& getRegisteredCommands();

@@ -1,18 +1,19 @@
 /**
  * @file
- * @brief Header for the PhysicsDebugDrawer class
+ * @brief Header for the PhysicsDebugDrawer class WS2EDITOR_EXPORT
  */
 
 #ifndef SMBLEVELWORKSHOP2_WS2EDITOR_PHYSICSDEBUGDRAWER_HPP
 #define SMBLEVELWORKSHOP2_WS2EDITOR_PHYSICSDEBUGDRAWER_HPP
 
+#include "ws2editor_export.h"
 #include "glplatform.hpp"
 #include "MathUtils.hpp"
 #include <btBulletDynamicsCommon.h>
 #include <QVector>
 
 namespace WS2Editor {
-    class PhysicsDebugDrawer : public btIDebugDraw {
+    class WS2EDITOR_EXPORT PhysicsDebugDrawer : public btIDebugDraw {
         protected:
             int debugMode;
 

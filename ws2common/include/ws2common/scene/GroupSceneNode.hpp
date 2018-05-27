@@ -1,17 +1,18 @@
 /**
  * @file
- * @brief Header for the GroupSceneNode class
+ * @brief Header for the GroupSceneNode class WS2COMMON_EXPORT
  */
 
 #ifndef SMBLEVELWORKSHOP2_WS2COMMON_SCENE_GROUPSCENENODE_HPP
 #define SMBLEVELWORKSHOP2_WS2COMMON_SCENE_GROUPSCENENODE_HPP
 
+#include "ws2common_export.h"
 #include "ws2common/scene/SceneNode.hpp"
 #include "ws2common/CollisionGrid.hpp"
 
 namespace WS2Common {
     namespace Scene {
-        class GroupSceneNode : public SceneNode {
+        class WS2COMMON_EXPORT GroupSceneNode : public SceneNode {
             protected:
                 CollisionGrid collisionGrid;
 

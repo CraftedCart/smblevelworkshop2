@@ -6,6 +6,7 @@
 #ifndef SMBLEVELWORKSHOP2_WS2EDITOR_UI_MODELMANAGER_HPP
 #define SMBLEVELWORKSHOP2_WS2EDITOR_UI_MODELMANAGER_HPP
 
+#include "ws2editor_export.h"
 #include "ws2editor/ui/ModelResources.hpp"
 #include "ws2editor/ui/ModelOutliner.hpp"
 
