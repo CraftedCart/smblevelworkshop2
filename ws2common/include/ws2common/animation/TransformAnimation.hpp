@@ -14,7 +14,7 @@
 
 namespace WS2Common {
     namespace Animation {
-        struct KeyframeCompare {
+        struct WS2COMMON_EXPORT KeyframeCompare {
             //Comparison function for keyframe lookup - to ensure that keyframes are ordered by time
             bool operator() (const KeyframeF* lhs, const KeyframeF* rhs) const;
         };
