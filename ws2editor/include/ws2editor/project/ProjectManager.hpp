@@ -17,7 +17,7 @@ namespace WS2Editor {
              *        over accessing the internals directly.
              */
             namespace ProjectManagerInternal {
-                extern Project *activeProject;
+                WS2EDITOR_EXPORT extern Project *activeProject;
             }
 
             /**
@@ -25,12 +25,12 @@ namespace WS2Editor {
              *
              * @return A pointer to the active project
              */
-            Project* getActiveProject();
+            WS2EDITOR_EXPORT Project* getActiveProject();
 
             /**
              * @brief Creates a new empty project, and sets it as the active project
              */
-            void newProject();
+            WS2EDITOR_EXPORT void newProject();
         }
     }
 }

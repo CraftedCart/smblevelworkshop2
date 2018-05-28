@@ -72,6 +72,47 @@ namespace WS2Editor {
 
                 void makeCurrentContext();
 
+                /**
+                 * @brief Gets the current camera position
+                 *
+                 * This will be interpolated every frame towards the target camera position
+                 *
+                 * @return The current camera position
+                 */
+                const glm::vec3 getCameraPos();
+
+                /**
+                 * @brief Gets the target camera position
+                 *
+                 * The current camera position will be interpolated every frame towards the target camera position
+                 *
+                 * @return The target camera positon
+                 */
+                const glm::vec3 getTargetCameraPos();
+
+                /**
+                 * @brief Gets the view matrix for the current camera
+                 *
+                 * @return The view matrix
+                 */
+                const glm::mat4 getViewMatrix();
+
+                /**
+                 * @brief Gets the projection matrix for the current camera
+                 *
+                 * @return The projection matrix
+                 */
+                const glm::mat4 getProjMatrix();
+
+                /**
+                 * @brief Raycast along the camera Z plane
+                 *
+                 * @param viewportPos X/Y: pixel coordinates, Z: NDC depth coordinate
+                 *
+                 * @return The 3D point where the raycast hit
+                 */
+                glm::vec3 zPlaneRaycast(const glm::vec3 viewportPos);
+
             protected:
                 virtual void initializeGL() override;
                 virtual void resizeGL(int w, int h) override;
@@ -160,8 +201,19 @@ namespace WS2Editor {
                  *
                  * @return A pointer to the raycast callback (Don't forget to delete this when you're done!)
                  */
-                btCollisionWorld::ClosestRayResultCallback* ndcRaycast(const glm::vec2 pos, const glm::vec3 startPos,
+                btCollisionWorld::AllHitsRayResultCallback* ndcRaycast(const glm::vec2 pos, const glm::vec3 startPos,
                         const float distance, const glm::mat4 proj, const glm::mat4 view);
+
+                /**
+                 * @brief Sorts the ray callback result values by each hit point's distance from sourcePoint and returns an indices vector
+                 *
+                 * Elements are not directly sorted in the rayCallback. Rather, an indices vector is created, sorted based on the fractions in the ray callback, and returned
+                 *
+                 * @param rayCallback The ray callback result to sort the returned indices vector
+                 *
+                 * @return An indices array sorted based on distance
+                 */
+                QVector<int> sortAllHitsRayResultCallback(const btCollisionWorld::AllHitsRayResultCallback *rayCallback);
 
                 /**
                  * @brief Selects the node at the given gcreen position
@@ -173,7 +225,51 @@ namespace WS2Editor {
                 void selectNodeAtScreenPos(const glm::vec2 pos, bool toggleSelect);
 
             signals:
+                void postConstruct(ViewportWidget &viewportWidget);
+                void preDestroy(ViewportWidget &viewportWidget);
+                void postInitializeGl(ViewportWidget &viewportWidget);
+
+                /**
+                 * @brief Emitted at the end of the preDraw function
+                 *
+                 * *naming is hard, ok?*
+                 */
+                void postPreDraw(ViewportWidget &viewportWidget);
+
                 void frameRendered(qint64 deltaNanoseconds);
+                void postRenderScene(ResourceScene &scene);
+
+                /**
+                 * @brief Emitted when a physics object has been clicked on
+                 *
+                 * @note Never set outHandled to false - it defaults to false when called and you should only set it to
+                 *       true if you handle it
+                 *
+                 * @param rayCallback The raytrace callback
+                 * @param outHandled Set this reference to true if your event handler takes care of this
+                 *                   (To prevent crahing when trying to handle a SceneNode)
+                 */
+                void onPhysicsObjectSelected(btCollisionWorld::AllHitsRayResultCallback *rayCallback, bool &outHandled);
+
+                /**
+                 * @brief Emitted when a physics object is hovered over
+                 *
+                 * @note Never set outHandled to false - it defaults to false when called and you should only set it to
+                 *       true if you handle it
+                 *
+                 * @param rayCallback The raytrace callback
+                 * @param outHandled Set this reference to true if your event handler takes care of this
+                 *                   (To prevent crahing when trying to handle a SceneNode)
+                 */
+                void onPhysicsObjectMouseOver(btCollisionWorld::AllHitsRayResultCallback *rayCallback, bool &outHandled);
+
+                /**
+                 * @brief Emitted when the physics raytrace hit nothing
+                 */
+                void onPhysicsObjectMouseOverNothing();
+
+                void onMousePressed(QMouseEvent *event);
+                void onMouseReleased(QMouseEvent *event);
         };
     }
 }

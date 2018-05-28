@@ -32,6 +32,13 @@ namespace WS2Editor {
                 explicit StageEditorWindow(QWidget *parent = 0);
                 ~StageEditorWindow();
 
+                /**
+                 * @brief Returns the viewport widget in the stage editor
+                 *
+                 * @return The viewport widget
+                 */
+                Widget::ViewportWidget* getViewportWidget();
+
             public slots:
                 void viewportFrameRendered(qint64 deltaNanoseconds);
 

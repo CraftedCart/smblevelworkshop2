@@ -9,6 +9,17 @@ namespace WS2Common {
             this->vertices = vertices;
             this->indices = indices;
             this->textures = textures;
+
+            //Don't start the AABB at 0, 0, 0 (Not all object may intersect the world origin point)
+            if (vertices.size() > 0) {
+                aabb.a = vertices.at(0).position;
+                aabb.b = vertices.at(0).position;
+            }
+
+            //Merge all verts into the AABB to make it fit this mesh segment
+            for (Vertex &vert : vertices) {
+                aabb.mergeWith(vert.position);
+            }
         }
 
         MeshSegment::~MeshSegment() {}
@@ -27,6 +38,10 @@ namespace WS2Common {
 
         const QVector<Resource::ResourceTexture*>& MeshSegment::getTextures() const {
             return textures;
+        }
+
+        const AABB3& MeshSegment::getAabb() const {
+            return aabb;
         }
     }
 }

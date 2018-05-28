@@ -24,14 +24,14 @@ namespace WS2Editor {
             /**
              * @brief Use this when modifying the resources vector, to ensure thread safety
              */
-            extern QMutex resourcesMutex;
+            WS2EDITOR_EXPORT extern QMutex resourcesMutex;
 
             /**
              * @brief Getter for the resources vector
              *
              * @return A reference to the resources vector
              */
-            QVector<WS2Common::Resource::AbstractResource*>& getResources();
+            WS2EDITOR_EXPORT QVector<WS2Common::Resource::AbstractResource*>& getResources();
 
             /**
              * @brief Adds a resource to the WS2Editor::Resource::ResourceManager::resources vector
@@ -40,12 +40,12 @@ namespace WS2Editor {
              *
              * @param res The resource to add
              */
-            void addResource(AbstractResource *res);
+            WS2EDITOR_EXPORT void addResource(AbstractResource *res);
 
             /**
              * @brief Unloads all registered resources if they are loaded
              */
-            void unloadAllResources();
+            WS2EDITOR_EXPORT void unloadAllResources();
 
             /**
              * @brief Gets a resource originating from the given file path
@@ -58,7 +58,7 @@ namespace WS2Editor {
              * @return A pointer to the resource if it already exists, or nullptr otherwise
              */
             template <class T>
-            T getResourceFromFilePath(QString filePath);
+            WS2EDITOR_EXPORT T getResourceFromFilePath(QString filePath);
 
             /**
              * @brief Addes the meshes in a 3D model to the resource manager
@@ -71,7 +71,7 @@ namespace WS2Editor {
              * @throws IOException When failing to read the file
              * @throws RuntimeException When Assimp fails to generate an aiScene
              */
-            QVector<ResourceMesh*> addModel(QFile &file, bool shouldLoad = false);
+            WS2EDITOR_EXPORT QVector<ResourceMesh*> addModel(QFile &file, bool shouldLoad = false);
 
             /**
              * @brief Generates a unique resource ID prefixed with prefix
@@ -80,7 +80,7 @@ namespace WS2Editor {
              *
              * @return A unique resource ID, starting with prefix and ending with a number
              */
-            QString generateUniqueId(QString prefix);
+            WS2EDITOR_EXPORT QString generateUniqueId(QString prefix);
         }
     }
 }

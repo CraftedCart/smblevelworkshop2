@@ -54,7 +54,7 @@ namespace WS2Editor {
 
         qDebug() << "Creating shaders";
 
-        //Load the shaders
+        //Load the stage shaders
         QFile stageVertFile(":/Workshop2/Shaders/stage.vert");
         QFile stageFragFile(":/Workshop2/Shaders/stage.frag");
         progID = loadShaders(&stageVertFile, &stageFragFile);
@@ -68,6 +68,17 @@ namespace WS2Editor {
         shaderTexInfluenceID = glGetUniformLocation(progID, "texInfluence");
         shaderTintID = glGetUniformLocation(progID, "tint");
         shaderRenderCameraNormals = glGetUniformLocation(progID, "renderCameraNormals");
+
+        //Load the unlit shaders
+        QFile unlitVertFile(":/Workshop2/Shaders/unlit.vert");
+        QFile unlitFragFile(":/Workshop2/Shaders/unlit.frag");
+        unlitProgID = loadShaders(&unlitVertFile, &unlitFragFile);
+
+        //Get uniform IDs
+        unlitShaderModelID = glGetUniformLocation(unlitProgID, "modelMat");
+        unlitShaderViewID = glGetUniformLocation(unlitProgID, "viewMat");
+        unlitShaderProjID = glGetUniformLocation(unlitProgID, "projMat");
+        unlitShaderTintID = glGetUniformLocation(unlitProgID, "tint");
 
         //Load the physics debug shaders
         //TODO: Make loading this an option
@@ -90,12 +101,23 @@ namespace WS2Editor {
         goalMesh = WS2Common::Model::ModelLoader::loadModel(goalFile);
 
         checkErrors("After RenderManager::init()");
+
+        emit postInit(*this);
+
+        checkErrors("After RenderManager::postInit(RenderManager &renderManager)");
     }
 
     void RenderManager::destroy() {
+        emit preDestroy(*this);
+
+        checkErrors("End of RenderManager::preDestroy(RenderManager &renderManager)");
+
         clearAllCaches(); //Unload all render objects
         unloadShaders();
         unloadPhysicsDebugShaders();
+
+        //Delete default models
+        qDeleteAll(goalMesh);
 
         GLuint texturesToDelete[] = {defaultTexture->getTextureId(), fboColorTexture, fboCameraNormalTexture};
         glDeleteTextures(3, texturesToDelete);
@@ -493,6 +515,21 @@ namespace WS2Editor {
             for (const MeshSegment *segment : segments) {
                 enqueueRenderMesh(segment, transform, glm::vec4(1.0f), isSelected);
             }
+
+            //Draw AABBs
+            //Note: This doesn't account for transforms
+            //PhysicsDebugDrawer *physicsDebugDrawer = Project::ProjectManager::getActiveProject()->getScene()->getPhysicsDebugDrawer();
+            //Scene::SceneSelectionManager *selMan = Project::ProjectManager::getActiveProject()->getScene()->getSelectionManager();
+            //const AABB3 &aabb = scene->getMeshNodeData(mesh->getUuid())->getMesh()->getAabb();
+
+            //btVector3 col;
+            //if (selMan->isSelected(node)) {
+                //col = btVector3(1.0f, 0.0f, 1.0f);
+            //} else {
+                //col = btVector3(0.0f, 0.0f, 1.0f);
+            //}
+
+            //physicsDebugDrawer->drawAabb(MathUtils::toBtVector3(aabb.a), MathUtils::toBtVector3(aabb.b), col);
         } else if (const GoalSceneNode *goal = dynamic_cast<const GoalSceneNode*>(node)) {
             bool isSelected = scene->getSelectionManager()->isSelected(node);
 
@@ -710,6 +747,7 @@ namespace WS2Editor {
 
     void RenderManager::unloadShaders() {
         glDeleteProgram(progID);
+        glDeleteProgram(unlitProgID);
         glDeleteProgram(compositeShaderProg);
     }
 
@@ -719,6 +757,14 @@ namespace WS2Editor {
 
     void RenderManager::addTexture(const QImage image, const ResourceTexture *tex) {
         textureCache[tex] = loadTexture(image);
+    }
+
+    CachedGlMesh* RenderManager::getCachedGlMesh(MeshSegment *mesh) {
+        if (!meshCache.contains(mesh)) loadMesh(mesh);
+
+        CachedGlMesh *glMesh = meshCache[mesh];
+        glMesh->updateAccessTimer();
+        return glMesh;
     }
 
 }

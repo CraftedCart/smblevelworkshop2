@@ -28,6 +28,27 @@ namespace WS2Editor {
                 QVector<WS2Common::Scene::SceneNode*>& getSelectedObjects();
 
                 /**
+                 * @brief Returns a vector of selected objects, discarding selected children who have an ancestor node
+                 *        selected (Not necessarily a direct parent)
+                 *
+                 * For example, let's say we had a scenegraph such as the following, with items in square brackets
+                 * selected
+                 *
+                 * - root
+                 *     - [Group A]
+                 *         - Subgroup A
+                 *             - [Object A]
+                 *     - Group B
+                 *         - [Object B]
+                 *     - Group C
+                 *
+                 * This would return a vector containing Group A and Object B only
+                 *
+                 * @return A vector of topmost selected objects
+                 */
+                QVector<WS2Common::Scene::SceneNode*> getTopmostSelectedObjects();
+
+                /**
                  * @brief Checks if a node is selected
                  *
                  * @param node The node to check

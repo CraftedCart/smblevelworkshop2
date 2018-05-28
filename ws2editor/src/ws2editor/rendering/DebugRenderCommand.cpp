@@ -23,7 +23,12 @@ namespace WS2Editor {
             glUniformMatrix4fv(renderManager->physicsDebugShaderProjID, 1, GL_FALSE, &projMatrix[0][0]);
 
             dynamicsWorld->debugDrawWorld();
+
+            //Don't draw the overlays and whatever to the camera normal texture (position = 1)
+            //TODO: Store positions in code elsewhere rather than hardcoding 1 here
+            glColorMaski(1, GL_TRUE, GL_FALSE, GL_FALSE, GL_FALSE);
             debugDrawer->drawAll();
+            glColorMaski(1, GL_TRUE, GL_TRUE, GL_TRUE, GL_TRUE);
         }
     }
 }

@@ -1,4 +1,5 @@
 #include "ws2editor/widget/ViewportWidget.hpp"
+#include "ws2common/scene/MeshSceneNode.hpp"
 #include "ws2common/MathUtils.hpp"
 #include "ws2editor/project/ProjectManager.hpp"
 #include "ws2editor/resource/ResourceManager.hpp"
@@ -48,10 +49,14 @@ namespace WS2Editor {
                 //Pick a random tip of the day
                 tip = tips.at(WS2Common::MathUtils::randInt(0, tips.size() - 1));
             }
+
+            emit postConstruct(*this);
         }
 
         ViewportWidget::~ViewportWidget() {
             makeCurrent(); //Need to have the context active to work with GL
+
+            emit preDestroy(*this);
 
             renderManager->destroy();
             delete renderManager;
@@ -75,6 +80,47 @@ namespace WS2Editor {
 
         void ViewportWidget::makeCurrentContext() {
             makeCurrent();
+        }
+
+        const glm::vec3 ViewportWidget::getCameraPos() {
+            return cameraPos;
+        }
+
+        const glm::vec3 ViewportWidget::getTargetCameraPos() {
+            return targetCameraPos;
+        }
+
+        const glm::mat4 ViewportWidget::getViewMatrix() {
+            return view;
+        }
+
+        const glm::mat4 ViewportWidget::getProjMatrix() {
+            return proj;
+        }
+
+        glm::vec3 ViewportWidget::zPlaneRaycast(const glm::vec3 viewportPos) {
+            const glm::vec4 viewport = glm::vec4(0.0f, 0.0f, width(), height());
+            //(z + 1) / 2 as we need to convert NDC Z (-1 to 1) to a 0 - 1 scale
+            const glm::vec3 mousePos = glm::vec3(viewportPos.x, height() - viewportPos.y, (viewportPos.z + 1.0f) / 2.0f);
+
+            const glm::vec3 v = glm::unProject(mousePos, view, proj, viewport);
+            PhysicsDebugDrawer *physicsDebugDrawer = Project::ProjectManager::getActiveProject()->getScene()->getPhysicsDebugDrawer();
+            physicsDebugDrawer->drawLine(
+                    MathUtils::toBtVector3(v + glm::vec3(-10.0f, 0.0f, 0.0f)),
+                    MathUtils::toBtVector3(v + glm::vec3(10.0f, 0.0f, 0.0f)),
+                    btVector3(1.0f, 1.0f, 0.0f)
+                    );
+            physicsDebugDrawer->drawLine(
+                    MathUtils::toBtVector3(v + glm::vec3(0.0f, -10.0f, 0.0f)),
+                    MathUtils::toBtVector3(v + glm::vec3(0.0f, 10.0f, 0.0f)),
+                    btVector3(1.0f, 1.0f, 0.0f)
+                    );
+            physicsDebugDrawer->drawLine(
+                    MathUtils::toBtVector3(v + glm::vec3(0.0f, 0.0f, -10.0f)),
+                    MathUtils::toBtVector3(v + glm::vec3(0.0f, 0.0f, 10.0f)),
+                    btVector3(1.0f, 1.0f, 0.0f)
+                    );
+            return v;
         }
 
         void ViewportWidget::initializeGL() {
@@ -103,6 +149,8 @@ namespace WS2Editor {
 
             //TODO: Make the debug drawer an option, and if enabled, load for each scene
             Project::ProjectManager::getActiveProject()->getScene()->initPhysicsDebugDrawer();
+
+            emit postInitializeGl(*this);
 
             //Start the elapsed timer
             elapsedTimer.start();
@@ -224,6 +272,8 @@ namespace WS2Editor {
             //Update bullet physics
             btDynamicsWorld *dynamicsWorld = Project::ProjectManager::getActiveProject()->getScene()->getPhysicsManager()->getDynamicsWorld();
             dynamicsWorld->updateAabbs();
+
+            emit postPreDraw(*this);
         }
 
         glm::vec3 ViewportWidget::calcForwardVector(glm::vec2 &rot) {
@@ -289,13 +339,15 @@ namespace WS2Editor {
             glUniformMatrix4fv(renderManager->shaderProjID, 1, GL_FALSE, &proj[0][0]);
             glUniformMatrix3fv(renderManager->shaderNormID, 1, GL_FALSE, &norm[0][0]);
 
-            Resource::ResourceScene *scene = Project::ProjectManager::getActiveProject()->getScene();
-
+            ResourceScene *scene = Project::ProjectManager::getActiveProject()->getScene();
             if (scene != nullptr) {
+                //Render the scene
                 renderManager->enqueueRenderScene(
                         scene->getRootNode(),
                         Project::ProjectManager::getActiveProject()->getScene()
                         );
+
+                emit postRenderScene(*scene);
             }
 
             //Physics debug drawing
@@ -306,6 +358,9 @@ namespace WS2Editor {
             }
 
             renderManager->renderQueue(defaultFramebufferObject());
+
+            //Clear the debug drawer queue in case debug drawing is not enabled
+            physicsDebugDrawer->clearBuffers();
 
             //Painter
             //Need to reset some OpenGL stuff before using QPainter is sane
@@ -354,7 +409,7 @@ namespace WS2Editor {
         }
 
         void ViewportWidget::drawObjectTooltipAtPos(QPainter &painter, glm::vec2 pos) {
-            btCollisionWorld::ClosestRayResultCallback* rayCallback = ndcRaycast(
+            btCollisionWorld::AllHitsRayResultCallback *rayCallback = ndcRaycast(
                     glm::vec2(
                         (pos.x / width() - 0.5f) * 2.0f,
                         -(pos.y / height() - 0.5f) * 2.0f
@@ -363,13 +418,22 @@ namespace WS2Editor {
                     );
 
             if (rayCallback->hasHit()) {
+                bool wasEventHandled = false;
+                emit onPhysicsObjectMouseOver(rayCallback, wasEventHandled);
+                if (wasEventHandled) return;
+
+                QVector<int> indices = sortAllHitsRayResultCallback(rayCallback);
+                const btCollisionObject *closestObject = rayCallback->m_collisionObjects[indices.at(0)];
+
                 WS2Common::Scene::SceneNode *node =
-                    static_cast<WS2Common::Scene::SceneNode*>(rayCallback->m_collisionObject->getUserPointer());
+                    static_cast<WS2Common::Scene::SceneNode*>(closestObject->getUserPointer());
 
                 painter.drawPixmap(pos.x, pos.y - tooltipPixmap->height(), *tooltipPixmap);
 
                 painter.setPen(Qt::white);
                 painter.drawText(WS2Common::MathUtils::toQPoint(pos + glm::vec2(20, -10)), node->getName());
+            } else {
+                emit onPhysicsObjectMouseOverNothing();
             }
 
             delete rayCallback;
@@ -423,10 +487,14 @@ namespace WS2Editor {
                 default:
                     break;
             }
+
+            emit onMousePressed(event);
         }
 
         void ViewportWidget::mouseReleaseEvent(QMouseEvent *event) {
             if (event->button() == Qt::RightButton || event->button() == Qt::MiddleButton) cameraNavMode = EnumCameraNav::NAV_FIXED;
+
+            emit onMouseReleased(event);
         }
 
         void ViewportWidget::wheelEvent(QWheelEvent *event) {
@@ -481,7 +549,7 @@ namespace WS2Editor {
             return WS2Common::MathUtils::toGlmVec2(relCursorPosQt);
         }
 
-        btCollisionWorld::ClosestRayResultCallback* ViewportWidget::ndcRaycast(const glm::vec2 pos, const glm::vec3 startPos,
+        btCollisionWorld::AllHitsRayResultCallback* ViewportWidget::ndcRaycast(const glm::vec2 pos, const glm::vec3 startPos,
                 const float distance, const glm::mat4 proj, const glm::mat4 view) {
             //NDC = Normalized device coordinates
             glm::vec4 rayStartNdc(
@@ -513,7 +581,7 @@ namespace WS2Editor {
             //Raycast
             glm::vec3 raycastEnd = startPos + rayDirWorld * distance;
 
-            btCollisionWorld::ClosestRayResultCallback *rayCallback = new btCollisionWorld::ClosestRayResultCallback(
+            btCollisionWorld::AllHitsRayResultCallback *rayCallback = new btCollisionWorld::AllHitsRayResultCallback(
                     btVector3(WS2Common::MathUtils::toBtVector3(startPos)),
                     btVector3(WS2Common::MathUtils::toBtVector3(raycastEnd))
                     );
@@ -525,11 +593,44 @@ namespace WS2Editor {
                     *rayCallback
                     );
 
+
+            if (rayCallback->hasHit()) {
+                for (int i = 0; i < rayCallback->m_collisionObjects.size(); i++) {
+                    btVector3 hitPoint = rayCallback->m_hitPointWorld[i];
+                    btVector3 hitNorm = rayCallback->m_hitNormalWorld[i];
+
+                    Project::ProjectManager::getActiveProject()->getScene()->getPhysicsDebugDrawer()->drawLine(
+                            hitPoint,
+                            hitPoint + hitNorm * 10.0f,
+                            btVector3(1.0f, 0.0f, 1.0f)
+                            );
+                }
+            }
+
             return rayCallback;
         }
 
+        QVector<int> ViewportWidget::sortAllHitsRayResultCallback(const btCollisionWorld::AllHitsRayResultCallback *rayCallback) {
+            //Create an indices array and fill it incrementally(0, 1, 2, 3, etc. for as many hit objects as there are)
+            QVector<int> indices(rayCallback->m_hitFractions.size());
+            std::iota(indices.begin(), indices.end(), 0);
+
+            //Sort the indices array based on the fractions
+            class SortIndices {
+                private:
+                    const btScalar *arr;
+
+                public:
+                    SortIndices(const btScalar *arr) : arr(arr) {}
+                    bool operator()(int a, int b) const { return arr[a] < arr[b]; }
+            };
+            std::sort(indices.begin(), indices.end(), SortIndices(&rayCallback->m_hitFractions[0]));
+
+            return indices;
+        }
+
         void ViewportWidget::selectNodeAtScreenPos(const glm::vec2 pos, bool toggleSelect) {
-            btCollisionWorld::ClosestRayResultCallback* rayCallback = ndcRaycast(
+            btCollisionWorld::AllHitsRayResultCallback *rayCallback = ndcRaycast(
                     glm::vec2(
                         (pos.x / width() - 0.5f) * 2.0f,
                         -(pos.y / height() - 0.5f) * 2.0f
@@ -538,9 +639,16 @@ namespace WS2Editor {
                     );
 
             if (rayCallback->hasHit()) {
+                bool wasEventHandled = false;
+                emit onPhysicsObjectSelected(rayCallback, wasEventHandled);
+                if (wasEventHandled) return;
+
+                //Fetch the closest node
+                QVector<int> indices = sortAllHitsRayResultCallback(rayCallback);
+
                 //Select the hit node
                 WS2Common::Scene::SceneNode *node =
-                    static_cast<WS2Common::Scene::SceneNode*>(rayCallback->m_collisionObject->getUserPointer());
+                    static_cast<WS2Common::Scene::SceneNode*>(rayCallback->m_collisionObjects[indices.at(0)]->getUserPointer());
 
                 if (toggleSelect) {
                     Project::ProjectManager::getActiveProject()->getScene()->getSelectionManager()->toggleSelect(node);
@@ -554,6 +662,7 @@ namespace WS2Editor {
 
             delete rayCallback;
         }
+
     }
 }
 

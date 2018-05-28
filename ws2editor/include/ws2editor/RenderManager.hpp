@@ -52,7 +52,6 @@ namespace WS2Editor {
              * @brief Used while a texture is loading/missing texture/etc.
              */
             CachedGlTexture *defaultTexture;
-
             GLuint fbo;
             GLuint fboColorTexture;
             GLuint fboCameraNormalTexture;
@@ -81,10 +80,18 @@ namespace WS2Editor {
             //GLuint shaderTexID;
             GLuint shaderRenderCameraNormals;
 
+            GLuint unlitProgID;
+            GLuint unlitShaderModelID;
+            GLuint unlitShaderViewID;
+            GLuint unlitShaderProjID;
+            GLuint unlitShaderTintID;
+
             GLuint physicsDebugProgID;
             GLuint physicsDebugShaderModelID;
             GLuint physicsDebugShaderViewID;
             GLuint physicsDebugShaderProjID;
+
+            //More default models
 
         protected:
             //Copied straight from Qt QGL
@@ -220,6 +227,16 @@ namespace WS2Editor {
             void addTexture(const QImage image, const ResourceTexture *tex);
 
             /**
+             * @brief Fetches a cached renderable mesh for the given mesh segment, or leads the mesh if it's not already
+             *        cached
+             *
+             * @param mesh The mesh segment to fetch the CachedGlMesh for
+             *
+             * @return A model with OpenGL buffer data
+             */
+            CachedGlMesh* getCachedGlMesh(MeshSegment *mesh);
+
+            /**
              * @brief Checks for OpenGL errors and logs them if any are found
              *
              * @param location This text is tacked on to the end of the log message.
@@ -227,6 +244,21 @@ namespace WS2Editor {
              *                 down issues.
              */
             WS2EDITOR_EXPORT static void checkErrors(QString location);
+
+        signals:
+            /**
+             * @brief Emitted at the end of the RenderManager's init function
+             *
+             * @param renderManager A reference to this RenderManager object
+             */
+            void postInit(RenderManager &renderManager);
+
+            /**
+             * @brief Emitted at the beginning of the RenderManager's destroy function
+             *
+             * @param renderManager A reference to this RenderManager object
+             */
+            void preDestroy(RenderManager &renderManager);
 
         public slots:
             void clearMeshCache();

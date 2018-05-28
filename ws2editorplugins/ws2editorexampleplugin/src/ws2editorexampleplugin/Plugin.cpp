@@ -17,7 +17,7 @@ namespace WS2EditorExamplePlugin {
         return true;
     }
 
-    void Plugin::onStageEditorWindowConstructed(UI::StageEditorWindow *w) {
+    void Plugin::onStageEditorWindowConstructed(UI::StageEditorWindow &w) {
         Q_UNUSED(w); //Tell the compiler to stop yelling at me for unused parameters
 
         qDebug() << "ws2editorexampleplugin: Window consructed!";

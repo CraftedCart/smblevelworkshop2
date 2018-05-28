@@ -115,6 +115,10 @@ namespace WS2Editor {
 
         glBindVertexArray(0);
 
+        clearBuffers();
+    }
+
+    void PhysicsDebugDrawer::clearBuffers() {
         lineData.clear();
     }
 }

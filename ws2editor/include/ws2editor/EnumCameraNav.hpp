@@ -1,3 +1,8 @@
+/**
+ * @file
+ * @brief Header for the EnumCamerNav enum
+ */
+
 #ifndef SMBLEVELWORKSHOP2_WS2EDITOR_ENUMCAMERANAV_HPP
 #define SMBLEVELWORKSHOP2_WS2EDITOR_ENUMCAMERANAV_HPP
 
@@ -6,7 +11,6 @@ namespace WS2Editor {
         NAV_FIXED,
         NAV_FIRST_PERSON_FLY,
         NAV_ORBIT
-#include "ws2editor_export.h"
     };
 }
 

@@ -6,7 +6,6 @@
  */
 
 #ifndef SMBLEVELWORKSHOP2_WS2EDITOR_GLPLATFORM_HPP
-#include "ws2editor_export.h"
 #define SMBLEVELWORKSHOP2_WS2EDITOR_GLPLATFORM_HPP
 
 #include <GL/glew.h>

@@ -53,6 +53,7 @@ add_subdirectory(./ws2editor)
 
 #Editor plugins
 add_subdirectory(./ws2editorplugins/ws2editorexampleplugin)
+add_subdirectory(./ws2editorplugins/gizmosplugin)
 
 if(APPLE)
     set(CPACK_GENERATOR Bundle)

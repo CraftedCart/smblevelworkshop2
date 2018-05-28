@@ -85,6 +85,10 @@ namespace WS2Editor {
             delete ui;
         }
 
+        Widget::ViewportWidget* StageEditorWindow::getViewportWidget() {
+            return ui->viewportWidget;
+        }
+
         void StageEditorWindow::viewportFrameRendered(qint64 deltaNanoseconds) {
             float deltaMs = deltaNanoseconds / 1000000.0f;
             float fps = 1000000000.0f / deltaNanoseconds;
