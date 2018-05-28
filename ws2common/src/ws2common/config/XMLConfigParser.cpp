@@ -77,7 +77,7 @@ namespace WS2Common {
 
                 //If we couldn't find a wormhole to link against, warn the user
                 if (!linkSuccess) {
-                    qWarning().noquote() << QString("Failed to link wormhole \"%1\" to \"%2\" - \"%2\" doesn't exist").arg(j.key()->getName()).arg(i.value());
+                    qCritical().noquote() << QString("Failed to link wormhole \"%1\" to \"%2\" - \"%2\" doesn't exist").arg(j.key()->getName()).arg(i.value());
                 }
             }
 
