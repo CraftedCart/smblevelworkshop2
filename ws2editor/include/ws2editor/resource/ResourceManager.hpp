@@ -19,8 +19,6 @@ namespace WS2Editor {
          * @brief Stores and manages various runtime resources
          */
         namespace ResourceManager {
-            using namespace WS2Common::Resource;
-
             /**
              * @brief Use this when modifying the resources vector, to ensure thread safety
              */
@@ -40,7 +38,7 @@ namespace WS2Editor {
              *
              * @param res The resource to add
              */
-            WS2EDITOR_EXPORT void addResource(AbstractResource *res);
+            WS2EDITOR_EXPORT void addResource(WS2Common::Resource::AbstractResource *res);
 
             /**
              * @brief Unloads all registered resources if they are loaded
@@ -71,7 +69,7 @@ namespace WS2Editor {
              * @throws IOException When failing to read the file
              * @throws RuntimeException When Assimp fails to generate an aiScene
              */
-            WS2EDITOR_EXPORT QVector<ResourceMesh*> addModel(QFile &file, bool shouldLoad = false);
+            WS2EDITOR_EXPORT QVector<WS2Common::Resource::ResourceMesh*> addModel(QFile &file, bool shouldLoad = false);
 
             /**
              * @brief Generates a unique resource ID prefixed with prefix

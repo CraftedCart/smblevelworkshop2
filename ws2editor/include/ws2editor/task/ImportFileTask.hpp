@@ -13,8 +13,6 @@
 
 namespace WS2Editor {
     namespace Task {
-        using namespace WS2Common::Resource;
-
         class WS2EDITOR_EXPORT ImportFileTask : public Task {
             Q_OBJECT
 
@@ -39,7 +37,7 @@ namespace WS2Editor {
                 QString getTranslatedMessage() override;
 
             signals:
-                void addModel(const QVector<ResourceMesh*> newMeshes);
+                void addModel(const QVector<WS2Common::Resource::ResourceMesh*> newMeshes);
         };
     }
 }

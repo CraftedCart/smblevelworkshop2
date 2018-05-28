@@ -1169,22 +1169,22 @@ Public License instead of this License.  But first, please read
 <context>
     <name>TranslateSelectedCommand</name>
     <message>
-        <location filename="../src/ws2editor/command/TranslateSelectedCommand.cpp" line="21"/>
+        <location filename="../src/ws2editor/command/TranslateSelectedCommand.cpp" line="23"/>
         <source>Expected 3 args: delta-x delta-y delta-z</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/ws2editor/command/TranslateSelectedCommand.cpp" line="31"/>
+        <location filename="../src/ws2editor/command/TranslateSelectedCommand.cpp" line="33"/>
         <source>Failed to parse delta-x</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/ws2editor/command/TranslateSelectedCommand.cpp" line="36"/>
+        <location filename="../src/ws2editor/command/TranslateSelectedCommand.cpp" line="38"/>
         <source>Failed to parse delta-y</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/ws2editor/command/TranslateSelectedCommand.cpp" line="41"/>
+        <location filename="../src/ws2editor/command/TranslateSelectedCommand.cpp" line="43"/>
         <source>Failed to parse delta-z</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1192,9 +1192,9 @@ Public License instead of this License.  But first, please read
 <context>
     <name>WS2Editor::Resource::ResourceScene</name>
     <message>
-        <location filename="../src/ws2editor/resource/ResourceScene.cpp" line="13"/>
-        <location filename="../src/ws2editor/resource/ResourceScene.cpp" line="104"/>
-        <location filename="../src/ws2editor/resource/ResourceScene.cpp" line="107"/>
+        <location filename="../src/ws2editor/resource/ResourceScene.cpp" line="15"/>
+        <location filename="../src/ws2editor/resource/ResourceScene.cpp" line="106"/>
+        <location filename="../src/ws2editor/resource/ResourceScene.cpp" line="109"/>
         <source>Static</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1207,7 +1207,7 @@ Public License instead of this License.  But first, please read
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/ws2editor/task/ImportFileTask.cpp" line="43"/>
+        <location filename="../src/ws2editor/task/ImportFileTask.cpp" line="45"/>
         <source>Importing file: %1</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1315,32 +1315,32 @@ Public License instead of this License.  But first, please read
 <context>
     <name>WS2Editor::Widget::ViewportWidget</name>
     <message>
-        <location filename="../src/ws2editor/widget/ViewportWidget.cpp" line="38"/>
+        <location filename="../src/ws2editor/widget/ViewportWidget.cpp" line="43"/>
         <source>:/Workshop2/Lang/tips-en_US.txt</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/ws2editor/widget/ViewportWidget.cpp" line="386"/>
+        <location filename="../src/ws2editor/widget/ViewportWidget.cpp" line="391"/>
         <source>Drop to import files</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/ws2editor/widget/ViewportWidget.cpp" line="448"/>
+        <location filename="../src/ws2editor/widget/ViewportWidget.cpp" line="453"/>
         <source>SMB Level Workshop 2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/ws2editor/widget/ViewportWidget.cpp" line="449"/>
+        <location filename="../src/ws2editor/widget/ViewportWidget.cpp" line="454"/>
         <source>Tip of the day</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/ws2editor/widget/ViewportWidget.cpp" line="453"/>
+        <location filename="../src/ws2editor/widget/ViewportWidget.cpp" line="458"/>
         <source>Open a project or import models to get started</source>
         <translation type="unfinished"></translation>
     </message>
     <message numerus="yes">
-        <location filename="../src/ws2editor/widget/ViewportWidget.cpp" line="458"/>
+        <location filename="../src/ws2editor/widget/ViewportWidget.cpp" line="463"/>
         <source>%1 / %2 plugins initialized, %n plugin(s) failed to load</source>
         <translation type="unfinished">
             <numerusform></numerusform>

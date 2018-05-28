@@ -8,6 +8,8 @@
 
 namespace WS2Editor {
     namespace Resource {
+        using namespace WS2Common::Resource;
+
         ResourceScene::ResourceScene() {
             rootNode = new WS2Common::Scene::SceneNode("root");
             WS2Common::Scene::GroupSceneNode *staticNode = new WS2Common::Scene::GroupSceneNode(tr("Static"));

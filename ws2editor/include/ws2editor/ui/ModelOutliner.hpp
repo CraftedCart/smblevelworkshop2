@@ -14,9 +14,6 @@
 
 namespace WS2Editor {
     namespace UI {
-        using namespace WS2Common::Scene;
-        using namespace WS2Common::Resource;
-
         class WS2EDITOR_EXPORT ModelOutliner : public QAbstractTableModel {
             Q_OBJECT
 
@@ -24,23 +21,23 @@ namespace WS2Editor {
                 /**
                  * @brief Getter for the root node of the active project
                  *
-                 * @return A pointer to the root SceneNode of the active project
+                 * @return A pointer to the root WS2Common::Scene::SceneNode of the active project
                  */
-                SceneNode* getRootNode() const;
+                WS2Common::Scene::SceneNode* getRootNode() const;
 
                 /**
                  * @brief Finds mesh node data entries with matching UUIDs recursively and sets the node to the one given
                  *
                  * @param node The new node to make the owner of
                  */
-                void recursiveTransferMeshNodeDataOwner(SceneNode *node);
+                void recursiveTransferMeshNodeDataOwner(WS2Common::Scene::SceneNode *node);
 
                 /**
                  * @brief Finds mesh node data matching the node's UUID and removes it if the node owner matched the one given
                  *
                  * @param node The node to check against
                  */
-                void recursiveConditionalDestroyMeshNodeData(SceneNode *node);
+                void recursiveConditionalDestroyMeshNodeData(WS2Common::Scene::SceneNode *node);
 
             public:
                 ModelOutliner(QObject *parent);
@@ -77,7 +74,7 @@ namespace WS2Editor {
                  *
                  * @return A QModelIndex corresponding to the node
                  */
-                QModelIndex findIndexFromNode(SceneNode *node);
+                QModelIndex findIndexFromNode(WS2Common::Scene::SceneNode *node);
 
                 /**
                  * @brief Adds a node to the parent and updates the model
@@ -85,7 +82,7 @@ namespace WS2Editor {
                  * @param node The new node to add
                  * @param parentNode The node to parent the new node to
                  */
-                void addNode(SceneNode *node, SceneNode *parentNode);
+                void addNode(WS2Common::Scene::SceneNode *node, WS2Common::Scene::SceneNode *parentNode);
 
                 /**
                  * @brief Adds a node to the parent, registers the mesh with the scene, and updates the model
@@ -94,21 +91,25 @@ namespace WS2Editor {
                  * @param parentNode The node to parent the new node to
                  * @param mesh The mesh to register with the scene
                  */
-                void addNodeWithMesh(SceneNode *node, SceneNode *parentNode, ResourceMesh *mesh);
+                void addNodeWithMesh(
+                        WS2Common::Scene::SceneNode *node,
+                        WS2Common::Scene::SceneNode *parentNode,
+                        WS2Common::Resource::ResourceMesh *mesh
+                        );
 
                 /**
                  * @brief Removes a node from its parent and updates the model
                  *
                  * @param node The new node to remove
                  */
-                void removeNode(SceneNode *node);
+                void removeNode(WS2Common::Scene::SceneNode *node);
 
                 /**
                  * @brief Informs that model that a node has been changed, and updates the node + children recursively
                  *
                  * @param node The modified node
                  */
-                void onNodeModified(SceneNode *node);
+                void onNodeModified(WS2Common::Scene::SceneNode *node);
 
                 /**
                  * @brief Call this when the selection changes
@@ -116,7 +117,10 @@ namespace WS2Editor {
                  * @param selectedObjects A vector of selected objects
                  * @param emitOnSelectionChanged Should onSelectionChanged be emitted? (Used to prevent inf. loops)
                  */
-                void selectionChanged(QVector<SceneNode*>& selectedObjects, bool emitOnSelectionChanged = true);
+                void selectionChanged(
+                        QVector<WS2Common::Scene::SceneNode*>& selectedObjects,
+                        bool emitOnSelectionChanged = true
+                        );
 
             signals:
                 /**

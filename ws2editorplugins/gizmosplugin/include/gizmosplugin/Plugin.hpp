@@ -52,7 +52,7 @@ namespace WS2EditorPlugins {
                 /**
                  * @brief The transforms of each topmost selected object before the user started dragging
                  */
-                QHash<WS2Common::Scene::SceneNode*, WS2Editor::Transform> preGrabTransforms;
+                QHash<WS2Common::Scene::SceneNode*, WS2Common::Transform> preGrabTransforms;
 
             public:
                 /**

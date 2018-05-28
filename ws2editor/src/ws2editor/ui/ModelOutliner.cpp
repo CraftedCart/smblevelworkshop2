@@ -7,6 +7,8 @@
 namespace WS2Editor {
     namespace UI {
         using namespace WS2Common::Scene;
+        using namespace WS2Common::Resource;
+
 
         ModelOutliner::ModelOutliner(QObject *parent) : QAbstractTableModel(parent) {}
 

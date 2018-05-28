@@ -13,8 +13,6 @@
 #include <QVector>
 
 namespace WS2Editor {
-    using namespace WS2Common::Resource;
-
     /**
      * @note The destructor will not free up the buffers on the GPU - it is your job to ensure that the correct GL context is bound and delete them yourself
      */
@@ -26,7 +24,7 @@ namespace WS2Editor {
             GLuint vbo;
             GLuint ebo;
             GLuint triCount;
-            QVector<const ResourceTexture*> textures;
+            QVector<const WS2Common::Resource::ResourceTexture*> textures;
 
         public:
             void updateAccessTimer();
@@ -40,7 +38,7 @@ namespace WS2Editor {
             GLuint getEbo() const;
             void setTriCount(GLuint triCount);
             GLuint getTriCount() const;
-            QVector<const ResourceTexture*>& getTextures();
+            QVector<const WS2Common::Resource::ResourceTexture*>& getTextures();
     };
 }
 

@@ -17,20 +17,18 @@
 
 namespace WS2Common {
     namespace SerializeUtils {
-        using namespace WS2Common::Scene;
+        WS2COMMON_EXPORT Scene::SceneNode* deserializeNodeFromXml(QXmlStreamReader &xml, Scene::SceneNode *parent = nullptr);
 
-        WS2COMMON_EXPORT SceneNode* deserializeNodeFromXml(QXmlStreamReader &xml, SceneNode *parent = nullptr);
+        WS2COMMON_EXPORT void parseSceneNode(QXmlStreamReader &xml, Scene::SceneNode *node);
+        WS2COMMON_EXPORT void parseSceneNodeData(QXmlStreamReader &xml, Scene::SceneNode *node);
+        WS2COMMON_EXPORT void parseMeshSceneNode(QXmlStreamReader &xml, Scene::MeshSceneNode *node);
+        WS2COMMON_EXPORT void parseMeshSceneNodeData(QXmlStreamReader &xml, Scene::MeshSceneNode *node);
+        WS2COMMON_EXPORT void parseGroupSceneNode(QXmlStreamReader &xml, Scene::GroupSceneNode *node);
+        WS2COMMON_EXPORT void parseGroupSceneNodeData(QXmlStreamReader &xml, Scene::GroupSceneNode *node);
+        WS2COMMON_EXPORT void parseGoalSceneNode(QXmlStreamReader &xml, Scene::GoalSceneNode *node);
+        WS2COMMON_EXPORT void parseGoalSceneNodeData(QXmlStreamReader &xml, Scene::GoalSceneNode *node);
 
-        WS2COMMON_EXPORT void parseSceneNode(QXmlStreamReader &xml, SceneNode *node);
-        WS2COMMON_EXPORT void parseSceneNodeData(QXmlStreamReader &xml, SceneNode *node);
-        WS2COMMON_EXPORT void parseMeshSceneNode(QXmlStreamReader &xml, MeshSceneNode *node);
-        WS2COMMON_EXPORT void parseMeshSceneNodeData(QXmlStreamReader &xml, MeshSceneNode *node);
-        WS2COMMON_EXPORT void parseGroupSceneNode(QXmlStreamReader &xml, GroupSceneNode *node);
-        WS2COMMON_EXPORT void parseGroupSceneNodeData(QXmlStreamReader &xml, GroupSceneNode *node);
-        WS2COMMON_EXPORT void parseGoalSceneNode(QXmlStreamReader &xml, GoalSceneNode *node);
-        WS2COMMON_EXPORT void parseGoalSceneNodeData(QXmlStreamReader &xml, GoalSceneNode *node);
-
-        WS2COMMON_EXPORT void parseChildren(QXmlStreamReader &xml, SceneNode *node);
+        WS2COMMON_EXPORT void parseChildren(QXmlStreamReader &xml, Scene::SceneNode *node);
 
         WS2COMMON_EXPORT void writeVec2(
                 QXmlStreamWriter &xml,

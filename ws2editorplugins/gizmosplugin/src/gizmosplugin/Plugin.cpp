@@ -19,6 +19,11 @@ namespace WS2EditorPlugins {
         using namespace WS2Editor::Widget;
         using namespace WS2Editor::Project;
         using namespace WS2Editor::UI;
+        using namespace WS2Editor::Physics;
+        using namespace WS2Editor::Resource;
+        using namespace WS2Common;
+        using namespace WS2Common::MathUtils;
+        using namespace WS2Common::Scene;
 
         bool Plugin::init() {
             //Hook into the stage editor window by calling onStageEditorWindowConstructed after it's been created
