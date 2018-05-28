@@ -13,7 +13,7 @@
 namespace WS2EditorPlugins {
     namespace GizmosPlugin {
         namespace Rendering {
-            class TranslateGizmoRenderCommand : public WS2Editor::IRenderCommand {
+            class TranslateGizmoRenderCommand : public WS2Editor::Rendering::IRenderCommand {
                 protected:
                     WS2Editor::RenderManager *renderManager;
                     glm::mat4 transform;

@@ -4,6 +4,7 @@
 #include "ws2common/scene/StartSceneNode.hpp"
 #include "ws2common/scene/MeshCollisionSceneNode.hpp"
 #include <QElapsedTimer>
+#include <QThreadPool>
 #include <QDebug>
 #include <QtMath>
 #include <math.h>
@@ -114,9 +115,14 @@ namespace WS2Lz {
         QElapsedTimer timer; //Measure how long this operation takes - probably a little while
         timer.start();
 
+        QAtomicInt finishedThreads = 0;
+        int maxThreads = 0;
+
         //Loop over all collision headers
         foreach(Scene::SceneNode *node, stage.getRootNode()->getChildren()) {
             if (dynamic_cast<Scene::GroupSceneNode*>(node)) {
+                ++maxThreads;
+
                 Scene::GroupSceneNode *groupNode = static_cast<Scene::GroupSceneNode*>(node);
                 //Find all MeshCollisionSceneNodes, and add the triangles to allVertices/allIndices
                 QVector<Model::Vertex> allVertices;
@@ -124,16 +130,58 @@ namespace WS2Lz {
                 addCollisionTriangles(node, allVertices, allIndices);
 
                 //Now create the TriangleIntrsectionGrid, which will check each triangle for intersections with each grid tile
+                //Also multithread this!
                 TriangleIntersectionGrid *intGrid = new TriangleIntersectionGrid(
                         allVertices,
-                        allIndices,
                         groupNode->getCollisionGrid()
                         );
+
+                class SortTask : public QRunnable {
+                    public:
+                        TriangleIntersectionGrid *intGrid;
+                        QVector<unsigned int> indices;
+                        CollisionGrid *grid;
+                        QAtomicInt *finishedThreadsCounter;
+
+                        virtual void run() override {
+                            intGrid->sortIntersections(indices, *grid);
+                            ++(*finishedThreadsCounter);
+                        }
+                };
+
+                SortTask *task = new SortTask;
+                task->intGrid = intGrid;
+                task->indices = allIndices;
+                task->grid = &groupNode->getCollisionGrid();
+                task->finishedThreadsCounter = &finishedThreads;
+                QThreadPool::globalInstance()->start(task);
 
                 //Store it
                 triangleIntGridMap[groupNode] = intGrid;
             }
         }
+
+        int sleepTime = 1;
+        while(finishedThreads < maxThreads) {
+            printf("\r[");
+            float percent = (float) finishedThreads / maxThreads;
+            for (int i = 0; i < 24; i++) {
+                if ((float) i / 24 < percent) {
+                    printf("#");
+                } else {
+                    printf(" ");
+                }
+            }
+            printf("] %d / %d item groups optimized", finishedThreads.load(), maxThreads);
+            fflush(stdout);
+
+            QThread::msleep(sleepTime); //Don't max out a CPU core on this progress reporting loop
+            if (sleepTime < 500) ++sleepTime; //Start off with rapid checking but slow down to a maximum delay of 0.5s
+        }
+        printf("\r[");
+        for (int i = 0; i < 24; i++) printf("#");
+        printf("] %d / %d item groups optimized\n", finishedThreads.load(), maxThreads);
+        fflush(stdout);
 
         //Finished - log the amount of time it took
         qDebug().noquote().nospace() << "Finished optimizing collision in " << timer.nsecsElapsed() / 1000000000.0f << "s";

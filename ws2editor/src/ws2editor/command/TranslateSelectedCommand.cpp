@@ -5,6 +5,8 @@
 
 namespace WS2Editor {
     namespace Command {
+        using namespace WS2Common::Scene;
+
         QString TranslateSelectedCommand::getCommand() {
             return "translate-selected";
         }

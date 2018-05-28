@@ -15,6 +15,8 @@
 namespace WS2Editor {
     namespace Resource {
         namespace ResourceManager {
+            using namespace WS2Common::Resource;
+
             //Define externs
             QMutex resourcesMutex;
 

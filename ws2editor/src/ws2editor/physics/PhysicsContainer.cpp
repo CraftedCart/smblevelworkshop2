@@ -4,6 +4,10 @@
 
 namespace WS2Editor {
     namespace Physics {
+        using namespace WS2Common;
+        using namespace WS2Common::Resource;
+        using namespace WS2Common::Scene;
+
         PhysicsContainer::PhysicsContainer(SceneNode *node, ResourceMesh *mesh, Transform &transform) {
             glm::quat rotQuat = glm::quat(transform.getRotation());
 

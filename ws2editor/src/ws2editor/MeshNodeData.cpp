@@ -1,6 +1,10 @@
 #include "ws2editor/MeshNodeData.hpp"
 
 namespace WS2Editor {
+    using namespace WS2Editor::Physics;
+    using namespace WS2Common::Scene;
+    using namespace WS2Common::Resource;
+
     MeshNodeData::MeshNodeData(SceneNode *node, ResourceMesh *mesh) : node(node), mesh(mesh) {
         physicsContainer = new PhysicsContainer(node, mesh, node->getTransform());
     }

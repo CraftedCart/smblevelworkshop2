@@ -13,6 +13,12 @@
 #include <QDebug>
 
 namespace WS2Editor {
+    using namespace WS2Editor::Rendering;
+    using namespace WS2Editor::Resource;
+    using namespace WS2Common::Model;
+    using namespace WS2Common::Resource;
+    using namespace WS2Common::Scene;
+
     void RenderManager::init(int fboWidth, int fboHeight) {
         qDebug() << "Initializing RenderManager";
 

@@ -13,22 +13,20 @@
 
 namespace WS2Editor {
     namespace Task {
-        using namespace WS2Common::Resource;
-
         class WS2EDITOR_EXPORT LoadGlTextureTask : public Task {
             Q_OBJECT
 
             protected:
-                const ResourceTexture &tex;
+                const WS2Common::Resource::ResourceTexture &tex;
 
             public:
-                LoadGlTextureTask(const ResourceTexture &tex);
+                LoadGlTextureTask(const WS2Common::Resource::ResourceTexture &tex);
 
                 void runTask(Progress *prog) override;
                 QString getTranslatedMessage() override;
 
             signals:
-                void addTexture(const QImage loadedImage, const ResourceTexture *tex);
+                void addTexture(const QImage loadedImage, const WS2Common::Resource::ResourceTexture *tex);
         };
     }
 }

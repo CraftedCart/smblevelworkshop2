@@ -18,12 +18,6 @@
 #include <QHash>
 
 namespace WS2Editor {
-    using namespace WS2Editor::Rendering;
-    using namespace WS2Editor::Resource;
-    using namespace WS2Common::Model;
-    using namespace WS2Common::Resource;
-    using namespace WS2Common::Scene;
-
     /**
      * @brief Don't forget to call init after constructig this
      *
@@ -42,11 +36,11 @@ namespace WS2Editor {
         protected:
             WS2EDITOR_EXPORT static const qint64 CACHE_TIMEOUT = 30 * 1000; //30s = 30 * 1000 ms
 
-            QQueue<IRenderCommand*> renderFifo;
-            QQueue<IRenderCommand*> renderSelectionFifo;
+            QQueue<Rendering::IRenderCommand*> renderFifo;
+            QQueue<Rendering::IRenderCommand*> renderSelectionFifo;
 
-            QHash<const MeshSegment*, CachedGlMesh*> meshCache;
-            QHash<const ResourceTexture*, CachedGlTexture*> textureCache;
+            QHash<const WS2Common::Model::MeshSegment*, CachedGlMesh*> meshCache;
+            QHash<const WS2Common::Resource::ResourceTexture*, CachedGlTexture*> textureCache;
 
             /**
              * @brief Used while a texture is loading/missing texture/etc.
@@ -67,7 +61,7 @@ namespace WS2Editor {
             int viewportHeight;
 
             //Default models
-            QVector<ResourceMesh*> goalMesh;
+            QVector<WS2Common::Resource::ResourceMesh*> goalMesh;
 
         public:
             GLuint progID;
@@ -98,7 +92,7 @@ namespace WS2Editor {
             WS2EDITOR_EXPORT static void convertToGLFormatHelper(QImage &dst, const QImage &img, GLenum texture_format);
             WS2EDITOR_EXPORT static QRgb qt_gl_convertToGLFormatHelper(QRgb src_pixel, GLenum texture_format);
 
-            void loadMesh(const MeshSegment *mesh);
+            void loadMesh(const WS2Common::Model::MeshSegment *mesh);
 
             /**
              * @brief Loads a QImage texture into the GPU
@@ -117,7 +111,7 @@ namespace WS2Editor {
              *
              * @param texture A loaded ResourceTexture
              */
-            void loadTextureAsync(const ResourceTexture *texture);
+            void loadTextureAsync(const WS2Common::Resource::ResourceTexture *texture);
 
             /**
              * @brief Generates textures/renderbuffers for the currently bound FBO
@@ -164,14 +158,14 @@ namespace WS2Editor {
              * @param rootNode The node to start searching from
              * @param scene The scene
              */
-            void enqueueRenderScene(SceneNode *rootNode, const ResourceScene *scene);
+            void enqueueRenderScene(WS2Common::Scene::SceneNode *rootNode, const Resource::ResourceScene *scene);
 
             /**
              * @brief Adds the given render command to the render fifo
              *
              * @param command The render command
              */
-            void enqueueRenderCommand(IRenderCommand *command);
+            void enqueueRenderCommand(Rendering::IRenderCommand *command);
 
             /**
              * @brief Recursively queues up the node and all the node's children to draw
@@ -182,7 +176,7 @@ namespace WS2Editor {
              */
             void recursiveEnqueueSceneNode(
                     WS2Common::Scene::SceneNode *node,
-                    const ResourceScene *scene,
+                    const Resource::ResourceScene *scene,
                     const glm::mat4 parentTransform
                     );
 
@@ -194,7 +188,7 @@ namespace WS2Editor {
              * @param renderCameraNormals Used for the selection outline
              */
             void enqueueRenderMesh(
-                    const MeshSegment *mesh,
+                    const WS2Common::Model::MeshSegment *mesh,
                     glm::mat4 transform,
                     glm::vec4 tint = glm::vec4(1.0f),
                     bool renderCameraNormals = false
@@ -212,7 +206,7 @@ namespace WS2Editor {
              *
              * @param tex The GL texture corresponding to the ResourceTexture provided
              */
-            CachedGlTexture* getTextureForResourceTexture(const ResourceTexture *tex);
+            CachedGlTexture* getTextureForResourceTexture(const WS2Common::Resource::ResourceTexture *tex);
 
             /**
              * @brief Unloads all shaders used in regular rendering (This does not include physics debug shaders)
@@ -224,7 +218,7 @@ namespace WS2Editor {
              */
             void unloadPhysicsDebugShaders();
 
-            void addTexture(const QImage image, const ResourceTexture *tex);
+            void addTexture(const QImage image, const WS2Common::Resource::ResourceTexture *tex);
 
             /**
              * @brief Fetches a cached renderable mesh for the given mesh segment, or leads the mesh if it's not already
@@ -234,7 +228,7 @@ namespace WS2Editor {
              *
              * @return A model with OpenGL buffer data
              */
-            CachedGlMesh* getCachedGlMesh(MeshSegment *mesh);
+            CachedGlMesh* getCachedGlMesh(WS2Common::Model::MeshSegment *mesh);
 
             /**
              * @brief Checks for OpenGL errors and logs them if any are found

@@ -237,7 +237,7 @@ namespace WS2Editor {
                 void postPreDraw(ViewportWidget &viewportWidget);
 
                 void frameRendered(qint64 deltaNanoseconds);
-                void postRenderScene(ResourceScene &scene);
+                void postRenderScene(Resource::ResourceScene &scene);
 
                 /**
                  * @brief Emitted when a physics object has been clicked on

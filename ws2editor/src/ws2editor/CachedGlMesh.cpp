@@ -1,6 +1,8 @@
 #include "ws2editor/CachedGlMesh.hpp"
 
 namespace WS2Editor {
+    using namespace WS2Common::Resource;
+
     void CachedGlMesh::updateAccessTimer() {
         lastAccessTimer.start();
     }

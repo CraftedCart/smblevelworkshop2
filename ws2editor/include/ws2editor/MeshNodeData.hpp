@@ -11,23 +11,20 @@
 #include "ws2common/resource/ResourceMesh.hpp"
 
 namespace WS2Editor {
-    using namespace WS2Editor::Physics;
-    using namespace WS2Common::Resource;
-
     class WS2EDITOR_EXPORT MeshNodeData {
         protected:
-            const SceneNode *node;
-            ResourceMesh *mesh;
-            PhysicsContainer *physicsContainer;
+            const WS2Common::Scene::SceneNode *node;
+            WS2Common::Resource::ResourceMesh *mesh;
+            Physics::PhysicsContainer *physicsContainer;
 
         public:
-            MeshNodeData(SceneNode *node, ResourceMesh *mesh);
+            MeshNodeData(WS2Common::Scene::SceneNode *node, WS2Common::Resource::ResourceMesh *mesh);
 
-            const SceneNode* getNode() const;
-            ResourceMesh* getMesh();
-            const ResourceMesh* getMesh() const;
-            PhysicsContainer* getPhysicsContainer();
-            const PhysicsContainer* getPhysicsContainer() const;
+            const WS2Common::Scene::SceneNode* getNode() const;
+            WS2Common::Resource::ResourceMesh* getMesh();
+            const WS2Common::Resource::ResourceMesh* getMesh() const;
+            Physics::PhysicsContainer* getPhysicsContainer();
+            const Physics::PhysicsContainer* getPhysicsContainer() const;
     };
 }
 

@@ -18,8 +18,6 @@
 
 namespace WS2Editor {
     namespace Resource {
-        using namespace WS2Common::Resource;
-
         /**
          * @todo Meshes loaded should belong to ResourceManager, not ResourceScene
          */
@@ -153,7 +151,7 @@ namespace WS2Editor {
                  *
                  * @throws WS2Editor::Exception::RuntimeException When Assimp fails to generate an aiScene
                  */
-                void addModel(const QVector<ResourceMesh*> &meshes);
+                void addModel(const QVector<WS2Common::Resource::ResourceMesh*> &meshes);
 
                 /**
                  * @brief Slot for when the selected nodes has been changed

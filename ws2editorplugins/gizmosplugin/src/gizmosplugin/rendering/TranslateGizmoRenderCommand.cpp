@@ -7,6 +7,8 @@ namespace WS2EditorPlugins {
     namespace GizmosPlugin {
         namespace Rendering {
             using namespace WS2Editor;
+            using namespace WS2Common::Resource;
+            using namespace WS2Common::Model;
 
             TranslateGizmoRenderCommand::TranslateGizmoRenderCommand(
                     RenderManager *renderManager,

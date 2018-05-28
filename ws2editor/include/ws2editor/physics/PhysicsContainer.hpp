@@ -14,10 +14,6 @@
 
 namespace WS2Editor {
     namespace Physics {
-        using namespace WS2Common;
-        using namespace WS2Common::Resource;
-        using namespace WS2Common::Scene;
-
         class WS2EDITOR_EXPORT PhysicsContainer {
             protected:
                 btCollisionShape *physicsCollisionShape;
@@ -32,7 +28,11 @@ namespace WS2Editor {
                  * @param mesh
                  * @param transform
                  */
-                PhysicsContainer(SceneNode *node, ResourceMesh *mesh, Transform &transform);
+                PhysicsContainer(
+                        WS2Common::Scene::SceneNode *node,
+                        WS2Common::Resource::ResourceMesh *mesh,
+                        WS2Common::Transform &transform
+                        );
 
                 /**
                  * @brief Constructor for PhysicsContainer that generates physics objects given an AABB and transform
@@ -41,11 +41,11 @@ namespace WS2Editor {
                  * @param transform
                  *
                  */
-                PhysicsContainer(AABB3 &aabb, Transform &transform);
+                PhysicsContainer(WS2Common::AABB3 &aabb, WS2Common::Transform &transform);
 
                 ~PhysicsContainer();
 
-                void updateTransform(Transform &transform);
+                void updateTransform(WS2Common::Transform &transform);
 
                 btRigidBody* getRigidBody();
         };

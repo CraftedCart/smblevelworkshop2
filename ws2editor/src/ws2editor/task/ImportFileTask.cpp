@@ -7,6 +7,8 @@
 
 namespace WS2Editor {
     namespace Task {
+        using namespace WS2Common::Resource;
+
         ImportFileTask::ImportFileTask(QFile *f) :
             Task(),
             f(f) {

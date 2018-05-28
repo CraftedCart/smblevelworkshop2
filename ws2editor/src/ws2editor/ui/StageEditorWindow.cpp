@@ -182,6 +182,9 @@ namespace WS2Editor {
             }
 
             ModelManager::modelOutliner->addNode(newNode, staticNode);
+
+            //Select the node
+            Project::ProjectManager::getActiveProject()->getScene()->getSelectionManager()->selectOnly(newNode);
         }
 
         void StageEditorWindow::addGoalGreen() {
@@ -201,6 +204,9 @@ namespace WS2Editor {
             }
 
             ModelManager::modelOutliner->addNode(newNode, staticNode);
+
+            //Select the node
+            Project::ProjectManager::getActiveProject()->getScene()->getSelectionManager()->selectOnly(newNode);
         }
 
         void StageEditorWindow::addGoalRed() {
@@ -220,6 +226,9 @@ namespace WS2Editor {
             }
 
             ModelManager::modelOutliner->addNode(newNode, staticNode);
+
+            //Select the node
+            Project::ProjectManager::getActiveProject()->getScene()->getSelectionManager()->selectOnly(newNode);
         }
 
         void StageEditorWindow::showCommandLine() {

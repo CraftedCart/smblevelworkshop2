@@ -25,6 +25,11 @@
 
 namespace WS2Editor {
     namespace Widget {
+        using namespace WS2Editor::Resource;
+        using namespace WS2Editor::Rendering;
+        using namespace WS2Common;
+        using namespace WS2Common::Resource;
+
         ViewportWidget::ViewportWidget(QWidget *parent) : QOpenGLWidget(parent) {
             QTimer *updateTimer = new QTimer(this);
             connect(updateTimer, SIGNAL(timeout()), this, SLOT(update()));
