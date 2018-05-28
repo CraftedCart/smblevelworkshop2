@@ -98,6 +98,31 @@ namespace WS2Editor {
             return proj;
         }
 
+        glm::vec3 ViewportWidget::zPlaneRaycast(const glm::vec3 viewportPos) {
+            const glm::vec4 viewport = glm::vec4(0.0f, 0.0f, width(), height());
+            //(z + 1) / 2 as we need to convert NDC Z (-1 to 1) to a 0 - 1 scale
+            const glm::vec3 mousePos = glm::vec3(viewportPos.x, height() - viewportPos.y, (viewportPos.z + 1.0f) / 2.0f);
+
+            const glm::vec3 v = glm::unProject(mousePos, view, proj, viewport);
+            PhysicsDebugDrawer *physicsDebugDrawer = Project::ProjectManager::getActiveProject()->getScene()->getPhysicsDebugDrawer();
+            physicsDebugDrawer->drawLine(
+                    MathUtils::toBtVector3(v + glm::vec3(-10.0f, 0.0f, 0.0f)),
+                    MathUtils::toBtVector3(v + glm::vec3(10.0f, 0.0f, 0.0f)),
+                    btVector3(1.0f, 1.0f, 0.0f)
+                    );
+            physicsDebugDrawer->drawLine(
+                    MathUtils::toBtVector3(v + glm::vec3(0.0f, -10.0f, 0.0f)),
+                    MathUtils::toBtVector3(v + glm::vec3(0.0f, 10.0f, 0.0f)),
+                    btVector3(1.0f, 1.0f, 0.0f)
+                    );
+            physicsDebugDrawer->drawLine(
+                    MathUtils::toBtVector3(v + glm::vec3(0.0f, 0.0f, -10.0f)),
+                    MathUtils::toBtVector3(v + glm::vec3(0.0f, 0.0f, 10.0f)),
+                    btVector3(1.0f, 1.0f, 0.0f)
+                    );
+            return v;
+        }
+
         void ViewportWidget::initializeGL() {
             //Uses default format which should use OpenGL 3.3 core
             glewExperimental = GL_TRUE;
@@ -247,6 +272,8 @@ namespace WS2Editor {
             //Update bullet physics
             btDynamicsWorld *dynamicsWorld = Project::ProjectManager::getActiveProject()->getScene()->getPhysicsManager()->getDynamicsWorld();
             dynamicsWorld->updateAabbs();
+
+            emit postPreDraw(*this);
         }
 
         glm::vec3 ViewportWidget::calcForwardVector(glm::vec2 &rot) {
@@ -460,10 +487,14 @@ namespace WS2Editor {
                 default:
                     break;
             }
+
+            emit onMousePressed(event);
         }
 
         void ViewportWidget::mouseReleaseEvent(QMouseEvent *event) {
             if (event->button() == Qt::RightButton || event->button() == Qt::MiddleButton) cameraNavMode = EnumCameraNav::NAV_FIXED;
+
+            emit onMouseReleased(event);
         }
 
         void ViewportWidget::wheelEvent(QWheelEvent *event) {
@@ -631,6 +662,7 @@ namespace WS2Editor {
 
             delete rayCallback;
         }
+
     }
 }
 

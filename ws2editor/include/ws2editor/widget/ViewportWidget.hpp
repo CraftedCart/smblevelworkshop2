@@ -104,6 +104,15 @@ namespace WS2Editor {
                  */
                 const glm::mat4 getProjMatrix();
 
+                /**
+                 * @brief Raycast along the camera Z plane
+                 *
+                 * @param viewportPos X/Y: pixel coordinates, Z: NDC depth coordinate
+                 *
+                 * @return The 3D point where the raycast hit
+                 */
+                glm::vec3 zPlaneRaycast(const glm::vec3 viewportPos);
+
             protected:
                 virtual void initializeGL() override;
                 virtual void resizeGL(int w, int h) override;
@@ -219,6 +228,14 @@ namespace WS2Editor {
                 void postConstruct(ViewportWidget &viewportWidget);
                 void preDestroy(ViewportWidget &viewportWidget);
                 void postInitializeGl(ViewportWidget &viewportWidget);
+
+                /**
+                 * @brief Emitted at the end of the preDraw function
+                 *
+                 * *naming is hard, ok?*
+                 */
+                void postPreDraw(ViewportWidget &viewportWidget);
+
                 void frameRendered(qint64 deltaNanoseconds);
                 void postRenderScene(ResourceScene &scene);
 
@@ -250,6 +267,9 @@ namespace WS2Editor {
                  * @brief Emitted when the physics raytrace hit nothing
                  */
                 void onPhysicsObjectMouseOverNothing();
+
+                void onMousePressed(QMouseEvent *event);
+                void onMouseReleased(QMouseEvent *event);
         };
     }
 }

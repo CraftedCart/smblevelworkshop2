@@ -1320,27 +1320,27 @@ Public License instead of this License.  But first, please read
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/ws2editor/widget/ViewportWidget.cpp" line="359"/>
+        <location filename="../src/ws2editor/widget/ViewportWidget.cpp" line="386"/>
         <source>Drop to import files</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/ws2editor/widget/ViewportWidget.cpp" line="421"/>
+        <location filename="../src/ws2editor/widget/ViewportWidget.cpp" line="448"/>
         <source>SMB Level Workshop 2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/ws2editor/widget/ViewportWidget.cpp" line="422"/>
+        <location filename="../src/ws2editor/widget/ViewportWidget.cpp" line="449"/>
         <source>Tip of the day</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/ws2editor/widget/ViewportWidget.cpp" line="426"/>
+        <location filename="../src/ws2editor/widget/ViewportWidget.cpp" line="453"/>
         <source>Open a project or import models to get started</source>
         <translation type="unfinished"></translation>
     </message>
     <message numerus="yes">
-        <location filename="../src/ws2editor/widget/ViewportWidget.cpp" line="431"/>
+        <location filename="../src/ws2editor/widget/ViewportWidget.cpp" line="458"/>
         <source>%1 / %2 plugins initialized, %n plugin(s) failed to load</source>
         <translation type="unfinished">
             <numerusform></numerusform>

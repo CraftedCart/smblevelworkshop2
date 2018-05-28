@@ -2,7 +2,10 @@
 #include "gizmosplugin/RenderGlobals.hpp"
 #include "gizmosplugin/rendering/TranslateGizmoRenderCommand.hpp"
 #include "ws2editor/physics/PhysicsUtils.hpp"
+#include "ws2editor/project/ProjectManager.hpp"
+#include "ws2editor/ui/ModelManager.hpp"
 #include "ws2common/model/ModelLoader.hpp"
+#include "ws2common/MathUtils.hpp"
 #define GLM_ENABLE_EXPERIMENTAL
 #include <glm/gtx/transform.hpp>
 #include <QAction>
@@ -14,6 +17,8 @@ namespace WS2EditorPlugins {
         using namespace WS2EditorPlugins::GizmosPlugin::Rendering;
         using namespace WS2Editor;
         using namespace WS2Editor::Widget;
+        using namespace WS2Editor::Project;
+        using namespace WS2Editor::UI;
 
         bool Plugin::init() {
             //Hook into the stage editor window by calling onStageEditorWindowConstructed after it's been created
@@ -51,18 +56,21 @@ namespace WS2EditorPlugins {
             connect(viewportWidget, &ViewportWidget::onPhysicsObjectMouseOverNothing,
                     this, &Plugin::onViewportWidgetPhysicsObjectMouseOverNothing,
                     Qt::DirectConnection);
+            connect(viewportWidget, &ViewportWidget::onMousePressed,
+                    this, &Plugin::onViewportWidgetMousePressed,
+                    Qt::DirectConnection);
+            connect(viewportWidget, &ViewportWidget::onMouseReleased,
+                    this, &Plugin::onViewportWidgetMouseReleased,
+                    Qt::DirectConnection);
+            connect(viewportWidget, &ViewportWidget::postPreDraw,
+                    this, &Plugin::onViewportWidgetPostPreDraw,
+                    Qt::DirectConnection);
             connect(viewportWidget, &ViewportWidget::postRenderScene,
                     this, &Plugin::updateGizmos,
                     Qt::DirectConnection);
             connect(viewportWidget, &ViewportWidget::preDestroy,
                     this, &Plugin::onViewportWidgetPreDestroy,
                     Qt::DirectConnection);
-        }
-
-        void Plugin::onViewportWidgetPostConstruct(ViewportWidget &viewportWidget) {
-            Q_UNUSED(viewportWidget);
-
-            //TODO
         }
 
         void Plugin::onViewportWidgetPreDestroy(WS2Editor::Widget::ViewportWidget &viewportWidget) {
@@ -87,17 +95,15 @@ namespace WS2EditorPlugins {
                 bool &outHandled
                 ) {
             //Check if any of the gizmos were hit, regardless of whether it was the closest objects or not
+            //We don't do anything with them apart from set outHandled to true to prevent crashing
             if (PhysicsUtils::doesAlignedObjectArrayContain(
                         rayCallback->m_collisionObjects, (const btCollisionObject*) gizmoYPhysics->getRigidBody())) {
-                qDebug() << "Gizmo transform Y NYI";
                 outHandled = true;
             } else if (PhysicsUtils::doesAlignedObjectArrayContain(
                         rayCallback->m_collisionObjects, (const btCollisionObject*) gizmoXPhysics->getRigidBody())) {
-                qDebug() << "Gizmo transform X NYI";
                 outHandled = true;
             } else if (PhysicsUtils::doesAlignedObjectArrayContain(
                         rayCallback->m_collisionObjects, (const btCollisionObject*) gizmoZPhysics->getRigidBody())) {
-                qDebug() << "Gizmo transform Z NYI";
                 outHandled = true;
             }
         }
@@ -127,17 +133,84 @@ namespace WS2EditorPlugins {
                     highlightGizmoZ = true;
                     outHandled = true;
                 } else {
-                    highlightGizmoY = false;
-                    highlightGizmoX = false;
-                    highlightGizmoZ = false;
+                    highlightGizmoY = highlightGizmoX = highlightGizmoZ = false;
                 }
         }
 
         void Plugin::onViewportWidgetPhysicsObjectMouseOverNothing() {
             //Don't highlight any gizmos
-            highlightGizmoY = false;
-            highlightGizmoX = false;
-            highlightGizmoZ = false;
+            highlightGizmoY = highlightGizmoX = highlightGizmoZ = false;
+        }
+
+        void Plugin::onViewportWidgetMousePressed(QMouseEvent *event) {
+            if (event->button() == Qt::LeftButton) {
+                activeGizmoY = highlightGizmoY;
+                activeGizmoX = highlightGizmoX;
+                activeGizmoZ = highlightGizmoZ;
+
+
+                if (activeGizmoY || activeGizmoX || activeGizmoZ) {
+                    glm::vec4 transformedLocation =
+                        viewportWidget->getProjMatrix() * viewportWidget->getViewMatrix() * glm::vec4(gizmoPosition, 1.0f);
+                    float zPlane = (glm::vec3(transformedLocation) / transformedLocation.w).z;
+
+                    preGrabPosition = viewportWidget->zPlaneRaycast(
+                            glm::vec3(
+                                MathUtils::toGlmVec2(QVector2D(viewportWidget->mapFromGlobal(QCursor::pos()))),
+                                zPlane
+                                )
+                            );
+
+                    QVector<SceneNode*> topmostSelected =
+                        ProjectManager::getActiveProject()->
+                        getScene()->
+                        getSelectionManager()->
+                        getTopmostSelectedObjects();
+
+                    preGrabTransforms.clear();
+                    for (SceneNode *node : topmostSelected) {
+                        preGrabTransforms[node] = node->getTransform(); //Copy the initial transforms for each node
+                    }
+                }
+            }
+        }
+
+        void Plugin::onViewportWidgetMouseReleased(QMouseEvent *event) {
+            if (event->button() == Qt::LeftButton) {
+                activeGizmoY = activeGizmoX = activeGizmoZ = false;
+            }
+        }
+
+        void Plugin::onViewportWidgetPostPreDraw(ViewportWidget &viewportWidget) {
+            Q_UNUSED(viewportWidget);
+
+            if (!(activeGizmoY || activeGizmoX || activeGizmoZ)) return;
+
+            glm::vec4 transformedLocation =
+                viewportWidget.getProjMatrix() * viewportWidget.getViewMatrix() * glm::vec4(gizmoPosition, 1.0f);
+            float zPlane = (glm::vec3(transformedLocation) / transformedLocation.w).z;
+
+            glm::vec3 mousePos = viewportWidget.zPlaneRaycast(
+                    glm::vec3(
+                        MathUtils::toGlmVec2(QVector2D(viewportWidget.mapFromGlobal(QCursor::pos()))),
+                        zPlane
+                        )
+                    );
+
+            QHashIterator<SceneNode*, Transform> i(preGrabTransforms);
+            while (i.hasNext()) {
+                i.next();
+                //Get the delta position from the start pos to the cursor pos
+                glm::vec3 deltaPos = mousePos - preGrabPosition;
+                glm::vec3 newPos = i.value().getPosition(); //The new position of the node
+
+                if (activeGizmoY) newPos.y = i.value().getPosition().y + deltaPos.y;
+                if (activeGizmoX) newPos.x = i.value().getPosition().x + deltaPos.x;
+                if (activeGizmoZ) newPos.z = i.value().getPosition().z + deltaPos.z;
+
+                i.key()->getTransform().setPosition(newPos);
+                ModelManager::modelOutliner->onNodeModified(i.key());
+            }
         }
 
         void Plugin::onRenderManagerPostInit(RenderManager &renderManager) {
@@ -194,10 +267,10 @@ namespace WS2EditorPlugins {
                 }
 
                 //Get the middle point of the AABB, and draw the gizmo there
-                const glm::vec3 center = aabb.getCenter();
+                gizmoPosition = aabb.getCenter();
                 renderManager->enqueueRenderCommand(new TranslateGizmoRenderCommand(
                             renderManager,
-                            glm::translate(center),
+                            glm::translate(gizmoPosition),
                             viewportWidget->getViewMatrix(),
                             viewportWidget->getProjMatrix(),
                             viewportWidget->getCameraPos(),
@@ -207,23 +280,24 @@ namespace WS2EditorPlugins {
                             ));
 
                 //Also update the hitbox collision
-                float distanceFromCamera = glm::length(
-                        viewportWidget->getProjMatrix() * viewportWidget->getViewMatrix() * glm::vec4(center, 1.0f));
+                glm::vec4 transformedLocation =
+                    (viewportWidget->getProjMatrix() * viewportWidget->getViewMatrix() * glm::vec4(gizmoPosition, 1.0f));
+                float distanceFromCamera = transformedLocation.w;
                 Transform t;
 
                 //Y
-                t.setPosition(center + glm::vec3(0.0f, 0.05f, 0.0f) * distanceFromCamera);
-                t.setScale(0.1f * glm::vec3(0.2f, 1.2f, 0.2f) * distanceFromCamera);
+                t.setPosition(gizmoPosition + glm::vec3(0.0f, 0.09f, 0.0f) * distanceFromCamera);
+                t.setScale(0.1f * glm::vec3(0.4f, 2.2f, 0.4f) * distanceFromCamera);
                 gizmoYPhysics->updateTransform(t);
 
                 //X
-                t.setPosition(center + glm::vec3(0.05f, 0.0f, 0.0f) * distanceFromCamera);
-                t.setScale(0.1f * glm::vec3(1.2f, 0.2f, 0.2f) * distanceFromCamera);
+                t.setPosition(gizmoPosition + glm::vec3(0.09f, 0.0f, 0.0f) * distanceFromCamera);
+                t.setScale(0.1f * glm::vec3(2.2f, 0.4f, 0.4f) * distanceFromCamera);
                 gizmoXPhysics->updateTransform(t);
 
                 //Z
-                t.setPosition(center + glm::vec3(0.0f, 0.0f, 0.05f) * distanceFromCamera);
-                t.setScale(0.1f * glm::vec3(0.2f, 0.2f, 1.2f) * distanceFromCamera);
+                t.setPosition(gizmoPosition + glm::vec3(0.0f, 0.0f, 0.09f) * distanceFromCamera);
+                t.setScale(0.1f * glm::vec3(0.4f, 0.4f, 2.2f) * distanceFromCamera);
                 gizmoZPhysics->updateTransform(t);
             } else {
                 //Nothing's selected, so disable the gizmos
