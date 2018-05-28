@@ -34,25 +34,22 @@ namespace WS2Lz {
             QVector<WS2Common::Model::Vertex> vertices;
 
         protected:
-            /**
-             * @brief Checks every triangle against every grid tile to see if they intersect, and if they do, add it
-             *        to the appropriate location within indicesGrid
-             *
-             * @param vertices All vertices
-             * @param indices Every 3 integers here corresponds to vertices for a triangle in the vertices vector
-             * @param grid The collision grid to check triangles against
-             */
-            void sortIntersections(
-                    QVector<WS2Common::Model::Vertex> &vertices,
-                    QVector<unsigned int> &indices,
-                    WS2Common::CollisionGrid &grid
-                    );
-
             bool doAABBsIntersect(WS2Common::AABB2 a, WS2Common::AABB2 b);
 
         public:
             /**
-             * @brief Constructs a TriangleIntersectionGrid, checks every triangle to see what grid tiles they intersect with
+             * @brief Constructs a TriangleIntersectionGrid without sorting triangles into intersecting grid tiles
+             *
+             * @param vertices All vertices
+             * @param grid The collision grid used to set the initial size of the indicesGrid vector
+             */
+            TriangleIntersectionGrid(
+                    QVector<WS2Common::Model::Vertex> &vertices,
+                    WS2Common::CollisionGrid &grid
+                    );
+
+            /**
+             * @brief Constructs a TriangleIntersectionGrid without and sorts triangles into intersecting grid tiles
              *
              * @param vertices All vertices
              * @param indices Every 3 integers here corresponds to vertices for a triangle in the vertices vector
@@ -60,6 +57,18 @@ namespace WS2Lz {
              */
             TriangleIntersectionGrid(
                     QVector<WS2Common::Model::Vertex> &vertices,
+                    QVector<unsigned int> &indices,
+                    WS2Common::CollisionGrid &grid
+                    );
+
+            /**
+             * @brief Checks every triangle against every grid tile to see if they intersect, and if they do, add it
+             *        to the appropriate location within indicesGrid
+             *
+             * @param indices Every 3 integers here corresponds to vertices for a triangle in the vertices vector
+             * @param grid The collision grid to check triangles against
+             */
+            void sortIntersections(
                     QVector<unsigned int> &indices,
                     WS2Common::CollisionGrid &grid
                     );

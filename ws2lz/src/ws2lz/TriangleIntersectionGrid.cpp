@@ -2,12 +2,11 @@
 #include <QElapsedTimer>
 #include <algorithm>
 #include <QDebug>
-#include <cstdio>
+//#include <cstdio>
 
 namespace WS2Lz {
     TriangleIntersectionGrid::TriangleIntersectionGrid(
             QVector<WS2Common::Model::Vertex> &vertices,
-            QVector<unsigned int> &indices,
             WS2Common::CollisionGrid &grid
             ) {
         this->vertices = vertices;
@@ -15,12 +14,17 @@ namespace WS2Lz {
         //Resize the indicesGrid vectors
         indicesGrid.resize(grid.getGridStepCount().y);
         for (unsigned int i = 0; i < grid.getGridStepCount().y; i++) indicesGrid[i].resize(grid.getGridStepCount().x);
+    }
 
-        sortIntersections(vertices, indices, grid);
+    TriangleIntersectionGrid::TriangleIntersectionGrid(
+            QVector<WS2Common::Model::Vertex> &vertices,
+            QVector<unsigned int> &indices,
+            WS2Common::CollisionGrid &grid
+            ) : TriangleIntersectionGrid(vertices, grid) {
+        sortIntersections(indices, grid);
     }
 
     void TriangleIntersectionGrid::sortIntersections(
-            QVector<WS2Common::Model::Vertex> &vertices,
             QVector<unsigned int> &indices,
             WS2Common::CollisionGrid &grid
             ) {
@@ -31,14 +35,14 @@ namespace WS2Lz {
         for (unsigned int xi = 0; xi < grid.getGridStepCount().x; xi++) {
             for (unsigned int yi = 0; yi < grid.getGridStepCount().y; yi++) {
                 //Can't seem to overwrite the same line with QDebug
-                unsigned int tilesDone = (grid.getGridStepCount().y * xi) + (yi + 1);
-                fprintf(stdout, "\rChecking tile: %03d, %03d (%04d / %04d | %06.2f%%)",
-                        xi + 1,
-                        yi + 1,
-                        tilesDone,
-                        totalTiles,
-                        tilesDone / (double) totalTiles * 100.0
-                        );
+                //unsigned int tilesDone = (grid.getGridStepCount().y * xi) + (yi + 1);
+                //fprintf(stdout, "\rChecking tile: %03d, %03d (%04d / %04d | %06.2f%%)",
+                        //xi + 1,
+                        //yi + 1,
+                        //tilesDone,
+                        //totalTiles,
+                        //tilesDone / (double) totalTiles * 100.0
+                        //);
 
                 //The grid tile spans from topLeft to bottomRight
                 //Add some padding around the grid, in case any triangles lie on the grid tile edge
@@ -77,7 +81,7 @@ namespace WS2Lz {
         }
 
         //New line, so new log messages aren't printed on the same line as the Checking tile line
-        fprintf(stdout, "\n");
+        //fprintf(stdout, "\n");
     }
 
     QVector<QVector<QVector<quint16>>>& TriangleIntersectionGrid::getIndicesGrid() {
