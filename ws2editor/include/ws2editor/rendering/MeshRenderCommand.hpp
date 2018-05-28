@@ -33,6 +33,15 @@ namespace WS2Editor {
                         bool renderCameraNormals = false
                         );
 
+                void setMesh(CachedGlMesh *mesh);
+                CachedGlMesh* getMesh();
+                void setTransform(glm::mat4 transform);
+                glm::mat4 getTransform();
+                void setRenderCameraNormals(bool renderCameraNormals);
+                bool getRenderCameraNormals();
+                void setTint(glm::vec4 tint);
+                glm::vec4 getTint();
+
                 virtual void draw() override;
         };
     }

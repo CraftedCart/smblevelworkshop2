@@ -98,6 +98,19 @@ namespace WS2Editor {
                         );
 
                 /**
+                 * @brief Adds a node to the parent, registers the meshes with the scene, and updates the model
+                 *
+                 * @param node The new node to add
+                 * @param parentNode The node to parent the new node to
+                 * @param meshes The meshes to register with the scene
+                 */
+                void addNodeWithMeshes(
+                        WS2Common::Scene::SceneNode *node,
+                        WS2Common::Scene::SceneNode *parentNode,
+                        QVector<WS2Common::Resource::ResourceMesh*> meshes
+                        );
+
+                /**
                  * @brief Removes a node from its parent and updates the model
                  *
                  * @param node The new node to remove

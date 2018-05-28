@@ -14,17 +14,21 @@ namespace WS2Editor {
     class WS2EDITOR_EXPORT MeshNodeData {
         protected:
             const WS2Common::Scene::SceneNode *node;
-            WS2Common::Resource::ResourceMesh *mesh;
+            QVector<WS2Common::Resource::ResourceMesh*> meshes;
             Physics::PhysicsContainer *physicsContainer;
 
         public:
             MeshNodeData(WS2Common::Scene::SceneNode *node, WS2Common::Resource::ResourceMesh *mesh);
+            MeshNodeData(WS2Common::Scene::SceneNode *node, QVector<WS2Common::Resource::ResourceMesh*>& meshes);
 
             const WS2Common::Scene::SceneNode* getNode() const;
-            WS2Common::Resource::ResourceMesh* getMesh();
-            const WS2Common::Resource::ResourceMesh* getMesh() const;
+            QVector<WS2Common::Resource::ResourceMesh*>& getMeshes();
+            const QVector<WS2Common::Resource::ResourceMesh*>& getMeshes() const;
+            QVector<WS2Common::Model::MeshSegment*> getMeshSegments();
+            const QVector<WS2Common::Model::MeshSegment*> getMeshSegments() const;
             Physics::PhysicsContainer* getPhysicsContainer();
             const Physics::PhysicsContainer* getPhysicsContainer() const;
+            const WS2Common::AABB3 getAabb() const;
     };
 }
 

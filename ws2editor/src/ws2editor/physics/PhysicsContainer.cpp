@@ -8,13 +8,17 @@ namespace WS2Editor {
         using namespace WS2Common::Resource;
         using namespace WS2Common::Scene;
 
-        PhysicsContainer::PhysicsContainer(SceneNode *node, ResourceMesh *mesh, Transform &transform) {
+        PhysicsContainer::PhysicsContainer(
+                SceneNode *node,
+                const QVector<ResourceMesh*> meshes,
+                const Transform &transform) {
             glm::quat rotQuat = glm::quat(transform.getRotation());
 
             //Construct mesh collision shape
             btTriangleMesh *triMesh = new btTriangleMesh();
 
-            const QVector<WS2Common::Model::MeshSegment*>& segments = mesh->getMeshSegments();
+            QVector<WS2Common::Model::MeshSegment*> segments;
+            for (ResourceMesh *mesh : meshes) segments.append(mesh->getMeshSegments());
 
             //Loop over all segments in the mesh
             for (int i = 0; i < segments.size(); i++) {
@@ -49,28 +53,11 @@ namespace WS2Editor {
             physicsRigidBody->setUserPointer(node); //The rigid body is bound to the node
         }
 
-        PhysicsContainer::PhysicsContainer(AABB3 &aabb, Transform &transform) {
-            glm::quat rotQuat = glm::quat(transform.getRotation());
-
-            //Construct box collision shape
-            btVector3 boxHalfExtents(MathUtils::toBtVector3((aabb.a - aabb.b) / 2.0f));
-            physicsCollisionShape = new btBoxShape(boxHalfExtents);
-
-            physicsMotionState = new btDefaultMotionState(btTransform(
-                        btQuaternion(rotQuat.x, rotQuat.y, rotQuat.z, rotQuat.w),
-                        btVector3(MathUtils::toBtVector3(transform.getPosition()))
-                        ));
-            physicsCollisionShape->setLocalScaling(MathUtils::toBtVector3(transform.getScale()));
-
-            btRigidBody::btRigidBodyConstructionInfo constructionInfo(
-                    0, //kg mass - 0 = static object
-                    physicsMotionState,
-                    physicsCollisionShape,
-                    btVector3(0.0f, 0.0f, 0.0f) //Local inertia
-                    );
-
-            physicsRigidBody = new btRigidBody(constructionInfo);
-        }
+        PhysicsContainer::PhysicsContainer(
+                SceneNode *node,
+                ResourceMesh* mesh,
+                const Transform &transform) :
+            PhysicsContainer(node, QVector<ResourceMesh*> {mesh}, transform) {}
 
         PhysicsContainer::~PhysicsContainer() {
             delete physicsCollisionShape;

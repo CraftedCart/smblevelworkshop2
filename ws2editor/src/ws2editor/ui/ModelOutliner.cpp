@@ -247,6 +247,12 @@ namespace WS2Editor {
             Project::ProjectManager::getActiveProject()->getScene()->addMeshNodeData(node->getUuid(), new MeshNodeData(node, mesh));
         }
 
+        void ModelOutliner::addNodeWithMeshes(SceneNode *node, SceneNode *parentNode, QVector<ResourceMesh*> meshes) {
+            addNode(node, parentNode);
+
+            Project::ProjectManager::getActiveProject()->getScene()->addMeshNodeData(node->getUuid(), new MeshNodeData(node, meshes));
+        }
+
         void ModelOutliner::removeNode(SceneNode *node) {
             //Remove nodes from the selection (If they are even selected)
             Project::ProjectManager::getActiveProject()->getScene()->getSelectionManager()->deselect(node);
@@ -299,10 +305,10 @@ namespace WS2Editor {
             MeshNodeData *meshData = Project::ProjectManager::getActiveProject()->getScene()->getMeshNodeData(node->getUuid());
 
             if (meshData != nullptr) {
-                ResourceMesh *mesh = Project::ProjectManager::getActiveProject()->getScene()->getMeshNodeData(node->getUuid())->getMesh();
+                QVector<ResourceMesh*> meshes = Project::ProjectManager::getActiveProject()->getScene()->getMeshNodeData(node->getUuid())->getMeshes();
                 Project::ProjectManager::getActiveProject()->getScene()->removeMeshNodeData(node->getUuid());
 
-                Project::ProjectManager::getActiveProject()->getScene()->addMeshNodeData(node->getUuid(), new MeshNodeData(node, mesh));
+                Project::ProjectManager::getActiveProject()->getScene()->addMeshNodeData(node->getUuid(), new MeshNodeData(node, meshes));
             }
 
             //Recursively call this function on children

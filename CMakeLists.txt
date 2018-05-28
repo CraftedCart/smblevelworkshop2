@@ -54,6 +54,7 @@ add_subdirectory(./ws2editor)
 #Editor plugins
 add_subdirectory(./ws2editorplugins/ws2editorexampleplugin)
 add_subdirectory(./ws2editorplugins/gizmosplugin)
+add_subdirectory(./ws2editorplugins/goalrendercolorsplugin)
 
 if(APPLE)
     set(CPACK_GENERATOR Bundle)

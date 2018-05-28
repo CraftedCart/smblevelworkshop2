@@ -15,6 +15,38 @@ namespace WS2Editor {
             tint(tint),
             renderCameraNormals(renderCameraNormals) {}
 
+        void MeshRenderCommand::setMesh(CachedGlMesh *mesh) {
+            this->mesh = mesh;
+        }
+
+        CachedGlMesh* MeshRenderCommand::getMesh() {
+            return mesh;
+        }
+
+        void MeshRenderCommand::setTransform(glm::mat4 transform) {
+            this->transform = transform;
+        }
+
+        glm::mat4 MeshRenderCommand::getTransform() {
+            return transform;
+        }
+
+        void MeshRenderCommand::setRenderCameraNormals(bool renderCameraNormals) {
+            this->renderCameraNormals = renderCameraNormals;
+        }
+
+        bool MeshRenderCommand::getRenderCameraNormals() {
+            return renderCameraNormals;
+        }
+
+        void MeshRenderCommand::setTint(glm::vec4 tint) {
+            this->tint = tint;
+        }
+
+        glm::vec4 MeshRenderCommand::getTint() {
+            return tint;
+        }
+
         void MeshRenderCommand::draw() {
             mesh->updateAccessTimer();
 

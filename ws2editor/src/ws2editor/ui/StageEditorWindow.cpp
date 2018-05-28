@@ -181,7 +181,7 @@ namespace WS2Editor {
                 ModelManager::modelOutliner->addNode(newNode, Project::ProjectManager::getActiveProject()->getScene()->getRootNode());
             }
 
-            ModelManager::modelOutliner->addNode(newNode, staticNode);
+            ModelManager::modelOutliner->addNodeWithMeshes(newNode, staticNode, ui->viewportWidget->getRenderManager()->goalMesh);
 
             //Select the node
             Project::ProjectManager::getActiveProject()->getScene()->getSelectionManager()->selectOnly(newNode);
@@ -203,7 +203,7 @@ namespace WS2Editor {
                 ModelManager::modelOutliner->addNode(newNode, Project::ProjectManager::getActiveProject()->getScene()->getRootNode());
             }
 
-            ModelManager::modelOutliner->addNode(newNode, staticNode);
+            ModelManager::modelOutliner->addNodeWithMeshes(newNode, staticNode, ui->viewportWidget->getRenderManager()->goalMesh);
 
             //Select the node
             Project::ProjectManager::getActiveProject()->getScene()->getSelectionManager()->selectOnly(newNode);
@@ -225,7 +225,7 @@ namespace WS2Editor {
                 ModelManager::modelOutliner->addNode(newNode, Project::ProjectManager::getActiveProject()->getScene()->getRootNode());
             }
 
-            ModelManager::modelOutliner->addNode(newNode, staticNode);
+            ModelManager::modelOutliner->addNodeWithMeshes(newNode, staticNode, ui->viewportWidget->getRenderManager()->goalMesh);
 
             //Select the node
             Project::ProjectManager::getActiveProject()->getScene()->getSelectionManager()->selectOnly(newNode);
