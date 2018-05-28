@@ -1283,18 +1283,18 @@ Public License instead of this License.  But first, please read
     </message>
     <message>
         <location filename="../src/ws2editor/ui/StageEditorWindow.cpp" line="180"/>
-        <location filename="../src/ws2editor/ui/StageEditorWindow.cpp" line="199"/>
-        <location filename="../src/ws2editor/ui/StageEditorWindow.cpp" line="218"/>
+        <location filename="../src/ws2editor/ui/StageEditorWindow.cpp" line="202"/>
+        <location filename="../src/ws2editor/ui/StageEditorWindow.cpp" line="224"/>
         <source>Static</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/ws2editor/ui/StageEditorWindow.cpp" line="192"/>
+        <location filename="../src/ws2editor/ui/StageEditorWindow.cpp" line="195"/>
         <source>New Green Goal</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/ws2editor/ui/StageEditorWindow.cpp" line="211"/>
+        <location filename="../src/ws2editor/ui/StageEditorWindow.cpp" line="217"/>
         <source>New Red Goal</source>
         <translation type="unfinished"></translation>
     </message>
