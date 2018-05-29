@@ -51,7 +51,7 @@ namespace WS2EditorPlugins {
             } else if (dynamic_cast<const BananaSceneNode*>(node)) {
                 command->setTint(glm::vec4(1.0f, 0.92f, 0.23f, 1.0f));
             } else if (dynamic_cast<const JamabarSceneNode*>(node)) {
-                command->setTint(glm::vec4(0.96f, 0.26f, 0.21f, 1.0f));
+                command->setTint(glm::vec4(0.0f, 0.74f, 0.83f, 1.0f));
             } else if (dynamic_cast<const WormholeSceneNode*>(node)) {
                 command->setTint(glm::vec4(0.4, 0.23f, 0.72f, 1.0f));
             }
