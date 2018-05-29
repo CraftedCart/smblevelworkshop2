@@ -105,6 +105,8 @@ namespace WS2Editor {
         //Load default models
         QFile goalFile(":/Workshop2/Models/goal.fbx");
         goalMesh = WS2Common::Model::ModelLoader::loadModel(goalFile);
+        QFile bumperFile(":/Workshop2/Models/bumper.fbx");
+        bumperMesh = WS2Common::Model::ModelLoader::loadModel(bumperFile);
 
         checkErrors("After RenderManager::init()");
 

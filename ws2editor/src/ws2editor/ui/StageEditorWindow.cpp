@@ -11,6 +11,7 @@
 #include "ws2editor/WS2EditorInstance.hpp"
 #include "ws2common/scene/GroupSceneNode.hpp"
 #include "ws2common/scene/GoalSceneNode.hpp"
+#include "ws2common/scene/BumperSceneNode.hpp"
 #include <QFontDatabase>
 #include <Qt>
 #include <QFileDialog>
@@ -20,6 +21,12 @@
 
 namespace WS2Editor {
     namespace UI {
+        using namespace WS2Editor::Resource;
+        using namespace WS2Editor::Project;
+        using namespace WS2Common::Scene;
+        using namespace WS2Common::Resource;
+        using namespace WS2Common;
+
         StageEditorWindow::StageEditorWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::StageEditorWindow) {
             ui->setupUi(this);
 
@@ -62,6 +69,7 @@ namespace WS2Editor {
             connect(ui->actionAddGoalBlue, &QAction::triggered, this, &StageEditorWindow::addGoalBlue);
             connect(ui->actionAddGoalGreen, &QAction::triggered, this, &StageEditorWindow::addGoalGreen);
             connect(ui->actionAddGoalRed, &QAction::triggered, this, &StageEditorWindow::addGoalRed);
+            connect(ui->actionAddBumper, &QAction::triggered, this, &StageEditorWindow::addBumper);
 
             //Debug menu
             connect(ui->actionClearAllRenderManagerCaches, &QAction::triggered, [this]() {
@@ -132,14 +140,11 @@ namespace WS2Editor {
         }
 
         void StageEditorWindow::addSceneNode() {
-            WS2Common::Scene::GroupSceneNode *newNode = new WS2Common::Scene::GroupSceneNode(tr("New Node"));
-            ModelManager::modelOutliner->addNode(newNode, Project::ProjectManager::getActiveProject()->getScene()->getRootNode());
+            GroupSceneNode *newNode = new GroupSceneNode(tr("New Node"));
+            ModelManager::modelOutliner->addNode(newNode, ProjectManager::getActiveProject()->getScene()->getRootNode());
         }
 
         void StageEditorWindow::deleteSelected() {
-            using namespace WS2Common::Scene;
-            using namespace WS2Editor::Project;
-
             QVector<SceneNode*> toDelete = ProjectManager::getActiveProject()->getScene()->getSelectionManager()->getSelectedObjects();
 
             for (SceneNode *node : toDelete) {
@@ -167,73 +172,47 @@ namespace WS2Editor {
             win->show();
         }
 
-        void StageEditorWindow::addGoalBlue() {
-            using namespace WS2Editor::Resource;
-            using namespace WS2Common::Scene;
-
-            GoalSceneNode *newNode = new WS2Common::Scene::GoalSceneNode(tr("New Blue Goal"));
-            ResourceScene *scene = Project::ProjectManager::getActiveProject()->getScene();
-            SceneNode *staticNode = scene->getStaticNode();
-
-            if (staticNode == nullptr) {
-                //No static nodes exist - create one
-                staticNode = new WS2Common::Scene::GroupSceneNode(tr("Static"));
-                ModelManager::modelOutliner->addNode(newNode, Project::ProjectManager::getActiveProject()->getScene()->getRootNode());
-            }
-
-            ModelManager::modelOutliner->addNodeWithMeshes(newNode, staticNode, ui->viewportWidget->getRenderManager()->goalMesh);
-
-            //Select the node
-            Project::ProjectManager::getActiveProject()->getScene()->getSelectionManager()->selectOnly(newNode);
-        }
-
-        void StageEditorWindow::addGoalGreen() {
-            using namespace WS2Editor::Resource;
-            using namespace WS2Common::Scene;
-            using namespace WS2Common;
-
-            GoalSceneNode *newNode = new WS2Common::Scene::GoalSceneNode(tr("New Green Goal"));
-            newNode->setType(EnumGoalType::GREEN);
-            ResourceScene *scene = Project::ProjectManager::getActiveProject()->getScene();
-            SceneNode *staticNode = scene->getStaticNode();
-
-            if (staticNode == nullptr) {
-                //No static nodes exist - create one
-                staticNode = new WS2Common::Scene::GroupSceneNode(tr("Static"));
-                ModelManager::modelOutliner->addNode(newNode, Project::ProjectManager::getActiveProject()->getScene()->getRootNode());
-            }
-
-            ModelManager::modelOutliner->addNodeWithMeshes(newNode, staticNode, ui->viewportWidget->getRenderManager()->goalMesh);
-
-            //Select the node
-            Project::ProjectManager::getActiveProject()->getScene()->getSelectionManager()->selectOnly(newNode);
-        }
-
-        void StageEditorWindow::addGoalRed() {
-            using namespace WS2Editor::Resource;
-            using namespace WS2Common::Scene;
-            using namespace WS2Common;
-
-            GoalSceneNode *newNode = new WS2Common::Scene::GoalSceneNode(tr("New Red Goal"));
-            newNode->setType(EnumGoalType::RED);
-            ResourceScene *scene = Project::ProjectManager::getActiveProject()->getScene();
-            SceneNode *staticNode = scene->getStaticNode();
-
-            if (staticNode == nullptr) {
-                //No static nodes exist - create one
-                staticNode = new WS2Common::Scene::GroupSceneNode(tr("Static"));
-                ModelManager::modelOutliner->addNode(newNode, Project::ProjectManager::getActiveProject()->getScene()->getRootNode());
-            }
-
-            ModelManager::modelOutliner->addNodeWithMeshes(newNode, staticNode, ui->viewportWidget->getRenderManager()->goalMesh);
-
-            //Select the node
-            Project::ProjectManager::getActiveProject()->getScene()->getSelectionManager()->selectOnly(newNode);
-        }
-
         void StageEditorWindow::showCommandLine() {
             CommandWidget *widget = new CommandWidget(QCursor::pos(), this);
             widget->show();
+        }
+
+        void StageEditorWindow::addNodeToStaticGroup(SceneNode *node, QVector<ResourceMesh*>& meshes) {
+            ResourceScene *scene = ProjectManager::getActiveProject()->getScene();
+            SceneNode *staticNode = scene->getStaticNode();
+
+            if (staticNode == nullptr) {
+                //No static nodes exist - create one
+                staticNode = new WS2Common::Scene::GroupSceneNode(tr("Static"));
+                ModelManager::modelOutliner->addNode(node, ProjectManager::getActiveProject()->getScene()->getRootNode());
+            }
+
+            ModelManager::modelOutliner->addNodeWithMeshes(node, staticNode, meshes);
+
+            //Select the node
+            ProjectManager::getActiveProject()->getScene()->getSelectionManager()->selectOnly(node);
+        }
+
+        void StageEditorWindow::addGoalBlue() {
+            GoalSceneNode *newNode = new WS2Common::Scene::GoalSceneNode(tr("New Blue Goal"));
+            addNodeToStaticGroup(newNode, ui->viewportWidget->getRenderManager()->goalMesh);
+        }
+
+        void StageEditorWindow::addGoalGreen() {
+            GoalSceneNode *newNode = new WS2Common::Scene::GoalSceneNode(tr("New Green Goal"));
+            newNode->setType(EnumGoalType::GREEN);
+            addNodeToStaticGroup(newNode, ui->viewportWidget->getRenderManager()->goalMesh);
+        }
+
+        void StageEditorWindow::addGoalRed() {
+            GoalSceneNode *newNode = new WS2Common::Scene::GoalSceneNode(tr("New Red Goal"));
+            newNode->setType(EnumGoalType::RED);
+            addNodeToStaticGroup(newNode, ui->viewportWidget->getRenderManager()->goalMesh);
+        }
+
+        void StageEditorWindow::addBumper() {
+            BumperSceneNode *newNode = new WS2Common::Scene::BumperSceneNode(tr("New Bumper"));
+            addNodeToStaticGroup(newNode, ui->viewportWidget->getRenderManager()->bumperMesh);
         }
     }
 }

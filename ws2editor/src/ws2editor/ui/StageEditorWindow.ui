@@ -164,6 +164,11 @@
    <addaction name="actionAddGoalBlue"/>
    <addaction name="actionAddGoalGreen"/>
    <addaction name="actionAddGoalRed"/>
+   <addaction name="actionAddBumper"/>
+   <addaction name="actionAddBanana"/>
+   <addaction name="actionAddBananaBunch"/>
+   <addaction name="actionAddJamabar"/>
+   <addaction name="actionAddWormhole"/>
   </widget>
   <widget class="QStatusBar" name="statusBar"/>
   <widget class="QDockWidget" name="outlinerDockWidget">
@@ -620,6 +625,51 @@
    </property>
    <property name="text">
     <string>Plugins</string>
+   </property>
+  </action>
+  <action name="actionAddBumper">
+   <property name="icon">
+    <iconset resource="../../../resources/Workshop2/Workshop2Resources.qrc">
+     <normaloff>:/Workshop2/Icons/Bumper.png</normaloff>:/Workshop2/Icons/Bumper.png</iconset>
+   </property>
+   <property name="text">
+    <string>Add Bumper</string>
+   </property>
+  </action>
+  <action name="actionAddBanana">
+   <property name="icon">
+    <iconset resource="../../../resources/Workshop2/Workshop2Resources.qrc">
+     <normaloff>:/Workshop2/Icons/Banana.png</normaloff>:/Workshop2/Icons/Banana.png</iconset>
+   </property>
+   <property name="text">
+    <string>Add Banana</string>
+   </property>
+  </action>
+  <action name="actionAddBananaBunch">
+   <property name="icon">
+    <iconset resource="../../../resources/Workshop2/Workshop2Resources.qrc">
+     <normaloff>:/Workshop2/Icons/Banana10.png</normaloff>:/Workshop2/Icons/Banana10.png</iconset>
+   </property>
+   <property name="text">
+    <string>Add Banana Bunch</string>
+   </property>
+  </action>
+  <action name="actionAddJamabar">
+   <property name="icon">
+    <iconset resource="../../../resources/Workshop2/Workshop2Resources.qrc">
+     <normaloff>:/Workshop2/Icons/Jamabar.png</normaloff>:/Workshop2/Icons/Jamabar.png</iconset>
+   </property>
+   <property name="text">
+    <string>Add Jamabar</string>
+   </property>
+  </action>
+  <action name="actionAddWormhole">
+   <property name="icon">
+    <iconset resource="../../../resources/Workshop2/Workshop2Resources.qrc">
+     <normaloff>:/Workshop2/Icons/Wormhole.png</normaloff>:/Workshop2/Icons/Wormhole.png</iconset>
+   </property>
+   <property name="text">
+    <string>Add Wormhole</string>
    </property>
   </action>
  </widget>

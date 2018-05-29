@@ -21,6 +21,11 @@
         <file>Icons/GoalBlue.png</file>
         <file>Icons/GoalGreen.png</file>
         <file>Icons/GoalRed.png</file>
+        <file>Icons/Bumper.png</file>
+        <file>Icons/Banana.png</file>
+        <file>Icons/Banana10.png</file>
+        <file>Icons/Jamabar.png</file>
+        <file>Icons/Wormhole.png</file>
         <file>Icons/Console.png</file>
         <file>Icons/Plugin.png</file>
         <file>Icons/PluginFail.png</file>
@@ -39,6 +44,7 @@
         <file>Lang/stageThemes-en_US.txt</file>
         <file>Lang/stageMechanics-en_US.txt</file>
         <file>Models/goal.fbx</file>
+        <file>Models/bumper.fbx</file>
     </qresource>
 </RCC>
 

@@ -1,11 +1,12 @@
-#include "goalrendercolorsplugin/Plugin.hpp"
+#include "rendercolorsplugin/Plugin.hpp"
 #include "ws2editor/WS2EditorInstance.hpp"
 #include "ws2editor/rendering/MeshRenderCommand.hpp"
 #include "ws2common/scene/GoalSceneNode.hpp"
+#include "ws2common/scene/BumperSceneNode.hpp"
 #include <QDebug>
 
 namespace WS2EditorPlugins {
-    namespace GoalRenderColorsPlugin {
+    namespace RenderColorsPlugin {
         using namespace WS2Editor;
         using namespace WS2Common;
         using namespace WS2Common::Scene;
@@ -19,7 +20,7 @@ namespace WS2EditorPlugins {
                     Qt::DirectConnection);
 
             //The plugin initialized successfully, return true
-            qDebug() << "WS2Editor GoalRenderColorsPlugin successfully initialized";
+            qDebug() << "WS2Editor RenderColorsPlugin successfully initialized";
             return true;
         }
 
@@ -42,6 +43,8 @@ namespace WS2EditorPlugins {
                     case EnumGoalType::RED:
                         command->setTint(glm::vec4(0.95f, 0.26f, 0.21f, 1.0f)); break;
                 }
+            } else if (const BumperSceneNode *bumper = dynamic_cast<const BumperSceneNode*>(node)) {
+                command->setTint(glm::vec4(1.0f, 0.6f, 0.0f, 1.0f));
             }
         }
 

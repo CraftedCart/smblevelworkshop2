@@ -28,6 +28,12 @@ namespace WS2Editor {
             private:
                 Ui::StageEditorWindow *ui;
 
+            protected:
+                void addNodeToStaticGroup(
+                        WS2Common::Scene::SceneNode *node,
+                        QVector<WS2Common::Resource::ResourceMesh*>& meshes
+                        );
+
             public:
                 explicit StageEditorWindow(QWidget *parent = 0);
                 ~StageEditorWindow();
@@ -85,6 +91,7 @@ namespace WS2Editor {
                 void addGoalBlue();
                 void addGoalGreen();
                 void addGoalRed();
+                void addBumper();
         };
     }
 }

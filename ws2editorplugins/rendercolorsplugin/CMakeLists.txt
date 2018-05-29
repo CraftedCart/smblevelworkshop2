@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.9.0)
-project(goalrendercolorsplugin)
+project(rendercolorsplugin)
 
 #Use C++ 11
 set(CMAKE_CXX_STANDARD 11)
@@ -23,11 +23,11 @@ include_directories(./include)
 include_directories(${CMAKE_BINARY_DIR})
 
 set(SOURCE_FILES
-    ./src/goalrendercolorsplugin/Plugin.cpp
+    ./src/rendercolorsplugin/Plugin.cpp
     )
 
 set(HEADER_FILES
-    ./include/goalrendercolorsplugin/Plugin.hpp
+    ./include/rendercolorsplugin/Plugin.hpp
     )
 
 add_library(${PROJECT_NAME} SHARED ${SOURCE_FILES} ${HEADER_FILES})

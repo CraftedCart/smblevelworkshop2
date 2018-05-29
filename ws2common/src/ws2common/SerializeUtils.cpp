@@ -26,6 +26,11 @@ namespace WS2Common {
                 parseGoalSceneNode(xml, node);
                 if (parent != nullptr) parent->addChild(node);
                 return node;
+            } else if (xml.name() == "node-bumperSceneNode") {
+                BumperSceneNode *node = new BumperSceneNode();
+                parseBumperSceneNode(xml, node);
+                if (parent != nullptr) parent->addChild(node);
+                return node;
             }
 
             return nullptr; //Failed to deserialize
@@ -211,6 +216,31 @@ namespace WS2Common {
                     node->setType(GoalType::fromString(xml.readElementText()));
                 } else {
                     qWarning().noquote() << "Unrecognised tag: data-goalSceneNode > " + xml.name();
+                }
+            }
+        }
+
+        void parseBumperSceneNode(QXmlStreamReader &xml, BumperSceneNode *node) {
+            while (!(xml.isEndElement() && xml.name() == "node-bumperSceneNode")) {
+                xml.readNext();
+                if (!xml.isStartElement()) continue; //Ignore all end elements
+
+                if (xml.name() == "data") {
+                    while (!(xml.isEndElement() && xml.name() == "data")) {
+                        xml.readNext();
+                        if (!xml.isStartElement()) continue; //Ignore all end elements
+
+                        if (xml.name() == "data-sceneNode") {
+                            parseSceneNodeData(xml, node);
+                        } else {
+                            qWarning().noquote() << "Unrecognised tag: data > " + xml.name();
+                        }
+                    }
+
+                } else if (xml.name() == "children") {
+                    parseChildren(xml, node);
+                } else {
+                    qWarning().noquote() << "Unrecognised tag: node-bumperSceneNode > " + xml.name();
                 }
             }
         }

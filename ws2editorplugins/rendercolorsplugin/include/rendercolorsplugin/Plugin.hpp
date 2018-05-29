@@ -1,19 +1,19 @@
 /**
  * @file
- * @brief Goal render colors plugin header
+ * @brief Render colors plugin header
  *
- * Provides colors to goals when rendering them in the world
+ * Provides colors to goals, bananas, bumpers, etc. when rendering them in the world
  */
 
-#ifndef SMBLEVELWORKSHOP2_WS2EDITORPLUGINS_GOALRENDERCOLORSPLUGIN_PLUGIN_HPP
-#define SMBLEVELWORKSHOP2_WS2EDITORPLUGINS_GOALRENDERCOLORSPLUGIN_PLUGIN_HPP
+#ifndef SMBLEVELWORKSHOP2_WS2EDITORPLUGINS_RENDERCOLORSPLUGIN_PLUGIN_HPP
+#define SMBLEVELWORKSHOP2_WS2EDITORPLUGINS_RENDERCOLORSPLUGIN_PLUGIN_HPP
 
 #include "ws2editor/plugin/IEditorPlugin.hpp"
 #include "ws2editor/ui/StageEditorWindow.hpp"
 #include <QMouseEvent>
 
 namespace WS2EditorPlugins {
-    namespace GoalRenderColorsPlugin {
+    namespace RenderColorsPlugin {
         class Plugin : public QObject, public WS2Editor::Plugin::IEditorPlugin {
             Q_OBJECT
 

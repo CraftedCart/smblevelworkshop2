@@ -91,6 +91,7 @@ namespace WS2Editor {
             //Default models
             //TODO: Move global models out of RenderManager
             QVector<WS2Common::Resource::ResourceMesh*> goalMesh;
+            QVector<WS2Common::Resource::ResourceMesh*> bumperMesh;
 
         protected:
             //Copied straight from Qt QGL
