@@ -6,6 +6,7 @@
 #ifndef SMBLEVELWORKSHOP2_WS2COMMON_ENUMANIMATIONSEESAWTYPE_HPP
 #define SMBLEVELWORKSHOP2_WS2COMMON_ENUMANIMATIONSEESAWTYPE_HPP
 
+#include "ws2common_export.h"
 #include <QString>
 
 namespace WS2Common {
@@ -21,7 +22,7 @@ namespace WS2Common {
     };
 
     namespace AnimationSeesawType {
-        QString toString(EnumAnimationSeesawType type);
+        WS2COMMON_EXPORT QString toString(EnumAnimationSeesawType type);
 
         /**
          * @brief Converts a string to an EnumAnimationSeesawType
@@ -30,7 +31,7 @@ namespace WS2Common {
          *
          * @return The EnumAnimationSeesawTyoe for the string. If the string is invalid, ANIMATION will be returned.
          */
-        EnumAnimationSeesawType fromString(QString str);
+        WS2COMMON_EXPORT EnumAnimationSeesawType fromString(QString str);
     }
 }
 

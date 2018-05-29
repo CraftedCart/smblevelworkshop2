@@ -6,6 +6,7 @@
 #ifndef SMBLEVELWORKSHOP2_WS2COMMON_ENUMBANANATYPE_HPP
 #define SMBLEVELWORKSHOP2_WS2COMMON_ENUMBANANATYPE_HPP
 
+#include "ws2common_export.h"
 #include <QString>
 
 namespace WS2Common {
@@ -26,7 +27,7 @@ namespace WS2Common {
          *
          * @return The EnumGoalType for the string. If the string is invalid, SINGLE will be returned.
          */
-        EnumBananaType fromString(QString str);
+        WS2COMMON_EXPORT EnumBananaType fromString(QString str);
     }
 }
 

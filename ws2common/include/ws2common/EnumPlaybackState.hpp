@@ -6,6 +6,7 @@
 #ifndef SMBLEVELWORKSHOP2_WS2COMMON_ENUMPLAYBACKSTATE_HPP
 #define SMBLEVELWORKSHOP2_WS2COMMON_ENUMPLAYBACKSTATE_HPP
 
+#include "ws2common_export.h"
 #include <QString>
 
 namespace WS2Common {
@@ -29,7 +30,7 @@ namespace WS2Common {
          *
          * @return The EnumPlaybackState for the string. If the string is invalid, PLAY will be returned.
          */
-        EnumPlaybackState fromString(QString str);
+        WS2COMMON_EXPORT EnumPlaybackState fromString(QString str);
     }
 }
 
