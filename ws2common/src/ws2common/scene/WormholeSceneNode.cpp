@@ -4,16 +4,12 @@ namespace WS2Common {
     namespace Scene {
         WormholeSceneNode::WormholeSceneNode(const QString name) : SceneNode(name) {}
 
-        WormholeSceneNode* WormholeSceneNode::getDestination() {
-            return destination;
+        const QUuid& WormholeSceneNode::getDestinationUuid() const {
+            return destinationUuid;
         }
 
-        const WormholeSceneNode* WormholeSceneNode::getDestination() const {
-            return destination;
-        }
-
-        void WormholeSceneNode::setDestination(WormholeSceneNode *destination) {
-            this->destination = destination;
+        void WormholeSceneNode::setDestinationUuid(QUuid destinationUuid) {
+            this->destinationUuid = destinationUuid;
         }
     }
 }

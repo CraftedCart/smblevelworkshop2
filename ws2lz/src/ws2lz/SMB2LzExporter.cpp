@@ -332,7 +332,7 @@ namespace WS2Lz {
 
             forEachChildType(group, Scene::WormholeSceneNode*, node) {
                 //Need to store the offset of every wormhole, so that they can be linked together (by offset) later
-                wormholeIndividualOffsetMap.insert(nextOffset, node);
+                wormholeIndividualOffsetMap.insert(nextOffset, node->getUuid());
 
                 nextOffset += WORMHOLE_LENGTH;
                 wormholeCount++;
@@ -693,7 +693,7 @@ namespace WS2Lz {
         dev << node->getPosition();
         dev << convertRotation(node->getRotation());
         writeNull(dev, 2);
-        dev << wormholeIndividualOffsetMap.key(node->getDestination()); //Destination wormhole offset
+        dev << wormholeIndividualOffsetMap.key(node->getDestinationUuid()); //Destination wormhole offset
     }
 
     void SMB2LzExporter::writeCollisionTriangles(QDataStream &dev, const Scene::SceneNode *node) {
