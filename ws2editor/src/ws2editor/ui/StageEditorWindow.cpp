@@ -12,6 +12,7 @@
 #include "ws2common/scene/GroupSceneNode.hpp"
 #include "ws2common/scene/GoalSceneNode.hpp"
 #include "ws2common/scene/BumperSceneNode.hpp"
+#include "ws2common/scene/BananaSceneNode.hpp"
 #include <QFontDatabase>
 #include <Qt>
 #include <QFileDialog>
@@ -70,6 +71,8 @@ namespace WS2Editor {
             connect(ui->actionAddGoalGreen, &QAction::triggered, this, &StageEditorWindow::addGoalGreen);
             connect(ui->actionAddGoalRed, &QAction::triggered, this, &StageEditorWindow::addGoalRed);
             connect(ui->actionAddBumper, &QAction::triggered, this, &StageEditorWindow::addBumper);
+            connect(ui->actionAddBanana, &QAction::triggered, this, &StageEditorWindow::addBananaSingle);
+            connect(ui->actionAddBananaBunch, &QAction::triggered, this, &StageEditorWindow::addBananaBunch);
 
             //Debug menu
             connect(ui->actionClearAllRenderManagerCaches, &QAction::triggered, [this]() {
@@ -194,25 +197,36 @@ namespace WS2Editor {
         }
 
         void StageEditorWindow::addGoalBlue() {
-            GoalSceneNode *newNode = new WS2Common::Scene::GoalSceneNode(tr("New Blue Goal"));
+            GoalSceneNode *newNode = new GoalSceneNode(tr("New Blue Goal"));
             addNodeToStaticGroup(newNode, ui->viewportWidget->getRenderManager()->goalMesh);
         }
 
         void StageEditorWindow::addGoalGreen() {
-            GoalSceneNode *newNode = new WS2Common::Scene::GoalSceneNode(tr("New Green Goal"));
+            GoalSceneNode *newNode = new GoalSceneNode(tr("New Green Goal"));
             newNode->setType(EnumGoalType::GREEN);
             addNodeToStaticGroup(newNode, ui->viewportWidget->getRenderManager()->goalMesh);
         }
 
         void StageEditorWindow::addGoalRed() {
-            GoalSceneNode *newNode = new WS2Common::Scene::GoalSceneNode(tr("New Red Goal"));
+            GoalSceneNode *newNode = new GoalSceneNode(tr("New Red Goal"));
             newNode->setType(EnumGoalType::RED);
             addNodeToStaticGroup(newNode, ui->viewportWidget->getRenderManager()->goalMesh);
         }
 
         void StageEditorWindow::addBumper() {
-            BumperSceneNode *newNode = new WS2Common::Scene::BumperSceneNode(tr("New Bumper"));
+            BumperSceneNode *newNode = new BumperSceneNode(tr("New Bumper"));
             addNodeToStaticGroup(newNode, ui->viewportWidget->getRenderManager()->bumperMesh);
+        }
+
+        void StageEditorWindow::addBananaSingle() {
+            BananaSceneNode *newNode = new BananaSceneNode(tr("New Banana Single"));
+            addNodeToStaticGroup(newNode, ui->viewportWidget->getRenderManager()->bananaSingleMesh);
+        }
+
+        void StageEditorWindow::addBananaBunch() {
+            BananaSceneNode *newNode = new BananaSceneNode(tr("New Banana Bunch"));
+            newNode->setType(EnumBananaType::BUNCH);
+            addNodeToStaticGroup(newNode, ui->viewportWidget->getRenderManager()->bananaBunchMesh);
         }
     }
 }

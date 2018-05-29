@@ -31,6 +31,11 @@ namespace WS2Common {
                 parseBumperSceneNode(xml, node);
                 if (parent != nullptr) parent->addChild(node);
                 return node;
+            } else if (xml.name() == "node-bananaSceneNode") {
+                BananaSceneNode *node = new BananaSceneNode();
+                parseBananaSceneNode(xml, node);
+                if (parent != nullptr) parent->addChild(node);
+                return node;
             }
 
             return nullptr; //Failed to deserialize
@@ -241,6 +246,46 @@ namespace WS2Common {
                     parseChildren(xml, node);
                 } else {
                     qWarning().noquote() << "Unrecognised tag: node-bumperSceneNode > " + xml.name();
+                }
+            }
+        }
+
+        void parseBananaSceneNode(QXmlStreamReader &xml, BananaSceneNode *node) {
+            while (!(xml.isEndElement() && xml.name() == "node-bananaSceneNode")) {
+                xml.readNext();
+                if (!xml.isStartElement()) continue; //Ignore all end elements
+
+                if (xml.name() == "data") {
+                    while (!(xml.isEndElement() && xml.name() == "data")) {
+                        xml.readNext();
+                        if (!xml.isStartElement()) continue; //Ignore all end elements
+
+                        if (xml.name() == "data-sceneNode") {
+                            parseSceneNodeData(xml, node);
+                        } else if (xml.name() == "data-bananaSceneNode") {
+                            parseBananaSceneNodeData(xml, node);
+                        } else {
+                            qWarning().noquote() << "Unrecognised tag: data > " + xml.name();
+                        }
+                    }
+
+                } else if (xml.name() == "children") {
+                    parseChildren(xml, node);
+                } else {
+                    qWarning().noquote() << "Unrecognised tag: node-bananaSceneNode > " + xml.name();
+                }
+            }
+        }
+
+        void parseBananaSceneNodeData(QXmlStreamReader &xml, BananaSceneNode *node) {
+            while (!(xml.isEndElement() && xml.name() == "data-bananaSceneNode")) {
+                xml.readNext();
+                if (!xml.isStartElement()) continue; //Ignore all end elements
+
+                if (xml.name() == "type") {
+                    node->setType(BananaType::fromString(xml.readElementText()));
+                } else {
+                    qWarning().noquote() << "Unrecognised tag: data-bananaSceneNode > " + xml.name();
                 }
             }
         }

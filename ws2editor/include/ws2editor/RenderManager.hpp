@@ -92,6 +92,8 @@ namespace WS2Editor {
             //TODO: Move global models out of RenderManager
             QVector<WS2Common::Resource::ResourceMesh*> goalMesh;
             QVector<WS2Common::Resource::ResourceMesh*> bumperMesh;
+            QVector<WS2Common::Resource::ResourceMesh*> bananaSingleMesh;
+            QVector<WS2Common::Resource::ResourceMesh*> bananaBunchMesh;
 
         protected:
             //Copied straight from Qt QGL

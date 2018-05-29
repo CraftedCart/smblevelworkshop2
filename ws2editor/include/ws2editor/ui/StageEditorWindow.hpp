@@ -40,7 +40,6 @@ namespace WS2Editor {
 
                 /**
                  * @brief Returns the viewport widget in the stage editor
-                 *
                  * @return The viewport widget
                  */
                 Widget::ViewportWidget* getViewportWidget();
@@ -92,6 +91,8 @@ namespace WS2Editor {
                 void addGoalGreen();
                 void addGoalRed();
                 void addBumper();
+                void addBananaSingle();
+                void addBananaBunch();
         };
     }
 }

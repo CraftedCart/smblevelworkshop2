@@ -20,6 +20,8 @@ namespace WS2Common {
     };
 
     namespace BananaType {
+        WS2COMMON_EXPORT QString toString(EnumBananaType type);
+
         /**
          * @brief Converts a string to an EnumBananaType
          *

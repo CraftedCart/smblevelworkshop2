@@ -45,6 +45,8 @@
         <file>Lang/stageMechanics-en_US.txt</file>
         <file>Models/goal.fbx</file>
         <file>Models/bumper.fbx</file>
+        <file>Models/bananaSingle.fbx</file>
+        <file>Models/bananaBunch.fbx</file>
     </qresource>
 </RCC>
 

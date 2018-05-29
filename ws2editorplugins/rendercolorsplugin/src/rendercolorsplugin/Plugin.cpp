@@ -3,6 +3,7 @@
 #include "ws2editor/rendering/MeshRenderCommand.hpp"
 #include "ws2common/scene/GoalSceneNode.hpp"
 #include "ws2common/scene/BumperSceneNode.hpp"
+#include "ws2common/scene/BananaSceneNode.hpp"
 #include <QDebug>
 
 namespace WS2EditorPlugins {
@@ -45,6 +46,8 @@ namespace WS2EditorPlugins {
                 }
             } else if (const BumperSceneNode *bumper = dynamic_cast<const BumperSceneNode*>(node)) {
                 command->setTint(glm::vec4(1.0f, 0.6f, 0.0f, 1.0f));
+            } else if (const BananaSceneNode *bumper = dynamic_cast<const BananaSceneNode*>(node)) {
+                command->setTint(glm::vec4(1.0f, 0.92f, 0.23f, 1.0f));
             }
         }
 
