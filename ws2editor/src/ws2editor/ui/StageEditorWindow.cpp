@@ -13,6 +13,7 @@
 #include "ws2common/scene/GoalSceneNode.hpp"
 #include "ws2common/scene/BumperSceneNode.hpp"
 #include "ws2common/scene/BananaSceneNode.hpp"
+#include "ws2common/scene/JamabarSceneNode.hpp"
 #include <QFontDatabase>
 #include <Qt>
 #include <QFileDialog>
@@ -73,6 +74,7 @@ namespace WS2Editor {
             connect(ui->actionAddBumper, &QAction::triggered, this, &StageEditorWindow::addBumper);
             connect(ui->actionAddBanana, &QAction::triggered, this, &StageEditorWindow::addBananaSingle);
             connect(ui->actionAddBananaBunch, &QAction::triggered, this, &StageEditorWindow::addBananaBunch);
+            connect(ui->actionAddJamabar, &QAction::triggered, this, &StageEditorWindow::addJamabar);
 
             //Debug menu
             connect(ui->actionClearAllRenderManagerCaches, &QAction::triggered, [this]() {
@@ -227,6 +229,11 @@ namespace WS2Editor {
             BananaSceneNode *newNode = new BananaSceneNode(tr("New Banana Bunch"));
             newNode->setType(EnumBananaType::BUNCH);
             addNodeToStaticGroup(newNode, ui->viewportWidget->getRenderManager()->bananaBunchMesh);
+        }
+
+        void StageEditorWindow::addJamabar() {
+            JamabarSceneNode *newNode = new JamabarSceneNode(tr("New Jamabar"));
+            addNodeToStaticGroup(newNode, ui->viewportWidget->getRenderManager()->jamabarMesh);
         }
     }
 }

@@ -94,6 +94,7 @@ namespace WS2Editor {
             QVector<WS2Common::Resource::ResourceMesh*> bumperMesh;
             QVector<WS2Common::Resource::ResourceMesh*> bananaSingleMesh;
             QVector<WS2Common::Resource::ResourceMesh*> bananaBunchMesh;
+            QVector<WS2Common::Resource::ResourceMesh*> jamabarMesh;
 
         protected:
             //Copied straight from Qt QGL

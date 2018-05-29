@@ -111,6 +111,8 @@ namespace WS2Editor {
         bananaSingleMesh = WS2Common::Model::ModelLoader::loadModel(bananaSingleFile);
         QFile bananaBunchFile(":/Workshop2/Models/bananaBunch.fbx");
         bananaBunchMesh = WS2Common::Model::ModelLoader::loadModel(bananaBunchFile);
+        QFile jamabarFile(":/Workshop2/Models/jamabar.fbx");
+        jamabarMesh = WS2Common::Model::ModelLoader::loadModel(jamabarFile);
 
         checkErrors("After RenderManager::init()");
 

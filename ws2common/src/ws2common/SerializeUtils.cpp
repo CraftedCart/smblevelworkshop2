@@ -36,6 +36,11 @@ namespace WS2Common {
                 parseBananaSceneNode(xml, node);
                 if (parent != nullptr) parent->addChild(node);
                 return node;
+            } else if (xml.name() == "node-jamabarSceneNode") {
+                JamabarSceneNode *node = new JamabarSceneNode();
+                parseJamabarSceneNode(xml, node);
+                if (parent != nullptr) parent->addChild(node);
+                return node;
             }
 
             return nullptr; //Failed to deserialize
@@ -286,6 +291,31 @@ namespace WS2Common {
                     node->setType(BananaType::fromString(xml.readElementText()));
                 } else {
                     qWarning().noquote() << "Unrecognised tag: data-bananaSceneNode > " + xml.name();
+                }
+            }
+        }
+
+        void parseJamabarSceneNode(QXmlStreamReader &xml, JamabarSceneNode *node) {
+            while (!(xml.isEndElement() && xml.name() == "node-jamabarSceneNode")) {
+                xml.readNext();
+                if (!xml.isStartElement()) continue; //Ignore all end elements
+
+                if (xml.name() == "data") {
+                    while (!(xml.isEndElement() && xml.name() == "data")) {
+                        xml.readNext();
+                        if (!xml.isStartElement()) continue; //Ignore all end elements
+
+                        if (xml.name() == "data-sceneNode") {
+                            parseSceneNodeData(xml, node);
+                        } else {
+                            qWarning().noquote() << "Unrecognised tag: data > " + xml.name();
+                        }
+                    }
+
+                } else if (xml.name() == "children") {
+                    parseChildren(xml, node);
+                } else {
+                    qWarning().noquote() << "Unrecognised tag: node-jamabarSceneNode > " + xml.name();
                 }
             }
         }
