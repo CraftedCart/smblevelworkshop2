@@ -5,6 +5,7 @@
 #include "ws2common/scene/BumperSceneNode.hpp"
 #include "ws2common/scene/BananaSceneNode.hpp"
 #include "ws2common/scene/JamabarSceneNode.hpp"
+#include "ws2common/scene/WormholeSceneNode.hpp"
 #include <QDebug>
 
 namespace WS2EditorPlugins {
@@ -45,12 +46,14 @@ namespace WS2EditorPlugins {
                     case EnumGoalType::RED:
                         command->setTint(glm::vec4(0.95f, 0.26f, 0.21f, 1.0f)); break;
                 }
-            } else if (const BumperSceneNode *bumper = dynamic_cast<const BumperSceneNode*>(node)) {
+            } else if (dynamic_cast<const BumperSceneNode*>(node)) {
                 command->setTint(glm::vec4(1.0f, 0.6f, 0.0f, 1.0f));
-            } else if (const BananaSceneNode *bumper = dynamic_cast<const BananaSceneNode*>(node)) {
+            } else if (dynamic_cast<const BananaSceneNode*>(node)) {
                 command->setTint(glm::vec4(1.0f, 0.92f, 0.23f, 1.0f));
-            } else if (const JamabarSceneNode *bumper = dynamic_cast<const JamabarSceneNode*>(node)) {
-                command->setTint(glm::vec4(0.96f, 0.26, 0.21f, 1.0f));
+            } else if (dynamic_cast<const JamabarSceneNode*>(node)) {
+                command->setTint(glm::vec4(0.96f, 0.26f, 0.21f, 1.0f));
+            } else if (dynamic_cast<const WormholeSceneNode*>(node)) {
+                command->setTint(glm::vec4(0.4, 0.23f, 0.72f, 1.0f));
             }
         }
 

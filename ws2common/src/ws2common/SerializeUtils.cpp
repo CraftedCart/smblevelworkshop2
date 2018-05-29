@@ -41,6 +41,11 @@ namespace WS2Common {
                 parseJamabarSceneNode(xml, node);
                 if (parent != nullptr) parent->addChild(node);
                 return node;
+            } else if (xml.name() == "node-wormholeSceneNode") {
+                WormholeSceneNode *node = new WormholeSceneNode();
+                parseWormholeSceneNode(xml, node);
+                if (parent != nullptr) parent->addChild(node);
+                return node;
             }
 
             return nullptr; //Failed to deserialize
@@ -316,6 +321,46 @@ namespace WS2Common {
                     parseChildren(xml, node);
                 } else {
                     qWarning().noquote() << "Unrecognised tag: node-jamabarSceneNode > " + xml.name();
+                }
+            }
+        }
+
+        void parseWormholeSceneNode(QXmlStreamReader &xml, WormholeSceneNode *node) {
+            while (!(xml.isEndElement() && xml.name() == "node-wormholeSceneNode")) {
+                xml.readNext();
+                if (!xml.isStartElement()) continue; //Ignore all end elements
+
+                if (xml.name() == "data") {
+                    while (!(xml.isEndElement() && xml.name() == "data")) {
+                        xml.readNext();
+                        if (!xml.isStartElement()) continue; //Ignore all end elements
+
+                        if (xml.name() == "data-sceneNode") {
+                            parseSceneNodeData(xml, node);
+                        } else if (xml.name() == "data-wormholeSceneNode") {
+                            parseWormholeSceneNodeData(xml, node);
+                        } else {
+                            qWarning().noquote() << "Unrecognised tag: data > " + xml.name();
+                        }
+                    }
+
+                } else if (xml.name() == "children") {
+                    parseChildren(xml, node);
+                } else {
+                    qWarning().noquote() << "Unrecognised tag: node-wormholeSceneNode > " + xml.name();
+                }
+            }
+        }
+
+        void parseWormholeSceneNodeData(QXmlStreamReader &xml, WormholeSceneNode *node) {
+            while (!(xml.isEndElement() && xml.name() == "data-wormholeSceneNode")) {
+                xml.readNext();
+                if (!xml.isStartElement()) continue; //Ignore all end elements
+
+                if (xml.name() == "destinationUuid") {
+                    node->setDestinationUuid(QUuid::fromString(xml.readElementText()));
+                } else {
+                    qWarning().noquote() << "Unrecognised tag: data-wormholeSceneNode > " + xml.name();
                 }
             }
         }

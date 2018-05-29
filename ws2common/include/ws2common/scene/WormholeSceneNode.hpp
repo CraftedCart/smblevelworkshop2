@@ -18,7 +18,12 @@ namespace WS2Common {
                  */
                 QUuid destinationUuid = QUuid();
 
+            protected:
+                virtual void serializeNodeDataXml(QXmlStreamWriter &s) const;
+                virtual const QString getSerializableName() const;
+
             public:
+                WormholeSceneNode() = default;
                 WormholeSceneNode(const QString name);
 
                 /**

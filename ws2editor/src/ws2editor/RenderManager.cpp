@@ -113,6 +113,8 @@ namespace WS2Editor {
         bananaBunchMesh = WS2Common::Model::ModelLoader::loadModel(bananaBunchFile);
         QFile jamabarFile(":/Workshop2/Models/jamabar.fbx");
         jamabarMesh = WS2Common::Model::ModelLoader::loadModel(jamabarFile);
+        QFile wormholeFile(":/Workshop2/Models/wormhole.fbx");
+        wormholeMesh = WS2Common::Model::ModelLoader::loadModel(wormholeFile);
 
         checkErrors("After RenderManager::init()");
 

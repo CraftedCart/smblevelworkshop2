@@ -14,6 +14,7 @@
 #include "ws2common/scene/BumperSceneNode.hpp"
 #include "ws2common/scene/BananaSceneNode.hpp"
 #include "ws2common/scene/JamabarSceneNode.hpp"
+#include "ws2common/scene/WormholeSceneNode.hpp"
 #include <QFontDatabase>
 #include <Qt>
 #include <QFileDialog>
@@ -75,6 +76,7 @@ namespace WS2Editor {
             connect(ui->actionAddBanana, &QAction::triggered, this, &StageEditorWindow::addBananaSingle);
             connect(ui->actionAddBananaBunch, &QAction::triggered, this, &StageEditorWindow::addBananaBunch);
             connect(ui->actionAddJamabar, &QAction::triggered, this, &StageEditorWindow::addJamabar);
+            connect(ui->actionAddWormhole, &QAction::triggered, this, &StageEditorWindow::addWormhole);
 
             //Debug menu
             connect(ui->actionClearAllRenderManagerCaches, &QAction::triggered, [this]() {
@@ -234,6 +236,11 @@ namespace WS2Editor {
         void StageEditorWindow::addJamabar() {
             JamabarSceneNode *newNode = new JamabarSceneNode(tr("New Jamabar"));
             addNodeToStaticGroup(newNode, ui->viewportWidget->getRenderManager()->jamabarMesh);
+        }
+
+        void StageEditorWindow::addWormhole() {
+            WormholeSceneNode *newNode = new WormholeSceneNode(tr("New Wormhole"));
+            addNodeToStaticGroup(newNode, ui->viewportWidget->getRenderManager()->wormholeMesh);
         }
     }
 }

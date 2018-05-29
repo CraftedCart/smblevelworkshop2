@@ -14,6 +14,7 @@
 #include "ws2common/scene/BumperSceneNode.hpp"
 #include "ws2common/scene/BananaSceneNode.hpp"
 #include "ws2common/scene/JamabarSceneNode.hpp"
+#include "ws2common/scene/WormholeSceneNode.hpp"
 #include <glm/glm.hpp>
 #include <QXmlStreamReader>
 #include <QXmlStreamWriter>
@@ -36,6 +37,8 @@ namespace WS2Common {
         WS2COMMON_EXPORT void parseBananaSceneNodeData(QXmlStreamReader &xml, Scene::BananaSceneNode *node);
         WS2COMMON_EXPORT void parseJamabarSceneNode(QXmlStreamReader &xml, Scene::JamabarSceneNode *node);
         //Jamabar scene node has no additional data to parse
+        WS2COMMON_EXPORT void parseWormholeSceneNode(QXmlStreamReader &xml, Scene::WormholeSceneNode *node);
+        WS2COMMON_EXPORT void parseWormholeSceneNodeData(QXmlStreamReader &xml, Scene::WormholeSceneNode *node);
 
         WS2COMMON_EXPORT void parseChildren(QXmlStreamReader &xml, Scene::SceneNode *node);
 

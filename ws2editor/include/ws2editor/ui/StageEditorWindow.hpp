@@ -94,6 +94,7 @@ namespace WS2Editor {
                 void addBananaSingle();
                 void addBananaBunch();
                 void addJamabar();
+                void addWormhole();
         };
     }
 }
