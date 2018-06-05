@@ -8,9 +8,9 @@
 
 #include "ws2editor_export.h"
 #include "ws2editor/widget/ViewportWidget.hpp"
+#include "ws2editor/widget/PropertiesWidget.hpp"
 #include <QMainWindow>
 #include <QLabel>
-#include <QProgressBar>
 
 namespace Ui {
     class WS2EDITOR_EXPORT StageEditorWindow;
@@ -43,6 +43,12 @@ namespace WS2Editor {
                  * @return The viewport widget
                  */
                 Widget::ViewportWidget* getViewportWidget();
+
+                /**
+                 * @brief Returns the properties widget in the stage editor
+                 * @return The properties widget
+                 */
+                Widget::PropertiesWidget* getPropertiesWidget();
 
             public slots:
                 void viewportFrameRendered(qint64 deltaNanoseconds);

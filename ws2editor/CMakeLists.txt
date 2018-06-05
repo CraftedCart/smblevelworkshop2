@@ -62,6 +62,10 @@ set(SOURCE_FILES
     ./src/ws2editor/ui/CommandWidget.cpp
     ./src/ws2editor/widget/ViewportWidget.cpp
     ./src/ws2editor/widget/OutlinerWidget.cpp
+    ./src/ws2editor/widget/PropertiesWidget.cpp
+    ./src/ws2editor/widget/DraggableDoubleSpinBox.cpp
+    ./src/ws2editor/widget/Vec3DraggableSpinBoxes.cpp
+    ./src/ws2editor/widget/CollapsableWidget.cpp
     ./src/ws2editor/MathUtils.cpp
     ./src/ws2editor/resource/ResourceManager.cpp
     ./src/ws2editor/resource/ResourceScene.cpp
@@ -106,6 +110,10 @@ set(HEADER_FILES
     ./include/ws2editor/ui/CommandWidget.hpp
     ./include/ws2editor/widget/ViewportWidget.hpp
     ./include/ws2editor/widget/OutlinerWidget.hpp
+    ./include/ws2editor/widget/PropertiesWidget.hpp
+    ./include/ws2editor/widget/DraggableDoubleSpinBox.hpp
+    ./include/ws2editor/widget/Vec3DraggableSpinBoxes.hpp
+    ./include/ws2editor/widget/CollapsableWidget.hpp
     ./include/ws2editor/EnumCameraNav.hpp
     ./include/ws2editor/MathUtils.hpp
     ./include/ws2editor/resource/ResourceManager.hpp

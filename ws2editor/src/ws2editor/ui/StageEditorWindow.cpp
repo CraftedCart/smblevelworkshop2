@@ -68,7 +68,7 @@ namespace WS2Editor {
             connect(ui->actionAbout, &QAction::triggered, this, &StageEditorWindow::showAbout);
             connect(ui->actionStageIdeaGenerator, &QAction::triggered, this, &StageEditorWindow::showStageIdeaGenerator);
             connect(ui->actionViewPlugins, &QAction::triggered, this, &StageEditorWindow::showPlugins);
-            connect(ui->actionWorkshopDiscord, &QAction::triggered, [](){ QDesktopServices::openUrl(QUrl("https://discord.gg/CEYjvDj")); });
+            connect(ui->actionWorkshopDiscord, &QAction::triggered, []() { QDesktopServices::openUrl(QUrl("https://discord.gg/CEYjvDj")); });
             connect(ui->actionAddGoalBlue, &QAction::triggered, this, &StageEditorWindow::addGoalBlue);
             connect(ui->actionAddGoalGreen, &QAction::triggered, this, &StageEditorWindow::addGoalGreen);
             connect(ui->actionAddGoalRed, &QAction::triggered, this, &StageEditorWindow::addGoalRed);
@@ -93,6 +93,11 @@ namespace WS2Editor {
                     ui->viewportWidget->makeCurrentContext();
                     ui->viewportWidget->getRenderManager()->clearTextureCache();
                     });
+
+            //Properties panel
+            //TODO: This won't survive project/scene changes
+            connect(ProjectManager::getActiveProject()->getScene()->getSelectionManager(), &Scene::SceneSelectionManager::onSelectionChanged,
+                    ui->propertiesWidget, &Widget::PropertiesWidget::updatePropertiesWidget);
         }
 
         StageEditorWindow::~StageEditorWindow() {
@@ -102,6 +107,10 @@ namespace WS2Editor {
 
         Widget::ViewportWidget* StageEditorWindow::getViewportWidget() {
             return ui->viewportWidget;
+        }
+
+        Widget::PropertiesWidget* StageEditorWindow::getPropertiesWidget() {
+            return ui->propertiesWidget;
         }
 
         void StageEditorWindow::viewportFrameRendered(qint64 deltaNanoseconds) {

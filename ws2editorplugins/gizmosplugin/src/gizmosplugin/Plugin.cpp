@@ -212,7 +212,7 @@ namespace WS2EditorPlugins {
                 if (activeGizmoZ) newPos.z = i.value().getPosition().z + deltaPos.z;
 
                 i.key()->getTransform().setPosition(newPos);
-                ModelManager::modelOutliner->onNodeModified(i.key());
+                ModelManager::modelOutliner->nodeModified(i.key());
             }
         }
 

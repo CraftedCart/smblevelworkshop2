@@ -48,7 +48,7 @@ namespace WS2Editor {
 
             for (SceneNode *node : selected) {
                 node->getTransform().translate(delta);
-                UI::ModelManager::modelOutliner->onNodeModified(node);
+                UI::ModelManager::modelOutliner->nodeModified(node);
             }
 
             return CommandReply(true);

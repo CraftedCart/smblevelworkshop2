@@ -122,7 +122,7 @@ namespace WS2Editor {
                  *
                  * @param node The modified node
                  */
-                void onNodeModified(WS2Common::Scene::SceneNode *node);
+                void nodeModified(WS2Common::Scene::SceneNode *node);
 
                 /**
                  * @brief Call this when the selection changes
@@ -142,6 +142,16 @@ namespace WS2Editor {
                  * @param indices A vector of model indices
                  */
                 void onSelectionChanged(QVector<QModelIndex> indices);
+
+                /**
+                 * @brief Emitted when a nodeModified call occurs
+                 *
+                 * If a nodeModified request has been recieved, this signal will be emitted for the node and all its
+                 * children recursively, in reverse order (Children first, before parents)
+                 *
+                 * @param node The modified node
+                 */
+                void onNodeModified(WS2Common::Scene::SceneNode *node);
         };
     }
 }

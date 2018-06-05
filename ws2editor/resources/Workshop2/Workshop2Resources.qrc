@@ -29,6 +29,7 @@
         <file>Icons/Console.png</file>
         <file>Icons/Plugin.png</file>
         <file>Icons/PluginFail.png</file>
+        <file>Icons/ArrowsUpDown.png</file>
         <file>Shaders/stage.vert</file>
         <file>Shaders/stage.frag</file>
         <file>Shaders/unlit.vert</file>

@@ -1,24 +1,27 @@
 /**
  * @file
- * @brief Render colors plugin header
+ * @brief Properties provider plugin header
  *
- * Provides colors to goals, bananas, bumpers, etc. when rendering them in the world
+ * Provides UI widgets for the properties panel
  */
 
-#ifndef SMBLEVELWORKSHOP2_WS2EDITORPLUGINS_RENDERCOLORSPLUGIN_PLUGIN_HPP
-#define SMBLEVELWORKSHOP2_WS2EDITORPLUGINS_RENDERCOLORSPLUGIN_PLUGIN_HPP
+#ifndef SMBLEVELWORKSHOP2_WS2EDITORPLUGINS_PROPERTIESPROVIDERPLUGIN_PLUGIN_HPP
+#define SMBLEVELWORKSHOP2_WS2EDITORPLUGINS_PROPERTIESPROVIDERPLUGIN_PLUGIN_HPP
 
 #include "ws2editor/plugin/IEditorPlugin.hpp"
 #include "ws2editor/ui/StageEditorWindow.hpp"
 
 namespace WS2EditorPlugins {
-    namespace RenderColorsPlugin {
+    namespace PropertiesProviderPlugin {
         class Plugin : public QObject, public WS2Editor::Plugin::IEditorPlugin {
             Q_OBJECT
 
             //Required macros to tell Qt about our plugin
             Q_PLUGIN_METADATA(IID WS2EDITOR_IEDITORPLUGIN_IID)
             Q_INTERFACES(WS2Editor::Plugin::IEditorPlugin)
+
+            private:
+                void createTransformWidgets(QVBoxLayout *layout, QVector<WS2Common::Scene::SceneNode*>& nodes);
 
             public:
                 /**
@@ -37,10 +40,7 @@ namespace WS2EditorPlugins {
                  */
                 void onStageEditorWindowConstructed(WS2Editor::UI::StageEditorWindow &w);
 
-                void onPostEnqueueSceneNodeRenderMesh(
-                        WS2Common::Scene::SceneNode *node,
-                        WS2Editor::Rendering::MeshRenderCommand *command
-                        );
+                void onUpdatePropertiesWidget(QVBoxLayout *layout, QVector<WS2Common::Scene::SceneNode*>& nodes);
         };
     }
 }
