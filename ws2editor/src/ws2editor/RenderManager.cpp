@@ -517,9 +517,9 @@ namespace WS2Editor {
 
         glm::mat4 transform = parentTransform;
         transform = glm::translate(transform, node->getPosition());
-        transform = glm::rotate(transform, node->getRotation().x, glm::vec3(1.0f, 0.0f, 0.0f));
-        transform = glm::rotate(transform, node->getRotation().y, glm::vec3(0.0f, 1.0f, 0.0f));
         transform = glm::rotate(transform, node->getRotation().z, glm::vec3(0.0f, 0.0f, 1.0f));
+        transform = glm::rotate(transform, node->getRotation().y, glm::vec3(0.0f, 1.0f, 0.0f));
+        transform = glm::rotate(transform, node->getRotation().x, glm::vec3(1.0f, 0.0f, 0.0f));
         transform = glm::scale(transform, node->getScale());
 
         //Check if this is a renderable object, and enqueue it for rendering if so

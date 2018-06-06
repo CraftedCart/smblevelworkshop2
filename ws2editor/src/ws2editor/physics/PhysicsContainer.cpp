@@ -1,6 +1,6 @@
 #include "ws2editor/physics/PhysicsContainer.hpp"
 #include "ws2editor/MathUtils.hpp"
-#include <glm/gtc/quaternion.hpp>
+#include "ws2common/MathUtils.hpp"
 
 namespace WS2Editor {
     namespace Physics {
@@ -12,7 +12,7 @@ namespace WS2Editor {
                 SceneNode *node,
                 const QVector<ResourceMesh*> meshes,
                 const Transform &transform) {
-            glm::quat rotQuat = glm::quat(transform.getRotation());
+            glm::quat rotQuat = MathUtils::eulerZyxToGlmQuat(transform.getRotation());
 
             //Construct mesh collision shape
             btTriangleMesh *triMesh = new btTriangleMesh();
@@ -66,7 +66,8 @@ namespace WS2Editor {
         }
 
         void PhysicsContainer::updateTransform(Transform &transform) {
-            glm::quat rotQuat = glm::quat(transform.getRotation());
+            glm::quat rotQuat = MathUtils::eulerZyxToGlmQuat(transform.getRotation());
+
             btTransform bulletTransform(
                     btQuaternion(rotQuat.x, rotQuat.y, rotQuat.z, rotQuat.w),
                     btVector3(MathUtils::toBtVector3(transform.getPosition()))
