@@ -43,6 +43,10 @@ namespace WS2Editor {
 
             connect(xSpinBox, QOverload<double>::of(&DraggableDoubleSpinBox::valueChanged),
                     this, &Vec3DraggableSpinBoxes::onValueChanged);
+            connect(ySpinBox, QOverload<double>::of(&DraggableDoubleSpinBox::valueChanged),
+                    this, &Vec3DraggableSpinBoxes::onValueChanged);
+            connect(zSpinBox, QOverload<double>::of(&DraggableDoubleSpinBox::valueChanged),
+                    this, &Vec3DraggableSpinBoxes::onValueChanged);
         }
 
         void Vec3DraggableSpinBoxes::setValue(glm::vec3 &value) {

@@ -40,7 +40,7 @@ namespace WS2EditorPlugins {
                  */
                 void onStageEditorWindowConstructed(WS2Editor::UI::StageEditorWindow &w);
 
-                void onUpdatePropertiesWidget(QVBoxLayout *layout, QVector<WS2Common::Scene::SceneNode*>& nodes);
+                void onUpdatePropertiesWidget(QVBoxLayout *layout, QVector<WS2Common::Scene::SceneNode*> &nodes);
         };
     }
 }
