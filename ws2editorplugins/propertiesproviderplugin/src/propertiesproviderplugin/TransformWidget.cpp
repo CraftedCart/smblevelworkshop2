@@ -26,6 +26,7 @@ namespace WS2EditorPlugins {
 
             sectionLayout->addWidget(new QLabel(tr("Rotation")));
             rotSpinBoxes = new Vec3DraggableSpinBoxes();
+            rotSpinBoxes->setSuffix(tr("°"));
             sectionLayout->addWidget(rotSpinBoxes);
 
             sectionLayout->addWidget(new QLabel(tr("Scale")));
@@ -64,7 +65,8 @@ namespace WS2EditorPlugins {
             prevPos = avgPosition;
             posSpinBoxes->setValue(avgPosition);
             prevRot = avgRotation;
-            rotSpinBoxes->setValue(avgRotation);
+            glm::vec3 avgRotationDeg = glm::degrees(avgRotation);
+            rotSpinBoxes->setValue(avgRotationDeg);
             prevScl = avgScale;
             sclSpinBoxes->setValue(avgScale);
         }
@@ -88,7 +90,7 @@ namespace WS2EditorPlugins {
 
         void TransformWidget::onRotModified(glm::vec3 newValue) {
             //Get the delta rotation
-            glm::vec3 delta = newValue - prevRot;
+            glm::vec3 delta = glm::radians(newValue) - prevRot;
 
             //Add the delta to each node
             for (SceneNode *node : ProjectManager::getActiveProject()->getScene()->getSelectionManager()->getTopmostSelectedObjects()) {
@@ -96,7 +98,7 @@ namespace WS2EditorPlugins {
                 ModelManager::modelOutliner->nodeModified(node);
             }
 
-            prevRot = newValue;
+            prevRot = glm::radians(newValue);
         }
 
         void TransformWidget::onSclModified(glm::vec3 newValue) {

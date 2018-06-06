@@ -29,6 +29,9 @@ namespace WS2Editor {
                 void setValue(glm::vec3 &value);
                 glm::vec3 getValue();
 
+                void setPrefix(const QString &prefix);
+                void setSuffix(const QString &suffix);
+
             signals:
                 void valueChanged(glm::vec3 value);
         };

@@ -63,6 +63,18 @@ namespace WS2Editor {
                     );
         }
 
+        void Vec3DraggableSpinBoxes::setPrefix(const QString &prefix) {
+            xSpinBox->setPrefix(prefix);
+            ySpinBox->setPrefix(prefix);
+            zSpinBox->setPrefix(prefix);
+        }
+
+        void Vec3DraggableSpinBoxes::setSuffix(const QString &suffix) {
+            xSpinBox->setSuffix(suffix);
+            ySpinBox->setSuffix(suffix);
+            zSpinBox->setSuffix(suffix);
+        }
+
         void Vec3DraggableSpinBoxes::onValueChanged() {
             emit valueChanged(glm::vec3(
                         xSpinBox->value(),
