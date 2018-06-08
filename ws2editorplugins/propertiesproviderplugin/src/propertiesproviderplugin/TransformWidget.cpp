@@ -1,6 +1,11 @@
 #include "propertiesproviderplugin/TransformWidget.hpp"
 #include "ws2editor/ui/ModelManager.hpp"
 #include "ws2editor/project/ProjectManager.hpp"
+#include "ws2common/scene/BumperSceneNode.hpp"
+#include "ws2common/scene/JamabarSceneNode.hpp"
+#include "ws2common/scene/BananaSceneNode.hpp"
+#include "ws2common/scene/FalloutVolumeSceneNode.hpp"
+#include "ws2common/scene/MeshSceneNode.hpp" //TODO: Remove this include when we have a GX exporter, probably
 #include <QLabel>
 
 namespace WS2EditorPlugins {
@@ -69,6 +74,34 @@ namespace WS2EditorPlugins {
             rotSpinBoxes->setValue(avgRotationDeg);
             prevScl = avgScale;
             sclSpinBoxes->setValue(avgScale);
+
+            //Check whether we should enable rot/scl spinboxes
+            bool canMove = true;
+            bool canRotate = true;
+            bool canScale = true;
+            for (SceneNode *node : ProjectManager::getActiveProject()->getScene()->getSelectionManager()->getSelectedObjects()) {
+                //Blacklist bananas from rotating
+                if (dynamic_cast<BananaSceneNode*>(node)) canRotate = false;
+
+                //Whitelist bumpers/jamabars/fallout volumes for scaling
+                if (!(
+                            dynamic_cast<BumperSceneNode*>(node) ||
+                            dynamic_cast<JamabarSceneNode*>(node) ||
+                            dynamic_cast<FalloutVolumeSceneNode*>(node))) {
+                    canScale = false;
+                }
+
+                //Also while we don't have a GX exporter yet, blacklist models from everything
+                if (dynamic_cast<MeshSceneNode*>(node)) {
+                    canMove = false;
+                    canRotate = false;
+                    canScale = false;
+                }
+            }
+
+            posSpinBoxes->setEnabled(canMove);
+            rotSpinBoxes->setEnabled(canRotate);
+            sclSpinBoxes->setEnabled(canScale);
         }
 
         void TransformWidget::onNodeModified(SceneNode *node) {

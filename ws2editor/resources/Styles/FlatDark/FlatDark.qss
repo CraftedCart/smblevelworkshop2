@@ -225,6 +225,10 @@ QLineEdit, QTextEdit, QSpinBox, QDoubleSpinBox, QComboBox {
     border: none;
 }
 
+QSpinBox:disabled, QDoubleSpinBox:disabled {
+    color: #80FFFFFF;
+}
+
 QSpinBox::up-button, QDoubleSpinBox::up-button {
     subcontrol-origin: border;
     subcontrol-position: top right;
@@ -295,16 +299,28 @@ QComboBox::down-arrow {
     max-width: 4px;
 }
 
+#xColorMarkerWidget:disabled {
+    background: #80F44336;
+}
+
 #yColorMarkerWidget {
     background: #4CAF50;
     min-width: 4px;
     max-width: 4px;
 }
 
+#yColorMarkerWidget:disabled {
+    background: #804CAF50;
+}
+
 #zColorMarkerWidget {
     background: #2196F3;
     min-width: 4px;
     max-width: 4px;
+}
+
+#zColorMarkerWidget:disabled {
+    background: #802196F3;
 }
 
 /* vim: set syntax=css: */
