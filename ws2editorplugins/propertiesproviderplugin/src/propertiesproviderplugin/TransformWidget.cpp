@@ -25,6 +25,12 @@ namespace WS2EditorPlugins {
             setContentLayout(*sectionLayout);
 
             //Create widgets
+            QHBoxLayout *nameLayout = new QHBoxLayout();
+            sectionLayout->addLayout(nameLayout);
+            nameLayout->addWidget(new QLabel(tr("Name")));
+            nameLineEdit = new QLineEdit();
+            nameLayout->addWidget(nameLineEdit);
+
             sectionLayout->addWidget(new QLabel(tr("Position")));
             posSpinBoxes = new Vec3DraggableSpinBoxes();
             sectionLayout->addWidget(posSpinBoxes);
@@ -42,12 +48,25 @@ namespace WS2EditorPlugins {
 
             connect(ModelManager::modelOutliner, &ModelOutliner::onNodeModified, this, &TransformWidget::onNodeModified);
 
+            connect(nameLineEdit, &QLineEdit::textEdited, this, &TransformWidget::onNameModified);
             connect(posSpinBoxes, &Vec3DraggableSpinBoxes::valueChanged, this, &TransformWidget::onPosModified);
             connect(rotSpinBoxes, &Vec3DraggableSpinBoxes::valueChanged, this, &TransformWidget::onRotModified);
             connect(sclSpinBoxes, &Vec3DraggableSpinBoxes::valueChanged, this, &TransformWidget::onSclModified);
         }
 
         void TransformWidget::updateValues() {
+            //Name
+            if (selectedNodes.size() > 1) {
+                nameLineEdit->setText(tr("[Multiple values]"));
+                nameLineEdit->setReadOnly(true);
+            } else {
+                QString name = selectedNodes.at(0)->getName();
+                //Only set if it differs from the current value so we don't jump the cursor to the end while typing
+                if (nameLineEdit->text() != name) nameLineEdit->setText(name);
+                nameLineEdit->setReadOnly(false);
+            }
+
+            //Transforms
             //Average out transforms
             int numTransforms = 0;
             glm::vec3 avgPosition = glm::vec3(0.0f);
@@ -104,6 +123,13 @@ namespace WS2EditorPlugins {
 
         void TransformWidget::onNodeModified(SceneNode *node) {
             if (selectedNodes.contains(node)) updateValues();
+        }
+
+        void TransformWidget::onNameModified(const QString &newName) {
+            for (SceneNode *node : selectedNodes) {
+                node->setName(newName);
+                ModelManager::modelOutliner->nodeModified(node);
+            }
         }
 
         void TransformWidget::onPosModified(glm::vec3 newValue) {

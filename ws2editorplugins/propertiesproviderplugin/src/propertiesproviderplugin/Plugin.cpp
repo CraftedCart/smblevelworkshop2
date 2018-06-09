@@ -42,7 +42,7 @@ namespace WS2EditorPlugins {
         }
 
         void Plugin::createTransformWidgets(QVBoxLayout *layout, QVector<SceneNode*> &nodes) {
-            TransformWidget *w = new TransformWidget(nodes, tr("Transform"));
+            TransformWidget *w = new TransformWidget(nodes, tr("Node"));
             layout->addWidget(w);
 
             w->toggleContentShown(true); //Default to visible

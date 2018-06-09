@@ -9,6 +9,7 @@
 #include "ws2editor/widget/CollapsableWidget.hpp"
 #include "ws2editor/widget/Vec3DraggableSpinBoxes.hpp"
 #include "ws2common/scene/SceneNode.hpp"
+#include <QLineEdit>
 #include <QVector>
 
 namespace WS2EditorPlugins {
@@ -18,6 +19,8 @@ namespace WS2EditorPlugins {
 
             protected:
                 QVector<WS2Common::Scene::SceneNode*> selectedNodes;
+
+                QLineEdit *nameLineEdit;
 
                 glm::vec3 prevPos;
                 WS2Editor::Widget::Vec3DraggableSpinBoxes *posSpinBoxes;
@@ -34,6 +37,7 @@ namespace WS2EditorPlugins {
 
             public slots:
                 void onNodeModified(WS2Common::Scene::SceneNode *node);
+                void onNameModified(const QString &newName);
                 void onPosModified(glm::vec3 newValue);
                 void onRotModified(glm::vec3 newValue);
                 void onSclModified(glm::vec3 newValue);

@@ -225,7 +225,7 @@ QLineEdit, QTextEdit, QSpinBox, QDoubleSpinBox, QComboBox {
     border: none;
 }
 
-QSpinBox:disabled, QDoubleSpinBox:disabled {
+QLineEdit:disabled, QLineEdit:read-only, QSpinBox:disabled, QDoubleSpinBox:disabled, QComboBox:disabled {
     color: #80FFFFFF;
 }
 
