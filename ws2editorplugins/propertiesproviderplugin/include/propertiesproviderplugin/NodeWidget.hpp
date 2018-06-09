@@ -21,6 +21,7 @@ namespace WS2EditorPlugins {
                 QVector<WS2Common::Scene::SceneNode*> selectedNodes;
 
                 QLineEdit *nameLineEdit;
+                QLineEdit *uuidLineEdit;
 
                 glm::vec3 prevPos;
                 WS2Editor::Widget::Vec3DraggableSpinBoxes *posSpinBoxes;

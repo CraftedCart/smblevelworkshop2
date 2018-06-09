@@ -26,6 +26,7 @@ namespace WS2Editor {
 
             //Let the entire widget grow and shrink with its content
             toggleAnimation.addAnimation(new QPropertyAnimation(this, "maximumHeight"));
+            toggleAnimation.addAnimation(new QPropertyAnimation(&contentArea, "minimumHeight"));
             toggleAnimation.addAnimation(new QPropertyAnimation(&contentArea, "maximumHeight"));
 
             //Don't waste space
@@ -49,7 +50,7 @@ namespace WS2Editor {
 
             //Fetch the current and target heights
             const int collapsedHeight = sizeHint().height() - contentArea.height();
-            const int contentHeight = contentArea.layout()->sizeHint().height();
+            const int contentHeight = contentArea.layout()->sizeHint().height() + contentArea.contentsMargins().top() + contentArea.contentsMargins().bottom();
 
             //Setup all the animations
             QPropertyAnimation *spoilerAnimation = static_cast<QPropertyAnimation*>(toggleAnimation.animationAt(0));
@@ -57,8 +58,13 @@ namespace WS2Editor {
             spoilerAnimation->setStartValue(collapsedHeight);
             spoilerAnimation->setEndValue(collapsedHeight + contentHeight);
 
-            //Setup the contentArea maximumHeight animation
+            //Setup the contentArea minimumHeight animation
             QPropertyAnimation *contentAnimation = static_cast<QPropertyAnimation*>(toggleAnimation.animationAt(1));
+            contentAnimation->setDuration(animationDuration);
+            contentAnimation->setStartValue(0);
+            contentAnimation->setEndValue(contentHeight);
+            //Setup the contentArea maximumHeight animation
+            contentAnimation = static_cast<QPropertyAnimation*>(toggleAnimation.animationAt(2));
             contentAnimation->setDuration(animationDuration);
             contentAnimation->setStartValue(0);
             contentAnimation->setEndValue(contentHeight);

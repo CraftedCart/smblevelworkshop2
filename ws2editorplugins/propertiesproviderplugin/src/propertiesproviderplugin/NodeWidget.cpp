@@ -31,6 +31,13 @@ namespace WS2EditorPlugins {
             nameLineEdit = new QLineEdit();
             nameLayout->addWidget(nameLineEdit);
 
+            QHBoxLayout *uuidLayout = new QHBoxLayout();
+            sectionLayout->addLayout(uuidLayout);
+            uuidLayout->addWidget(new QLabel(tr("UUID")));
+            uuidLineEdit = new QLineEdit();
+            uuidLineEdit->setReadOnly(true);
+            uuidLayout->addWidget(uuidLineEdit);
+
             sectionLayout->addWidget(new QLabel(tr("Position")));
             posSpinBoxes = new Vec3DraggableSpinBoxes();
             sectionLayout->addWidget(posSpinBoxes);
@@ -64,6 +71,13 @@ namespace WS2EditorPlugins {
                 //Only set if it differs from the current value so we don't jump the cursor to the end while typing
                 if (nameLineEdit->text() != name) nameLineEdit->setText(name);
                 nameLineEdit->setReadOnly(false);
+            }
+
+            //UUID
+            if (selectedNodes.size() > 1) {
+                uuidLineEdit->setText(tr("[Multiple values]"));
+            } else {
+                uuidLineEdit->setText(selectedNodes.at(0)->getUuid().toString());
             }
 
             //Transforms
