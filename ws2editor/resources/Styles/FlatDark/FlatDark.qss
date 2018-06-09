@@ -267,7 +267,7 @@ QComboBox::down-arrow {
 /* Less generic stuff */
 
 #collapsableWidgetToggleButton {
-    background: #616161;
+    background: #424242;
     padding: 0;
     margin-top: 2px;
     margin-left: 0;
@@ -285,8 +285,16 @@ QComboBox::down-arrow {
     background: #757575;
 }
 
+#collapsableWidgetToggleButton:checked {
+    border-left: 4px solid #2196F3;
+}
+
 #collapsableWidgetContent {
-    border-bottom: 2px solid #424242;
+    /*border-left: 4px solid #2196F3;*/
+    border-left-width: 4px;
+    border-left-style: solid;
+    border-left-color: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1, stop: 0 #2196F3, stop: 0.1 #802196F3);
+    /*border-bottom: 2px solid #424242;*/
 
     padding: 4px;
 }
