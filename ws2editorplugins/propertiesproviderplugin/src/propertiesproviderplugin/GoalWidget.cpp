@@ -48,11 +48,7 @@ namespace WS2EditorPlugins {
 
             updateValues();
 
-            //Set the object reference to posSpinBoxes so the connection is destroyed when the posSpinBoxes is deleted
-            //(Which happens when the selection is changed, as the spin boxes are recreated)
             connect(ModelManager::modelOutliner, &ModelOutliner::onNodeModified, this, &GoalWidget::onNodeModified);
-
-            //connect(posSpinBoxes, &Vec3DraggableSpinBoxes::valueChanged, this, &TransformWidget::onTypeModified);
         }
 
         void GoalWidget::updateValues() {

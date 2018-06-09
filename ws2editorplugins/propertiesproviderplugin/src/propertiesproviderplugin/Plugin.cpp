@@ -1,8 +1,8 @@
 #include "propertiesproviderplugin/Plugin.hpp"
 #include "propertiesproviderplugin/TransformWidget.hpp"
 #include "propertiesproviderplugin/GoalWidget.hpp"
+#include "propertiesproviderplugin/BananaWidget.hpp"
 #include "ws2editor/WS2EditorInstance.hpp"
-#include "ws2common/scene/GoalSceneNode.hpp"
 #include <QVBoxLayout>
 #include <QDebug>
 
@@ -25,6 +25,8 @@ namespace WS2EditorPlugins {
         }
 
         void Plugin::onStageEditorWindowConstructed(UI::StageEditorWindow &w) {
+            stageEditorWindow = &w;
+
             connect(w.getPropertiesWidget(), &PropertiesWidget::onUpdatePropertiesWidget,
                     this, &Plugin::onUpdatePropertiesWidget,
                     Qt::DirectConnection);
@@ -36,6 +38,7 @@ namespace WS2EditorPlugins {
             //Create widgets
             createTransformWidgets(layout, nodes);
             createGoalWidgets(layout, nodes);
+            createBananaWidgets(layout, nodes);
         }
 
         void Plugin::createTransformWidgets(QVBoxLayout *layout, QVector<SceneNode*> &nodes) {
@@ -57,6 +60,23 @@ namespace WS2EditorPlugins {
             if (goals.size() == 0) return;
 
             GoalWidget *w = new GoalWidget(goals, tr("Goal"));
+            layout->addWidget(w);
+
+            w->toggleContentShown(true); //Default to visible
+        }
+
+        void Plugin::createBananaWidgets(QVBoxLayout *layout, QVector<SceneNode*> &nodes) {
+            //Fetch goals
+            QVector<BananaSceneNode*> bananas;
+            for (SceneNode *node : nodes) {
+                if (BananaSceneNode *banana = dynamic_cast<BananaSceneNode*>(node)) {
+                    bananas.append(banana);
+                }
+            }
+
+            if (bananas.size() == 0) return;
+
+            BananaWidget *w = new BananaWidget(bananas, stageEditorWindow->getViewportWidget()->getRenderManager(), tr("Banana"));
             layout->addWidget(w);
 
             w->toggleContentShown(true); //Default to visible

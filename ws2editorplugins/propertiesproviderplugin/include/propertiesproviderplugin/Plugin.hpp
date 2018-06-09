@@ -21,8 +21,12 @@ namespace WS2EditorPlugins {
             Q_INTERFACES(WS2Editor::Plugin::IEditorPlugin)
 
             private:
+                WS2Editor::UI::StageEditorWindow *stageEditorWindow;
+
+            private:
                 void createTransformWidgets(QVBoxLayout *layout, QVector<WS2Common::Scene::SceneNode*>& nodes);
                 void createGoalWidgets(QVBoxLayout *layout, QVector<WS2Common::Scene::SceneNode*>& nodes);
+                void createBananaWidgets(QVBoxLayout *layout, QVector<WS2Common::Scene::SceneNode*>& nodes);
 
             public:
                 /**
