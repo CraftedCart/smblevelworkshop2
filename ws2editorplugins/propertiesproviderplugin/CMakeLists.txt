@@ -24,14 +24,14 @@ include_directories(${CMAKE_BINARY_DIR})
 
 set(SOURCE_FILES
     ./src/propertiesproviderplugin/Plugin.cpp
-    ./src/propertiesproviderplugin/TransformWidget.cpp
+    ./src/propertiesproviderplugin/NodeWidget.cpp
     ./src/propertiesproviderplugin/GoalWidget.cpp
     ./src/propertiesproviderplugin/BananaWidget.cpp
     )
 
 set(HEADER_FILES
     ./include/propertiesproviderplugin/Plugin.hpp
-    ./include/propertiesproviderplugin/TransformWidget.hpp
+    ./include/propertiesproviderplugin/NodeWidget.hpp
     ./include/propertiesproviderplugin/GoalWidget.hpp
     ./include/propertiesproviderplugin/BananaWidget.hpp
     )

@@ -1,5 +1,5 @@
 #include "propertiesproviderplugin/Plugin.hpp"
-#include "propertiesproviderplugin/TransformWidget.hpp"
+#include "propertiesproviderplugin/NodeWidget.hpp"
 #include "propertiesproviderplugin/GoalWidget.hpp"
 #include "propertiesproviderplugin/BananaWidget.hpp"
 #include "ws2editor/WS2EditorInstance.hpp"
@@ -36,13 +36,13 @@ namespace WS2EditorPlugins {
             if (nodes.isEmpty()) return;
 
             //Create widgets
-            createTransformWidgets(layout, nodes);
+            createNodeWidgets(layout, nodes);
             createGoalWidgets(layout, nodes);
             createBananaWidgets(layout, nodes);
         }
 
-        void Plugin::createTransformWidgets(QVBoxLayout *layout, QVector<SceneNode*> &nodes) {
-            TransformWidget *w = new TransformWidget(nodes, tr("Node"));
+        void Plugin::createNodeWidgets(QVBoxLayout *layout, QVector<SceneNode*> &nodes) {
+            NodeWidget *w = new NodeWidget(nodes, tr("Node"));
             layout->addWidget(w);
 
             w->toggleContentShown(true); //Default to visible

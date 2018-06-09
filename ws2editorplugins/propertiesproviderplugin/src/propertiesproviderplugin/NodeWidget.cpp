@@ -1,4 +1,4 @@
-#include "propertiesproviderplugin/TransformWidget.hpp"
+#include "propertiesproviderplugin/NodeWidget.hpp"
 #include "ws2editor/ui/ModelManager.hpp"
 #include "ws2editor/project/ProjectManager.hpp"
 #include "ws2common/scene/BumperSceneNode.hpp"
@@ -15,7 +15,7 @@ namespace WS2EditorPlugins {
         using namespace WS2Editor::Project;
         using namespace WS2Common::Scene;
 
-        TransformWidget::TransformWidget(QVector<SceneNode*> &nodes, QString label, QWidget *parent) :
+        NodeWidget::NodeWidget(QVector<SceneNode*> &nodes, QString label, QWidget *parent) :
             CollapsableWidget(label, 100, parent)
         {
             selectedNodes = nodes;
@@ -46,15 +46,15 @@ namespace WS2EditorPlugins {
 
             updateValues();
 
-            connect(ModelManager::modelOutliner, &ModelOutliner::onNodeModified, this, &TransformWidget::onNodeModified);
+            connect(ModelManager::modelOutliner, &ModelOutliner::onNodeModified, this, &NodeWidget::onNodeModified);
 
-            connect(nameLineEdit, &QLineEdit::textEdited, this, &TransformWidget::onNameModified);
-            connect(posSpinBoxes, &Vec3DraggableSpinBoxes::valueChanged, this, &TransformWidget::onPosModified);
-            connect(rotSpinBoxes, &Vec3DraggableSpinBoxes::valueChanged, this, &TransformWidget::onRotModified);
-            connect(sclSpinBoxes, &Vec3DraggableSpinBoxes::valueChanged, this, &TransformWidget::onSclModified);
+            connect(nameLineEdit, &QLineEdit::textEdited, this, &NodeWidget::onNameModified);
+            connect(posSpinBoxes, &Vec3DraggableSpinBoxes::valueChanged, this, &NodeWidget::onPosModified);
+            connect(rotSpinBoxes, &Vec3DraggableSpinBoxes::valueChanged, this, &NodeWidget::onRotModified);
+            connect(sclSpinBoxes, &Vec3DraggableSpinBoxes::valueChanged, this, &NodeWidget::onSclModified);
         }
 
-        void TransformWidget::updateValues() {
+        void NodeWidget::updateValues() {
             //Name
             if (selectedNodes.size() > 1) {
                 nameLineEdit->setText(tr("[Multiple values]"));
@@ -121,18 +121,18 @@ namespace WS2EditorPlugins {
             sclSpinBoxes->setEnabled(canScale);
         }
 
-        void TransformWidget::onNodeModified(SceneNode *node) {
+        void NodeWidget::onNodeModified(SceneNode *node) {
             if (selectedNodes.contains(node)) updateValues();
         }
 
-        void TransformWidget::onNameModified(const QString &newName) {
+        void NodeWidget::onNameModified(const QString &newName) {
             for (SceneNode *node : selectedNodes) {
                 node->setName(newName);
                 ModelManager::modelOutliner->nodeModified(node);
             }
         }
 
-        void TransformWidget::onPosModified(glm::vec3 newValue) {
+        void NodeWidget::onPosModified(glm::vec3 newValue) {
             //Get the delta position
             glm::vec3 delta = newValue - prevPos;
 
@@ -145,7 +145,7 @@ namespace WS2EditorPlugins {
             prevPos = newValue;
         }
 
-        void TransformWidget::onRotModified(glm::vec3 newValue) {
+        void NodeWidget::onRotModified(glm::vec3 newValue) {
             //Get the delta rotation
             glm::vec3 delta = glm::radians(newValue) - prevRot;
 
@@ -158,7 +158,7 @@ namespace WS2EditorPlugins {
             prevRot = glm::radians(newValue);
         }
 
-        void TransformWidget::onSclModified(glm::vec3 newValue) {
+        void NodeWidget::onSclModified(glm::vec3 newValue) {
             //Get the delta scale
             glm::vec3 delta = newValue - prevScl;
 

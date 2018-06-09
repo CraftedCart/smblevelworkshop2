@@ -1,10 +1,10 @@
 /**
  * @file
- * @brief Transform widget for the properties panel
+ * @brief Node widget for the properties panel
  */
 
-#ifndef SMBLEVELWORKSHOP2_WS2EDITORPLUGINS_PROPERTIESPROVIDERPLUGIN_TRANSFORMWIDGET_HPP
-#define SMBLEVELWORKSHOP2_WS2EDITORPLUGINS_PROPERTIESPROVIDERPLUGIN_TRANSFORMWIDGET_HPP
+#ifndef SMBLEVELWORKSHOP2_WS2EDITORPLUGINS_PROPERTIESPROVIDERPLUGIN_NODEWIDGET_HPP
+#define SMBLEVELWORKSHOP2_WS2EDITORPLUGINS_PROPERTIESPROVIDERPLUGIN_NODEWIDGET_HPP
 
 #include "ws2editor/widget/CollapsableWidget.hpp"
 #include "ws2editor/widget/Vec3DraggableSpinBoxes.hpp"
@@ -14,7 +14,7 @@
 
 namespace WS2EditorPlugins {
     namespace PropertiesProviderPlugin {
-        class TransformWidget : public WS2Editor::Widget::CollapsableWidget {
+        class NodeWidget : public WS2Editor::Widget::CollapsableWidget {
             Q_OBJECT
 
             protected:
@@ -33,7 +33,7 @@ namespace WS2EditorPlugins {
                 void updateValues();
 
             public:
-                TransformWidget(QVector<WS2Common::Scene::SceneNode*> &nodes, QString label = "", QWidget *parent = nullptr);
+                NodeWidget(QVector<WS2Common::Scene::SceneNode*> &nodes, QString label = "", QWidget *parent = nullptr);
 
             public slots:
                 void onNodeModified(WS2Common::Scene::SceneNode *node);

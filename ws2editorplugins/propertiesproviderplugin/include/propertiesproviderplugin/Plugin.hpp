@@ -24,7 +24,7 @@ namespace WS2EditorPlugins {
                 WS2Editor::UI::StageEditorWindow *stageEditorWindow;
 
             private:
-                void createTransformWidgets(QVBoxLayout *layout, QVector<WS2Common::Scene::SceneNode*>& nodes);
+                void createNodeWidgets(QVBoxLayout *layout, QVector<WS2Common::Scene::SceneNode*>& nodes);
                 void createGoalWidgets(QVBoxLayout *layout, QVector<WS2Common::Scene::SceneNode*>& nodes);
                 void createBananaWidgets(QVBoxLayout *layout, QVector<WS2Common::Scene::SceneNode*>& nodes);
 
