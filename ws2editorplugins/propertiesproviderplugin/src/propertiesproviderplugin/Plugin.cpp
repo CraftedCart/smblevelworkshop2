@@ -1,6 +1,8 @@
 #include "propertiesproviderplugin/Plugin.hpp"
 #include "propertiesproviderplugin/TransformWidget.hpp"
+#include "propertiesproviderplugin/GoalWidget.hpp"
 #include "ws2editor/WS2EditorInstance.hpp"
+#include "ws2common/scene/GoalSceneNode.hpp"
 #include <QVBoxLayout>
 #include <QDebug>
 
@@ -33,10 +35,28 @@ namespace WS2EditorPlugins {
 
             //Create widgets
             createTransformWidgets(layout, nodes);
+            createGoalWidgets(layout, nodes);
         }
 
         void Plugin::createTransformWidgets(QVBoxLayout *layout, QVector<SceneNode*> &nodes) {
             TransformWidget *w = new TransformWidget(nodes, tr("Transform"));
+            layout->addWidget(w);
+
+            w->toggleContentShown(true); //Default to visible
+        }
+
+        void Plugin::createGoalWidgets(QVBoxLayout *layout, QVector<SceneNode*> &nodes) {
+            //Fetch goals
+            QVector<GoalSceneNode*> goals;
+            for (SceneNode *node : nodes) {
+                if (GoalSceneNode *goal = dynamic_cast<GoalSceneNode*>(node)) {
+                    goals.append(goal);
+                }
+            }
+
+            if (goals.size() == 0) return;
+
+            GoalWidget *w = new GoalWidget(goals, tr("Goal"));
             layout->addWidget(w);
 
             w->toggleContentShown(true); //Default to visible

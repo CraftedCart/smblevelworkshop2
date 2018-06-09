@@ -22,6 +22,7 @@ namespace WS2EditorPlugins {
 
             private:
                 void createTransformWidgets(QVBoxLayout *layout, QVector<WS2Common::Scene::SceneNode*>& nodes);
+                void createGoalWidgets(QVBoxLayout *layout, QVector<WS2Common::Scene::SceneNode*>& nodes);
 
             public:
                 /**

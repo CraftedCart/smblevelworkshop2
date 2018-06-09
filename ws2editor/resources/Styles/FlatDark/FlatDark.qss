@@ -138,14 +138,12 @@ QScrollBar:vertical {
 QScrollBar::handle:horizontal {
     background: #9E9E9E;
     min-width: 20px;
-    border-radius: 0;
     margin: 0;
 }
 
 QScrollBar::handle:vertical {
     background: #9E9E9E;
     min-height: 20px;
-    border-radius: 0;
     margin: 0;
 }
 
@@ -167,7 +165,6 @@ QToolButton {
     background: none;
     padding: 2px;
     margin: 2px;
-    border-radius: 2px;
     border: none;
 }
 
@@ -175,18 +172,21 @@ QPushButton {
     background: #424242;
     padding: 4px;
     min-width: 72px;
-    border-radius: 2px;
     border: none;
 }
 
 QPushButton:hover, QPushButton:focus,
 QToolButton:hover, QToolButton:focus {
-    background: #2196F3;
+    background: #1565C0; /* Material blue 800 */
 }
 
 QPushButton:pressed,
 QToolButton:pressed {
     background: #616161;
+}
+
+QPushButton:checked {
+    border-left: 4px solid #2196F3;
 }
 
 QToolBar::separator:horizontal {
@@ -273,12 +273,11 @@ QComboBox::down-arrow {
     margin-left: 0;
     margin-bottom: 0;
     margin-right: 0;
-    border-radius: 0;
 }
 
 #collapsableWidgetToggleButton:hover,
 #collapsableWidgetToggleButton:focus {
-    background: #2196F3;
+    background: #1565C0; /* Material blue 800 */
 }
 
 #collapsableWidgetToggleButton:pressed {

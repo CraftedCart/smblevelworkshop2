@@ -11,7 +11,7 @@ namespace WS2Editor {
             animationDuration(animationDuration)
         {
             toggleButton.setToolButtonStyle(Qt::ToolButtonTextBesideIcon);
-            toggleButton.setArrowType(Qt::ArrowType::RightArrow);
+            //toggleButton.setArrowType(Qt::ArrowType::RightArrow);
             toggleButton.setText(title);
             toggleButton.setCheckable(true);
             toggleButton.setChecked(false);
@@ -46,7 +46,7 @@ namespace WS2Editor {
             //So make sure it is
             //Also set the flippy arrow
             toggleButton.setChecked(visible);
-            toggleButton.setArrowType(visible ? Qt::ArrowType::DownArrow : Qt::ArrowType::RightArrow);
+            //toggleButton.setArrowType(visible ? Qt::ArrowType::DownArrow : Qt::ArrowType::RightArrow);
 
             //Fetch the current and target heights
             const int collapsedHeight = sizeHint().height() - contentArea.maximumHeight();

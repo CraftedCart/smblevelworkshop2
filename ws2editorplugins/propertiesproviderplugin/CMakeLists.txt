@@ -25,11 +25,13 @@ include_directories(${CMAKE_BINARY_DIR})
 set(SOURCE_FILES
     ./src/propertiesproviderplugin/Plugin.cpp
     ./src/propertiesproviderplugin/TransformWidget.cpp
+    ./src/propertiesproviderplugin/GoalWidget.cpp
     )
 
 set(HEADER_FILES
     ./include/propertiesproviderplugin/Plugin.hpp
     ./include/propertiesproviderplugin/TransformWidget.hpp
+    ./include/propertiesproviderplugin/GoalWidget.hpp
     )
 
 add_library(${PROJECT_NAME} SHARED ${SOURCE_FILES} ${HEADER_FILES})
