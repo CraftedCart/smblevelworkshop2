@@ -8,7 +8,6 @@ namespace WS2EditorPlugins {
         using namespace WS2Editor::Widget;
         using namespace WS2Editor::UI;
         using namespace WS2Common::Scene;
-        using namespace WS2Common::Project;
         using namespace WS2Common;
 
         GoalWidget::GoalWidget(QVector<GoalSceneNode*> &nodes, QString label, QWidget *parent) :
