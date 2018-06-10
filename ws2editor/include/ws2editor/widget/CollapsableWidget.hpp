@@ -23,7 +23,7 @@ namespace WS2Editor {
                 QVBoxLayout mainLayout;
                 QToolButton toggleButton;
                 QParallelAnimationGroup toggleAnimation;
-                QScrollArea contentArea;
+                QWidget contentArea;
                 int animationDuration;
 
             public:
@@ -31,6 +31,9 @@ namespace WS2Editor {
                 void setContentLayout(QLayout &contentLayout);
 
                 void toggleContentShown(bool visible);
+
+            public slots:
+                void animationFinished();
         };
     }
 }

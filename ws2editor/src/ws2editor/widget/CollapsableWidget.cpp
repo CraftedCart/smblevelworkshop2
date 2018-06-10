@@ -28,6 +28,7 @@ namespace WS2Editor {
             toggleAnimation.addAnimation(new QPropertyAnimation(this, "maximumHeight"));
             toggleAnimation.addAnimation(new QPropertyAnimation(&contentArea, "minimumHeight"));
             toggleAnimation.addAnimation(new QPropertyAnimation(&contentArea, "maximumHeight"));
+            connect(&toggleAnimation, &QParallelAnimationGroup::finished, this, &CollapsableWidget::animationFinished);
 
             //Don't waste space
             mainLayout.setSpacing(0);
@@ -76,7 +77,17 @@ namespace WS2Editor {
 
         void CollapsableWidget::setContentLayout(QLayout &contentLayout) {
             delete contentArea.layout();
+            contentLayout.setContentsMargins(8, 4, 4, 4);
             contentArea.setLayout(&contentLayout);
+        }
+
+        void CollapsableWidget::animationFinished() {
+            if (toggleButton.isChecked()) {
+                //Unset min/max heights when we're done
+                setMaximumHeight(QWIDGETSIZE_MAX);
+                contentArea.setMaximumHeight(QWIDGETSIZE_MAX);
+                contentArea.setMinimumHeight(0);
+            }
         }
 
     }

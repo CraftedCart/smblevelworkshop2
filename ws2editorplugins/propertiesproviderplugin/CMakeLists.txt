@@ -27,6 +27,7 @@ set(SOURCE_FILES
     ./src/propertiesproviderplugin/NodeWidget.cpp
     ./src/propertiesproviderplugin/GoalWidget.cpp
     ./src/propertiesproviderplugin/BananaWidget.cpp
+    ./src/propertiesproviderplugin/WormholeWidget.cpp
     )
 
 set(HEADER_FILES
@@ -34,6 +35,7 @@ set(HEADER_FILES
     ./include/propertiesproviderplugin/NodeWidget.hpp
     ./include/propertiesproviderplugin/GoalWidget.hpp
     ./include/propertiesproviderplugin/BananaWidget.hpp
+    ./include/propertiesproviderplugin/WormholeWidget.hpp
     )
 
 add_library(${PROJECT_NAME} SHARED ${SOURCE_FILES} ${HEADER_FILES})

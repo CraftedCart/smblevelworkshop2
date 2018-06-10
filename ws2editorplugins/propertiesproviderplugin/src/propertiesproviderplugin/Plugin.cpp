@@ -2,6 +2,7 @@
 #include "propertiesproviderplugin/NodeWidget.hpp"
 #include "propertiesproviderplugin/GoalWidget.hpp"
 #include "propertiesproviderplugin/BananaWidget.hpp"
+#include "propertiesproviderplugin/WormholeWidget.hpp"
 #include "ws2editor/WS2EditorInstance.hpp"
 #include <QVBoxLayout>
 #include <QDebug>
@@ -39,6 +40,7 @@ namespace WS2EditorPlugins {
             createNodeWidgets(layout, nodes);
             createGoalWidgets(layout, nodes);
             createBananaWidgets(layout, nodes);
+            createWormholeWidgets(layout, nodes);
         }
 
         void Plugin::createNodeWidgets(QVBoxLayout *layout, QVector<SceneNode*> &nodes) {
@@ -66,7 +68,7 @@ namespace WS2EditorPlugins {
         }
 
         void Plugin::createBananaWidgets(QVBoxLayout *layout, QVector<SceneNode*> &nodes) {
-            //Fetch goals
+            //Fetch bananas
             QVector<BananaSceneNode*> bananas;
             for (SceneNode *node : nodes) {
                 if (BananaSceneNode *banana = dynamic_cast<BananaSceneNode*>(node)) {
@@ -77,6 +79,23 @@ namespace WS2EditorPlugins {
             if (bananas.size() == 0) return;
 
             BananaWidget *w = new BananaWidget(bananas, stageEditorWindow->getViewportWidget()->getRenderManager(), tr("Banana"));
+            layout->addWidget(w);
+
+            w->toggleContentShown(true); //Default to visible
+        }
+
+        void Plugin::createWormholeWidgets(QVBoxLayout *layout, QVector<SceneNode*> &nodes) {
+            //Fetch wormholes
+            QVector<WormholeSceneNode*> wormholes;
+            for (SceneNode *node : nodes) {
+                if (WormholeSceneNode *wormhole = dynamic_cast<WormholeSceneNode*>(node)) {
+                    wormholes.append(wormhole);
+                }
+            }
+
+            if (wormholes.size() == 0) return;
+
+            WormholeWidget *w = new WormholeWidget(wormholes, tr("Wormhole"));
             layout->addWidget(w);
 
             w->toggleContentShown(true); //Default to visible

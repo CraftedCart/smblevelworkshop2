@@ -295,7 +295,7 @@ QComboBox::down-arrow {
     border-left-color: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1, stop: 0 #2196F3, stop: 0.1 #802196F3);
     /*border-bottom: 2px solid #424242;*/
 
-    padding: 4px;
+    /*padding: 4px;*/
 }
 
 /* Even less generic stuff */
@@ -328,6 +328,20 @@ QComboBox::down-arrow {
 
 #zColorMarkerWidget:disabled {
     background: #802196F3;
+}
+
+#destinationAlertWidget {
+    border-left: 4px solid #F44336;
+    background: #80F44336;
+}
+
+#destinationInfoWidget {
+    border-left: 4px solid #2196F3;
+    background: #802196F3;
+}
+
+#destinationAlertWidget *, #destinationInfoWidget * {
+    background: #00000000;
 }
 
 /* vim: set syntax=css: */

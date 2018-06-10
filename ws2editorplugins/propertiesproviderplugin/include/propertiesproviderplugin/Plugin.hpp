@@ -27,6 +27,7 @@ namespace WS2EditorPlugins {
                 void createNodeWidgets(QVBoxLayout *layout, QVector<WS2Common::Scene::SceneNode*>& nodes);
                 void createGoalWidgets(QVBoxLayout *layout, QVector<WS2Common::Scene::SceneNode*>& nodes);
                 void createBananaWidgets(QVBoxLayout *layout, QVector<WS2Common::Scene::SceneNode*>& nodes);
+                void createWormholeWidgets(QVBoxLayout *layout, QVector<WS2Common::Scene::SceneNode*>& nodes);
 
             public:
                 /**

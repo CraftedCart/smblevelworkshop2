@@ -6,6 +6,7 @@
 #include "ws2common/scene/BananaSceneNode.hpp"
 #include "ws2common/scene/FalloutVolumeSceneNode.hpp"
 #include "ws2common/scene/MeshSceneNode.hpp" //TODO: Remove this include when we have a GX exporter, probably
+#include <QFontDatabase>
 #include <QLabel>
 
 namespace WS2EditorPlugins {
@@ -36,6 +37,7 @@ namespace WS2EditorPlugins {
             uuidLayout->addWidget(new QLabel(tr("UUID")));
             uuidLineEdit = new QLineEdit();
             uuidLineEdit->setReadOnly(true);
+            uuidLineEdit->setFont(QFontDatabase::systemFont(QFontDatabase::FixedFont));
             uuidLayout->addWidget(uuidLineEdit);
 
             sectionLayout->addWidget(new QLabel(tr("Position")));
