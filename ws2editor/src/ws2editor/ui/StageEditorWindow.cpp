@@ -10,6 +10,7 @@
 #include "ws2editor/task/ImportFileTask.hpp"
 #include "ws2editor/WS2EditorInstance.hpp"
 #include "ws2common/scene/GroupSceneNode.hpp"
+#include "ws2common/scene/BackgroundGroupSceneNode.hpp"
 #include "ws2common/scene/GoalSceneNode.hpp"
 #include "ws2common/scene/BumperSceneNode.hpp"
 #include "ws2common/scene/BananaSceneNode.hpp"
@@ -63,6 +64,7 @@ namespace WS2Editor {
             connect(ui->actionImport, &QAction::triggered, this, &StageEditorWindow::askImportFiles);
             connect(ui->actionRunCommand, &QAction::triggered, this, &StageEditorWindow::showCommandLine);
             connect(ui->actionNewNode, &QAction::triggered, this, &StageEditorWindow::addSceneNode);
+            connect(ui->actionNewBackgroundGroupNode, &QAction::triggered, this, &StageEditorWindow::addBackgroundNode);
             connect(ui->actionDelete, &QAction::triggered, this, &StageEditorWindow::deleteSelected);
             connect(ui->actionSettings, &QAction::triggered, this, &StageEditorWindow::showSettings);
             connect(ui->actionAbout, &QAction::triggered, this, &StageEditorWindow::showAbout);
@@ -156,7 +158,12 @@ namespace WS2Editor {
         }
 
         void StageEditorWindow::addSceneNode() {
-            GroupSceneNode *newNode = new GroupSceneNode(tr("New Node"));
+            GroupSceneNode *newNode = new GroupSceneNode(tr("New Item Group"));
+            ModelManager::modelOutliner->addNode(newNode, ProjectManager::getActiveProject()->getScene()->getRootNode());
+        }
+
+        void StageEditorWindow::addBackgroundNode() {
+            BackgroundGroupSceneNode *newNode = new BackgroundGroupSceneNode(tr("New Background Group"));
             ModelManager::modelOutliner->addNode(newNode, ProjectManager::getActiveProject()->getScene()->getRootNode());
         }
 

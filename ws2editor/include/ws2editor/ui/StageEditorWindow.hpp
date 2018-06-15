@@ -59,9 +59,14 @@ namespace WS2Editor {
                 void askImportFiles();
 
                 /**
-                 * @brief Adds an empty scene node to the currently active project
+                 * @brief Adds an empty group scene node to the currently active project
                  */
                 void addSceneNode();
+
+                /**
+                 * @brief Adds an empty background scene node to the currently active project
+                 */
+                void addBackgroundNode();
 
                 /**
                  * @brief Deletes selected nodes

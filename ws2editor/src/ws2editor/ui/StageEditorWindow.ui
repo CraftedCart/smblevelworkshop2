@@ -81,6 +81,7 @@
     <addaction name="actionFocusSelected"/>
     <addaction name="separator"/>
     <addaction name="actionNewNode"/>
+    <addaction name="actionNewBackgroundGroupNode"/>
     <addaction name="separator"/>
     <addaction name="actionSettings"/>
    </widget>
@@ -722,6 +723,18 @@
    </property>
    <property name="text">
     <string>Add Wormhole</string>
+   </property>
+  </action>
+  <action name="actionNewBackgroundGroupNode">
+   <property name="icon">
+    <iconset resource="../../../resources/Workshop2/Workshop2Resources.qrc">
+     <normaloff>:/Workshop2/Icons/Add.png</normaloff>:/Workshop2/Icons/Add.png</iconset>
+   </property>
+   <property name="text">
+    <string>New Background Group Node</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+Shift+B</string>
    </property>
   </action>
  </widget>
