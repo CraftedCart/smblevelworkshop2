@@ -120,6 +120,7 @@ namespace WS2Editor {
 
                 //Also make sure collision is generated on export
                 MeshCollisionSceneNode *collision = new MeshCollisionSceneNode(tr("%1 Mesh Collision").arg(meshName));
+                collision->setMeshName(meshName);
                 meshNode->addChild(collision);
 
                 UI::ModelManager::modelOutliner->addNodeWithMesh(meshNode, staticNode, meshes.at(i));
