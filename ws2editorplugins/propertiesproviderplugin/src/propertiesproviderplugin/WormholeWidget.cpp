@@ -33,6 +33,10 @@ namespace WS2EditorPlugins {
             destinationUuidLineEdit->setFont(QFontDatabase::systemFont(QFontDatabase::FixedFont));
             destinationUuidLayout->addWidget(destinationUuidLineEdit);
 
+            //Link selected button
+            linkSelectedButton = new QPushButton(tr("Link selected wormholes"));
+            sectionLayout->addWidget(linkSelectedButton);
+
             //Destination UUID alert
             destinationAlertWidget = new QWidget();
             destinationAlertWidget->setObjectName("destinationAlertWidget");
@@ -71,6 +75,7 @@ namespace WS2EditorPlugins {
             connect(destinationUuidLineEdit, &QLineEdit::editingFinished,
                     [this]() { onDestinationModifiedConfirmed(destinationUuidLineEdit->text()); });
             connect(destinationUuidLineEdit, &QLineEdit::textEdited, this, &WormholeWidget::onDestinationEdited);
+            connect(linkSelectedButton, &QPushButton::pressed, this, &WormholeWidget::linkSelectedWormholes);
 
             updateValues();
 
@@ -80,7 +85,15 @@ namespace WS2EditorPlugins {
         void WormholeWidget::updateValues() {
             //Destination UUID
             if (selectedWormholeNodes.size() > 1) {
-                destinationUuidLineEdit->setText(tr("[Multiple values]"));
+                //Check if 2 are selected and are linked together
+                if (selectedWormholeNodes.size() == 2 &&
+                        selectedWormholeNodes.at(0)->getDestinationUuid() == selectedWormholeNodes.at(1)->getUuid() &&
+                        selectedWormholeNodes.at(1)->getDestinationUuid() == selectedWormholeNodes.at(0)->getUuid()) {
+                    destinationUuidLineEdit->setText(tr("[Multiple values - linked]"));
+                } else {
+                    destinationUuidLineEdit->setText(tr("[Multiple values]"));
+                }
+
                 destinationUuidLineEdit->setReadOnly(true);
             } else {
                 QString uuid = selectedWormholeNodes.at(0)->getDestinationUuid().toString();
@@ -88,6 +101,9 @@ namespace WS2EditorPlugins {
                 if (destinationUuidLineEdit->text() != uuid) destinationUuidLineEdit->setText(uuid);
                 destinationUuidLineEdit->setReadOnly(false);
             }
+
+            //Check if the link button should be shown
+            linkSelectedButton->setVisible(selectedWormholeNodes.size() == 2);
 
             onDestinationEdited(destinationUuidLineEdit->text());
         }
@@ -136,6 +152,17 @@ namespace WS2EditorPlugins {
                     destinationInfoWidget->show();
                 }
             }
+        }
+
+        void WormholeWidget::linkSelectedWormholes() {
+            WormholeSceneNode *nodeA = selectedWormholeNodes.at(0);
+            WormholeSceneNode *nodeB = selectedWormholeNodes.at(1);
+
+            nodeA->setDestinationUuid(nodeB->getUuid());
+            nodeB->setDestinationUuid(nodeA->getUuid());
+
+            ModelManager::modelOutliner->onNodeModified(nodeA);
+            ModelManager::modelOutliner->onNodeModified(nodeB);
         }
     }
 }
