@@ -22,7 +22,12 @@ namespace WS2Common {
                  */
                 QString meshName;
 
+            protected:
+                virtual void serializeNodeDataXml(QXmlStreamWriter &s) const;
+                virtual const QString getSerializableName() const;
+
             public:
+                MeshCollisionSceneNode() = default;
                 MeshCollisionSceneNode(const QString name);
 
                 /**

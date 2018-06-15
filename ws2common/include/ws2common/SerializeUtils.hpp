@@ -9,6 +9,7 @@
 
 #include "ws2common_export.h"
 #include "ws2common/scene/MeshSceneNode.hpp"
+#include "ws2common/scene/MeshCollisionSceneNode.hpp"
 #include "ws2common/scene/GroupSceneNode.hpp"
 #include "ws2common/scene/GoalSceneNode.hpp"
 #include "ws2common/scene/BumperSceneNode.hpp"
@@ -27,6 +28,9 @@ namespace WS2Common {
         WS2COMMON_EXPORT void parseSceneNodeData(QXmlStreamReader &xml, Scene::SceneNode *node);
         WS2COMMON_EXPORT void parseMeshSceneNode(QXmlStreamReader &xml, Scene::MeshSceneNode *node);
         WS2COMMON_EXPORT void parseMeshSceneNodeData(QXmlStreamReader &xml, Scene::MeshSceneNode *node);
+        WS2COMMON_EXPORT void parseMeshCollisionSceneNode(QXmlStreamReader &xml, Scene::MeshCollisionSceneNode *node);
+        WS2COMMON_EXPORT void parseCollisionSceneNodeData(QXmlStreamReader &xml, Scene::CollisionSceneNode *node);
+        WS2COMMON_EXPORT void parseMeshCollisionSceneNodeData(QXmlStreamReader &xml, Scene::MeshCollisionSceneNode *node);
         WS2COMMON_EXPORT void parseGroupSceneNode(QXmlStreamReader &xml, Scene::GroupSceneNode *node);
         WS2COMMON_EXPORT void parseGroupSceneNodeData(QXmlStreamReader &xml, Scene::GroupSceneNode *node);
         WS2COMMON_EXPORT void parseGoalSceneNode(QXmlStreamReader &xml, Scene::GoalSceneNode *node);
