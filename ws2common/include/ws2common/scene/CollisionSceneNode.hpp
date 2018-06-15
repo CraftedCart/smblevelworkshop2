@@ -16,7 +16,12 @@ namespace WS2Common {
          * @brief Near base class WS2COMMON_EXPORT for all collision shapes
          */
         class WS2COMMON_EXPORT CollisionSceneNode : public SceneNode {
+            protected:
+                virtual void serializeNodeDataXml(QXmlStreamWriter &s) const;
+                virtual const QString getSerializableName() const;
+
             public:
+                CollisionSceneNode() = default;
                 CollisionSceneNode(const QString name);
         };
     }

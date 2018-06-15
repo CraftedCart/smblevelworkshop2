@@ -16,6 +16,11 @@ namespace WS2Common {
                 parseMeshSceneNode(xml, node);
                 if (parent != nullptr) parent->addChild(node);
                 return node;
+            } else if (xml.name() == "node-meshCollisionSceneNode") {
+                MeshCollisionSceneNode *node = new MeshCollisionSceneNode();
+                parseMeshCollisionSceneNode(xml, node);
+                if (parent != nullptr) parent->addChild(node);
+                return node;
             } else if (xml.name() == "node-groupSceneNode") {
                 GroupSceneNode *node = new GroupSceneNode();
                 parseGroupSceneNode(xml, node);
@@ -152,6 +157,64 @@ namespace WS2Common {
                 } else {
                     qWarning().noquote() << "Unrecognised tag: data-meshSceneNode > " + xml.name();
                 }
+            }
+        }
+
+        void parseMeshCollisionSceneNode(QXmlStreamReader &xml, MeshCollisionSceneNode *node) {
+            while (!(xml.isEndElement() && xml.name() == "node-meshCollisionSceneNode")) {
+                xml.readNext();
+                if (!xml.isStartElement()) continue; //Ignore all end elements
+
+                if (xml.name() == "data") {
+                    while (!(xml.isEndElement() && xml.name() == "data")) {
+                        xml.readNext();
+                        if (!xml.isStartElement()) continue; //Ignore all end elements
+
+                        if (xml.name() == "data-sceneNode") {
+                            parseSceneNodeData(xml, node);
+                        } else if (xml.name() == "data-collisionSceneNode") {
+                            parseCollisionSceneNodeData(xml, node);
+                        } else if (xml.name() == "data-meshCollisionSceneNode") {
+                            parseMeshCollisionSceneNodeData(xml, node);
+                        } else {
+                            qWarning().noquote() << "Unrecognised tag: data > " + xml.name();
+                        }
+                    }
+
+                } else if (xml.name() == "children") {
+                    parseChildren(xml, node);
+                } else {
+                    qWarning().noquote() << "Unrecognised tag: node-meshCollisionSceneNode > " + xml.name();
+                }
+            }
+        }
+
+        void parseMeshCollisionSceneNodeData(QXmlStreamReader &xml, MeshCollisionSceneNode *node) {
+            while (!(xml.isEndElement() && xml.name() == "data-meshCollisionSceneNode")) {
+                xml.readNext();
+                if (!xml.isStartElement()) continue; //Ignore all end elements
+
+                if (xml.name() == "meshName") {
+                    node->setMeshName(xml.readElementText());
+                } else {
+                    qWarning().noquote() << "Unrecognised tag: data-meshCollisionSceneNode > " + xml.name();
+                }
+            }
+        }
+
+        void parseCollisionSceneNodeData(QXmlStreamReader &xml, CollisionSceneNode *node) {
+            //There's nothing to parse! (yet?)
+            Q_UNUSED(node);
+
+            while (!(xml.isEndElement() && xml.name() == "data-collisionSceneNode")) {
+                xml.readNext();
+                if (!xml.isStartElement()) continue; //Ignore all end elements
+
+                //if (xml.name() == "meshName") {
+                    //node->setMeshName(xml.readElementText());
+                //} else {
+                    qWarning().noquote() << "Unrecognised tag: data-collisionSceneNode > " + xml.name();
+                //}
             }
         }
 
