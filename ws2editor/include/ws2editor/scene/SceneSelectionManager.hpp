@@ -94,7 +94,7 @@ namespace WS2Editor {
                 /**
                  * @brief Emitted when the selection has been updated
                  *
-                 * @param selectedObjects A vector of selected objects A vector of selected objects
+                 * @param selectedObjects A vector of selected objects
                  */
                 void onSelectionChanged(QVector<WS2Common::Scene::SceneNode*>& selectedObjects);
         };

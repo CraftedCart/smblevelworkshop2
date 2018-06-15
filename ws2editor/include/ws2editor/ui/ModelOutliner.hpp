@@ -98,6 +98,19 @@ namespace WS2Editor {
                         );
 
                 /**
+                 * @brief Adds a node to the parent, registers the meshes with the scene, and updates the model
+                 *
+                 * @param node The new node to add
+                 * @param parentNode The node to parent the new node to
+                 * @param meshes The meshes to register with the scene
+                 */
+                void addNodeWithMeshes(
+                        WS2Common::Scene::SceneNode *node,
+                        WS2Common::Scene::SceneNode *parentNode,
+                        QVector<WS2Common::Resource::ResourceMesh*> meshes
+                        );
+
+                /**
                  * @brief Removes a node from its parent and updates the model
                  *
                  * @param node The new node to remove
@@ -109,7 +122,7 @@ namespace WS2Editor {
                  *
                  * @param node The modified node
                  */
-                void onNodeModified(WS2Common::Scene::SceneNode *node);
+                void nodeModified(WS2Common::Scene::SceneNode *node);
 
                 /**
                  * @brief Call this when the selection changes
@@ -129,6 +142,16 @@ namespace WS2Editor {
                  * @param indices A vector of model indices
                  */
                 void onSelectionChanged(QVector<QModelIndex> indices);
+
+                /**
+                 * @brief Emitted when a nodeModified call occurs
+                 *
+                 * If a nodeModified request has been recieved, this signal will be emitted for the node and all its
+                 * children recursively, in reverse order (Children first, before parents)
+                 *
+                 * @param node The modified node
+                 */
+                void onNodeModified(WS2Common::Scene::SceneNode *node);
         };
     }
 }

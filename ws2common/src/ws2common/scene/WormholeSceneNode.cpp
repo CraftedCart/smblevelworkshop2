@@ -4,16 +4,26 @@ namespace WS2Common {
     namespace Scene {
         WormholeSceneNode::WormholeSceneNode(const QString name) : SceneNode(name) {}
 
-        WormholeSceneNode* WormholeSceneNode::getDestination() {
-            return destination;
+        const QUuid& WormholeSceneNode::getDestinationUuid() const {
+            return destinationUuid;
         }
 
-        const WormholeSceneNode* WormholeSceneNode::getDestination() const {
-            return destination;
+        void WormholeSceneNode::setDestinationUuid(QUuid destinationUuid) {
+            this->destinationUuid = destinationUuid;
         }
 
-        void WormholeSceneNode::setDestination(WormholeSceneNode *destination) {
-            this->destination = destination;
+        const QString WormholeSceneNode::getSerializableName() const {
+            return "wormholeSceneNode";
+        }
+
+        void WormholeSceneNode::serializeNodeDataXml(QXmlStreamWriter &s) const {
+            SceneNode::serializeNodeDataXml(s);
+
+            s.writeStartElement("data-" + WormholeSceneNode::getSerializableName());
+
+            s.writeTextElement("destinationUuid", destinationUuid.toString());
+
+            s.writeEndElement();
         }
     }
 }

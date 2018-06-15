@@ -12,7 +12,11 @@
 namespace WS2Common {
     namespace Scene {
         class WS2COMMON_EXPORT BumperSceneNode : public SceneNode {
+            protected:
+                virtual const QString getSerializableName() const;
+
             public:
+                BumperSceneNode() = default;
                 BumperSceneNode(const QString name);
         };
     }

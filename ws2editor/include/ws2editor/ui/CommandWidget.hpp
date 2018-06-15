@@ -13,6 +13,8 @@
 namespace WS2Editor {
     namespace UI {
         class WS2EDITOR_EXPORT CommandWidget : public QWidget {
+            Q_OBJECT
+
             protected:
                 QLineEdit *lineEdit;
                 QCompleter *completer;

@@ -327,10 +327,10 @@ namespace WS2Editor {
                     );
 
             //Model matrix (Identity matrix - Model will be at origin)
-            glm::mat4 model = glm::mat4(1.0f);
+            //glm::mat4 model = glm::mat4(1.0f);
 
             //Normal matrix
-            glm::mat3 norm(glm::transpose(glm::inverse(model)));
+            //glm::mat3 norm(glm::transpose(glm::inverse(model)));
 
             //The model-view-projection matrix (Matrix multiplication is the other way round)
             //glm::mat4 mvp = proj * view * model;
@@ -342,7 +342,7 @@ namespace WS2Editor {
             //glUniformMatrix4fv(GLManager::shaderModelID, 1, GL_FALSE, &model[0][0]); //Model matrix set by recursiveDrawSceneNode
             glUniformMatrix4fv(renderManager->shaderViewID, 1, GL_FALSE, &view[0][0]);
             glUniformMatrix4fv(renderManager->shaderProjID, 1, GL_FALSE, &proj[0][0]);
-            glUniformMatrix3fv(renderManager->shaderNormID, 1, GL_FALSE, &norm[0][0]);
+            //glUniformMatrix3fv(renderManager->shaderNormID, 1, GL_FALSE, &norm[0][0]);
 
             ResourceScene *scene = Project::ProjectManager::getActiveProject()->getScene();
             if (scene != nullptr) {

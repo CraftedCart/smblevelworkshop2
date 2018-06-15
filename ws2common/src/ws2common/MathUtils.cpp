@@ -24,6 +24,13 @@ namespace WS2Common {
                     );
         }
 
+        glm::quat eulerZyxToGlmQuat(const glm::vec3 &euler) {
+            glm::quat xQuat = glm::angleAxis(euler.x, glm::vec3(1.0f, 0.0f, 0.0f));
+            glm::quat yQuat = glm::angleAxis(euler.y, glm::vec3(0.0f, 1.0f, 0.0f));
+            glm::quat zQuat = glm::angleAxis(euler.z, glm::vec3(0.0f, 0.0f, 1.0f));
+            return zQuat * yQuat * xQuat;
+        }
+
         QPoint toQPoint(const glm::vec2 &vec) {
             return QPoint(vec.x, vec.y);
         }

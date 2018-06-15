@@ -12,8 +12,40 @@ namespace WS2Editor {
             mesh(mesh),
             renderManager(renderManager),
             transform(transform),
-            tint(tint),
-            renderCameraNormals(renderCameraNormals) {}
+            renderCameraNormals(renderCameraNormals),
+            tint(tint) {}
+
+        void MeshRenderCommand::setMesh(CachedGlMesh *mesh) {
+            this->mesh = mesh;
+        }
+
+        CachedGlMesh* MeshRenderCommand::getMesh() {
+            return mesh;
+        }
+
+        void MeshRenderCommand::setTransform(glm::mat4 transform) {
+            this->transform = transform;
+        }
+
+        glm::mat4 MeshRenderCommand::getTransform() {
+            return transform;
+        }
+
+        void MeshRenderCommand::setRenderCameraNormals(bool renderCameraNormals) {
+            this->renderCameraNormals = renderCameraNormals;
+        }
+
+        bool MeshRenderCommand::getRenderCameraNormals() {
+            return renderCameraNormals;
+        }
+
+        void MeshRenderCommand::setTint(glm::vec4 tint) {
+            this->tint = tint;
+        }
+
+        glm::vec4 MeshRenderCommand::getTint() {
+            return tint;
+        }
 
         void MeshRenderCommand::draw() {
             mesh->updateAccessTimer();
@@ -34,7 +66,10 @@ namespace WS2Editor {
                 texInfluence = 0.0f;
             }
 
+            glm::mat3 norm(glm::transpose(glm::inverse(transform)));
+
             glUniformMatrix4fv(renderManager->shaderModelID, 1, GL_FALSE, &transform[0][0]);
+            glUniformMatrix3fv(renderManager->shaderNormID, 1, GL_FALSE, &norm[0][0]);
             glUniform1i(renderManager->shaderRenderCameraNormals, renderCameraNormals);
             glUniform1f(renderManager->shaderTexInfluenceID, texInfluence);
             glUniform4fv(renderManager->shaderTintID, 1, &tint[0]);

@@ -30,6 +30,21 @@ namespace WS2Common {
             this->uuid = uuid;
         }
 
+        SceneNode* SceneNode::findNodeByUuid(const QUuid &uuid) {
+            //Check if this very node has a matching UUID
+            if (this->uuid == uuid) return this;
+
+            //Check all children if they have a matching UUID
+            for (SceneNode *child : children) {
+                SceneNode *foundNode = child->findNodeByUuid(uuid);
+
+                if (foundNode != nullptr) return foundNode;
+            }
+
+            //Nothing found, return nullptr
+            return nullptr;
+        }
+
         QVector<SceneNode*>& SceneNode::getChildren() {
             return children;
         }

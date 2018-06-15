@@ -99,7 +99,7 @@ namespace WS2Lz {
             QMultiMap<quint32, const WS2Common::Scene::GroupSceneNode*> switchOffsetMap;
             QMap<const WS2Common::Scene::GroupSceneNode*, quint32> switchCountMap;
             QMultiMap<quint32, const WS2Common::Scene::GroupSceneNode*> wormholeOffsetMap; //Per collision header
-            QMultiMap<quint32, const WS2Common::Scene::WormholeSceneNode*> wormholeIndividualOffsetMap; //Per wormhole (Needed to link wormholes together)
+            QMultiMap<quint32, QUuid> wormholeIndividualOffsetMap; //Per wormhole (Needed to link wormholes together) - the value is each wormhole's UUID
             QMap<const WS2Common::Scene::GroupSceneNode*, quint32> wormholeCountMap;
             QMultiMap<quint32, const WS2Common::Scene::GroupSceneNode*> groupAnimHeaderOffsetMap;
             QMultiMap<quint32, const WS2Common::Animation::TransformAnimation*> animPosXKeyframesOffsetMap;

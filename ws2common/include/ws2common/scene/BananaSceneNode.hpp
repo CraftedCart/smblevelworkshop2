@@ -19,7 +19,12 @@ namespace WS2Common {
                  */
                 EnumBananaType type;
 
+            protected:
+                virtual void serializeNodeDataXml(QXmlStreamWriter &s) const;
+                virtual const QString getSerializableName() const;
+
             public:
+                BananaSceneNode() = default;
                 BananaSceneNode(const QString name);
 
                 /**

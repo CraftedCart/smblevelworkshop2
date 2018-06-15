@@ -123,6 +123,15 @@ namespace WS2Common {
                 void setUuid(const QUuid uuid);
 
                 /**
+                 * @brief Recursively searches this node and its children for a node with a matching UUID
+                 *
+                 * @param uuid The UUID to search for
+                 *
+                 * @return The node found, or nullptr if none was
+                 */
+                SceneNode* findNodeByUuid(const QUuid &uuid);
+
+                /**
                  * @brief Getter for WS2::Scene::SceneNode::children
                  *
                  * @return A reference to the children QVector

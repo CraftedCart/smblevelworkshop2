@@ -69,7 +69,7 @@ namespace WS2Common {
                     j.next();
 
                     if (i.value() == j.key()->getName()) {
-                        i.key()->setDestination(j.key());
+                        i.key()->setDestinationUuid(j.key()->getUuid());
                         linkSuccess = true;
                         break;
                     }

@@ -6,6 +6,7 @@
 #ifndef SMBLEVELWORKSHOP2_WS2COMMON_ANIMATION_ENUMEASING_HPP
 #define SMBLEVELWORKSHOP2_WS2COMMON_ANIMATION_ENUMEASING_HPP
 
+#include "ws2common_export.h"
 #include <QString>
 
 namespace WS2Common {
@@ -30,7 +31,7 @@ namespace WS2Common {
              *
              * @return The EnumEasing for the string. If the string is invalid, LINEAR will be returned.
              */
-            EnumEasing fromString(QString str);
+            WS2COMMON_EXPORT EnumEasing fromString(QString str);
         }
     }
 }

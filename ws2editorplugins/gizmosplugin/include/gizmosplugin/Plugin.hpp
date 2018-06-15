@@ -1,6 +1,6 @@
 /**
  * @file
- * @brief Example plugin header
+ * @brief Gizmos plugin header
  */
 
 #ifndef SMBLEVELWORKSHOP2_WS2EDITORPLUGINS_GIZMOSPLUGIN_PLUGIN_HPP

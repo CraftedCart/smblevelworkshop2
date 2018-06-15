@@ -22,6 +22,19 @@ namespace WS2Editor {
 
             public:
                 /**
+                 * @brief Constructor for PhysicsContainer that generates physics objects given the meshes and transform
+                 *
+                 * @param node
+                 * @param meshes
+                 * @param transform
+                 */
+                PhysicsContainer(
+                        WS2Common::Scene::SceneNode *node,
+                        const QVector<WS2Common::Resource::ResourceMesh*> meshes,
+                        const WS2Common::Transform &transform
+                        );
+
+                /**
                  * @brief Constructor for PhysicsContainer that generates physics objects given the mesh and transform
                  *
                  * @param node
@@ -30,18 +43,9 @@ namespace WS2Editor {
                  */
                 PhysicsContainer(
                         WS2Common::Scene::SceneNode *node,
-                        WS2Common::Resource::ResourceMesh *mesh,
-                        WS2Common::Transform &transform
+                        WS2Common::Resource::ResourceMesh* mesh,
+                        const WS2Common::Transform &transform
                         );
-
-                /**
-                 * @brief Constructor for PhysicsContainer that generates physics objects given an AABB and transform
-                 *
-                 * @param aabb
-                 * @param transform
-                 *
-                 */
-                PhysicsContainer(WS2Common::AABB3 &aabb, WS2Common::Transform &transform);
 
                 ~PhysicsContainer();
 

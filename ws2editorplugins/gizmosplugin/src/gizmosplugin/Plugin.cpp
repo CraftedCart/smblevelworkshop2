@@ -8,8 +8,6 @@
 #include "ws2common/MathUtils.hpp"
 #define GLM_ENABLE_EXPERIMENTAL
 #include <glm/gtx/transform.hpp>
-#include <QAction>
-#include <QMessageBox>
 #include <QDebug>
 
 namespace WS2EditorPlugins {
@@ -214,7 +212,7 @@ namespace WS2EditorPlugins {
                 if (activeGizmoZ) newPos.z = i.value().getPosition().z + deltaPos.z;
 
                 i.key()->getTransform().setPosition(newPos);
-                ModelManager::modelOutliner->onNodeModified(i.key());
+                ModelManager::modelOutliner->nodeModified(i.key());
             }
         }
 
@@ -253,7 +251,7 @@ namespace WS2EditorPlugins {
 
                 AABB3 aabb;
                 if (initialMeshData != nullptr) {
-                    aabb = initialMeshData->getMesh()->getAabb();
+                    aabb = initialMeshData->getAabb();
                     aabb.offsetBy(initialNode->getPosition());
                 } else {
                     aabb = AABB3(initialNode->getPosition(), initialNode->getPosition());
@@ -263,7 +261,7 @@ namespace WS2EditorPlugins {
                     MeshNodeData *meshData = scene.getMeshNodeData(node->getUuid());
 
                     if (meshData != nullptr) {
-                        AABB3 newAabb = meshData->getMesh()->getAabb();
+                        AABB3 newAabb = meshData->getAabb();
                         newAabb.offsetBy(node->getPosition());
                         aabb.mergeWith(newAabb);
                     } else {

@@ -18,6 +18,12 @@
 #include <QHash>
 
 namespace WS2Editor {
+    namespace Rendering {
+        class MeshRenderCommand;
+    }
+}
+
+namespace WS2Editor {
     /**
      * @brief Don't forget to call init after constructig this
      *
@@ -60,9 +66,6 @@ namespace WS2Editor {
             int viewportWidth;
             int viewportHeight;
 
-            //Default models
-            QVector<WS2Common::Resource::ResourceMesh*> goalMesh;
-
         public:
             GLuint progID;
             GLuint shaderModelID;
@@ -85,7 +88,14 @@ namespace WS2Editor {
             GLuint physicsDebugShaderViewID;
             GLuint physicsDebugShaderProjID;
 
-            //More default models
+            //Default models
+            //TODO: Move global models out of RenderManager
+            QVector<WS2Common::Resource::ResourceMesh*> goalMesh;
+            QVector<WS2Common::Resource::ResourceMesh*> bumperMesh;
+            QVector<WS2Common::Resource::ResourceMesh*> bananaSingleMesh;
+            QVector<WS2Common::Resource::ResourceMesh*> bananaBunchMesh;
+            QVector<WS2Common::Resource::ResourceMesh*> jamabarMesh;
+            QVector<WS2Common::Resource::ResourceMesh*> wormholeMesh;
 
         protected:
             //Copied straight from Qt QGL
@@ -187,7 +197,7 @@ namespace WS2Editor {
              * @param transform The world transform of this mesh
              * @param renderCameraNormals Used for the selection outline
              */
-            void enqueueRenderMesh(
+            Rendering::MeshRenderCommand* enqueueRenderMesh(
                     const WS2Common::Model::MeshSegment *mesh,
                     glm::mat4 transform,
                     glm::vec4 tint = glm::vec4(1.0f),
@@ -253,6 +263,15 @@ namespace WS2Editor {
              * @param renderManager A reference to this RenderManager object
              */
             void preDestroy(RenderManager &renderManager);
+
+            /**
+             * @brief Emitted after constructing a MeshRenderCommand as part of recursiveEnqueueSceneNode, and adding it
+             *        to the render queue
+             *
+             * @param node The scene node that the mesh belongs to
+             * @param command The enqueued mesh render command
+             */
+            void postEnqueueSceneNodeRenderMesh(WS2Common::Scene::SceneNode *node, Rendering::MeshRenderCommand *command);
 
         public slots:
             void clearMeshCache();

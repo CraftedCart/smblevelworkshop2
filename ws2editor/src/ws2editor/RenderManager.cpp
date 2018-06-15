@@ -105,6 +105,16 @@ namespace WS2Editor {
         //Load default models
         QFile goalFile(":/Workshop2/Models/goal.fbx");
         goalMesh = WS2Common::Model::ModelLoader::loadModel(goalFile);
+        QFile bumperFile(":/Workshop2/Models/bumper.fbx");
+        bumperMesh = WS2Common::Model::ModelLoader::loadModel(bumperFile);
+        QFile bananaSingleFile(":/Workshop2/Models/bananaSingle.fbx");
+        bananaSingleMesh = WS2Common::Model::ModelLoader::loadModel(bananaSingleFile);
+        QFile bananaBunchFile(":/Workshop2/Models/bananaBunch.fbx");
+        bananaBunchMesh = WS2Common::Model::ModelLoader::loadModel(bananaBunchFile);
+        QFile jamabarFile(":/Workshop2/Models/jamabar.fbx");
+        jamabarMesh = WS2Common::Model::ModelLoader::loadModel(jamabarFile);
+        QFile wormholeFile(":/Workshop2/Models/wormhole.fbx");
+        wormholeMesh = WS2Common::Model::ModelLoader::loadModel(wormholeFile);
 
         checkErrors("After RenderManager::init()");
 
@@ -507,19 +517,20 @@ namespace WS2Editor {
 
         glm::mat4 transform = parentTransform;
         transform = glm::translate(transform, node->getPosition());
-        transform = glm::rotate(transform, node->getRotation().x, glm::vec3(1.0f, 0.0f, 0.0f));
-        transform = glm::rotate(transform, node->getRotation().y, glm::vec3(0.0f, 1.0f, 0.0f));
         transform = glm::rotate(transform, node->getRotation().z, glm::vec3(0.0f, 0.0f, 1.0f));
+        transform = glm::rotate(transform, node->getRotation().y, glm::vec3(0.0f, 1.0f, 0.0f));
+        transform = glm::rotate(transform, node->getRotation().x, glm::vec3(1.0f, 0.0f, 0.0f));
         transform = glm::scale(transform, node->getScale());
 
         //Check if this is a renderable object, and enqueue it for rendering if so
-        if (const MeshSceneNode *mesh = dynamic_cast<const MeshSceneNode*>(node)) {
-            const QVector<WS2Common::Model::MeshSegment*>& segments = scene->getMeshNodeData(mesh->getUuid())->getMesh()->getMeshSegments();
+        if (scene->getMeshNodeData(node->getUuid()) != nullptr) {
+            const QVector<WS2Common::Model::MeshSegment*>& segments = scene->getMeshNodeData(node->getUuid())->getMeshSegments();
 
             bool isSelected = scene->getSelectionManager()->isSelected(node);
 
             for (const MeshSegment *segment : segments) {
-                enqueueRenderMesh(segment, transform, glm::vec4(1.0f), isSelected);
+                MeshRenderCommand *cmd = enqueueRenderMesh(segment, transform, glm::vec4(1.0f), isSelected);
+                emit postEnqueueSceneNodeRenderMesh(node, cmd);
             }
 
             //Draw AABBs
@@ -536,27 +547,6 @@ namespace WS2Editor {
             //}
 
             //physicsDebugDrawer->drawAabb(MathUtils::toBtVector3(aabb.a), MathUtils::toBtVector3(aabb.b), col);
-        } else if (const GoalSceneNode *goal = dynamic_cast<const GoalSceneNode*>(node)) {
-            bool isSelected = scene->getSelectionManager()->isSelected(node);
-
-            glm::vec4 goalColor;
-            switch (goal->getType()) {
-                case EnumGoalType::BLUE:
-                    goalColor = glm::vec4(0.13f, 0.59f, 0.95f, 1.0f); break;
-                case EnumGoalType::GREEN:
-                    goalColor = glm::vec4(0.30f, 0.69f, 0.51f, 1.0f); break;
-                case EnumGoalType::RED:
-                    goalColor = glm::vec4(0.95f, 0.26f, 0.21f, 1.0f); break;
-                default:
-                    //This should never happen!
-                    goalColor = glm::vec4(1.0f, 0.0, 1.0f, 1.0f); break;
-            }
-
-            for (const ResourceMesh *mesh : goalMesh) {
-                for (const MeshSegment *segment : mesh->getMeshSegments()) {
-                    enqueueRenderMesh(segment, transform, goalColor, isSelected);
-                }
-            }
         }
 
         //Check children to recirsively render
@@ -565,12 +555,14 @@ namespace WS2Editor {
         }
     }
 
-    void RenderManager::enqueueRenderMesh(const MeshSegment *mesh, glm::mat4 transform, glm::vec4 tint, bool renderCameraNormals) {
+    MeshRenderCommand* RenderManager::enqueueRenderMesh(const MeshSegment *mesh, glm::mat4 transform, glm::vec4 tint, bool renderCameraNormals) {
         //First check if the mesh has been cached already
         //If it hasen't, we need to load it first
         if (!meshCache.contains(mesh)) loadMesh(mesh);
 
-        renderFifo.enqueue(new MeshRenderCommand(meshCache[mesh], this, transform, tint, renderCameraNormals));
+        MeshRenderCommand *cmd = new MeshRenderCommand(meshCache[mesh], this, transform, tint, renderCameraNormals);
+        renderFifo.enqueue(cmd);
+        return cmd;
     }
 
     void RenderManager::enqueueRenderCommand(IRenderCommand *command) {
