@@ -1217,10 +1217,15 @@ Public License instead of this License.  But first, please read
 <context>
     <name>WS2Editor::Resource::ResourceScene</name>
     <message>
-        <location filename="../src/ws2editor/resource/ResourceScene.cpp" line="15"/>
-        <location filename="../src/ws2editor/resource/ResourceScene.cpp" line="106"/>
-        <location filename="../src/ws2editor/resource/ResourceScene.cpp" line="109"/>
+        <location filename="../src/ws2editor/resource/ResourceScene.cpp" line="16"/>
+        <location filename="../src/ws2editor/resource/ResourceScene.cpp" line="107"/>
+        <location filename="../src/ws2editor/resource/ResourceScene.cpp" line="110"/>
         <source>Static</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/ws2editor/resource/ResourceScene.cpp" line="122"/>
+        <source>%1 Mesh Collision</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

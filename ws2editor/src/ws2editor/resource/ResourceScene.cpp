@@ -2,6 +2,7 @@
 #include "ws2editor/resource/ResourceManager.hpp"
 #include "ws2editor/ui/ModelManager.hpp"
 #include "ws2common/scene/MeshSceneNode.hpp"
+#include "ws2common/scene/MeshCollisionSceneNode.hpp"
 #include "ws2common/scene/GroupSceneNode.hpp"
 #include <QByteArray>
 #include <QFileInfo>
@@ -116,6 +117,10 @@ namespace WS2Editor {
                 QString meshName = meshes.at(i)->getId().split("@")[0];
                 MeshSceneNode *meshNode = new MeshSceneNode(meshName);
                 meshNode->setMeshName(meshName);
+
+                //Also make sure collision is generated on export
+                MeshCollisionSceneNode *collision = new MeshCollisionSceneNode(tr("%1 Mesh Collision").arg(meshName));
+                meshNode->addChild(collision);
 
                 UI::ModelManager::modelOutliner->addNodeWithMesh(meshNode, staticNode, meshes.at(i));
             }
