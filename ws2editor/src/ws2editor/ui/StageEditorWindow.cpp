@@ -100,11 +100,26 @@ namespace WS2Editor {
             //TODO: This won't survive project/scene changes
             connect(ProjectManager::getActiveProject()->getScene()->getSelectionManager(), &Scene::SceneSelectionManager::onSelectionChanged,
                     ui->propertiesWidget, &Widget::PropertiesWidget::updatePropertiesWidget);
+
+            //Install an event filter for the viewport
+            //so we don't trigger shortcuts when a mouse button is down
+            ui->viewportWidget->installEventFilter(new ViewportEventFilter(this, this));
         }
 
         StageEditorWindow::~StageEditorWindow() {
             delete statusFramerateLabel;
             delete ui;
+        }
+
+        void StageEditorWindow::checkShortcutsEnabled() {
+            QList<QAction*> actions = findChildren<QAction*>();
+
+            if (QApplication::mouseButtons() != Qt::NoButton) {
+                for (QAction *a : actions) a->setShortcutContext(Qt::WidgetShortcut);
+            } else if (QApplication::keyboardModifiers() == Qt::NoModifier) {
+                //Don't re-enable shortcuts until modifers have been released
+                for (QAction *a : actions) a->setShortcutContext(Qt::WindowShortcut);
+            }
         }
 
         Widget::ViewportWidget* StageEditorWindow::getViewportWidget() {
@@ -257,6 +272,22 @@ namespace WS2Editor {
         void StageEditorWindow::addWormhole() {
             WormholeSceneNode *newNode = new WormholeSceneNode(tr("New Wormhole"));
             addNodeToStaticGroup(newNode, ui->viewportWidget->getRenderManager()->wormholeMesh);
+        }
+
+        //==============================================================================================================
+
+        ViewportEventFilter::ViewportEventFilter(StageEditorWindow *w, QObject *parent) :
+            QObject(parent),
+            w(w) {}
+
+        bool ViewportEventFilter::eventFilter(QObject *watched, QEvent *event) {
+            if (event->type() == QEvent::MouseButtonPress ||
+                    event->type() == QEvent::MouseButtonRelease ||
+                    event->type() == QEvent::KeyRelease) {
+                w->checkShortcutsEnabled();
+            }
+
+            return QObject::eventFilter(watched, event);
         }
     }
 }

@@ -241,7 +241,7 @@ namespace WS2Editor {
                     float locPosSpeed = Config::cameraPosSpeed;
                     //TODO: Rebindable keys
                     if (isKeyDown(Qt::Key_Shift)) locPosSpeed *= Config::cameraPosSpeedUpMultiplier;
-                    if (isKeyDown(Qt::Key_Alt)) locPosSpeed *= Config::cameraPosSlowDownMultiplier;
+                    if (isKeyDown(Qt::Key_Control)) locPosSpeed *= Config::cameraPosSlowDownMultiplier;
                     if (isKeyDown(Qt::Key_W)) targetCameraPos += forward * deltaSeconds * locPosSpeed;
                     if (isKeyDown(Qt::Key_S)) targetCameraPos -= forward * deltaSeconds * locPosSpeed;
                     if (isKeyDown(Qt::Key_D)) targetCameraPos += right * deltaSeconds * locPosSpeed;
