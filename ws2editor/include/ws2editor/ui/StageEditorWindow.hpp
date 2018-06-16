@@ -21,14 +21,21 @@ namespace WS2Editor {
         class WS2EDITOR_EXPORT StageEditorWindow : public QMainWindow {
             Q_OBJECT
 
-            public:
-                QLabel *statusTaskLabel = new QLabel();
-                QLabel *statusFramerateLabel = new QLabel();
+            friend class ViewportEventFilter;
 
             private:
                 Ui::StageEditorWindow *ui;
 
+            public:
+                QLabel *statusTaskLabel = new QLabel();
+                QLabel *statusFramerateLabel = new QLabel();
+
             protected:
+                /**
+                 * @brief Checks if any mouse buttons are down and disables/enables shortcuts appropriately
+                 */
+                void checkShortcutsEnabled();
+
                 void addNodeToStaticGroup(
                         WS2Common::Scene::SceneNode *node,
                         QVector<WS2Common::Resource::ResourceMesh*>& meshes
@@ -106,6 +113,22 @@ namespace WS2Editor {
                 void addBananaBunch();
                 void addJamabar();
                 void addWormhole();
+        };
+
+        /**
+         * @brief Used to check if the mouse is pressed over the viewport and disable shortcuts if so
+         */
+        class WS2EDITOR_EXPORT ViewportEventFilter : public QObject {
+            Q_OBJECT
+
+            protected:
+                StageEditorWindow *w;
+
+            public:
+                ViewportEventFilter(StageEditorWindow *w, QObject *parent = nullptr);
+
+            protected:
+                bool eventFilter(QObject *watched, QEvent *event);
         };
     }
 }
