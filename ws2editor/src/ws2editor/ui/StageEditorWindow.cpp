@@ -62,6 +62,7 @@ namespace WS2Editor {
             connect(ui->viewportWidget, &Widget::ViewportWidget::frameRendered, this, &StageEditorWindow::viewportFrameRendered);
             connect(ui->actionQuit, &QAction::triggered, QApplication::instance(), QApplication::quit);
             connect(ui->actionImport, &QAction::triggered, this, &StageEditorWindow::askImportFiles);
+            connect(ui->actionExport, &QAction::triggered, this, &StageEditorWindow::askExportFilesProvider);
             connect(ui->actionRunCommand, &QAction::triggered, this, &StageEditorWindow::showCommandLine);
             connect(ui->actionNewNode, &QAction::triggered, this, &StageEditorWindow::addSceneNode);
             connect(ui->actionNewBackgroundGroupNode, &QAction::triggered, this, &StageEditorWindow::addBackgroundNode);
@@ -170,6 +171,67 @@ namespace WS2Editor {
             }
 
             WS2EditorInstance::getInstance()->getTaskManager()->enqueueTasks(tasks);
+        }
+
+        void StageEditorWindow::askExportFilesProvider() {
+            QMenu m(tr("Export menu"), this);
+
+            //Add a title to the menu
+            QAction *titleAction = new QAction(tr("Export providers"), &m);
+            titleAction->setEnabled(false);
+            m.addAction(titleAction);
+
+            //Fetch export providers
+            QVector<IExportProvider*> &exportProviders = WS2EditorInstance::getInstance()->getExportProviders();
+
+            if (exportProviders.isEmpty()) {
+                //No providers
+                QAction *a = new QAction(tr("No export providers"), &m);
+                a->setEnabled(false);
+                m.addAction(a);
+            } else {
+                //Set up provider actions
+                for (IExportProvider *provider : exportProviders) {
+                    QAction *a = new QAction(provider->getTranslatedTypeName(), &m);
+                    connect(a, &QAction::triggered, [this, provider]() { askExportFiles(provider); });
+                    m.addAction(a);
+                }
+            }
+
+            m.exec(QCursor::pos());
+        }
+
+        void StageEditorWindow::askExportFiles(IExportProvider *provider) {
+            QFileDialog dialog(this);
+            dialog.setFileMode(QFileDialog::AnyFile);
+
+            //Set name filters
+            QStringList l;
+            for (QPair<QString, QString> p : provider->getNameFilters()) l << p.first;
+            l << tr("All files (*)");
+            dialog.setNameFilters(l);
+
+            //Set the default extension if there is one
+            if (!provider->getNameFilters().isEmpty()) dialog.selectFile(provider->getNameFilters().at(0).second);
+
+            if (dialog.exec()) {
+                QStringList selected = dialog.selectedFiles();
+
+                //Check the selected filter and append the appropriate file extension if it's not already there
+                QString selectedFilter = dialog.selectedNameFilter();
+                for (QPair<QString, QString> p : provider->getNameFilters()) {
+                    if (p.first == selectedFilter) {
+                        //Found a matching filter
+                        //Append the appropriate extension if it's not already there
+                        for (QString &file : selected) if (!file.endsWith(p.second)) file += p.second;
+
+                        break;
+                    }
+                }
+
+                //We now have our final file name list
+                qDebug() << selected;
+            }
         }
 
         void StageEditorWindow::addSceneNode() {

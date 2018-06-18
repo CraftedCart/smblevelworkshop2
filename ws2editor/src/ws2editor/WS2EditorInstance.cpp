@@ -30,6 +30,10 @@ namespace WS2Editor {
     }
 
     WS2EditorInstance::~WS2EditorInstance() {
+        //Remove and unregister all export provider
+        //Deleting export providers will automatically unregister them
+        qDeleteAll(exportProviders);
+
         delete taskManager;
         delete app;
 
@@ -57,6 +61,23 @@ namespace WS2Editor {
     QVector<QPluginLoader*>& WS2EditorInstance::getFailedPlugins() {
         static QVector<QPluginLoader*> failedPlugins;
         return failedPlugins;
+    }
+
+    void WS2EditorInstance::registerExportProvider(IExportProvider *provider) {
+        exportProviders.append(provider);
+
+        //Remove the provider from the vector when it's deleted
+        connect(provider, &QObject::destroyed, [this](QObject *obj) {
+                exportProviders.removeAll(static_cast<IExportProvider*>(obj));
+                });
+    }
+
+    QVector<IExportProvider*>& WS2EditorInstance::getExportProviders() {
+        return exportProviders;
+    }
+
+    const QVector<IExportProvider*>& WS2EditorInstance::getExportProviders() const {
+        return exportProviders;
     }
 
     int WS2EditorInstance::execApp() {

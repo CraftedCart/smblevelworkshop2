@@ -153,6 +153,7 @@ set(HEADER_FILES
     ./include/ws2editor/command/TranslateSelectedCommand.hpp
     ./include/ws2editor/command/ToggleDebugDrawingCommand.hpp
     ./include/ws2editor/plugin/IEditorPlugin.hpp
+    ./include/ws2editor/IExportProvider.hpp
     )
 
 set(UI_FILES
