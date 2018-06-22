@@ -7,7 +7,8 @@
 #define SMBLEVELWORKSHOP2_WS2EDITOR_WS2EDITORINSTANCE_HPP
 
 #include "ws2editor_export.h"
-#include "task/TaskManager.hpp"
+#include "ws2editor/task/TaskManager.hpp"
+#include "ws2editor/IExportProvider.hpp"
 #include "ui/StageEditorWindow.hpp"
 #include <QApplication>
 #include <QPluginLoader>
@@ -29,6 +30,8 @@ namespace WS2Editor {
 
             QApplication *app;
             Task::TaskManager *taskManager;
+
+            QVector<IExportProvider*> exportProviders;
 
         private:
             WS2EditorInstance(int &argc, char *argv[]);
@@ -93,6 +96,32 @@ namespace WS2Editor {
              * @return Plugins that failed to load
              */
             QVector<QPluginLoader*>& getFailedPlugins();
+
+            /**
+             * @brief Registers an export provider
+             *
+             * When the user requests to export a file they will be presented with a list of export providers to select
+             * from.
+             *
+             * When the provider is deleted it will automatically be unregistered
+             *
+             * @param provider The export provider to register
+             */
+            void registerExportProvider(IExportProvider *provider);
+
+            /**
+             * @brief Getter for exportProviders
+             *
+             * @return A vector of all export providers, which are used to generate data for exporting files
+             */
+            QVector<IExportProvider*>& getExportProviders();
+
+            /**
+             * @brief Getter for exportProviders - const edition
+             *
+             * @return A vector of all export providers, which are used to generate data for exporting files
+             */
+            const QVector<IExportProvider*>& getExportProviders() const;
 
             /**
              * @brief Calls the exec function on the QApplcation, entering the event loop and staying in there until

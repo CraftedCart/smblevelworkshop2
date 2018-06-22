@@ -36,7 +36,6 @@ string (REPLACE ";" "$<SEMICOLON>" platformPluginsStr "${platformPlugins}")
 configure_file("cmake/installprerequisites.cmake" "cmake/installprerequisites.cmake" COPYONLY)
 add_custom_target(installprerequisites "${CMAKE_COMMAND}" -DCMAKE_INSTALL_PREFIX="${CMAKE_INSTALL_PREFIX}" -DQT_PLATFORM_PLUGINS="${platformPluginsStr}" -P "cmake/installprerequisites.cmake")
 
-#No need to add lang/lang_en_US.ts to the translation list, as the source already has the en_US translation
 set(TRANSLATIONS
     lang/lang_en_US.ts
     #lang/lang_ja_JA.ts
@@ -56,6 +55,7 @@ add_subdirectory(./ws2editorplugins/ws2editorexampleplugin)
 add_subdirectory(./ws2editorplugins/gizmosplugin)
 add_subdirectory(./ws2editorplugins/rendercolorsplugin)
 add_subdirectory(./ws2editorplugins/propertiesproviderplugin)
+add_subdirectory(./ws2editorplugins/lzexportproviderplugin)
 
 if(APPLE)
     set(CPACK_GENERATOR Bundle)

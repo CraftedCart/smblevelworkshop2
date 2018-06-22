@@ -103,6 +103,8 @@ namespace WS2Editor {
         compositeShaderCameraNormalsTextureId = glGetUniformLocation(compositeShaderProg, "cameraNormalsTexSampler");
 
         //Load default models
+        QFile playerBallFile(":/Workshop2/Models/playerBall.fbx");
+        playerBallMesh = WS2Common::Model::ModelLoader::loadModel(playerBallFile);
         QFile goalFile(":/Workshop2/Models/goal.fbx");
         goalMesh = WS2Common::Model::ModelLoader::loadModel(goalFile);
         QFile bumperFile(":/Workshop2/Models/bumper.fbx");

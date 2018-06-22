@@ -9,6 +9,7 @@
 #include "ws2editor_export.h"
 #include "ws2editor/widget/ViewportWidget.hpp"
 #include "ws2editor/widget/PropertiesWidget.hpp"
+#include "ws2editor/IExportProvider.hpp"
 #include <QMainWindow>
 #include <QLabel>
 
@@ -35,6 +36,11 @@ namespace WS2Editor {
                  * @brief Checks if any mouse buttons are down and disables/enables shortcuts appropriately
                  */
                 void checkShortcutsEnabled();
+
+                void addNodeToRoot(
+                        WS2Common::Scene::SceneNode *node,
+                        QVector<WS2Common::Resource::ResourceMesh*>& meshes
+                        );
 
                 void addNodeToStaticGroup(
                         WS2Common::Scene::SceneNode *node,
@@ -64,6 +70,18 @@ namespace WS2Editor {
                  * @brief Shows a file chooser to import files. If files are picked, the files will be imported.
                  */
                 void askImportFiles();
+
+                /**
+                 * @brief Shows a pop up menu to select an export provider
+                 */
+                void askExportFilesProvider();
+
+                /**
+                 * @brief Shows a file chooser to export files using the given export provider
+                 *
+                 * @param provider The export provider to use when generating data to write
+                 */
+                void askExportFiles(IExportProvider *provider);
 
                 /**
                  * @brief Adds an empty group scene node to the currently active project
@@ -105,6 +123,7 @@ namespace WS2Editor {
                  */
                 void showCommandLine();
 
+                void addStart();
                 void addGoalBlue();
                 void addGoalGreen();
                 void addGoalRed();

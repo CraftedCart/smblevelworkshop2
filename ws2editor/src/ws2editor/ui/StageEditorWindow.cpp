@@ -7,10 +7,12 @@
 #include "ws2editor/ui/StageIdeaGeneratorWindow.hpp"
 #include "ws2editor/ui/PluginsWindow.hpp"
 #include "ws2editor/ui/CommandWidget.hpp"
+#include "ws2editor/ui/StatusPopupWidget.hpp"
 #include "ws2editor/task/ImportFileTask.hpp"
 #include "ws2editor/WS2EditorInstance.hpp"
 #include "ws2common/scene/GroupSceneNode.hpp"
 #include "ws2common/scene/BackgroundGroupSceneNode.hpp"
+#include "ws2common/scene/StartSceneNode.hpp"
 #include "ws2common/scene/GoalSceneNode.hpp"
 #include "ws2common/scene/BumperSceneNode.hpp"
 #include "ws2common/scene/BananaSceneNode.hpp"
@@ -62,6 +64,7 @@ namespace WS2Editor {
             connect(ui->viewportWidget, &Widget::ViewportWidget::frameRendered, this, &StageEditorWindow::viewportFrameRendered);
             connect(ui->actionQuit, &QAction::triggered, QApplication::instance(), QApplication::quit);
             connect(ui->actionImport, &QAction::triggered, this, &StageEditorWindow::askImportFiles);
+            connect(ui->actionExport, &QAction::triggered, this, &StageEditorWindow::askExportFilesProvider);
             connect(ui->actionRunCommand, &QAction::triggered, this, &StageEditorWindow::showCommandLine);
             connect(ui->actionNewNode, &QAction::triggered, this, &StageEditorWindow::addSceneNode);
             connect(ui->actionNewBackgroundGroupNode, &QAction::triggered, this, &StageEditorWindow::addBackgroundNode);
@@ -71,6 +74,7 @@ namespace WS2Editor {
             connect(ui->actionStageIdeaGenerator, &QAction::triggered, this, &StageEditorWindow::showStageIdeaGenerator);
             connect(ui->actionViewPlugins, &QAction::triggered, this, &StageEditorWindow::showPlugins);
             connect(ui->actionWorkshopDiscord, &QAction::triggered, []() { QDesktopServices::openUrl(QUrl("https://discord.gg/CEYjvDj")); });
+            connect(ui->actionAddStart, &QAction::triggered, this, &StageEditorWindow::addStart);
             connect(ui->actionAddGoalBlue, &QAction::triggered, this, &StageEditorWindow::addGoalBlue);
             connect(ui->actionAddGoalGreen, &QAction::triggered, this, &StageEditorWindow::addGoalGreen);
             connect(ui->actionAddGoalRed, &QAction::triggered, this, &StageEditorWindow::addGoalRed);
@@ -172,6 +176,81 @@ namespace WS2Editor {
             WS2EditorInstance::getInstance()->getTaskManager()->enqueueTasks(tasks);
         }
 
+        void StageEditorWindow::askExportFilesProvider() {
+            QMenu m(tr("Export menu"), this);
+
+            //Add a title to the menu
+            QAction *titleAction = new QAction(tr("Export providers"), &m);
+            titleAction->setEnabled(false);
+            m.addAction(titleAction);
+
+            //Fetch export providers
+            QVector<IExportProvider*> &exportProviders = WS2EditorInstance::getInstance()->getExportProviders();
+
+            if (exportProviders.isEmpty()) {
+                //No providers
+                QAction *a = new QAction(tr("No export providers"), &m);
+                a->setEnabled(false);
+                m.addAction(a);
+            } else {
+                //Set up provider actions
+                for (IExportProvider *provider : exportProviders) {
+                    QAction *a = new QAction(provider->getTranslatedTypeName(), &m);
+                    connect(a, &QAction::triggered, [this, provider]() { askExportFiles(provider); });
+                    m.addAction(a);
+                }
+            }
+
+            m.exec(QCursor::pos());
+        }
+
+        void StageEditorWindow::askExportFiles(IExportProvider *provider) {
+            //First check if the export provider will allow us
+            Result<> r = provider->checkProject(ProjectManager::getActiveProject());
+
+            if (r.getStatus() != EnumStatus::SUCCESS) {
+                QString message = r.getMessage();
+                if (message.isEmpty()) message = tr("Project check failed - no message provided");
+
+                StatusPopupWidget *w = new StatusPopupWidget(QCursor::pos(), message, "statusMessageFailed", this);
+                w->show();
+
+                return;
+            }
+
+            QFileDialog dialog(this);
+            dialog.setFileMode(QFileDialog::AnyFile);
+
+            //Set name filters
+            QStringList l;
+            for (QPair<QString, QString> p : provider->getNameFilters()) l << p.first;
+            l << tr("All files (*)");
+            dialog.setNameFilters(l);
+
+            //Set the default extension if there is one
+            if (!provider->getNameFilters().isEmpty()) dialog.selectFile(provider->getNameFilters().at(0).second);
+
+            if (dialog.exec()) {
+                QStringList selected = dialog.selectedFiles();
+
+                //Check the selected filter and append the appropriate file extension if it's not already there
+                QString selectedFilter = dialog.selectedNameFilter();
+                for (QPair<QString, QString> p : provider->getNameFilters()) {
+                    if (p.first == selectedFilter) {
+                        //Found a matching filter
+                        //Append the appropriate extension if it's not already there
+                        for (QString &file : selected) if (!file.endsWith(p.second)) file += p.second;
+
+                        break;
+                    }
+                }
+
+                //We now have our final file name list
+                //Let the export provider take over now
+                provider->exportFiles(selected, ProjectManager::getActiveProject());
+            }
+        }
+
         void StageEditorWindow::addSceneNode() {
             GroupSceneNode *newNode = new GroupSceneNode(tr("New Item Group"));
             ModelManager::modelOutliner->addNode(newNode, ProjectManager::getActiveProject()->getScene()->getRootNode());
@@ -215,6 +294,16 @@ namespace WS2Editor {
             widget->show();
         }
 
+        void StageEditorWindow::addNodeToRoot(SceneNode *node, QVector<ResourceMesh*>& meshes) {
+            ResourceScene *scene = ProjectManager::getActiveProject()->getScene();
+            SceneNode *rootNode = scene->getRootNode();
+
+            ModelManager::modelOutliner->addNodeWithMeshes(node, rootNode, meshes);
+
+            //Select the node
+            ProjectManager::getActiveProject()->getScene()->getSelectionManager()->selectOnly(node);
+        }
+
         void StageEditorWindow::addNodeToStaticGroup(SceneNode *node, QVector<ResourceMesh*>& meshes) {
             ResourceScene *scene = ProjectManager::getActiveProject()->getScene();
             SceneNode *staticNode = scene->getStaticNode();
@@ -229,6 +318,11 @@ namespace WS2Editor {
 
             //Select the node
             ProjectManager::getActiveProject()->getScene()->getSelectionManager()->selectOnly(node);
+        }
+
+        void StageEditorWindow::addStart() {
+            StartSceneNode *newNode = new StartSceneNode(tr("Player Start"));
+            addNodeToRoot(newNode, ui->viewportWidget->getRenderManager()->playerBallMesh);
         }
 
         void StageEditorWindow::addGoalBlue() {

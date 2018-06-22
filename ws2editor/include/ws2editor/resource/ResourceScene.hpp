@@ -14,6 +14,7 @@
 #include "ws2common/resource/AbstractResource.hpp"
 #include "ws2common/scene/SceneNode.hpp"
 #include "ws2common/resource/ResourceMesh.hpp"
+#include "ws2common/Stage.hpp"
 #include <QFile>
 
 namespace WS2Editor {
@@ -25,7 +26,7 @@ namespace WS2Editor {
             Q_OBJECT
 
             protected:
-                WS2Common::Scene::SceneNode *rootNode;
+                WS2Common::Stage *stage;
                 Scene::SceneSelectionManager *selectionManager;
                 Physics::PhysicsManager *physicsManager;
                 PhysicsDebugDrawer *physicsDebugDrawer = nullptr;
@@ -73,7 +74,21 @@ namespace WS2Editor {
                 void unload() override;
 
                 /**
-                 * @brief Getter for rootNode
+                 * @brief Getter for stage
+                 *
+                 * @return This scene's stage data
+                 */
+                WS2Common::Stage* getStage();
+
+                /**
+                 * @brief Const getter for stage
+                 *
+                 * @return This scene's stage data
+                 */
+                const WS2Common::Stage* getStage() const;
+
+                /**
+                 * @brief Getter for the stage's rootNode
                  *
                  * @return This scene's root node of the scenegraph
                  */

@@ -31,6 +31,10 @@ QMenu::item:selected {
     background-color: #2196F3;
 }
 
+QMenu::item:disabled {
+    color: #80FFFFFF;
+}
+
 QMenu::separator {
     height: 1px;
     background: #616161;
@@ -342,6 +346,12 @@ QComboBox::down-arrow {
 
 #destinationAlertWidget *, #destinationInfoWidget * {
     background: #00000000;
+}
+
+#statusMessageFailed {
+    border-left: 4px solid #F44336;
+    background: #80F44336;
+    padding: 8px;
 }
 
 /* vim: set syntax=css: */
