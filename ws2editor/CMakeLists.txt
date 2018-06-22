@@ -60,6 +60,7 @@ set(SOURCE_FILES
     ./src/ws2editor/ui/StageIdeaGeneratorWindow.cpp
     ./src/ws2editor/ui/SettingsDialog.cpp
     ./src/ws2editor/ui/CommandWidget.cpp
+    ./src/ws2editor/ui/StatusPopupWidget.cpp
     ./src/ws2editor/widget/ViewportWidget.cpp
     ./src/ws2editor/widget/OutlinerWidget.cpp
     ./src/ws2editor/widget/PropertiesWidget.cpp
@@ -99,6 +100,7 @@ set(SOURCE_FILES
     ./src/ws2editor/command/RestartCommand.cpp
     ./src/ws2editor/command/TranslateSelectedCommand.cpp
     ./src/ws2editor/command/ToggleDebugDrawingCommand.cpp
+    ./src/ws2editor/IExportProvider.cpp
     )
 
 set(HEADER_FILES
@@ -108,6 +110,7 @@ set(HEADER_FILES
     ./include/ws2editor/ui/StageIdeaGeneratorWindow.hpp
     ./include/ws2editor/ui/SettingsDialog.hpp
     ./include/ws2editor/ui/CommandWidget.hpp
+    ./include/ws2editor/ui/StatusPopupWidget.hpp
     ./include/ws2editor/widget/ViewportWidget.hpp
     ./include/ws2editor/widget/OutlinerWidget.hpp
     ./include/ws2editor/widget/PropertiesWidget.hpp

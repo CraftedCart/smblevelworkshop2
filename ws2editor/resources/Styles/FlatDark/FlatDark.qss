@@ -348,5 +348,11 @@ QComboBox::down-arrow {
     background: #00000000;
 }
 
+#statusMessageFailed {
+    border-left: 4px solid #F44336;
+    background: #80F44336;
+    padding: 8px;
+}
+
 /* vim: set syntax=css: */
 

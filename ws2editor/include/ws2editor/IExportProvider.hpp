@@ -3,10 +3,11 @@
  * @brief Header for the IExportProvider interface
  */
 
-#ifndef SMBLEVELWORKSHOP2_WS2EDITOR_PLUGIN_IEXPORTPROVIDER_HPP
-#define SMBLEVELWORKSHOP2_WS2EDITOR_PLUGIN_IEXPORTPROVIDER_HPP
+#ifndef SMBLEVELWORKSHOP2_WS2EDITOR_IEXPORTPROVIDER_HPP
+#define SMBLEVELWORKSHOP2_WS2EDITOR_IEXPORTPROVIDER_HPP
 
 #include "ws2editor_export.h"
+#include "ws2common/Result.hpp"
 #include "ws2editor/project/Project.hpp"
 #include <QString>
 #include <QVector>
@@ -50,6 +51,15 @@ namespace WS2Editor {
              * @return A vector of file extensions usable when exporting files
              */
             virtual QVector<QPair<QString, QString>> getNameFilters() = 0;
+
+            /**
+             * @brief Checks if the given project can be exported or not before asking the user where to export to
+             *
+             * @param project The project to check
+             *
+             * @return A result value containing a status and optional error message
+             */
+            virtual WS2Common::Result<> checkProject(Project::Project *project);
 
             /**
              * @brief Generates export data and writes it to each target file

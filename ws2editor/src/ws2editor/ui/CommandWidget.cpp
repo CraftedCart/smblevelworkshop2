@@ -6,12 +6,14 @@
 #include <QDesktopWidget>
 #include <QKeyEvent>
 #include <QAbstractItemView>
+#include <QDebug>
 
 namespace WS2Editor {
     namespace UI {
         CommandWidget::CommandWidget(QPoint pos, QWidget *parent) : QWidget(parent) {
             using namespace WS2Editor::Command;
 
+            setAttribute(Qt::WA_DeleteOnClose);
             setWindowFlags(windowFlags() | Qt::Popup);
 
             QHBoxLayout *layout = new QHBoxLayout;

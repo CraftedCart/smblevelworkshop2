@@ -7,6 +7,7 @@
 #include "ws2editor/ui/StageIdeaGeneratorWindow.hpp"
 #include "ws2editor/ui/PluginsWindow.hpp"
 #include "ws2editor/ui/CommandWidget.hpp"
+#include "ws2editor/ui/StatusPopupWidget.hpp"
 #include "ws2editor/task/ImportFileTask.hpp"
 #include "ws2editor/WS2EditorInstance.hpp"
 #include "ws2common/scene/GroupSceneNode.hpp"
@@ -204,6 +205,19 @@ namespace WS2Editor {
         }
 
         void StageEditorWindow::askExportFiles(IExportProvider *provider) {
+            //First check if the export provider will allow us
+            Result<> r = provider->checkProject(ProjectManager::getActiveProject());
+
+            if (r.getStatus() != EnumStatus::SUCCESS) {
+                QString message = r.getMessage();
+                if (message.isEmpty()) message = tr("Project check failed - no message provided");
+
+                StatusPopupWidget *w = new StatusPopupWidget(QCursor::pos(), message, "statusMessageFailed", this);
+                w->show();
+
+                return;
+            }
+
             QFileDialog dialog(this);
             dialog.setFileMode(QFileDialog::AnyFile);
 
