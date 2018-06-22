@@ -38,6 +38,7 @@ add_library(${PROJECT_NAME} SHARED ${SOURCE_FILES} ${HEADER_FILES})
 target_link_libraries(${PROJECT_NAME}
     Qt5::Core
     ws2editor
+    ws2lz
     ${BULLET_LIBRARIES}
     )
 

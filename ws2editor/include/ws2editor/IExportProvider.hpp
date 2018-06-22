@@ -7,6 +7,7 @@
 #define SMBLEVELWORKSHOP2_WS2EDITOR_PLUGIN_IEXPORTPROVIDER_HPP
 
 #include "ws2editor_export.h"
+#include "ws2editor/project/Project.hpp"
 #include <QString>
 #include <QVector>
 
@@ -49,6 +50,14 @@ namespace WS2Editor {
              * @return A vector of file extensions usable when exporting files
              */
             virtual QVector<QPair<QString, QString>> getNameFilters() = 0;
+
+            /**
+             * @brief Generates export data and writes it to each target file
+             *
+             * @param targetFiles A list of files to save to
+             * @param project The project to export
+             */
+            virtual void exportFiles(QStringList targetFiles, Project::Project *project) = 0;
     };
 }
 

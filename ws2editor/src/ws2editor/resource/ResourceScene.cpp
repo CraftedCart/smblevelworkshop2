@@ -10,11 +10,15 @@
 namespace WS2Editor {
     namespace Resource {
         using namespace WS2Common::Resource;
+        using namespace WS2Common;
 
         ResourceScene::ResourceScene() {
-            rootNode = new WS2Common::Scene::SceneNode("root");
+            stage = new Stage();
+            stage->setRootNode(new WS2Common::Scene::SceneNode("root"));
+            stage->setFalloutY(-10.0f); //Default fallout plane
+
             WS2Common::Scene::GroupSceneNode *staticNode = new WS2Common::Scene::GroupSceneNode(tr("Static"));
-            UI::ModelManager::modelOutliner->addNode(staticNode, rootNode);
+            UI::ModelManager::modelOutliner->addNode(staticNode, stage->getRootNode());
 
             selectionManager = new Scene::SceneSelectionManager();
             connect(selectionManager, &Scene::SceneSelectionManager::onSelectionChanged,
@@ -24,7 +28,7 @@ namespace WS2Editor {
         }
 
         ResourceScene::~ResourceScene() {
-            delete rootNode;
+            delete stage;
             delete selectionManager;
             delete physicsManager;
             if (physicsDebugDrawer != nullptr) delete physicsDebugDrawer;
@@ -41,15 +45,23 @@ namespace WS2Editor {
             return physicsDebugDrawer;
         }
 
+        Stage* ResourceScene::getStage() {
+            return stage;
+        }
+
+        const Stage* ResourceScene::getStage() const {
+            return stage;
+        }
+
         WS2Common::Scene::SceneNode* ResourceScene::getRootNode() {
-            return rootNode;
+            return stage->getRootNode();
         }
 
         WS2Common::Scene::SceneNode* ResourceScene::getStaticNode() {
             using namespace WS2Common::Scene;
 
             //Search for non-animated nodes
-            for (SceneNode *node : rootNode->getChildren()) {
+            for (SceneNode *node : stage->getRootNode()->getChildren()) {
                 if (node->getTransformAnimation() == nullptr) return node;
             }
 
@@ -104,11 +116,11 @@ namespace WS2Editor {
             using namespace WS2Editor::Scene;
 
             //Get the static node
-            WS2Common::Scene::SceneNode *staticNode = rootNode->getChildByName(tr("Static"));
+            WS2Common::Scene::SceneNode *staticNode = stage->getRootNode()->getChildByName(tr("Static"));
             //Create the static node if it doesn't exist
             if (!staticNode) {
                 staticNode = new WS2Common::Scene::GroupSceneNode(tr("Static"));
-                UI::ModelManager::modelOutliner->addNode(staticNode, rootNode);
+                UI::ModelManager::modelOutliner->addNode(staticNode, stage->getRootNode());
             }
 
             for (int i = 0; i < meshes.size(); i++) {

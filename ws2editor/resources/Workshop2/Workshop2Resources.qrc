@@ -18,6 +18,7 @@
         <file>Icons/Import.png</file>
         <file>Icons/Add.png</file>
         <file>Icons/Settings.png</file>
+        <file>Icons/Start.png</file>
         <file>Icons/GoalBlue.png</file>
         <file>Icons/GoalGreen.png</file>
         <file>Icons/GoalRed.png</file>
@@ -45,6 +46,7 @@
         <file>Lang/tips-en_US.txt</file>
         <file>Lang/stageThemes-en_US.txt</file>
         <file>Lang/stageMechanics-en_US.txt</file>
+        <file>Models/playerBall.fbx</file>
         <file>Models/goal.fbx</file>
         <file>Models/bumper.fbx</file>
         <file>Models/bananaSingle.fbx</file>

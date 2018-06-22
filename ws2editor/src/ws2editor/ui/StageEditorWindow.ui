@@ -162,6 +162,7 @@
    <addaction name="separator"/>
    <addaction name="actionDelete"/>
    <addaction name="separator"/>
+   <addaction name="actionAddStart"/>
    <addaction name="actionAddGoalBlue"/>
    <addaction name="actionAddGoalGreen"/>
    <addaction name="actionAddGoalRed"/>
@@ -738,6 +739,15 @@
    </property>
    <property name="shortcut">
     <string>Ctrl+Shift+B</string>
+   </property>
+  </action>
+  <action name="actionAddStart">
+   <property name="icon">
+    <iconset resource="../../../resources/Workshop2/Workshop2Resources.qrc">
+     <normaloff>:/Workshop2/Icons/Start.png</normaloff>:/Workshop2/Icons/Start.png</iconset>
+   </property>
+   <property name="text">
+    <string>Add &amp;Start</string>
    </property>
   </action>
  </widget>

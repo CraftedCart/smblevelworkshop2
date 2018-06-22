@@ -37,6 +37,11 @@ namespace WS2Editor {
                  */
                 void checkShortcutsEnabled();
 
+                void addNodeToRoot(
+                        WS2Common::Scene::SceneNode *node,
+                        QVector<WS2Common::Resource::ResourceMesh*>& meshes
+                        );
+
                 void addNodeToStaticGroup(
                         WS2Common::Scene::SceneNode *node,
                         QVector<WS2Common::Resource::ResourceMesh*>& meshes
@@ -118,6 +123,7 @@ namespace WS2Editor {
                  */
                 void showCommandLine();
 
+                void addStart();
                 void addGoalBlue();
                 void addGoalGreen();
                 void addGoalRed();

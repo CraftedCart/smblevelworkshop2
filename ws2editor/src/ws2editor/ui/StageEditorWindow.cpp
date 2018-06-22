@@ -11,6 +11,7 @@
 #include "ws2editor/WS2EditorInstance.hpp"
 #include "ws2common/scene/GroupSceneNode.hpp"
 #include "ws2common/scene/BackgroundGroupSceneNode.hpp"
+#include "ws2common/scene/StartSceneNode.hpp"
 #include "ws2common/scene/GoalSceneNode.hpp"
 #include "ws2common/scene/BumperSceneNode.hpp"
 #include "ws2common/scene/BananaSceneNode.hpp"
@@ -72,6 +73,7 @@ namespace WS2Editor {
             connect(ui->actionStageIdeaGenerator, &QAction::triggered, this, &StageEditorWindow::showStageIdeaGenerator);
             connect(ui->actionViewPlugins, &QAction::triggered, this, &StageEditorWindow::showPlugins);
             connect(ui->actionWorkshopDiscord, &QAction::triggered, []() { QDesktopServices::openUrl(QUrl("https://discord.gg/CEYjvDj")); });
+            connect(ui->actionAddStart, &QAction::triggered, this, &StageEditorWindow::addStart);
             connect(ui->actionAddGoalBlue, &QAction::triggered, this, &StageEditorWindow::addGoalBlue);
             connect(ui->actionAddGoalGreen, &QAction::triggered, this, &StageEditorWindow::addGoalGreen);
             connect(ui->actionAddGoalRed, &QAction::triggered, this, &StageEditorWindow::addGoalRed);
@@ -230,7 +232,8 @@ namespace WS2Editor {
                 }
 
                 //We now have our final file name list
-                qDebug() << selected;
+                //Let the export provider take over now
+                provider->exportFiles(selected, ProjectManager::getActiveProject());
             }
         }
 
@@ -277,6 +280,16 @@ namespace WS2Editor {
             widget->show();
         }
 
+        void StageEditorWindow::addNodeToRoot(SceneNode *node, QVector<ResourceMesh*>& meshes) {
+            ResourceScene *scene = ProjectManager::getActiveProject()->getScene();
+            SceneNode *rootNode = scene->getRootNode();
+
+            ModelManager::modelOutliner->addNodeWithMeshes(node, rootNode, meshes);
+
+            //Select the node
+            ProjectManager::getActiveProject()->getScene()->getSelectionManager()->selectOnly(node);
+        }
+
         void StageEditorWindow::addNodeToStaticGroup(SceneNode *node, QVector<ResourceMesh*>& meshes) {
             ResourceScene *scene = ProjectManager::getActiveProject()->getScene();
             SceneNode *staticNode = scene->getStaticNode();
@@ -291,6 +304,11 @@ namespace WS2Editor {
 
             //Select the node
             ProjectManager::getActiveProject()->getScene()->getSelectionManager()->selectOnly(node);
+        }
+
+        void StageEditorWindow::addStart() {
+            StartSceneNode *newNode = new StartSceneNode(tr("Player Start"));
+            addNodeToRoot(newNode, ui->viewportWidget->getRenderManager()->playerBallMesh);
         }
 
         void StageEditorWindow::addGoalBlue() {
