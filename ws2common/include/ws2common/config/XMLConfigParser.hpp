@@ -212,10 +212,13 @@ namespace WS2Common {
                  *
                  * @param xml The QXmlStreamReader
                  * @param keyframes The keyframe map to populate
+                 * @param convertToRadians Whether keyframe values should be interpreted as degrees and converted to
+                 *                         radians first
                  */
                 void parseKeyframes(
                         QXmlStreamReader &xml,
-                        std::set<Animation::KeyframeF*, Animation::KeyframeCompare> &keyframes
+                        std::set<Animation::KeyframeF*, Animation::KeyframeCompare> &keyframes,
+                        bool convertToRadians = false
                         );
         };
     }

@@ -212,6 +212,14 @@ namespace WS2Lz {
             void writeTransformAnimation(QDataStream &dev, const WS2Common::Animation::TransformAnimation *anim);
             void writeKeyframeF(QDataStream &dev, const WS2Common::Animation::KeyframeF *k);
 
+            /**
+             * @brief Like `writeKeyframeF`, but converts the value from radians to degrees first
+             *
+             * @param dev The data stream to write to
+             * @param k The keyframe to write
+             */
+            void writeKeyframeAngleF(QDataStream &dev, const WS2Common::Animation::KeyframeF *k);
+
             void writeNull(QDataStream &dev, const unsigned int count);
 
             /**

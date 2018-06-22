@@ -920,15 +920,22 @@ namespace WS2Lz {
         foreach(Animation::KeyframeF *k, anim->getPosXKeyframes()) writeKeyframeF(dev, k);
         foreach(Animation::KeyframeF *k, anim->getPosYKeyframes()) writeKeyframeF(dev, k);
         foreach(Animation::KeyframeF *k, anim->getPosZKeyframes()) writeKeyframeF(dev, k);
-        foreach(Animation::KeyframeF *k, anim->getRotXKeyframes()) writeKeyframeF(dev, k);
-        foreach(Animation::KeyframeF *k, anim->getRotYKeyframes()) writeKeyframeF(dev, k);
-        foreach(Animation::KeyframeF *k, anim->getRotZKeyframes()) writeKeyframeF(dev, k);
+        foreach(Animation::KeyframeF *k, anim->getRotXKeyframes()) writeKeyframeAngleF(dev, k);
+        foreach(Animation::KeyframeF *k, anim->getRotYKeyframes()) writeKeyframeAngleF(dev, k);
+        foreach(Animation::KeyframeF *k, anim->getRotZKeyframes()) writeKeyframeAngleF(dev, k);
     }
 
     void SMB2LzExporter::writeKeyframeF(QDataStream &dev, const Animation::KeyframeF *k) {
         dev << (quint32) k->getEasing(); //Easing
         dev << k->getValue().first;
         dev << k->getValue().second;
+        writeNull(dev, 8);
+    }
+
+    void SMB2LzExporter::writeKeyframeAngleF(QDataStream &dev, const Animation::KeyframeF *k) {
+        dev << (quint32) k->getEasing(); //Easing
+        dev << k->getValue().first;
+        dev << qRadiansToDegrees(k->getValue().second);
         writeNull(dev, 8);
     }
 

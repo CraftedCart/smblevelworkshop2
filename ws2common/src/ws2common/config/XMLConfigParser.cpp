@@ -1,9 +1,11 @@
 #include "ws2common/config/XMLConfigParser.hpp"
 #include "ws2common/scene/MeshCollisionSceneNode.hpp"
 #include "ws2common/SerializeUtils.hpp"
+#include "ws2common/MathUtils.hpp"
 #include <QXmlStreamReader>
 #include <QDebug>
 #include <QCoreApplication>
+#include <QtMath>
 
 namespace WS2Common {
     namespace Config {
@@ -124,7 +126,7 @@ namespace WS2Common {
                 } else if (xml.name() == "position") {
                     start->setPosition(SerializeUtils::getVec3Attributes(xml.attributes()));
                 } else if (xml.name() == "rotation") {
-                    start->setRotation(SerializeUtils::getVec3Attributes(xml.attributes()));
+                    start->setRotation(MathUtils::degreesToRadians(SerializeUtils::getVec3Attributes(xml.attributes())));
                 } else {
                     qWarning().noquote() << "Unrecognised tag: start >" << xml.name();
                 }
@@ -149,7 +151,7 @@ namespace WS2Common {
                 } else if (xml.name() == "position") {
                     bg->setPosition(SerializeUtils::getVec3Attributes(xml.attributes()));
                 } else if (xml.name() == "rotation") {
-                    bg->setRotation(SerializeUtils::getVec3Attributes(xml.attributes()));
+                    bg->setRotation(MathUtils::degreesToRadians(SerializeUtils::getVec3Attributes(xml.attributes())));
                 } else if (xml.name() == "scale") {
                     bg->setScale(SerializeUtils::getVec3Attributes(xml.attributes()));
                 } else if (xml.name() == "animKeyframes") { //TODO
@@ -188,7 +190,7 @@ namespace WS2Common {
                 } else if (xml.name() == "rotationCenter") { //TODO
                     group->setOriginPosition(SerializeUtils::getVec3Attributes(xml.attributes()));
                 } else if (xml.name() == "initialRotation") { //TODO
-                    group->setOriginRotation(SerializeUtils::getVec3Attributes(xml.attributes()));
+                    group->setOriginRotation(MathUtils::degreesToRadians(SerializeUtils::getVec3Attributes(xml.attributes())));
                 } else if (xml.name() == "animSeesawType") { //TODO
                     QPair<EnumAnimationSeesawType, Animation::EnumLoopType> type = parseAnimLoopType(xml);
                     group->setAnimationSeesawType(type.first);
@@ -260,7 +262,7 @@ namespace WS2Common {
                 } else if (xml.name() == "position") {
                     goal->setPosition(SerializeUtils::getVec3Attributes(xml.attributes()));
                 } else if (xml.name() == "rotation") {
-                    goal->setRotation(SerializeUtils::getVec3Attributes(xml.attributes()));
+                    goal->setRotation(MathUtils::degreesToRadians(SerializeUtils::getVec3Attributes(xml.attributes())));
                 } else if (xml.name() == "type") {
                     goal->setType(GoalType::fromString(xml.readElementText()));
                 } else {
@@ -287,7 +289,7 @@ namespace WS2Common {
                 } else if (xml.name() == "position") {
                     bumper->setPosition(SerializeUtils::getVec3Attributes(xml.attributes()));
                 } else if (xml.name() == "rotation") {
-                    bumper->setRotation(SerializeUtils::getVec3Attributes(xml.attributes()));
+                    bumper->setRotation(MathUtils::degreesToRadians(SerializeUtils::getVec3Attributes(xml.attributes())));
                 } else if (xml.name() == "scale") {
                     bumper->setScale(SerializeUtils::getVec3Attributes(xml.attributes()));
                 } else {
@@ -314,7 +316,7 @@ namespace WS2Common {
                 } else if (xml.name() == "position") {
                     jamabar->setPosition(SerializeUtils::getVec3Attributes(xml.attributes()));
                 } else if (xml.name() == "rotation") {
-                    jamabar->setRotation(SerializeUtils::getVec3Attributes(xml.attributes()));
+                    jamabar->setRotation(MathUtils::degreesToRadians(SerializeUtils::getVec3Attributes(xml.attributes())));
                 } else if (xml.name() == "scale") {
                     jamabar->setScale(SerializeUtils::getVec3Attributes(xml.attributes()));
                 } else {
@@ -366,7 +368,7 @@ namespace WS2Common {
                 } else if (xml.name() == "position") {
                     volume->setPosition(SerializeUtils::getVec3Attributes(xml.attributes()));
                 } else if (xml.name() == "rotation") {
-                    volume->setRotation(SerializeUtils::getVec3Attributes(xml.attributes()));
+                    volume->setRotation(MathUtils::degreesToRadians(SerializeUtils::getVec3Attributes(xml.attributes())));
                 } else if (xml.name() == "scale") {
                     volume->setScale(SerializeUtils::getVec3Attributes(xml.attributes()));
                 } else {
@@ -393,7 +395,7 @@ namespace WS2Common {
                 } else if (xml.name() == "position") {
                     wh->setPosition(SerializeUtils::getVec3Attributes(xml.attributes()));
                 } else if (xml.name() == "rotation") {
-                    wh->setRotation(SerializeUtils::getVec3Attributes(xml.attributes()));
+                    wh->setRotation(MathUtils::degreesToRadians(SerializeUtils::getVec3Attributes(xml.attributes())));
                 } else if (xml.name() == "destinationName") {
                     wormholeDestMap[wh] = xml.readElementText();
                 } else {
@@ -421,7 +423,7 @@ namespace WS2Common {
                 } else if (xml.name() == "position") {
                     sw->setPosition(SerializeUtils::getVec3Attributes(xml.attributes()));
                 } else if (xml.name() == "rotation") {
-                    sw->setRotation(SerializeUtils::getVec3Attributes(xml.attributes()));
+                    sw->setRotation(MathUtils::degreesToRadians(SerializeUtils::getVec3Attributes(xml.attributes())));
                 } else if (xml.name() == "type") {
                     sw->setType(PlaybackState::fromString(xml.readElementText()));
                 } else if (xml.name() == "animGroupId") {
@@ -512,11 +514,11 @@ namespace WS2Common {
                 } else if (xml.name() == "posZ") {
                     parseKeyframes(xml, anim->getPosZKeyframes());
                 } else if (xml.name() == "rotX") {
-                    parseKeyframes(xml, anim->getRotXKeyframes());
+                    parseKeyframes(xml, anim->getRotXKeyframes(), true);
                 } else if (xml.name() == "rotY") {
-                    parseKeyframes(xml, anim->getRotYKeyframes());
+                    parseKeyframes(xml, anim->getRotYKeyframes(), true);
                 } else if (xml.name() == "rotZ") {
-                    parseKeyframes(xml, anim->getRotZKeyframes());
+                    parseKeyframes(xml, anim->getRotZKeyframes(), true);
                 } else {
                     qWarning().noquote() << "Unrecognised tag: animKeyframes >" << xml.name();
                 }
@@ -527,7 +529,8 @@ namespace WS2Common {
 
         void XMLConfigParser::parseKeyframes(
                 QXmlStreamReader &xml,
-                std::set<Animation::KeyframeF*, Animation::KeyframeCompare> &keyframes
+                std::set<Animation::KeyframeF*, Animation::KeyframeCompare> &keyframes,
+                bool convertToRadians
                 ) {
             using namespace Animation;
 
@@ -548,6 +551,8 @@ namespace WS2Common {
                             time = attr.value().toFloat();
                         } else if (attr.name() == "value") {
                             value = attr.value().toFloat();
+
+                            if (convertToRadians) value = qDegreesToRadians(value);
                         } else if (attr.name() == "easing") {
                             easing = Easing::fromString(attr.value().toString());
                         }
