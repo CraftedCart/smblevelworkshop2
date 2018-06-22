@@ -8,6 +8,7 @@
 #define SMBLEVELWORKSHOP2_WS2COMMON_SERIALIZEUTILS_HPP
 
 #include "ws2common_export.h"
+#include "ws2common/scene/StartSceneNode.hpp"
 #include "ws2common/scene/MeshSceneNode.hpp"
 #include "ws2common/scene/MeshCollisionSceneNode.hpp"
 #include "ws2common/scene/GroupSceneNode.hpp"
@@ -26,6 +27,8 @@ namespace WS2Common {
 
         WS2COMMON_EXPORT void parseSceneNode(QXmlStreamReader &xml, Scene::SceneNode *node);
         WS2COMMON_EXPORT void parseSceneNodeData(QXmlStreamReader &xml, Scene::SceneNode *node);
+        WS2COMMON_EXPORT void parseStartSceneNode(QXmlStreamReader &xml, Scene::StartSceneNode *node);
+        //Start scene node has no additional data to parse
         WS2COMMON_EXPORT void parseMeshSceneNode(QXmlStreamReader &xml, Scene::MeshSceneNode *node);
         WS2COMMON_EXPORT void parseMeshSceneNodeData(QXmlStreamReader &xml, Scene::MeshSceneNode *node);
         WS2COMMON_EXPORT void parseMeshCollisionSceneNode(QXmlStreamReader &xml, Scene::MeshCollisionSceneNode *node);
