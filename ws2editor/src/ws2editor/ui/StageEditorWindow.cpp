@@ -19,11 +19,11 @@
 #include "ws2common/scene/JamabarSceneNode.hpp"
 #include "ws2common/scene/WormholeSceneNode.hpp"
 #include <QFontDatabase>
-#include <Qt>
 #include <QFileDialog>
 #include <QAction>
 #include <QDesktopServices>
 #include <QDebug>
+#include <Qt>
 
 namespace WS2Editor {
     namespace UI {
@@ -84,7 +84,7 @@ namespace WS2Editor {
             connect(ui->actionAddJamabar, &QAction::triggered, this, &StageEditorWindow::addJamabar);
             connect(ui->actionAddWormhole, &QAction::triggered, this, &StageEditorWindow::addWormhole);
 
-            //Debug menu
+            ////Debug menu
             connect(ui->actionClearAllRenderManagerCaches, &QAction::triggered, [this]() {
                     ui->viewportWidget->makeCurrentContext();
                     ui->viewportWidget->getRenderManager()->clearAllCaches();
@@ -108,6 +108,24 @@ namespace WS2Editor {
             //Install an event filter for the viewport
             //so we don't trigger shortcuts when a mouse button is down
             ui->viewportWidget->installEventFilter(new ViewportEventFilter(this, this));
+
+            //Disable not yet implemented functionality
+            ui->actionNew->setEnabled(false);
+            ui->actionOpen->setEnabled(false);
+            ui->actionUndo->setEnabled(false);
+            ui->actionRedo->setEnabled(false);
+            ui->actionCut->setEnabled(false);
+            ui->actionCopy->setEnabled(false);
+            ui->actionPaste->setEnabled(false);
+            ui->actionSelectAll->setEnabled(false);
+            ui->actionDuplicate->setEnabled(false);
+            ui->actionFocusSelected->setEnabled(false);
+            ui->actionSave->setEnabled(false);
+            ui->actionSaveAs->setEnabled(false);
+
+            //Hide NYI dockables
+            ui->timelineDockWidget->hide();
+            ui->actionToggleViewTimeline->setEnabled(false);
         }
 
         StageEditorWindow::~StageEditorWindow() {

@@ -1325,102 +1325,102 @@ Public License instead of this License.  But first, please read
 <context>
     <name>WS2Editor::UI::StageEditorWindow</name>
     <message>
-        <location filename="../src/ws2editor/ui/StageEditorWindow.cpp" line="141"/>
-        <source>Delta: %1ms / Framerate: %2</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../src/ws2editor/ui/StageEditorWindow.cpp" line="150"/>
+        <location filename="../src/ws2editor/ui/StageEditorWindow.cpp" line="168"/>
         <source>Import files</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/ws2editor/ui/StageEditorWindow.cpp" line="152"/>
+        <location filename="../src/ws2editor/ui/StageEditorWindow.cpp" line="170"/>
         <source>All supported file types (*.fbx *.dae *.gltf *.glb *.blend *.3ds *.ase *.obj *.ifc *.xgl *.zgl *.ply *.dxf *.lwo *.lws *.lxo *.stl *.x *.ac *ms3d *.cob *.scn *.mesh.xml *.irrmesh *.irr *.mdl *.md2 *.md3 *.pk3 *.mdc *.md5* *.smd *.vta *.ogex *.3d *.b3d *.q3d *.q3s *.nff *.off *.raw *.ter *.hmp *.ndo *.txt *.xml);;3D models (*.fbx *.dae *.gltf *.glb *.blend *.3ds *.ase *.obj *.ifc *.xgl *.zgl *.ply *.dxf *.lwo *.lws *.lxo *.stl *.x *.ac *ms3d *.cob *.scn *.mesh.xml *.irrmesh *.irr *.mdl *.md2 *.md3 *.pk3 *.mdc *.md5* *.smd *.vta *.ogex *.3d *.b3d *.q3d *.q3s *.nff *.off *.raw *.ter *.hmp *.ndo);;Stage configurations (*.txt *.xml);;All files (*)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/ws2editor/ui/StageEditorWindow.cpp" line="180"/>
+        <location filename="../src/ws2editor/ui/StageEditorWindow.cpp" line="198"/>
         <source>Export menu</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/ws2editor/ui/StageEditorWindow.cpp" line="192"/>
+        <location filename="../src/ws2editor/ui/StageEditorWindow.cpp" line="210"/>
         <source>No export providers</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/ws2editor/ui/StageEditorWindow.cpp" line="213"/>
+        <location filename="../src/ws2editor/ui/StageEditorWindow.cpp" line="231"/>
         <source>Project check failed - no message provided</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/ws2editor/ui/StageEditorWindow.cpp" line="227"/>
+        <location filename="../src/ws2editor/ui/StageEditorWindow.cpp" line="245"/>
         <source>All files (*)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/ws2editor/ui/StageEditorWindow.cpp" line="324"/>
+        <location filename="../src/ws2editor/ui/StageEditorWindow.cpp" line="342"/>
         <source>Player Start</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/ws2editor/ui/StageEditorWindow.cpp" line="329"/>
+        <location filename="../src/ws2editor/ui/StageEditorWindow.cpp" line="347"/>
         <source>New Blue Goal</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/ws2editor/ui/StageEditorWindow.cpp" line="351"/>
+        <location filename="../src/ws2editor/ui/StageEditorWindow.cpp" line="369"/>
         <source>New Banana Single</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/ws2editor/ui/StageEditorWindow.cpp" line="356"/>
+        <location filename="../src/ws2editor/ui/StageEditorWindow.cpp" line="374"/>
         <source>New Banana Bunch</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/ws2editor/ui/StageEditorWindow.cpp" line="362"/>
+        <location filename="../src/ws2editor/ui/StageEditorWindow.cpp" line="380"/>
         <source>New Jamabar</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/ws2editor/ui/StageEditorWindow.cpp" line="367"/>
+        <location filename="../src/ws2editor/ui/StageEditorWindow.cpp" line="385"/>
         <source>New Wormhole</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/ws2editor/ui/StageEditorWindow.cpp" line="313"/>
+        <location filename="../src/ws2editor/ui/StageEditorWindow.cpp" line="331"/>
         <source>Static</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/ws2editor/ui/StageEditorWindow.cpp" line="183"/>
+        <location filename="../src/ws2editor/ui/StageEditorWindow.cpp" line="159"/>
+        <source>Delta: %1ms / Framerate: %2</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/ws2editor/ui/StageEditorWindow.cpp" line="201"/>
         <source>Export providers</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/ws2editor/ui/StageEditorWindow.cpp" line="255"/>
+        <location filename="../src/ws2editor/ui/StageEditorWindow.cpp" line="273"/>
         <source>New Item Group</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/ws2editor/ui/StageEditorWindow.cpp" line="260"/>
+        <location filename="../src/ws2editor/ui/StageEditorWindow.cpp" line="278"/>
         <source>New Background Group</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/ws2editor/ui/StageEditorWindow.cpp" line="334"/>
+        <location filename="../src/ws2editor/ui/StageEditorWindow.cpp" line="352"/>
         <source>New Green Goal</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/ws2editor/ui/StageEditorWindow.cpp" line="340"/>
+        <location filename="../src/ws2editor/ui/StageEditorWindow.cpp" line="358"/>
         <source>New Red Goal</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/ws2editor/ui/StageEditorWindow.cpp" line="346"/>
+        <location filename="../src/ws2editor/ui/StageEditorWindow.cpp" line="364"/>
         <source>New Bumper</source>
         <translation type="unfinished"></translation>
     </message>

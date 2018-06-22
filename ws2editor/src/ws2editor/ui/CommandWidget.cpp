@@ -52,6 +52,7 @@ namespace WS2Editor {
             move(pos);
 
             completer->popup()->installEventFilter(this);
+            installEventFilter(this);
 
             connect(lineEdit, &QLineEdit::returnPressed, this, &CommandWidget::executeCommand);
         }
@@ -79,17 +80,19 @@ namespace WS2Editor {
                         return true;
                     }
                 }
+            } else {
+                if (event->type() == QEvent::KeyPress) {
+                    QKeyEvent *keyEvent = static_cast<QKeyEvent*>(event);
+                    if (keyEvent->key() == Qt::Key_Return) {
+                        close();
+
+                        return true;
+                    }
+                }
             }
 
             //Pass the event on to the parent class WS2EDITOR_EXPORT
             return QWidget::eventFilter(obj, event);
-        }
-
-        void CommandWidget::keyPressEvent(QKeyEvent *event) {
-            QWidget::keyPressEvent(event);
-
-            //Close the window if we're focus but the line edit isn't focused on return
-            if (event->key() == Qt::Key_Return) close();
         }
 
         void CommandWidget::executeCommand() {

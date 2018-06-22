@@ -189,6 +189,10 @@ QToolButton:pressed {
     background: #616161;
 }
 
+QToolButton:disabled {
+    background: #424242;
+}
+
 QPushButton:checked {
     border-left: 4px solid #2196F3;
 }
