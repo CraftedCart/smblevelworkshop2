@@ -9,68 +9,73 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/ws2editor/ui/AboutWindow.ui" line="89"/>
-        <source>Compiled on... MISSING TIMESTAMP - Timestamp should be added within C++</source>
+        <location filename="../src/ws2editor/ui/AboutWindow.ui" line="101"/>
+        <source>MISSING VERSION</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/ws2editor/ui/AboutWindow.ui" line="108"/>
+        <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Compiled on... MISSING TIMESTAMP&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
         <extracomment>This should never be shown, therefore should not need translating</extracomment>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/ws2editor/ui/AboutWindow.ui" line="103"/>
+        <location filename="../src/ws2editor/ui/AboutWindow.ui" line="128"/>
         <source>Developed by</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/ws2editor/ui/AboutWindow.ui" line="110"/>
+        <location filename="../src/ws2editor/ui/AboutWindow.ui" line="135"/>
         <source>CraftedCart</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/ws2editor/ui/AboutWindow.ui" line="122"/>
+        <location filename="../src/ws2editor/ui/AboutWindow.ui" line="147"/>
         <source>Special thanks for hacking</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/ws2editor/ui/AboutWindow.ui" line="129"/>
+        <location filename="../src/ws2editor/ui/AboutWindow.ui" line="154"/>
         <source>Yoshimaster96</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/ws2editor/ui/AboutWindow.ui" line="136"/>
+        <location filename="../src/ws2editor/ui/AboutWindow.ui" line="161"/>
         <source>bobjrsenior</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/ws2editor/ui/AboutWindow.ui" line="143"/>
+        <location filename="../src/ws2editor/ui/AboutWindow.ui" line="168"/>
         <source>Mechalico</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/ws2editor/ui/AboutWindow.ui" line="155"/>
+        <location filename="../src/ws2editor/ui/AboutWindow.ui" line="180"/>
         <source>Special thanks for helping to get SMB Level Workshop known</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/ws2editor/ui/AboutWindow.ui" line="162"/>
+        <location filename="../src/ws2editor/ui/AboutWindow.ui" line="187"/>
         <source>Geoff</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/ws2editor/ui/AboutWindow.ui" line="174"/>
+        <location filename="../src/ws2editor/ui/AboutWindow.ui" line="199"/>
         <source>And thanks to the community for creating custom content</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/ws2editor/ui/AboutWindow.ui" line="181"/>
+        <location filename="../src/ws2editor/ui/AboutWindow.ui" line="206"/>
         <source>CraftedCart/smblevelworkshop2 on GitHub</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/ws2editor/ui/AboutWindow.ui" line="193"/>
+        <location filename="../src/ws2editor/ui/AboutWindow.ui" line="218"/>
         <source>SMB Level Workshop 2 is licenced under the GNU GPL v3</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/ws2editor/ui/AboutWindow.ui" line="203"/>
+        <location filename="../src/ws2editor/ui/AboutWindow.ui" line="228"/>
         <source>                    GNU GENERAL PUBLIC LICENSE
                        Version 3, 29 June 2007
 
@@ -1303,7 +1308,12 @@ Public License instead of this License.  But first, please read
     <name>WS2Editor::UI::AboutWindow</name>
     <message>
         <location filename="../src/ws2editor/ui/AboutWindow.cpp" line="12"/>
-        <source>Compiled on </source>
+        <source>Compiled on %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/ws2editor/ui/AboutWindow.cpp" line="13"/>
+        <source>v%1</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

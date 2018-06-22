@@ -9,7 +9,8 @@ namespace WS2Editor {
     namespace UI {
         AboutWindow::AboutWindow(QWidget *parent) : QDialog(parent), ui(new Ui::AboutWindow) {
             ui->setupUi(this);
-            ui->compileDateLabel->setText(tr("Compiled on " TO_STRING(COMPILE_TIMESTAMP)));
+            ui->compileDateLabel->setText(tr("Compiled on %1").arg(TO_STRING(SMBLEVELWORKSHOP2_COMPILE_TIMESTAMP)));
+            ui->versionLabel->setText(tr("v%1").arg(TO_STRING(SMBLEVELWORKSHOP2_VERSION_STRING)));
 
             connect(ui->githubButton, &QPushButton::clicked, [](){ QDesktopServices::openUrl(QUrl("https://github.com/CraftedCart/smblevelworkshop2")); });
         }

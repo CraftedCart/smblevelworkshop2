@@ -84,10 +84,35 @@
       <number>8</number>
      </property>
      <item>
-      <widget class="QLabel" name="compileDateLabel">
-       <property name="text">
-        <string extracomment="This should never be shown, therefore should not need translating">Compiled on... MISSING TIMESTAMP - Timestamp should be added within C++</string>
-       </property>
+      <widget class="QWidget" name="widget" native="true">
+       <layout class="QHBoxLayout" name="horizontalLayout">
+        <property name="leftMargin">
+         <number>0</number>
+        </property>
+        <property name="topMargin">
+         <number>0</number>
+        </property>
+        <property name="rightMargin">
+         <number>0</number>
+        </property>
+        <item>
+         <widget class="QLabel" name="versionLabel">
+          <property name="text">
+           <string>MISSING VERSION</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QLabel" name="compileDateLabel">
+          <property name="text">
+           <string extracomment="This should never be shown, therefore should not need translating">&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Compiled on... MISSING TIMESTAMP&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+          </property>
+          <property name="alignment">
+           <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+          </property>
+         </widget>
+        </item>
+       </layout>
       </widget>
      </item>
      <item>
@@ -884,7 +909,7 @@ Public License instead of this License.  But first, please read
  </widget>
  <resources>
   <include location="../../../resources/Workshop2/Workshop2Resources.qrc"/>
-  <include location="../../resources/Workshop2/Workshop2Resources.qrc"/>
+  <include location="../../../resources/Workshop2/Workshop2Resources.qrc"/>
  </resources>
  <connections/>
 </ui>
