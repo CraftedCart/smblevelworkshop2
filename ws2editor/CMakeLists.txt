@@ -28,7 +28,7 @@ endif(UNIX)
 string(TIMESTAMP COMPILE_TIMESTAMP UTC)
 #add_definitions(-DCOMPILE_TIMESTAMP=${COMPILE_TIMESTAMP})
 #Don't add definitions for every single file, as this will cause a recompile of everything every time
-set_source_files_properties(./src/ws2editor/ui/AboutWindow.cpp PROPERTIES COMPILE_FLAGS -DCOMPILE_TIMESTAMP=${COMPILE_TIMESTAMP})
+set_source_files_properties(./src/ws2editor/ui/AboutWindow.cpp PROPERTIES COMPILE_FLAGS "-DSMBLEVELWORKSHOP2_COMPILE_TIMESTAMP=${COMPILE_TIMESTAMP} -DSMBLEVELWORKSHOP2_VERSION_STRING=${RELEASE_VERSION_STRING}")
 
 #Automatically run moc, uic and rcc when needed
 set(CMAKE_AUTOMOC ON)

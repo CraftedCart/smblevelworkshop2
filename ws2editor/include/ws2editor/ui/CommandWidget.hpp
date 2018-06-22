@@ -21,7 +21,6 @@ namespace WS2Editor {
 
             protected:
                 bool eventFilter(QObject *obj, QEvent *event) override;
-                virtual void keyPressEvent(QKeyEvent *event) override;
 
             public:
                 CommandWidget(QPoint pos, QWidget *parent);
