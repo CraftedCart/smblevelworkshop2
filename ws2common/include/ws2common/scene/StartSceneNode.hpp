@@ -12,7 +12,11 @@
 namespace WS2Common {
     namespace Scene {
         class WS2COMMON_EXPORT StartSceneNode : public SceneNode {
+            protected:
+                virtual const QString getSerializableName() const;
+
             public:
+                StartSceneNode() = default;
                 StartSceneNode(const QString name);
         };
     }

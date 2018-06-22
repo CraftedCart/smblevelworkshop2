@@ -11,6 +11,11 @@ namespace WS2Common {
                 parseSceneNode(xml, node);
                 if (parent != nullptr) parent->addChild(node);
                 return node;
+            } else if (xml.name() == "node-startSceneNode") {
+                StartSceneNode *node = new StartSceneNode();
+                parseStartSceneNode(xml, node);
+                if (parent != nullptr) parent->addChild(node);
+                return node;
             } else if (xml.name() == "node-meshSceneNode") {
                 MeshSceneNode *node = new MeshSceneNode();
                 parseMeshSceneNode(xml, node);
@@ -116,6 +121,31 @@ namespace WS2Common {
                     node->setSeesawRotationBounds(xml.readElementText().toFloat());
                 } else {
                     qWarning().noquote() << "Unrecognised tag: data-sceneNode > " + xml.name();
+                }
+            }
+        }
+
+        void parseStartSceneNode(QXmlStreamReader &xml, StartSceneNode *node) {
+            while (!(xml.isEndElement() && xml.name() == "node-startSceneNode")) {
+                xml.readNext();
+                if (!xml.isStartElement()) continue; //Ignore all end elements
+
+                if (xml.name() == "data") {
+                    while (!(xml.isEndElement() && xml.name() == "data")) {
+                        xml.readNext();
+                        if (!xml.isStartElement()) continue; //Ignore all end elements
+
+                        if (xml.name() == "data-sceneNode") {
+                            parseSceneNodeData(xml, node);
+                        } else {
+                            qWarning().noquote() << "Unrecognised tag: data > " + xml.name();
+                        }
+                    }
+
+                } else if (xml.name() == "children") {
+                    parseChildren(xml, node);
+                } else {
+                    qWarning().noquote() << "Unrecognised tag: node-startSceneNode > " + xml.name();
                 }
             }
         }
