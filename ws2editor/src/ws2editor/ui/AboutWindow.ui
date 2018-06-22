@@ -201,9 +201,9 @@
       </widget>
      </item>
      <item>
-      <widget class="QPushButton" name="githubButton">
+      <widget class="QPushButton" name="gitlabButton">
        <property name="text">
-        <string>CraftedCart/smblevelworkshop2 on GitHub</string>
+        <string>CraftedCart/smblevelworkshop2 on GitLab</string>
        </property>
       </widget>
      </item>

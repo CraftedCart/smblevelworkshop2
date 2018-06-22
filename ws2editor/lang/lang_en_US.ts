@@ -66,7 +66,7 @@
     </message>
     <message>
         <location filename="../src/ws2editor/ui/AboutWindow.ui" line="206"/>
-        <source>CraftedCart/smblevelworkshop2 on GitHub</source>
+        <source>CraftedCart/smblevelworkshop2 on GitLab</source>
         <translation type="unfinished"></translation>
     </message>
     <message>

@@ -12,7 +12,7 @@ namespace WS2Editor {
             ui->compileDateLabel->setText(tr("Compiled on %1").arg(TO_STRING(SMBLEVELWORKSHOP2_COMPILE_TIMESTAMP)));
             ui->versionLabel->setText(tr("v%1").arg(TO_STRING(SMBLEVELWORKSHOP2_VERSION_STRING)));
 
-            connect(ui->githubButton, &QPushButton::clicked, [](){ QDesktopServices::openUrl(QUrl("https://github.com/CraftedCart/smblevelworkshop2")); });
+            connect(ui->gitlabButton, &QPushButton::clicked, [](){ QDesktopServices::openUrl(QUrl("https://gitlab.com/CraftedCart/smblevelworkshop2")); });
         }
 
         AboutWindow::~AboutWindow() {
