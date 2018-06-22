@@ -36,46 +36,30 @@
     </message>
     <message>
         <location filename="../src/ws2editor/ui/AboutWindow.ui" line="154"/>
-        <source>Yoshimaster96</source>
+        <source>Yoshimaster96
+bobjrsenior
+Mechalico
+CraftSpider
+TwixNinja411</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/ws2editor/ui/AboutWindow.ui" line="161"/>
-        <source>bobjrsenior</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../src/ws2editor/ui/AboutWindow.ui" line="168"/>
-        <source>Mechalico</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../src/ws2editor/ui/AboutWindow.ui" line="180"/>
-        <source>Special thanks for helping to get SMB Level Workshop known</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../src/ws2editor/ui/AboutWindow.ui" line="187"/>
-        <source>Geoff</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../src/ws2editor/ui/AboutWindow.ui" line="199"/>
+        <location filename="../src/ws2editor/ui/AboutWindow.ui" line="170"/>
         <source>And thanks to the community for creating custom content</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/ws2editor/ui/AboutWindow.ui" line="206"/>
+        <location filename="../src/ws2editor/ui/AboutWindow.ui" line="177"/>
         <source>CraftedCart/smblevelworkshop2 on GitLab</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/ws2editor/ui/AboutWindow.ui" line="218"/>
+        <location filename="../src/ws2editor/ui/AboutWindow.ui" line="189"/>
         <source>SMB Level Workshop 2 is licenced under the GNU GPL v3</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/ws2editor/ui/AboutWindow.ui" line="228"/>
+        <location filename="../src/ws2editor/ui/AboutWindow.ui" line="199"/>
         <source>                    GNU GENERAL PUBLIC LICENSE
                        Version 3, 29 June 2007
 

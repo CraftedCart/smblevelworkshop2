@@ -130,7 +130,7 @@
       </widget>
      </item>
      <item>
-      <widget class="QLabel" name="craftedcartLabel">
+      <widget class="QLabel" name="developedByNamesLabel">
        <property name="text">
         <string>CraftedCart</string>
        </property>
@@ -149,42 +149,13 @@
       </widget>
      </item>
      <item>
-      <widget class="QLabel" name="yoshimaster96Label">
+      <widget class="QLabel" name="specialThanksHackingNamesLabel">
        <property name="text">
-        <string>Yoshimaster96</string>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QLabel" name="bobjrseniorLabel">
-       <property name="text">
-        <string>bobjrsenior</string>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QLabel" name="mechalicoLabel">
-       <property name="text">
-        <string>Mechalico</string>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QLabel" name="specialThanksKnownLabel">
-       <property name="font">
-        <font>
-         <pointsize>14</pointsize>
-        </font>
-       </property>
-       <property name="text">
-        <string>Special thanks for helping to get SMB Level Workshop known</string>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QLabel" name="geoffLabel">
-       <property name="text">
-        <string>Geoff</string>
+        <string>Yoshimaster96
+bobjrsenior
+Mechalico
+CraftSpider
+TwixNinja411</string>
        </property>
       </widget>
      </item>
