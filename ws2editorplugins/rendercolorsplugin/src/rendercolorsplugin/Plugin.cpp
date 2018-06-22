@@ -6,6 +6,7 @@
 #include "ws2common/scene/BananaSceneNode.hpp"
 #include "ws2common/scene/JamabarSceneNode.hpp"
 #include "ws2common/scene/WormholeSceneNode.hpp"
+#include "ws2common/scene/StartSceneNode.hpp"
 #include <QDebug>
 
 namespace WS2EditorPlugins {
@@ -54,6 +55,8 @@ namespace WS2EditorPlugins {
                 command->setTint(glm::vec4(0.0f, 0.74f, 0.83f, 1.0f));
             } else if (dynamic_cast<const WormholeSceneNode*>(node)) {
                 command->setTint(glm::vec4(0.4, 0.23f, 0.72f, 1.0f));
+            } else if (dynamic_cast<const StartSceneNode*>(node)) {
+                command->setTint(glm::vec4(0.13f, 0.59f, 0.95f, 1.0f));
             }
         }
 
