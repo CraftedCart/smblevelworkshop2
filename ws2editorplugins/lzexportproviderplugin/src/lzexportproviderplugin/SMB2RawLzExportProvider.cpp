@@ -2,6 +2,7 @@
 #include "ws2editor/resource/ResourceManager.hpp"
 #include "ws2lz/SMB2LzExporter.hpp"
 #include "ws2common/scene/StartSceneNode.hpp"
+#include <QInputDialog>
 #include <QBuffer>
 #include <QDebug>
 
@@ -37,7 +38,25 @@ namespace WS2EditorPlugins {
             }
 
             if (hasStart) {
-                return Result<>(EnumStatus::SUCCESS);
+                //TODO: Super tempoary way of setting the fallout plane on export
+                bool ok = false;
+                float fallout = QInputDialog::getDouble(
+                        nullptr,
+                        tr("Set fallout Y"),
+                        tr("Set fallout Y: (Also be sure to yell at Crafted for forgetting this initially)"),
+                        project->getScene()->getStage()->getFalloutY(),
+                        -FLT_MAX,
+                        FLT_MAX,
+                        2,
+                        &ok
+                        );
+
+                if (ok) {
+                    project->getScene()->getStage()->setFalloutY(fallout);
+                    return Result<>(EnumStatus::SUCCESS);
+                } else {
+                    return Result<>(EnumStatus::FAILURE, tr("No fallout Y provided"));
+                }
             } else {
                 return Result<>(EnumStatus::FAILURE, tr("No player start found in the scene root"));
             }
