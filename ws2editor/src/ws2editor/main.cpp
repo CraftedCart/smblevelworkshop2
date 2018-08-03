@@ -90,12 +90,12 @@ namespace WS2Editor {
                 qDebug().noquote() << "Ignoring" << fileName << "- Filename does not end in .so";
                 continue;
             }
-#elif Q_OS_DARWIN
+#elif defined(Q_OS_DARWIN)
             if (!fileName.toLower().endsWith(".dylib")) {
                 qDebug().noquote() << "Ignoring" << fileName << "- Filename does not end in .dylib";
                 continue;
             }
-#elif Q_OS_WIN
+#elif defined(Q_OS_WIN)
             if (!fileName.toLower().endsWith(".dll")) {
                 qDebug().noquote() << "Ignoring" << fileName << "- Filename does not end in .dll";
                 continue;
