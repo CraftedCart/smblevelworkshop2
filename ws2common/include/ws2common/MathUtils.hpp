@@ -36,6 +36,7 @@ namespace WS2Common {
         WS2COMMON_EXPORT glm::vec3 degreesToRadians(const glm::vec3 &vec);
         WS2COMMON_EXPORT QPoint toQPoint(const glm::vec2 &vec);
         WS2COMMON_EXPORT int randInt(const int a, const int b);
+        WS2COMMON_EXPORT bool areAlmostEqual(const float a, const float b);
     }
 }
 
