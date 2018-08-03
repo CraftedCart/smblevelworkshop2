@@ -1,6 +1,6 @@
 /**
  * @file
- * @brief Header for the ModelLoadingException class WS2COMMON_EXPORT
+ * @brief Header for the ModelLoadingException class
  */
 
 #ifndef SMBLEVELWORKSHOP2_WS2COMMON_EXCEPTION_MODELLOADINGEXCEPTION_HPP
@@ -13,7 +13,7 @@ namespace WS2Common {
     namespace Exception {
 
         /**
-         * @brief Exception class WS2COMMON_EXPORT for when issues arise when loading a 3D model
+         * @brief Exception class for when issues arise when loading a 3D model
          */
         class WS2COMMON_EXPORT ModelLoadingException : public RuntimeException {
             public:

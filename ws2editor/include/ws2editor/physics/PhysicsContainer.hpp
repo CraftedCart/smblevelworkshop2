@@ -1,6 +1,6 @@
 /**
  * @file
- * @brief Header for the PhysicsContainer class WS2EDITOR_EXPORT
+ * @brief Header for the PhysicsContainer class
  */
 
 #ifndef SMBLEVELWORKSHOP2_WS2EDITOR_PHYSICS_PHYSICSCONTAINER_HPP

@@ -1,6 +1,6 @@
 /**
  * @file
- * @brief Header for the GroupSceneNode class WS2COMMON_EXPORT
+ * @brief Header for the GroupSceneNode class
  */
 
 #ifndef SMBLEVELWORKSHOP2_WS2COMMON_SCENE_GROUPSCENENODE_HPP

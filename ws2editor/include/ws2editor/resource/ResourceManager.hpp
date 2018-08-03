@@ -1,6 +1,6 @@
 /**
  * @file
- * @brief Header for the WS2Editor::Resource::ResourceManager namespace
+ * @brief Header for the ResourceManager namespace
  */
 
 #ifndef SMBLEVELWORKSHOP2_WS2EDITOR_RESOURCEMANAGER_HPP

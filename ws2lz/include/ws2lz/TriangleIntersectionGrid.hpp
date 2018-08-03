@@ -1,6 +1,6 @@
 /**
  * @file
- * @brief Header for the TriangleIntersrectionGrid class WS2LZ_EXPORT
+ * @brief Header for the TriangleIntersrectionGrid class
  */
 
 #ifndef SMBLEVELWORKSHOP2_WS2LZ_TRIANGLEINTERSECTIONGRID_HPP

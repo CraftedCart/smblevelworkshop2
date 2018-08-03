@@ -1,6 +1,6 @@
 /**
  * @file
- * @brief Header for the MeshRenderCommand class WS2EDITOR_EXPORT
+ * @brief Header for the MeshRenderCommand class
  */
 
 #ifndef SMBLEVELWORKSHOP2_WS2EDITOR_RENDERING_MESHRENDERCOMMAND_HPP

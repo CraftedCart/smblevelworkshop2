@@ -1,6 +1,6 @@
 /**
  * @file
- * @brief Header for the SettingsDialog class WS2EDITOR_EXPORT
+ * @brief Header for the SettingsDialog class
  */
 
 #ifndef SMBLEVELWORKSHOP2_WS2EDITOR_UI_SETTINGSDIALOG_HPP

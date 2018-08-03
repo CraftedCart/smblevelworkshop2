@@ -1,6 +1,6 @@
 /**
  * @file
- * @brief Header for the Stage class WS2COMMON_EXPORT
+ * @brief Header for the Stage class
  */
 
 #ifndef SMBLEVELWORKSHOP2_WS2COMMON_STAGE_HPP

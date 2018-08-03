@@ -1,6 +1,6 @@
 /**
  * @file
- * @brief Header for the CollisionSceneNode class WS2COMMON_EXPORT
+ * @brief Header for the CollisionSceneNode class
  */
 
 #ifndef SMBLEVELWORKSHOP2_WS2COMMON_SCENE_COLLISIONSCENENODE_HPP
@@ -13,7 +13,7 @@ namespace WS2Common {
     namespace Scene {
 
         /**
-         * @brief Near base class WS2COMMON_EXPORT for all collision shapes
+         * @brief Base class for all collision shapes
          */
         class WS2COMMON_EXPORT CollisionSceneNode : public SceneNode {
             protected:

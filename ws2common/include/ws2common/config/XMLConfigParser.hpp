@@ -1,6 +1,6 @@
 /**
  * @file
- * @brief Header for the XMLConfigParser class WS2COMMON_EXPORT
+ * @brief Header for the XMLConfigParser class
  */
 
 #ifndef SMBLEVELWORKSHOP2_WS2COMMON_CONFIG_XMLCONFIGPARSER_HPP

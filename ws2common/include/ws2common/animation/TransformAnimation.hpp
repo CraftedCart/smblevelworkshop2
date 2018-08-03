@@ -1,6 +1,6 @@
 /**
  * @file
- * @brief Header for the Animation class WS2COMMON_EXPORT
+ * @brief Header for the Animation class
  */
 
 #ifndef SMBLEVELWORKSHOP2_WS2COMMON_ANIMATION_ANIMATION_HPP

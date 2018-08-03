@@ -1,6 +1,6 @@
 /**
  * @file
- * @brief Header for the WS2Editor::UI::ModelResources clas
+ * @brief Header for the ModelResources class
  */
 
 #ifndef SMBLEVELWORKSHOP2_WS2EDITOR_UI_MODELRESOURCES_HPP

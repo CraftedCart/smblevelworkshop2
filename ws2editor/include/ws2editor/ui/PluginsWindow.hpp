@@ -1,6 +1,6 @@
 /**
  * @file
- * @brief Header for the PluginsWindow class WS2EDITOR_EXPORT
+ * @brief Header for the PluginsWindow class
  */
 
 #ifndef SMBLEVELWORKSHOP2_WS2EDITOR_UI_PLUGINSWINDOW_HPP

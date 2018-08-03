@@ -1,6 +1,6 @@
 /**
  * @file
- * @brief Header for the Exception class WS2COMMON_EXPORT
+ * @brief Header for the Exception class
  */
 
 #ifndef SMBLEVELWORKSHOP2_WS2COMMON_EXCEPTION_EXCEPTION_HPP
@@ -14,7 +14,7 @@ namespace WS2Common {
     namespace Exception {
 
         /**
-         * @brief Base exception class WS2COMMON_EXPORT for WS2 exceptions
+         * @brief Base exception class for WS2 exceptions
          */
         class WS2COMMON_EXPORT Exception : public QException {
             protected:

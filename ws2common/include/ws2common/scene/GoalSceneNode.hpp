@@ -1,6 +1,6 @@
 /**
  * @file
- * @brief Header for the GoalSceneNode class WS2COMMON_EXPORT
+ * @brief Header for the GoalSceneNode class
  */
 
 #ifndef SMBLEVELWORKSHOP2_WS2COMMON_SCENE_GOALSCENENODE_HPP

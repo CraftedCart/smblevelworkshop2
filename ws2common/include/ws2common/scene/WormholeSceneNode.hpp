@@ -1,6 +1,6 @@
 /**
  * @file
- * @brief Header for the WormholeSceneNode class WS2COMMON_EXPORT
+ * @brief Header for the WormholeSceneNode class
  */
 
 #ifndef SMBLEVELWORKSHOP2_WS2COMMON_SCENE_WORMHOLESCENENODE_HPP

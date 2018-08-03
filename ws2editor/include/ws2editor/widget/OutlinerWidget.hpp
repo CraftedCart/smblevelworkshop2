@@ -1,6 +1,6 @@
 /**
  * @file
- * @brief Header for the OutlinerWidget class WS2EDITOR_EXPORT
+ * @brief Header for the OutlinerWidget class
  */
 
 #ifndef SMBLEVELWORKSHOP2_WS2EDITOR_WIDGET_OUTLINERWIDGET_HPP

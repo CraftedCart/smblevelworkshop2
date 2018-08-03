@@ -1,6 +1,6 @@
 /**
  * @file
- * @brief Header for the DebugRenderCommand class WS2EDITOR_EXPORT
+ * @brief Header for the DebugRenderCommand class
  */
 
 #ifndef SMBLEVELWORKSHOP2_WS2EDITOR_RENDERING_DEBUGRENDERCOMMAND_HPP

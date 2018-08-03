@@ -1,6 +1,6 @@
 /**
  * @file
- * @brief Header for the MeshSceneNode class WS2COMMON_EXPORT
+ * @brief Header for the MeshSceneNode class
  */
 
 #ifndef SMBLEVELWORKSHOP2_WS2COMMON_SCENE_MESHSCENENODE_HPP

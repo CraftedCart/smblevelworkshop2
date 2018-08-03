@@ -1,6 +1,6 @@
 /**
  * @file
- * @brief Header for the WS2Editor::Progress class WS2EDITOR_EXPORT
+ * @brief Header for the Progress class
  */
 
 #ifndef SMBLEVELWORKSHOP2_WS2EDITOR_PROGRESS_HPP

@@ -1,6 +1,6 @@
 /**
  * @file
- * @brief Header for the ToggleDebugDrawingCommand class WS2EDITOR_EXPORT
+ * @brief Header for the ToggleDebugDrawingCommand class
  */
 
 #ifndef SMBLEVELWORKSHOP2_WS2EDITOR_COMMAND_TOGGLEDEBUGDRAWINGCOMMAND_HPP

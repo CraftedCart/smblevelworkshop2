@@ -1,6 +1,6 @@
 /**
  * @file
- * @brief Header for the Keyframe template class WS2COMMON_EXPORT
+ * @brief Header for the Keyframe template class
  */
 
 #ifndef SMBLEVELWORKSHOP2_WS2COMMON_ANIMATION_KEYFRAME_HPP

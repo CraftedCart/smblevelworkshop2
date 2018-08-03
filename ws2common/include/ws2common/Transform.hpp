@@ -1,6 +1,6 @@
 /**
  * @file
- * @brief Header for the Transform class WS2COMMON_EXPORT
+ * @brief Header for the Transform class
  */
 
 #ifndef SMBLEVELWORKSHOP2_WS2COMMON_TRANSFORM_HPP

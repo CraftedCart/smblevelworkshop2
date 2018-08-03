@@ -1,6 +1,6 @@
 /**
  * @file
- * @brief Header for the WS2Editor::Task::LoadGlTextureTask class WS2EDITOR_EXPORT
+ * @brief Header for the LoadGlTextureTask class
  */
 
 #ifndef SMBLEVELWORKSHOP2_WS2EDITOR_TASK_LOADGLTEXTURETASK_HPP

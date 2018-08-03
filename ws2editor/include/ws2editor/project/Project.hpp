@@ -1,6 +1,6 @@
 /**
  * @file
- * @brief Header for the WS2Editor::Project::Project
+ * @brief Header for the Project
  */
 
 #ifndef SMBLEVELWORKSHOP2_WS2EDITOR_PROJECT_PROJECT_HPP

@@ -1,6 +1,6 @@
 /**
  * @file
- * @brief Header for the StartSceneNode class WS2COMMON_EXPORT
+ * @brief Header for the StartSceneNode class
  */
 
 #ifndef SMBLEVELWORKSHOP2_WS2COMMON_SCENE_STARTSCENENODE_HPP

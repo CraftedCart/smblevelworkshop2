@@ -1,6 +1,6 @@
 /**
  * @file
- * @brief Header for the RuntimeException class WS2COMMON_EXPORT
+ * @brief Header for the RuntimeException class
  */
 
 #ifndef SMBLEVELWORKSHOP2_WS2COMMON_EXCEPTION_RUNTIMEEXCEPTION_HPP
@@ -13,7 +13,7 @@ namespace WS2Common {
     namespace Exception {
 
         /**
-         * @brief Base exception class WS2COMMON_EXPORT for WS2 runtime exceptions
+         * @brief Base exception class for WS2 runtime exceptions
          */
         class WS2COMMON_EXPORT RuntimeException : public Exception {
             public:

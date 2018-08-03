@@ -1,6 +1,6 @@
 /**
  * @file
- * @brief Header for the WS2Editor::Task::ImportFileTask class WS2EDITOR_EXPORT
+ * @brief Header for the ImportFileTask class
  */
 
 #ifndef SMBLEVELWORKSHOP2_WS2EDITOR_TASK_IMPORTFILETASK_HPP

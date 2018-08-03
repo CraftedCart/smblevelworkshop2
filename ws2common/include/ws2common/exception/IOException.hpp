@@ -1,6 +1,6 @@
 /**
  * @file
- * @brief Header for the IOException class WS2COMMON_EXPORT
+ * @brief Header for the IOException class
  */
 
 #ifndef SMBLEVELWORKSHOP2_WS2COMMON_EXCEPTION_IOEXCEPTION_HPP
@@ -13,7 +13,7 @@ namespace WS2Common {
     namespace Exception {
 
         /**
-         * @brief Exception class WS2COMMON_EXPORT for when issues arise when inputting or outputting
+         * @brief Exception class for when issues arise when inputting or outputting
          *
          * Example use: When failing to read a file
          */

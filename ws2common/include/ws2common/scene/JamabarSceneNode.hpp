@@ -1,6 +1,6 @@
 /**
  * @file
- * @brief Header for the JamabarSceneNode class WS2COMMON_EXPORT
+ * @brief Header for the JamabarSceneNode class
  */
 
 #ifndef SMBLEVELWORKSHOP2_WS2COMMON_SCENE_JAMABARSCENENODE_HPP
