@@ -1,6 +1,6 @@
 /**
  * @file
- * @brief Heder for the MeshNodeData class WS2EDITOR_EXPORT
+ * @brief Heder for the MeshNodeData class
  */
 
 #ifndef SMBLEVELWORKSHOP2_WS2EDITOR_MESHNODEDATA_HPP

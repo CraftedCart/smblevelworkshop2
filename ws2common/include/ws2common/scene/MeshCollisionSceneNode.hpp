@@ -1,6 +1,6 @@
 /**
  * @file
- * @brief Header for the MeshCollisionSceneNode class WS2COMMON_EXPORT
+ * @brief Header for the MeshCollisionSceneNode class
  */
 
 #ifndef SMBLEVELWORKSHOP2_WS2COMMON_SCENE_MESHCOLLISIONSCENENODE_HPP

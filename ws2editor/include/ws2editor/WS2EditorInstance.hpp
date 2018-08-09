@@ -1,6 +1,6 @@
 /**
  * @file
- * @brief Header for the WS2EditorInstance class WS2EDITOR_EXPORT
+ * @brief Header for the WS2EditorInstance class
  */
 
 #ifndef SMBLEVELWORKSHOP2_WS2EDITOR_WS2EDITORINSTANCE_HPP

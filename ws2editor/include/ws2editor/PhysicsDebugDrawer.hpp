@@ -1,6 +1,6 @@
 /**
  * @file
- * @brief Header for the PhysicsDebugDrawer class WS2EDITOR_EXPORT
+ * @brief Header for the PhysicsDebugDrawer class
  */
 
 #ifndef SMBLEVELWORKSHOP2_WS2EDITOR_PHYSICSDEBUGDRAWER_HPP

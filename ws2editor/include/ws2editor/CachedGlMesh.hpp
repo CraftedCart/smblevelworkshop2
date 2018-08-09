@@ -1,6 +1,6 @@
 /**
  * @file
- * @brief Header for the WS2Editor::CachedGlMesh class WS2EDITOR_EXPORT
+ * @brief Header for the CachedGlMesh class
  */
 
 #ifndef SMBLEVELWORKSHOP2_WS2EDITOR_CACHEDGLMESH_HPP

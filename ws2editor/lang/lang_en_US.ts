@@ -1497,17 +1497,17 @@ Public License instead of this License.  But first, please read
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/ws2editor/main.cpp" line="89"/>
+        <location filename="../src/ws2editor/main.cpp" line="107"/>
         <source>Loading plugin %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/ws2editor/main.cpp" line="108"/>
+        <location filename="../src/ws2editor/main.cpp" line="126"/>
         <source>Initializing plugin %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/ws2editor/main.cpp" line="119"/>
+        <location filename="../src/ws2editor/main.cpp" line="137"/>
         <source>Initializing Stage Editor</source>
         <translation type="unfinished"></translation>
     </message>

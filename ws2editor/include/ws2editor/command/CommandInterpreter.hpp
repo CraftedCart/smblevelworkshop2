@@ -1,6 +1,6 @@
 /**
  * @file
- * @brief Header for the CommandInterpreter class WS2EDITOR_EXPORT
+ * @brief Header for the CommandInterpreter class
  */
 
 #ifndef SMBLEVELWORKSHOP2_WS2EDITOR_COMMAND_COMMANDINTERPRETER_HPP

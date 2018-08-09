@@ -1,6 +1,6 @@
 /**
  * @file
- * @brief Header for the PhysicsManager class WS2EDITOR_EXPORT
+ * @brief Header for the PhysicsManager class
  */
 
 #ifndef SMBLEVELWORKSHOP2_WS2EDITOR_PHYSICS_PHYSICSMANAGER_HPP

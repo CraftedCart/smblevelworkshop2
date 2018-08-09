@@ -1,6 +1,6 @@
 /**
  * @file
- * @brief Header for the ListCommandsCommand class WS2EDITOR_EXPORT
+ * @brief Header for the ListCommandsCommand class
  */
 
 #ifndef SMBLEVELWORKSHOP2_WS2EDITOR_COMMAND_LISTCOMMANDSCOMMAND_HPP

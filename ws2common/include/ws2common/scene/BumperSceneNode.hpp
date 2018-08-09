@@ -1,6 +1,6 @@
 /**
  * @file
- * @brief Header for the BumperSceneNode class WS2COMMON_EXPORT
+ * @brief Header for the BumperSceneNode class
  */
 
 #ifndef SMBLEVELWORKSHOP2_WS2COMMON_SCENE_BUMPERSCENENODE_HPP

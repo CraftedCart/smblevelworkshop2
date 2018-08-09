@@ -1,6 +1,6 @@
 /**
  * @file
- * @brief Header for the FalloutVolumeSceneNode class WS2COMMON_EXPORT
+ * @brief Header for the FalloutVolumeSceneNode class
  */
 
 #ifndef SMBLEVELWORKSHOP2_WS2COMMON_SCENE_FALLOUTVOLUMESCENENODE_HPP

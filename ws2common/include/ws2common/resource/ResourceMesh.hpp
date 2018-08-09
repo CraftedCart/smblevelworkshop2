@@ -1,6 +1,6 @@
 /**
  * @file
- * @brief Header for the ResourceMesh class WS2COMMON_EXPORT
+ * @brief Header for the ResourceMesh class
  */
 
 #ifndef SMBLEVELWORKSHOP2_WS2COMMON_RESOURCE_RESOURCEMESH_HPP

@@ -1,6 +1,6 @@
 /**
  * @file
- * @brief Header for the WS2Common::Scene::SceneNode class WS2COMMON_EXPORT
+ * @brief Header for the SceneNode class
  */
 
 #ifndef SMBLEVELWORKSHOP2_WS2COMMON_SCENE_SCENENODE_HPP
@@ -64,11 +64,11 @@ namespace WS2Common {
                 virtual void serializeNodeDataXml(QXmlStreamWriter &s) const;
 
                 /**
-                 * @brief This returns the identifier used to serialize this node class WS2COMMON_EXPORT
+                 * @brief This returns the identifier used to serialize this node class
                  *
-                 * This should be just the class WS2COMMON_EXPORT name in camelCase
+                 * This should be just the class name in camelCase
                  *
-                 * @return The identifier used to serialize this node class WS2COMMON_EXPORT
+                 * @return The identifier used to serialize this node class
                  */
                 virtual const QString getSerializableName() const;
 

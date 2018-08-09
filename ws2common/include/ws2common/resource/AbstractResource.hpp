@@ -1,6 +1,6 @@
 /**
  * @file
- * @brief Header for the AbstractResource class WS2COMMON_EXPORT
+ * @brief Header for the AbstractResource class
  */
 
 #ifndef SMBLEVELWORKSHOP2_WS2COMMON_RESOURCE_ABSTRACTRESOURCE_HPP
@@ -15,7 +15,7 @@ namespace WS2Common {
     namespace Resource {
 
         /**
-         * @brief Base class WS2COMMON_EXPORT for all resources
+         * @brief Base class for all resources
          */
         class WS2COMMON_EXPORT AbstractResource : public QObject {
             Q_OBJECT

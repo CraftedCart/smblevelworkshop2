@@ -1,6 +1,6 @@
 /**
  * @file
- * @brief Header for the BananaSceneNode class WS2COMMON_EXPORT
+ * @brief Header for the BananaSceneNode class
  */
 
 #ifndef SMBLEVELWORKSHOP2_WS2COMMON_SCENE_BANANASCENENODE_HPP

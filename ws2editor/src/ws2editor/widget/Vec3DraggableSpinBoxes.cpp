@@ -1,4 +1,5 @@
 #include "ws2editor/widget/Vec3DraggableSpinBoxes.hpp"
+#include "ws2common/MathUtils.hpp"
 #include <QHBoxLayout>
 #include <cfloat>
 
@@ -50,9 +51,13 @@ namespace WS2Editor {
         }
 
         void Vec3DraggableSpinBoxes::setValue(glm::vec3 &value) {
-            xSpinBox->setValue(value.x);
-            ySpinBox->setValue(value.y);
-            zSpinBox->setValue(value.z);
+            using namespace WS2Common;
+
+            //Don't set the value if it's already pretty much equal - the user could be typing in the spin box and
+            //setting it would reset the caret
+            if (!MathUtils::areAlmostEqual(value.x, xSpinBox->value())) xSpinBox->setValue(value.x);
+            if (!MathUtils::areAlmostEqual(value.y, ySpinBox->value())) ySpinBox->setValue(value.y);
+            if (!MathUtils::areAlmostEqual(value.z, zSpinBox->value())) zSpinBox->setValue(value.z);
         }
 
         glm::vec3 Vec3DraggableSpinBoxes::getValue() {

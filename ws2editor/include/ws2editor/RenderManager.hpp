@@ -1,6 +1,6 @@
 /**
  * @file
- * @brief Header for the WS2Editor::RenderManager class WS2EDITOR_EXPORT
+ * @brief Header for the RenderManager class
  */
 
 #ifndef SMBLEVELWORKSHOP2_WS2EDITOR_RENDERMANAGER_HPP

@@ -1,6 +1,6 @@
 /**
  * @file
- * @brief Header for the StageIdeaGeneratorWindow class WS2EDITOR_EXPORT
+ * @brief Header for the StageIdeaGeneratorWindow class
  */
 
 #ifndef SMBLEVELWORKSHOP2_WS2EDITOR_UI_STAGEIDEAGENERATORWINDOW_HPP

@@ -1,6 +1,6 @@
 /**
  * @file
- * @brief Header for the WS2Editor::UI::ModelManager namespace
+ * @brief Header for the ModelManager namespace
  */
 
 #ifndef SMBLEVELWORKSHOP2_WS2EDITOR_UI_MODELMANAGER_HPP

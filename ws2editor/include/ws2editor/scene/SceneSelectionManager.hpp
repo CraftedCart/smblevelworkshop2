@@ -1,6 +1,6 @@
 /**
  * @file
- * @brief Header for the SceneSelectionManager class WS2EDITOR_EXPORT
+ * @brief Header for the SceneSelectionManager class
  */
 
 #ifndef SMBLEVELWORKSHOP2_WS2EDITOR_SCENE_SCENESELECTIONMANAGER_HPP

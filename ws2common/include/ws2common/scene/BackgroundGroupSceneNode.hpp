@@ -1,6 +1,6 @@
 /**
  * @file
- * @brief Header for the BackgroundGroupSceneNode class WS2COMMON_EXPORT
+ * @brief Header for the BackgroundGroupSceneNode class
  */
 
 #ifndef SMBLEVELWORKSHOP2_WS2COMMON_SCENE_BACKGROUNDGROUPSCENENODE_HPP

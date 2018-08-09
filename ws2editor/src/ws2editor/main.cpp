@@ -85,6 +85,24 @@ namespace WS2Editor {
         pluginsDir.cd("plugins");
 
         for (QString fileName : pluginsDir.entryList(QDir::Files)) {
+#ifdef Q_OS_LINUX
+            if (!fileName.toLower().endsWith(".so")) {
+                qDebug().noquote() << "Ignoring" << fileName << "- Filename does not end in .so";
+                continue;
+            }
+#elif defined(Q_OS_DARWIN)
+            if (!fileName.toLower().endsWith(".dylib")) {
+                qDebug().noquote() << "Ignoring" << fileName << "- Filename does not end in .dylib";
+                continue;
+            }
+#elif defined(Q_OS_WIN)
+            if (!fileName.toLower().endsWith(".dll")) {
+                qDebug().noquote() << "Ignoring" << fileName << "- Filename does not end in .dll";
+                continue;
+            }
+#endif
+            //Otherwise if we're on some unknown OS, we'll just try and load everything
+
             qDebug().noquote() << "Loading plugin" << fileName;
             splash.showMessage(QApplication::translate("main", "Loading plugin %1").arg(fileName), Qt::AlignRight | Qt::AlignBottom, Qt::white);
             qApp->processEvents();

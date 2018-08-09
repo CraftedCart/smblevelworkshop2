@@ -1,6 +1,6 @@
 /**
  * @file
- * @brief Header for the Collision Grid class WS2COMMON_EXPORT
+ * @brief Header for the Collision Grid class
  */
 
 #ifndef SMBLEVELWORKSHOP2_WS2COMMON_COLLISIONGRID_HPP

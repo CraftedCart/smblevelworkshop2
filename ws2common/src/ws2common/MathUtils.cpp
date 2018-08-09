@@ -1,6 +1,7 @@
 #include "ws2common/MathUtils.hpp"
 #include "ws2common/WS2Common.hpp"
 #include <QtMath>
+#include <climits>
 
 namespace WS2Common {
     namespace MathUtils {
@@ -47,6 +48,10 @@ namespace WS2Common {
         int randInt(const int a, const int b) {
             std::uniform_int_distribution<> distr(a, b);
             return distr(*WS2Common::getRandGen());
+        }
+
+        bool areAlmostEqual(const float a, const float b) {
+            return qFabs(a - b) < FLT_EPSILON;
         }
     }
 }

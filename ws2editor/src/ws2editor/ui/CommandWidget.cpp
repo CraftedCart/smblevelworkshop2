@@ -91,7 +91,7 @@ namespace WS2Editor {
                 }
             }
 
-            //Pass the event on to the parent class WS2EDITOR_EXPORT
+            //Pass the event on to the parent class
             return QWidget::eventFilter(obj, event);
         }
 

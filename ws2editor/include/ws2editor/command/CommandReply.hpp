@@ -1,6 +1,6 @@
 /**
  * @file
- * @brief Header for the CommandReply class WS2EDITOR_EXPORT
+ * @brief Header for the CommandReply class
  */
 
 #ifndef SMBLEVELWORKSHOP2_WS2EDITOR_COMMAND_COMMANDREPLY_HPP

@@ -1,6 +1,6 @@
 /**
  * @file
- * @brief Header for the ResourceTexture class WS2COMMON_EXPORT
+ * @brief Header for the ResourceTexture class
  */
 
 #ifndef SMBLEVELWORKSHOP2_WS2EDITOR_RESOURCE_RESOURCETEXTURE_HPP

@@ -1,6 +1,6 @@
 /**
  * @file
- * @brief Header for the RestartCommand class WS2EDITOR_EXPORT
+ * @brief Header for the RestartCommand class
  */
 
 #ifndef SMBLEVELWORKSHOP2_WS2EDITOR_COMMAND_RESTARTCOMMAND_HPP

@@ -1,6 +1,6 @@
 /**
  * @file
- * @brief Header for the WS2Editor::Task::TaskManager class WS2EDITOR_EXPORT
+ * @brief Header for the TaskManager class
  */
 
 #ifndef SMBLEVELWORKSHOP2_WS2EDITOR_TASK_TASKMANAGER_HPP

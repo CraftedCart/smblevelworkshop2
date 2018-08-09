@@ -1,6 +1,6 @@
 /**
  * @file
- * @brief Header for the WS2Editor::CachedGlTexture class WS2EDITOR_EXPORT
+ * @brief Header for the CachedGlTexture class
  */
 
 #ifndef SMBLEVELWORKSHOP2_WS2EDITOR_CACHEDGLTEXTURE_HPP

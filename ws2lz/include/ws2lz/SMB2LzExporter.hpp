@@ -1,6 +1,6 @@
 /**
  * @file
- * @brief Header for the SMB2LzExporter class WS2LZ_EXPORT
+ * @brief Header for the SMB2LzExporter class
  */
 
 #ifndef SMBLEVELWORKSHOP2_WS2LZ_SMB2LZEXPORTER_HPP
@@ -165,7 +165,7 @@ namespace WS2Lz {
             void optimizeCollision(const WS2Common::Stage &stage);
 
             /**
-             * @brief Calculates offsets and item counts and writes it to class WS2LZ_EXPORT scoped variables
+             * @brief Calculates offsets and item counts and writes it to class scoped variables
              *
              * @param stage The stage to calculate offsets for
              */

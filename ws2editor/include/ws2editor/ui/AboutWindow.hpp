@@ -1,6 +1,6 @@
 /**
  * @file
- * @brief Header for the AboutWindow class WS2EDITOR_EXPORT
+ * @brief Header for the AboutWindow class
  */
 
 #ifndef SMBLEVELWORKSHOP2_WS2EDITOR_UI_ABOUTWINDOW_HPP

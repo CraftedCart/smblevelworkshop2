@@ -1,6 +1,6 @@
 /**
  * @file
- * @brief Header for the CommandWidget class WS2EDITOR_EXPORT
+ * @brief Header for the CommandWidget class
  */
 
 #ifndef SMBLEVELWORKSHOP2_WS2EDITOR_UI_COMMANDWIDGET_HPP

@@ -1,6 +1,6 @@
 /**
  * @file
- * @brief Header for the WS2Editor::UI::ModelOutliner clas
+ * @brief Header for the ModelOutliner class
  */
 
 #ifndef SMBLEVELWORKSHOP2_WS2EDITOR_UI_MODELOUTLINER_HPP

@@ -1,6 +1,6 @@
 /**
  * @file
- * @brief Header for the MeshSegment class WS2COMMON_EXPORT
+ * @brief Header for the MeshSegment class
  */
 
 #ifndef SMBLEVELWORKSHOP2_WS2EDITOR_MODEL_MESHSEGMENT_HPP
