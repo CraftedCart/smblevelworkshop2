@@ -232,8 +232,7 @@ namespace WS2Common {
                 } else if (xml.name() == "levelModel") { //Deprecated
                     group->addChild(parseLevelModel(xml));
                 } else if (xml.name() == "stageModel") {
-                    qWarning() << "itemGroup > stageModel not yet implemented!";
-                    xml.skipCurrentElement();
+                    group->addChild(parseStageModel(xml));
                 } else {
                     qWarning().noquote() << "Unrecognised tag: itemGroup >" << xml.name();
                 }
@@ -446,7 +445,9 @@ namespace WS2Common {
             qWarning().noquote().nospace() << "    <stageModel>";
             qWarning().noquote().nospace() << "        <name>" << name << "</name>";
             qWarning().noquote().nospace() << "        <collision>";
-            qWarning().noquote().nospace() << "            <meshCollision>" << name << "</meshCollision>";
+            qWarning().noquote().nospace() << "            <meshCollision>";
+            qWarning().noquote().nospace() << "                <name>" << name << "</name>";
+            qWarning().noquote().nospace() << "            </meshCollision>";
             qWarning().noquote().nospace() << "        </collision>";
             qWarning().noquote().nospace() << "    </stageModel>";
 
@@ -459,6 +460,63 @@ namespace WS2Common {
             mesh->addChild(collision);
 
             return mesh;
+        }
+
+        Scene::MeshSceneNode* XMLConfigParser::parseStageModel(QXmlStreamReader &xml) {
+            Scene::MeshSceneNode *mesh = new Scene::MeshSceneNode();
+
+            while (!(xml.isEndElement() && xml.name() == "stageModel")) {
+                xml.readNext();
+                if (!xml.isStartElement()) continue; //Ignore all end elements
+
+                if (xml.name() == "name") {
+                    QString name = xml.readElementText();
+                    mesh->setName(name);
+                    mesh->setMeshName(name);
+                } else if (xml.name() == "collision") {
+                    for (Scene::CollisionSceneNode *collision : parseCollision(xml)) mesh->addChild(collision);
+                } else {
+                    qWarning().noquote() << "Unrecognised tag: stageModel >" << xml.name();
+                }
+            }
+
+            return mesh;
+        }
+
+        QVector<Scene::CollisionSceneNode*> XMLConfigParser::parseCollision(QXmlStreamReader &xml) {
+            QVector<Scene::CollisionSceneNode*> outNodes;
+
+            while (!(xml.isEndElement() && xml.name() == "collision")) {
+                xml.readNext();
+                if (!xml.isStartElement()) continue; //Ignore all end elements
+
+                if (xml.name() == "meshCollision") {
+                    outNodes.append(parseMeshCollision(xml));
+                } else {
+                    qWarning().noquote() << "Unrecognised tag: collision >" << xml.name();
+                }
+            }
+
+            return outNodes;
+        }
+
+        Scene::MeshCollisionSceneNode* XMLConfigParser::parseMeshCollision(QXmlStreamReader &xml) {
+            Scene::MeshCollisionSceneNode *node = new Scene::MeshCollisionSceneNode();
+
+            while (!(xml.isEndElement() && xml.name() == "meshCollision")) {
+                xml.readNext();
+                if (!xml.isStartElement()) continue; //Ignore all end elements
+
+                if (xml.name() == "name") {
+                    QString name = xml.readElementText();
+                    node->setName(QCoreApplication::translate("XMLConfigParser", "Mesh Collision: %1").arg(name));
+                    node->setMeshName(name);
+                } else {
+                    qWarning().noquote() << "Unrecognised tag: meshCollision >" << xml.name();
+                }
+            }
+
+            return node;
         }
 
         CollisionGrid XMLConfigParser::parseCollisionGrid(QXmlStreamReader &xml) {
