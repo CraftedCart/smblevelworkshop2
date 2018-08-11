@@ -18,6 +18,7 @@
 #include "ws2common/scene/FalloutVolumeSceneNode.hpp"
 #include "ws2common/scene/SwitchSceneNode.hpp"
 #include "ws2common/scene/WormholeSceneNode.hpp"
+#include "ws2common/scene/MeshCollisionSceneNode.hpp"
 #include "ws2common/EnumAnimationSeesawType.hpp"
 #include "ws2common/CollisionGrid.hpp"
 #include <QXmlStreamAttributes>
@@ -176,6 +177,39 @@ namespace WS2Common {
                  * @return The level model parsed from the config
                  */
                 Scene::MeshSceneNode* parseLevelModel(QXmlStreamReader &xml);
+
+                /**
+                 * @brief Parses a stage model in an XML config
+                 *
+                 * Make sure the XML reader is within the stageModel element before calling this
+                 *
+                 * @param xml The QXmlStreamReader
+                 *
+                 * @return The stage model parsed from the config
+                 */
+                Scene::MeshSceneNode* parseStageModel(QXmlStreamReader &xml);
+
+                /**
+                 * @brief Parses a collision block in an XML config
+                 *
+                 * Make sure the XML reader is within the collision element before calling this
+                 *
+                 * @param xml The QXmlStreamReader
+                 *
+                 * @return A vector of collision objects to attach to a node
+                 */
+                QVector<Scene::CollisionSceneNode*> parseCollision(QXmlStreamReader &xml);
+
+                /**
+                 * @brief Parses a mesh collision block in an XML config
+                 *
+                 * Make sure the XML reader is within the meshCollision element before calling this
+                 *
+                 * @param xml The QXmlStreamReader
+                 *
+                 * @return The mesh collision parsed from the config
+                 */
+                Scene::MeshCollisionSceneNode* parseMeshCollision(QXmlStreamReader &xml);
 
                 /**
                  * @brief Parses collision information in an XML config
