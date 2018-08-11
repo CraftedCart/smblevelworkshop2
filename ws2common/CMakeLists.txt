@@ -63,6 +63,7 @@ set(SOURCE_FILES
     ./src/ws2common/scene/CollisionSceneNode.cpp
     ./src/ws2common/scene/MeshCollisionSceneNode.cpp
     ./src/ws2common/config/XMLConfigParser.cpp
+    ./src/ws2common/config/StagedefConfigParser.cpp
     ./src/ws2common/model/MeshSegment.cpp
     ./src/ws2common/model/ModelLoader.cpp
     ./src/ws2common/resource/AbstractResource.cpp
@@ -110,6 +111,7 @@ set(HEADER_FILES
     ./include/ws2common/scene/CollisionSceneNode.hpp
     ./include/ws2common/scene/MeshCollisionSceneNode.hpp
     ./include/ws2common/config/XMLConfigParser.hpp
+    ./include/ws2common/config/StagedefConfigParser.hpp
     ./include/ws2common/model/Vertex.hpp
     ./include/ws2common/model/MeshSegment.hpp
     ./include/ws2common/model/ModelLoader.hpp

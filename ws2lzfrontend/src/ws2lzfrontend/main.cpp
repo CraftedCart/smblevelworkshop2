@@ -1,6 +1,7 @@
 #include "ws2common/MessageHandler.hpp"
 #include "ws2common/EnumGameVersion.hpp"
 #include "ws2common/config/XMLConfigParser.hpp"
+#include "ws2common/config/StagedefConfigParser.hpp"
 #include "ws2common/model/ModelLoader.hpp"
 #include "ws2lz/SMB2LzExporter.hpp"
 #include <QCoreApplication>
@@ -40,10 +41,14 @@ int main(int argc, char *argv[]) {
     parser.addHelpOption();
 
     parser.addOptions({
-            {{"c", "config"}, QCoreApplication::translate("main", "Input path to the XML configuration file."), QCoreApplication::translate("main", "configuration file")},
-            {{"o", "output"}, QCoreApplication::translate("main", "Output path to an uncompressed LZ file."), QCoreApplication::translate("main", "uncompressed output file")},
-            {{"s", "compressed-output"}, QCoreApplication::translate("main", "Output path to a compressed LZ file."), QCoreApplication::translate("main", "output file")},
-            {{"g", "game-version"}, QCoreApplication::translate("main", "The version of SMB to generate an LZ file for (1/2/deluxe)."), QCoreApplication::translate("main", "version")}
+            {{"c", "config"}, QCoreApplication::translate("main", "Input path to the XML configuration file.\n"
+                    "Cannot be used with -r"), QCoreApplication::translate("main", "config file")},
+            {{"d", "stagedef-config"}, QCoreApplication::translate("main", "Input path to a stagedef (.stagedef / .lz.raw) to use as a stage configuration.\n"
+                    "This will automatically detect whether an SMB 1 or SMB 2 config is being used.\n"
+                    "Cannot be used with -c"), QCoreApplication::translate("main", "stagedef file")},
+            {{"s", "compressed-output"}, QCoreApplication::translate("main", "Output path to a compressed stagedef (.lz) file."), QCoreApplication::translate("main", "output file")},
+            {{"o", "output"}, QCoreApplication::translate("main", "Output path to a stagedef file (.stagedef / .lz.raw)."), QCoreApplication::translate("main", "stagedef")},
+            {{"g", "game-version"}, QCoreApplication::translate("main", "The version of SMB to generate an stagedef file for (1/2/deluxe)."), QCoreApplication::translate("main", "version")}
             });
 
     parser.process(app);
@@ -63,8 +68,11 @@ int main(int argc, char *argv[]) {
     }
 
     //Check for a valid input
-    if (!parser.isSet("c")) {
+    if (!(parser.isSet("c") || parser.isSet("d"))) {
         qCritical().noquote() << QCoreApplication::translate("main", "No confiuration file specified. Use --help for more info.");
+        return EXIT_FAILURE;
+    } else if (parser.isSet("c") && parser.isSet("d")) {
+        qCritical().noquote() << QCoreApplication::translate("main", "Cannot specify both an XML config and a raw LZ config. Use --help for more info.");
         return EXIT_FAILURE;
     }
 
@@ -92,20 +100,33 @@ int main(int argc, char *argv[]) {
         }
     }
 
+    WS2Common::Stage *stage;
+
     qInfo() << "Reading configuration...";
-    QFile configFile(parser.value("c"));
-    configFile.open(QIODevice::ReadOnly | QIODevice::Text);
-    QString config = configFile.readAll();
-    configFile.close();
+    if (parser.isSet("c")) {
+        QFile configFile(parser.value("c"));
+        configFile.open(QIODevice::ReadOnly | QIODevice::Text);
+        QString config = configFile.readAll();
+        configFile.close();
 
-    //Get the config file directory, for relative file paths in the config
-    QFileInfo configFileInfo(configFile);
-    QDir configFileDir = configFileInfo.dir();
+        //Get the config file directory, for relative file paths in the config
+        QFileInfo configFileInfo(configFile);
+        QDir configFileDir = configFileInfo.dir();
 
-    qInfo() << "Parsing configuration...";
-    WS2Common::Config::XMLConfigParser confParser;
-    WS2Common::Stage *stage = confParser.parseStage(config, configFileDir);
-    qInfo() << stage->getRootNode();
+        qInfo() << "Parsing configuration...";
+        WS2Common::Config::XMLConfigParser confParser;
+        stage = confParser.parseStage(config, configFileDir);
+        qInfo() << stage->getRootNode();
+    } else {
+        // Raw LZ config
+        QFile configFile(parser.value("d"));
+        configFile.open(QIODevice::ReadOnly);
+        QByteArray bytes = configFile.readAll();
+
+        WS2Common::Config::StagedefConfigParser confParser;
+        stage = confParser.parseStage(bytes);
+        qInfo() << stage->getRootNode();
+    }
 
     qInfo() << "Loading models...";
     //resources is only really used to conserve some memory, by preventing the creation of duplicate textures

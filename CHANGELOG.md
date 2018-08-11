@@ -6,6 +6,11 @@ SMB Level Workshop 2 Changelog
 These features are still a work in progress. You can download the latest development build from https://bintray.com/craftedcart/the-workshop/smblevelworkshop2-develop  
 [ ![Download](https://api.bintray.com/packages/craftedcart/the-workshop/smblevelworkshop2-develop/images/download.svg) ](https://bintray.com/craftedcart/the-workshop/smblevelworkshop2-develop/_latestVersion)
 
+### Added
+
+- ws2lzfrontend/ws2common
+    - Added the ability to convert SMB 1 stagedefs to other game version stagedefs
+
 ### Fixed
 
 - ws2editor
