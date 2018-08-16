@@ -6,6 +6,7 @@
 #ifndef SMBLEVELWORKSHOP2_WS2COMMON_EXCEPTION_RUNTIMEEXCEPTION_HPP
 #define SMBLEVELWORKSHOP2_WS2COMMON_EXCEPTION_RUNTIMEEXCEPTION_HPP
 
+#include "ws2common_export.h"
 #include "ws2common/exception/Exception.hpp"
 
 namespace WS2Common {
@@ -14,12 +15,10 @@ namespace WS2Common {
         /**
          * @brief Base exception class for WS2 runtime exceptions
          */
-        class RuntimeException : public Exception {
+        class WS2COMMON_EXPORT RuntimeException : public Exception {
             public:
                 RuntimeException();
                 RuntimeException(QString message);
-
-                const QString& getMessage() const;
 
                 RuntimeException* clone() const override;
                 void raise() const override;

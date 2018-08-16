@@ -1,0 +1,70 @@
+sudo: required
+language: cpp
+
+os:
+  - linux
+  - osx
+
+services:
+  - docker
+
+before_install:
+  - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then docker build -t ws2 .; fi
+
+script:
+  - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then docker run --name ws2 ws2; fi
+  - mkdir -p $TRAVIS_BUILD_DIR/ws2install/deploy
+
+  - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then export CC=clang; fi
+  - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then export CXX=clang++; fi
+  - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then export CMAKE_PREFIX_PATH="/usr/local/opt/qt/lib/cmake"; fi
+  - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then brew update; fi
+  - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then brew upgrade || true; fi #OR with true as the python update will yell about the linking
+  - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then brew install cmake qt5 glew glm assimp bullet ninja; fi
+  - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then mkdir build; fi
+  - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then cd build; fi
+
+  - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then cmake -DCMAKE_BUILD_TYPE="RelWithDebInfo" -DCMAKE_INSTALL_PREFIX="install" -G "Ninja" ..; fi
+  - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then ninja; fi
+  - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then ninja install; fi
+  - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then cp -r install installnodeps; fi
+
+  - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then ninja package; fi
+  - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then hdiutil attach smblevelworkshop2*-Darwin.dmg; fi
+  - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then mkdir installwithdeps; fi
+  - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then cp -r /Volumes/smblevelworkshop2*-Darwin/ws2editor.app installwithdeps/ws2editor.app; fi
+  - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then mkdir installwithdeps/ws2editor.app/Contents/MacOS; fi
+  - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then cd installwithdeps/ws2editor.app/Contents/MacOS; fi
+  - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then ln -s ../Resources/bin/* .; fi
+  - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then cd ../../..; fi
+  - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then /usr/local/opt/qt5/bin/macdeployqt ws2editor.app; fi
+  - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then cd ..; fi
+
+  - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then cp -RH installnodeps $TRAVIS_BUILD_DIR/ws2install/smblevelworkshop2-nodeps; fi
+  - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then cp -RH installwithdeps $TRAVIS_BUILD_DIR/ws2install/smblevelworkshop2-withdeps; fi
+
+  - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then cd $TRAVIS_BUILD_DIR; fi
+
+before_deploy:
+  - sed -ie "s/|||COMMIT|||/${TRAVIS_COMMIT}/g" .bintray-descriptor.json
+  - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then sed -ie "s/|||ARCH|||/linux-x86_64/g" .bintray-descriptor.json; fi
+  - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then sed -ie "s/|||ARCH|||/macos-x86_64/g" .bintray-descriptor.json; fi
+
+  - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then docker cp ws2:/app/build/installnodeps $TRAVIS_BUILD_DIR/ws2install/smblevelworkshop2-nodeps; fi
+  - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then docker cp ws2:/app/build/installwithdeps $TRAVIS_BUILD_DIR/ws2install/smblevelworkshop2-withdeps; fi
+
+  - cd $TRAVIS_BUILD_DIR/ws2install
+  - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then tar zcvf deploy/smblevelworkshop2-develop-nodeps.tar.gz --owner=0 --group=0 smblevelworkshop2-nodeps; fi
+  - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then tar zcvf deploy/smblevelworkshop2-develop-withdeps.tar.gz --owner=0 --group=0 smblevelworkshop2-withdeps; fi
+  - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then tar zcvf deploy/smblevelworkshop2-develop-nodeps.tar.gz smblevelworkshop2-nodeps; fi
+  - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then tar zcvf deploy/smblevelworkshop2-develop-withdeps.tar.gz smblevelworkshop2-withdeps; fi
+  - cd $TRAVIS_BUILD_DIR
+
+deploy:
+  skip-cleanup: true
+  provider: bintray
+  file: ".bintray-descriptor.json"
+  user: craftedcart
+  key:
+    secure: lRGdA1IRcN1pNNZkUrC1w4sZOjzbS+IVBjSVp4Q/Om/oh/qZjebP74F98TRqwCL0ZZQa09E7m9sOfEkHUkNkNsqyhw5F5DSBDcdxMCa8vhKgLVUY4ofJ1P74v9Hr+6XL2n8yZaoChENuV+QLWv1SqGM24+fujCAnGZmcJzkXbFSIOtY6r61netwR/E+r2fkVCFbpZuoSnTmoaWikrileDr3AkdHtLjA41WqqIWD8GD+ZfJMRB1ogJVnXr4IiC7lB/Cgpy61eBiCMce3GI3vHPulL3CB/BiIyTHrJn2MkP2Y2jmzQzNjq8MUL4taSUJZFXrF1C1hjmF8/9ksqibdxA7Wm+4zJoAk2RTe7V9UCzjOomO1QROegm8N1V5E0fiDCAe/2g/s7gF0t5zMNqGIY2QATgf0NpE9zq7uz70QL4MvWFA0bzpNALH9ENnB+YxZI2XaRsj5KFnY6OuFm1iDAIv/QaiXdz065y04Iwgw5MawOp/IS4cr9UF0+Bvlg6E+eOyjwKmD21oKbDCFeJy+ii2B4AUjBbqhPyU/hOQ2XSMG55Y44TFAUDfvkBLRvdFxiViEbKOwbvf/dJzv6fUKjD9wzOLb3LK32buZTfDQj5lPsh+zB2d8Go1JWThrbvtlCGF1morFE002Kaow6t8itG0eOBz2A7icgTonxY6mwaiY=
+

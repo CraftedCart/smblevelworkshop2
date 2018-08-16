@@ -4,8 +4,10 @@
 #include "ws2common/scene/StartSceneNode.hpp"
 #include "ws2common/scene/MeshCollisionSceneNode.hpp"
 #include <QElapsedTimer>
+#include <QThreadPool>
 #include <QDebug>
 #include <QtMath>
+#include <glm/gtc/constants.hpp>
 #include <math.h>
 
 //Macros
@@ -83,7 +85,7 @@ namespace WS2Lz {
             QVector<Model::Vertex> &allVertices,
             QVector<unsigned int> &allIndices
             ) {
-        if (instanceOf<Scene::MeshCollisionSceneNode>(node)) {
+        if (dynamic_cast<const Scene::MeshCollisionSceneNode*>(node)) {
             const Scene::MeshCollisionSceneNode *coli= static_cast<const Scene::MeshCollisionSceneNode*>(node);
             //First, find the MeshSceneNode in the models QHash
             if (models.contains(coli->getMeshName())) {
@@ -116,9 +118,14 @@ namespace WS2Lz {
         QElapsedTimer timer; //Measure how long this operation takes - probably a little while
         timer.start();
 
+        QAtomicInt finishedThreads = 0;
+        int maxThreads = 0;
+
         //Loop over all collision headers
         foreach(Scene::SceneNode *node, stage.getRootNode()->getChildren()) {
-            if (instanceOf<Scene::GroupSceneNode>(node)) {
+            if (dynamic_cast<Scene::GroupSceneNode*>(node)) {
+                ++maxThreads;
+
                 Scene::GroupSceneNode *groupNode = static_cast<Scene::GroupSceneNode*>(node);
                 //Find all MeshCollisionSceneNodes, and add the triangles to allVertices/allIndices
                 QVector<Model::Vertex> allVertices;
@@ -126,16 +133,58 @@ namespace WS2Lz {
                 addCollisionTriangles(node, allVertices, allIndices);
 
                 //Now create the TriangleIntrsectionGrid, which will check each triangle for intersections with each grid tile
+                //Also multithread this!
                 TriangleIntersectionGrid *intGrid = new TriangleIntersectionGrid(
                         allVertices,
-                        allIndices,
-                        *groupNode->getCollisionGrid()
+                        groupNode->getCollisionGrid()
                         );
+
+                class SortTask : public QRunnable {
+                    public:
+                        TriangleIntersectionGrid *intGrid;
+                        QVector<unsigned int> indices;
+                        CollisionGrid *grid;
+                        QAtomicInt *finishedThreadsCounter;
+
+                        virtual void run() override {
+                            intGrid->sortIntersections(indices, *grid);
+                            ++(*finishedThreadsCounter);
+                        }
+                };
+
+                SortTask *task = new SortTask;
+                task->intGrid = intGrid;
+                task->indices = allIndices;
+                task->grid = &groupNode->getCollisionGrid();
+                task->finishedThreadsCounter = &finishedThreads;
+                QThreadPool::globalInstance()->start(task);
 
                 //Store it
                 triangleIntGridMap[groupNode] = intGrid;
             }
         }
+
+        int sleepTime = 1;
+        while(finishedThreads < maxThreads) {
+            printf("\r[");
+            float percent = (float) finishedThreads / maxThreads;
+            for (int i = 0; i < 24; i++) {
+                if ((float) i / 24 < percent) {
+                    printf("#");
+                } else {
+                    printf(" ");
+                }
+            }
+            printf("] %d / %d item groups optimized", finishedThreads.load(), maxThreads);
+            fflush(stdout);
+
+            QThread::msleep(sleepTime); //Don't max out a CPU core on this progress reporting loop
+            if (sleepTime < 500) ++sleepTime; //Start off with rapid checking but slow down to a maximum delay of 0.5s
+        }
+        printf("\r[");
+        for (int i = 0; i < 24; i++) printf("#");
+        printf("] %d / %d item groups optimized\n", finishedThreads.load(), maxThreads);
+        fflush(stdout);
 
         //Finished - log the amount of time it took
         qDebug().noquote().nospace() << "Finished optimizing collision in " << timer.nsecsElapsed() / 1000000000.0f << "s";
@@ -170,8 +219,8 @@ namespace WS2Lz {
         //This is for Collision Triangle Pointers
         forEachGroup(group) {
             gridTriangleListPointersOffsetMap.insert(nextOffset, group);
-            const CollisionGrid *grid = group->getCollisionGrid();
-            nextOffset += COLLISION_TRIANGLE_LIST_POINTER_LENGTH * grid->getGridStepCount().x * grid->getGridStepCount().y;
+            const CollisionGrid &grid = group->getCollisionGrid();
+            nextOffset += COLLISION_TRIANGLE_LIST_POINTER_LENGTH * grid.getGridStepCount().x * grid.getGridStepCount().y;
         }
 
         //Iterate over all GroupSceneNodes/collision headers, and fill the gridTriangleListOffsetMap
@@ -286,7 +335,7 @@ namespace WS2Lz {
 
             forEachChildType(group, Scene::WormholeSceneNode*, node) {
                 //Need to store the offset of every wormhole, so that they can be linked together (by offset) later
-                wormholeIndividualOffsetMap.insert(nextOffset, node);
+                wormholeIndividualOffsetMap.insert(nextOffset, node->getUuid());
 
                 nextOffset += WORMHOLE_LENGTH;
                 wormholeCount++;
@@ -345,7 +394,7 @@ namespace WS2Lz {
 
         //Find all background models
         foreach(Scene::SceneNode *node, stage.getRootNode()->getChildren()) {
-            if (instanceOf<Scene::BackgroundGroupSceneNode>(node)) {
+            if (dynamic_cast<Scene::BackgroundGroupSceneNode*>(node)) {
                 Scene::BackgroundGroupSceneNode *group = static_cast<Scene::BackgroundGroupSceneNode*>(node);
 
                 //Found one, now iterate over all children
@@ -463,7 +512,7 @@ namespace WS2Lz {
 
     void SMB2LzExporter::addCollisionTriangleOffsets(const Scene::SceneNode *node, quint32 &nextOffset) {
         //TODO: Store this in a map or hash or something, per collision header, add a function argument for the collision header, store in a nested maps - Collision header, object name, offset
-        if (instanceOf<Scene::MeshCollisionSceneNode>(node)) {
+        if (dynamic_cast<const Scene::MeshCollisionSceneNode*>(node)) {
             const Scene::MeshCollisionSceneNode *coli= static_cast<const Scene::MeshCollisionSceneNode*>(node);
             //First, find the MeshSceneNode in the models QHash
             if (models.contains(coli->getMeshName())) {
@@ -575,9 +624,9 @@ namespace WS2Lz {
         dev << node->getConveyorSpeed();
         dev << gridTriangleListOffsetMap.key(node);
         dev << gridTriangleListPointersOffsetMap.key(node);
-        dev << node->getCollisionGrid()->getGridStart();
-        dev << node->getCollisionGrid()->getGridStep();
-        dev << node->getCollisionGrid()->getGridStepCount();
+        dev << node->getCollisionGrid().getGridStart();
+        dev << node->getCollisionGrid().getGridStep();
+        dev << node->getCollisionGrid().getGridStepCount();
         dev << goalCountMap.value(node);
         dev << goalOffsetMap.key(node);
         dev << bumperCountMap.value(node);
@@ -641,7 +690,7 @@ namespace WS2Lz {
     }
 
     void SMB2LzExporter::writeCollisionTriangleIndexListPointers(QDataStream &dev, const Scene::GroupSceneNode *node) {
-        unsigned int totalTiles = node->getCollisionGrid()->getGridStepCount().x * node->getCollisionGrid()->getGridStepCount().y;
+        unsigned int totalTiles = node->getCollisionGrid().getGridStepCount().x * node->getCollisionGrid().getGridStepCount().y;
         for (unsigned int i = 0; i < totalTiles; i++) {
             dev << gridTriangleIndexListOffsetMap[node][i];
         }
@@ -685,11 +734,11 @@ namespace WS2Lz {
         dev << node->getPosition();
         dev << convertRotation(node->getRotation());
         writeNull(dev, 2);
-        dev << wormholeIndividualOffsetMap.key(node->getDestination()); //Destination wormhole offset
+        dev << wormholeIndividualOffsetMap.key(node->getDestinationUuid()); //Destination wormhole offset
     }
 
     void SMB2LzExporter::writeCollisionTriangles(QDataStream &dev, const Scene::SceneNode *node) {
-        if (instanceOf<Scene::MeshCollisionSceneNode>(node)) {
+        if (dynamic_cast<const Scene::MeshCollisionSceneNode*>(node)) {
             const Scene::MeshCollisionSceneNode *coli= static_cast<const Scene::MeshCollisionSceneNode*>(node);
             //This node is a MeshCollisionSceneNode - Loop over all the triangles and write them
             //First, find the MeshSceneNode in the models QHash
@@ -784,9 +833,9 @@ namespace WS2Lz {
                         glm::vec3 tangent = glm::normalize(hat(n0v));
                         glm::vec3 bitangent = glm::normalize(hat(n1v));
 
-                        float rotX = 360.0f - reverseAngle(cx, sx);
-                        float rotY = 360.0f - reverseAngle(cy, sy);
-                        float rotZ = 360.0f - reverseAngle(cz, sz);
+                        float rotX = (2 * glm::pi<float>()) - reverseAngle(cx, sx);
+                        float rotY = (2 * glm::pi<float>()) - reverseAngle(cy, sy);
+                        float rotZ = (2 * glm::pi<float>()) - reverseAngle(cz, sz);
 
                         dev << a.x; //X1 pos
                         dev << a.y; //Y1 pos
@@ -937,15 +986,22 @@ namespace WS2Lz {
         foreach(Animation::KeyframeF *k, anim->getPosXKeyframes()) writeKeyframeF(dev, k);
         foreach(Animation::KeyframeF *k, anim->getPosYKeyframes()) writeKeyframeF(dev, k);
         foreach(Animation::KeyframeF *k, anim->getPosZKeyframes()) writeKeyframeF(dev, k);
-        foreach(Animation::KeyframeF *k, anim->getRotXKeyframes()) writeKeyframeF(dev, k);
-        foreach(Animation::KeyframeF *k, anim->getRotYKeyframes()) writeKeyframeF(dev, k);
-        foreach(Animation::KeyframeF *k, anim->getRotZKeyframes()) writeKeyframeF(dev, k);
+        foreach(Animation::KeyframeF *k, anim->getRotXKeyframes()) writeKeyframeAngleF(dev, k);
+        foreach(Animation::KeyframeF *k, anim->getRotYKeyframes()) writeKeyframeAngleF(dev, k);
+        foreach(Animation::KeyframeF *k, anim->getRotZKeyframes()) writeKeyframeAngleF(dev, k);
     }
 
     void SMB2LzExporter::writeKeyframeF(QDataStream &dev, const Animation::KeyframeF *k) {
         dev << (quint32) k->getEasing(); //Easing
         dev << k->getValue().first;
         dev << k->getValue().second;
+        writeNull(dev, 8);
+    }
+
+    void SMB2LzExporter::writeKeyframeAngleF(QDataStream &dev, const Animation::KeyframeF *k) {
+        dev << (quint32) k->getEasing(); //Easing
+        dev << k->getValue().first;
+        dev << qRadiansToDegrees(k->getValue().second);
         writeNull(dev, 8);
     }
 
@@ -956,18 +1012,18 @@ namespace WS2Lz {
     }
 
     glm::tvec3<quint16> SMB2LzExporter::convertRotation(glm::vec3 rot) {
-        rot.x = fmod(rot.x, 360.0f);
-        rot.y = fmod(rot.y, 360.0f);
-        rot.z = fmod(rot.z, 360.0f);
+        rot.x = fmod(rot.x, 2 * glm::pi<float>());
+        rot.y = fmod(rot.y, 2 * glm::pi<float>());
+        rot.z = fmod(rot.z, 2 * glm::pi<float>());
 
-        if (rot.x < 0) rot.x += 360.0f;
-        if (rot.y < 0) rot.y += 360.0f;
-        if (rot.z < 0) rot.z += 360.0f;
+        if (rot.x < 0) rot.x += 2 * glm::pi<float>();
+        if (rot.y < 0) rot.y += 2 * glm::pi<float>();
+        if (rot.z < 0) rot.z += 2 * glm::pi<float>();
 
         return glm::tvec3<quint16>(
-                rot.x / 360.0f * 65536.0f,
-                rot.y / 360.0f * 65536.0f,
-                rot.z / 360.0f * 65536.0f
+                rot.x / (2 * glm::pi<float>()) * 65536.0f,
+                rot.y / (2 * glm::pi<float>()) * 65536.0f,
+                rot.z / (2 * glm::pi<float>()) * 65536.0f
                 );
     }
 
@@ -1000,7 +1056,7 @@ namespace WS2Lz {
         float d0 = (a.y * b.z) - (a.z * b.y);
         float d1 = (a.z * b.x) - (a.x * b.z);
         float d2 = (a.x * b.y) - (a.y * b.x);
-        return glm::vec3(d0,d1,d2);
+        return glm::vec3(d0, d1, d2);
     }
 
     glm::vec3 SMB2LzExporter::hat(glm::vec3 v) {
@@ -1008,15 +1064,15 @@ namespace WS2Lz {
     }
 
     float SMB2LzExporter::reverseAngle(float c, float s) {
-        float a = qRadiansToDegrees(asin(s));
-        if (c < 0.0f) a = 180.0f - a;
+        float a = asin(s);
+        if (c < 0.0f) a = glm::pi<float>() - a;
         if (qFabs(c) < qFabs(s)) {
-            a = qRadiansToDegrees(acos(c));
+            a = acos(c);
             if(s < 0.0f) a = -a;
         }
         if (a < 0.0f) {
             if(a > -0.001f) a = 0.0f;
-            else a += 360.0;
+            else a += 2 * glm::pi<float>();
         }
         return a;
     }

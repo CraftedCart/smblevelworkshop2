@@ -6,6 +6,7 @@
 #ifndef SMBLEVELWORKSHOP2_WS2COMMON_EXCEPTION_EXCEPTION_HPP
 #define SMBLEVELWORKSHOP2_WS2COMMON_EXCEPTION_EXCEPTION_HPP
 
+#include "ws2common_export.h"
 #include <QException>
 #include <QString>
 
@@ -15,7 +16,7 @@ namespace WS2Common {
         /**
          * @brief Base exception class for WS2 exceptions
          */
-        class Exception : public QException {
+        class WS2COMMON_EXPORT Exception : public QException {
             protected:
                 QString message;
 
@@ -23,7 +24,7 @@ namespace WS2Common {
                 Exception();
                 Exception(QString message);
 
-                const QString& getMessage() const;
+                virtual const QString& getMessage() const;
 
                 Exception* clone() const override;
                 void raise() const override;

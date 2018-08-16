@@ -6,40 +6,39 @@
 #ifndef SMBLEVELWORKSHOP2_WS2COMMON_SCENE_WORMHOLESCENENODE_HPP
 #define SMBLEVELWORKSHOP2_WS2COMMON_SCENE_WORMHOLESCENENODE_HPP
 
+#include "ws2common_export.h"
 #include "ws2common/scene/SceneNode.hpp"
 
 namespace WS2Common {
     namespace Scene {
-        class WormholeSceneNode : public SceneNode {
+        class WS2COMMON_EXPORT WormholeSceneNode : public SceneNode {
             protected:
                 /**
-                 * @brief Where this wormhole should lead to
+                 * @brief The UUID of the wormhole where this wormhole should lead to
                  */
-                WormholeSceneNode *destination;
+                QUuid destinationUuid = QUuid();
+
+            protected:
+                virtual void serializeNodeDataXml(QXmlStreamWriter &s) const;
+                virtual const QString getSerializableName() const;
 
             public:
+                WormholeSceneNode() = default;
                 WormholeSceneNode(const QString name);
 
                 /**
-                 * @brief Getter for destination
+                 * @brief Const getter for destinationUuid
                  *
                  * @return A pointer to the destination WormholeSceneNode
                  */
-                WormholeSceneNode* getDestination();
+                const QUuid& getDestinationUuid() const;
 
                 /**
-                 * @brief Const etter for destination
+                 * @brief Setter for destinationUuid
                  *
-                 * @return A pointer to the destination WormholeSceneNode
+                 * @param type The UUID of the destination wormhole node to set this as
                  */
-                const WormholeSceneNode* getDestination() const;
-
-                /**
-                 * @brief Setter for destination
-                 *
-                 * @param type A pointer to the destination wormhole to set this as
-                 */
-                void setDestination(WormholeSceneNode *destination);
+                void setDestinationUuid(QUuid destinationUuid);
         };
     }
 }

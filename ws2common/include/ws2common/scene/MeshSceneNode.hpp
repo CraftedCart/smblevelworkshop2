@@ -6,18 +6,24 @@
 #ifndef SMBLEVELWORKSHOP2_WS2COMMON_SCENE_MESHSCENENODE_HPP
 #define SMBLEVELWORKSHOP2_WS2COMMON_SCENE_MESHSCENENODE_HPP
 
+#include "ws2common_export.h"
 #include "ws2common/scene/SceneNode.hpp"
 
 namespace WS2Common {
     namespace Scene {
-        class MeshSceneNode : public SceneNode {
+        class WS2COMMON_EXPORT MeshSceneNode : public SceneNode {
             protected:
                 /**
                  * @brief The name of the referenced mesh
                  */
                 QString meshName;
 
+            protected:
+                virtual void serializeNodeDataXml(QXmlStreamWriter &s) const;
+                virtual const QString getSerializableName() const;
+
             public:
+                MeshSceneNode() = default;
                 MeshSceneNode(const QString name);
 
                 /**

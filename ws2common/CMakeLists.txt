@@ -1,11 +1,17 @@
 cmake_minimum_required(VERSION 3.9.0)
 project(ws2common)
 
+include(GenerateExportHeader)
+
 #Use C++ 11
 set(CMAKE_CXX_STANDARD 11)
 
 #Export compile commands for editor autocomplete
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
+
+#Well if I gotta do it for Windows I may as well do it for other platforms so I don't stuff up the Windows build
+set(CMAKE_CXX_VISIBILITY_PRESET hidden)
+set(CMAKE_VISIBILITY_INLINES_HIDDEN 1)
 
 #Be really pedantic!
 add_definitions(-Wall -Wextra -pedantic)
@@ -28,7 +34,7 @@ if(APPLE) #For whatever reason ASSIMP_LIBRARIES does not use a full path on macO
 endif(APPLE)
 
 include_directories(./include)
-include_directories(${CMAKE_BINARY_DIR})
+include_directories(${CMAKE_CURRENT_BINARY_DIR})
 
 set(SOURCE_FILES
     ./src/ws2common/WS2Common.cpp
@@ -37,8 +43,11 @@ set(SOURCE_FILES
     ./src/ws2common/EnumGoalType.cpp
     ./src/ws2common/EnumBananaType.cpp
     ./src/ws2common/EnumPlaybackState.cpp
+    ./src/ws2common/EnumAnimationSeesawType.cpp
     ./src/ws2common/Stage.cpp
     ./src/ws2common/CollisionGrid.cpp
+    ./src/ws2common/SerializeUtils.cpp
+    ./src/ws2common/Transform.cpp
     ./src/ws2common/scene/SceneNode.cpp
     ./src/ws2common/scene/StartSceneNode.cpp
     ./src/ws2common/scene/GroupSceneNode.cpp
@@ -70,7 +79,6 @@ set(SOURCE_FILES
 
 set(HEADER_FILES
     ./include/ws2common/WS2Common.hpp
-    ./include/ws2common/WS2Common.ipp
     ./include/ws2common/AABB.hpp
     ./include/ws2common/MessageHandler.hpp
     ./include/ws2common/MathUtils.hpp
@@ -81,6 +89,11 @@ set(HEADER_FILES
     ./include/ws2common/EnumAnimationSeesawType.hpp
     ./include/ws2common/Stage.hpp
     ./include/ws2common/CollisionGrid.hpp
+    ./include/ws2common/SerializeUtils.hpp
+    ./include/ws2common/Transform.hpp
+    ./include/ws2common/Result.hpp
+    ./include/ws2common/Result.ipp
+    ./include/ws2common/EnumStatus.hpp
     ./include/ws2common/scene/SceneNode.hpp
     ./include/ws2common/scene/StartSceneNode.hpp
     ./include/ws2common/scene/GroupSceneNode.hpp
@@ -120,6 +133,7 @@ set(RESOURCE_FILES
     )
 
 add_library(${PROJECT_NAME} SHARED ${SOURCE_FILES} ${HEADER_FILES} ${RESOURCE_FILES})
+generate_export_header(${PROJECT_NAME})
 
 #External dependencies
 target_link_libraries(${PROJECT_NAME}
@@ -131,6 +145,7 @@ target_link_libraries(${PROJECT_NAME}
 #Export headers
 target_include_directories(${PROJECT_NAME} PUBLIC
     $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
+    $<BUILD_INTERFACE:${CMAKE_CURRENT_BINARY_DIR}>
     $<INSTALL_INTERFACE:include>
     PRIVATE src)
 

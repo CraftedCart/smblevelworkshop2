@@ -1,11 +1,12 @@
 /**
  * @file
- * @brief Header for the WS2Editor::Project::ProjectManager namespace
+ * @brief Header for the ProjectManager namespace
  */
 
 #ifndef SMBLEVELWORKSHOP2_WS2EDITOR_PROJECT_PROJECTMANAGER_HPP
 #define SMBLEVELWORKSHOP2_WS2EDITOR_PROJECT_PROJECTMANAGER_HPP
 
+#include "ws2editor_export.h"
 #include "ws2editor/project/Project.hpp"
 
 namespace WS2Editor {
@@ -16,20 +17,20 @@ namespace WS2Editor {
              *        over accessing the internals directly.
              */
             namespace ProjectManagerInternal {
-                extern Project *activeProject;
+                WS2EDITOR_EXPORT extern Project *activeProject;
             }
 
             /**
-             * @brief Getter for WS2Editor::Project::ProjectManager::ProjectManagerInternal::activeProject
+             * @brief Getter for activeProject
              *
              * @return A pointer to the active project
              */
-            Project* getActiveProject();
+            WS2EDITOR_EXPORT Project* getActiveProject();
 
             /**
              * @brief Creates a new empty project, and sets it as the active project
              */
-            void newProject();
+            WS2EDITOR_EXPORT void newProject();
         }
     }
 }

@@ -1,74 +1,160 @@
-#include "ws2editor/WS2.hpp"
+#include "ws2editor_export.h"
+#include "ws2editor/WS2EditorInstance.hpp"
 #include "ws2editor/ui/StageEditorWindow.hpp"
 #include "ws2editor/ui/ModelManager.hpp"
 #include "ws2editor/resource/ResourceManager.hpp"
+#include "ws2editor/command/CommandInterpreter.hpp"
+#include "ws2editor/plugin/IEditorPlugin.hpp"
 #include "ws2common/MessageHandler.hpp"
 #include <QFile>
 #include <QSurfaceFormat>
 #include <QSplashScreen>
 #include <QTranslator>
 
-int main(int argc, char *argv[]) {
-    qInstallMessageHandler(WS2Common::messageHandler);
+namespace WS2Editor {
+    WS2EDITOR_EXPORT int ws2editorLaunch(int argc, char *argv[]) {
+        using namespace WS2Editor;
 
-    //Init WS2
-    WS2Editor::ws2Init(argc, argv);
+        qInstallMessageHandler(WS2Common::messageHandler);
 
-    //QTranslator translator;
-    //translator.load("lang_ja_JA", QDir(QCoreApplication::applicationDirPath()).filePath("../share/ws2editor/lang"));
-    //WS2Editor::ws2App->installTranslator(&translator);
+        //Init WS2
+        WS2EditorInstance::createInstance(argc, argv);
+        WS2EditorInstance *ws2Instance = WS2EditorInstance::getInstance();
 
-    //Splash screen
-    QPixmap pixmap(":/Workshop2/Images/banner.png");
-    QSplashScreen splash(pixmap);
-    splash.show();
-    splash.showMessage(QApplication::translate("main", "Initializing WS2"), Qt::AlignRight | Qt::AlignBottom, Qt::white);
-    WS2Editor::ws2App->processEvents();
+        //Load translations
+        QTranslator translator;
+        if (translator.load(QLocale(), QLatin1String("lang"), QLatin1String("_"), QDir(QCoreApplication::applicationDirPath()).filePath("../share/ws2editor/lang"))) {
+            qApp->installTranslator(&translator);
+        } else if (translator.load(QLocale(), QLatin1String("lang"), QLatin1String("_"), QCoreApplication::applicationDirPath())) {
+            //If the software was never installed after build, the translations will be alongside the executable
+            qApp->installTranslator(&translator);
+        } else if (translator.load("lang_en_US", QDir(QCoreApplication::applicationDirPath()).filePath("../share/ws2editor/lang"))) {
+            //If we can't find a suitable translation, try en_US
+            qApp->installTranslator(&translator);
+        } else if (translator.load("lang_en_US", QCoreApplication::applicationDirPath())) {
+            //If we can't find a suitable translation, try en_US - if not intalled
+            qApp->installTranslator(&translator);
+        }
 
-    splash.showMessage(QApplication::translate("main", "Setting default OpenGL format"), Qt::AlignRight | Qt::AlignBottom, Qt::white);
-    WS2Editor::ws2App->processEvents();
+        //Init command interpreter
+        Command::CommandInterpreter::createInstance();
 
-    //Set default format
-    QSurfaceFormat fmt;
+        //Splash screen
+        QPixmap pixmap(":/Workshop2/Images/banner.png");
+        QSplashScreen splash(pixmap);
+        splash.show();
+        splash.showMessage(QApplication::translate("main", "Initializing WS2"), Qt::AlignRight | Qt::AlignBottom, Qt::white);
+        qApp->processEvents();
 
-    //Use core profile for OpenGL 3.3
-    fmt.setVersion(3, 3);
-    fmt.setProfile(QSurfaceFormat::CoreProfile);
+        splash.showMessage(QApplication::translate("main", "Setting default OpenGL format"), Qt::AlignRight | Qt::AlignBottom, Qt::white);
+        qApp->processEvents();
 
-    fmt.setSamples(4); //4x MSAA
-    fmt.setSwapInterval(0); //VSync wrecks havok with the framerate in Qt
+        //Set default format
+        QSurfaceFormat fmt;
 
-    QSurfaceFormat::setDefaultFormat(fmt);
+        //Use core profile for OpenGL 3.3
+        fmt.setVersion(3, 3);
+        fmt.setProfile(QSurfaceFormat::CoreProfile);
 
-    //Splash message
-    splash.showMessage(QApplication::translate("main", "Setting style"), Qt::AlignRight | Qt::AlignBottom, Qt::white);
-    WS2Editor::ws2App->processEvents();
+        fmt.setSamples(4); //4x MSAA
+        fmt.setSwapInterval(0); //VSync wrecks havok with the framerate in Qt
 
-    QFile styleFile(":/Styles/FlatDark/FlatDark.qss");
-    styleFile.open(QFile::ReadOnly);
-    QString style(styleFile.readAll());
-    styleFile.close();
-    WS2Editor::ws2App->setStyleSheet(style);
+        QSurfaceFormat::setDefaultFormat(fmt);
 
-    //Splash message
-    splash.showMessage(QApplication::translate("main", "Initializing Stage Editor"), Qt::AlignRight | Qt::AlignBottom, Qt::white);
-    WS2Editor::ws2App->processEvents();
+        //Splash message
+        splash.showMessage(QApplication::translate("main", "Setting style"), Qt::AlignRight | Qt::AlignBottom, Qt::white);
+        qApp->processEvents();
 
-    WS2Editor::UI::StageEditorWindow *w = new WS2Editor::UI::StageEditorWindow();
-    w->show();
-    splash.finish(w);
+        QFile styleFile(":/Styles/FlatDark/FlatDark.qss");
+        styleFile.open(QFile::ReadOnly);
+        QString style(styleFile.readAll());
+        styleFile.close();
+        qApp->setStyleSheet(style);
 
-    WS2Editor::qAppRunning = true;
-    int ret = WS2Editor::ws2App->exec();
-    WS2Editor::qAppRunning = false;
+        //Load plugins
+        splash.showMessage(QApplication::translate("main", "Finding plugins"), Qt::AlignRight | Qt::AlignBottom, Qt::white);
+        qApp->processEvents();
 
-    WS2Editor::Resource::ResourceManager::unloadAllResources();
+        qDebug() << "Loading plugins";
+        QDir pluginsDir = QDir(QApplication::applicationDirPath());
+        pluginsDir.cdUp();
+        pluginsDir.cd("share");
+        pluginsDir.cd("ws2editor");
+        //Try and make the plugins dir if it doesn't exist
+        pluginsDir.mkdir("plugins");
+        pluginsDir.cd("plugins");
 
-    //Free resources
-    WS2Editor::UI::ModelManager::destruct();
-    delete w;
+        for (QString fileName : pluginsDir.entryList(QDir::Files)) {
+#ifdef Q_OS_LINUX
+            if (!fileName.toLower().endsWith(".so")) {
+                qDebug().noquote() << "Ignoring" << fileName << "- Filename does not end in .so";
+                continue;
+            }
+#elif defined(Q_OS_DARWIN)
+            if (!fileName.toLower().endsWith(".dylib")) {
+                qDebug().noquote() << "Ignoring" << fileName << "- Filename does not end in .dylib";
+                continue;
+            }
+#elif defined(Q_OS_WIN)
+            if (!fileName.toLower().endsWith(".dll")) {
+                qDebug().noquote() << "Ignoring" << fileName << "- Filename does not end in .dll";
+                continue;
+            }
+#endif
+            //Otherwise if we're on some unknown OS, we'll just try and load everything
 
-    WS2Editor::ws2Destroy();
+            qDebug().noquote() << "Loading plugin" << fileName;
+            splash.showMessage(QApplication::translate("main", "Loading plugin %1").arg(fileName), Qt::AlignRight | Qt::AlignBottom, Qt::white);
+            qApp->processEvents();
 
-    return ret;
+            QPluginLoader *loader = new QPluginLoader(pluginsDir.absoluteFilePath(fileName));
+            QObject *plugin = loader->instance();
+
+            if (plugin) {
+                ws2Instance->getLoadedPlugins() << loader;
+            } else {
+                qDebug().noquote() << "Failed to load plugin" << fileName << "-" << loader->errorString();
+                loader->unload();
+
+                ws2Instance->getFailedPlugins() << loader;
+            }
+        }
+
+        //Now that we've loaded all the plugins, try to initialize them
+        for (QPluginLoader *loader : ws2Instance->getLoadedPlugins()) {
+            qDebug().noquote() << "Initializing plugin" << loader->fileName();
+            splash.showMessage(QApplication::translate("main", "Initializing plugin %1").arg(loader->fileName()), Qt::AlignRight | Qt::AlignBottom, Qt::white);
+            qApp->processEvents();
+
+            if (Plugin::IEditorPlugin *editorPlugin = qobject_cast<Plugin::IEditorPlugin*>(loader->instance())) {
+                if (editorPlugin->init()) {
+                    ws2Instance->getInitializedPlugins() << loader;
+                }
+            }
+        }
+
+        //Splash message
+        splash.showMessage(QApplication::translate("main", "Initializing Stage Editor"), Qt::AlignRight | Qt::AlignBottom, Qt::white);
+        qApp->processEvents();
+
+        UI::StageEditorWindow *w = new UI::StageEditorWindow();
+        emit ws2Instance->onStageEditorWindowConstructed(*w);
+        w->show();
+        splash.finish(w);
+
+        //Enter the event loop until we request to quit
+        int ret = ws2Instance->execApp();
+
+        WS2Editor::Resource::ResourceManager::unloadAllResources();
+
+        //Free resources
+        UI::ModelManager::destruct();
+        delete w;
+
+        Command::CommandInterpreter::destroyInstance();
+        WS2EditorInstance::destroyInstance();
+
+        return ret;
+    }
 }
+

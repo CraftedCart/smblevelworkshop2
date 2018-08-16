@@ -1,16 +1,20 @@
 /**
  * @file
- * @brief Header for the WS2Editor::Model::Scene class
+ * @brief Header for the Scene class
  */
 
 #ifndef SMBLEVELWORKSHOP2_WS2EDITOR_RESOURCE_RESOURCESCENE_HPP
 #define SMBLEVELWORKSHOP2_WS2EDITOR_RESOURCE_RESOURCESCENE_HPP
 
+#include "ws2editor_export.h"
+#include "ws2editor/scene/SceneSelectionManager.hpp"
+#include "ws2editor/physics/PhysicsManager.hpp"
+#include "ws2editor/PhysicsDebugDrawer.hpp"
+#include "ws2editor/MeshNodeData.hpp"
 #include "ws2common/resource/AbstractResource.hpp"
 #include "ws2common/scene/SceneNode.hpp"
-#include "ws2editor/scene/SceneSelectionManager.hpp"
-#include "ws2editor/physics/PhysicsManger.hpp"
-#include "ws2editor/PhysicsDebugDrawer.hpp"
+#include "ws2common/resource/ResourceMesh.hpp"
+#include "ws2common/Stage.hpp"
 #include <QFile>
 
 namespace WS2Editor {
@@ -18,29 +22,27 @@ namespace WS2Editor {
         /**
          * @todo Meshes loaded should belong to ResourceManager, not ResourceScene
          */
-        class ResourceScene : public WS2Common::Resource::AbstractResource {
+        class WS2EDITOR_EXPORT ResourceScene : public WS2Common::Resource::AbstractResource {
             Q_OBJECT
 
             protected:
-                WS2Common::Scene::SceneNode *rootNode;
+                WS2Common::Stage *stage;
                 Scene::SceneSelectionManager *selectionManager;
                 Physics::PhysicsManager *physicsManager;
-                PhysicsDebugDrawer *physicsDebugDrawer;
+                PhysicsDebugDrawer *physicsDebugDrawer = nullptr;
+
+                /**
+                 * @brief This ties nodes to mesh data - used for rendering and ray tracing
+                 *
+                 * The key identifies a node by UUID
+                 */
+                QHash<const QUuid, MeshNodeData*> nodeMeshData;
 
             public:
                 /**
-                 * @brief Constructs an empty scene with a SceneNode named `QCoreApplication::translate("SceneNode", "Static")`
+                 * @brief Constructs an empty scene with a SceneNode named `tr("Static")`
                  */
                 ResourceScene();
-
-                /**
-                 * @brief Construct a scene from the file given
-                 *
-                 * This just calls `addModel(file)` for you
-                 *
-                 * @param file The model file
-                 */
-                ResourceScene(QFile &file);
 
                 /**
                  * @brief Frees up resources
@@ -72,11 +74,32 @@ namespace WS2Editor {
                 void unload() override;
 
                 /**
-                 * @brief Getter for rootNode
+                 * @brief Getter for stage
+                 *
+                 * @return This scene's stage data
+                 */
+                WS2Common::Stage* getStage();
+
+                /**
+                 * @brief Const getter for stage
+                 *
+                 * @return This scene's stage data
+                 */
+                const WS2Common::Stage* getStage() const;
+
+                /**
+                 * @brief Getter for the stage's rootNode
                  *
                  * @return This scene's root node of the scenegraph
                  */
                 WS2Common::Scene::SceneNode* getRootNode();
+
+                /**
+                 * @brief Fetches the first static node it can find, or nullptr if one doesn't exist
+                 *
+                 * @return This scene's first static node, or nullptr is there are none
+                 */
+                WS2Common::Scene::SceneNode* getStaticNode();
 
                 /**
                  * @brief Getter for selectionManager
@@ -86,6 +109,13 @@ namespace WS2Editor {
                 Scene::SceneSelectionManager* getSelectionManager();
 
                 /**
+                 * @brief Const getter for selectionManager
+                 *
+                 * @return This scene's selection manager
+                 */
+                const Scene::SceneSelectionManager* getSelectionManager() const;
+
+                /**
                  * @brief Getter for physicsManager
                  *
                  * @return This scene's physics manager
@@ -93,14 +123,51 @@ namespace WS2Editor {
                 Physics::PhysicsManager* getPhysicsManager();
 
                 /**
-                 * @brief Adds the file path to the resource filePaths vector, and append a model to the scene from the
-                 *        file given if the resource is marked as loaded.
+                 * @brief Stores mesh node data in the scene and registers it with the scene physics manager
                  *
-                 * @param file The model file to append
+                 * @param uuid The UUID of the node to store data about
+                 * @param data The mesh data to store
                  */
-                void addModel(QFile &file);
+                void addMeshNodeData(const QUuid &uuid, MeshNodeData *data);
+
+                /**
+                 * @brief Removes and deletes stored mesh node data from the scene and unregisters it from the scene's
+                 *        physics manager, or does nothing if the node doesn't have mesh data
+                 *
+                 * @param uuid The UUID of the node to remove stored data about
+                 *
+                 * @return Whether the node was found and therefore removed or not
+                 */
+                bool removeMeshNodeData(const QUuid &uuid);
+
+                /**
+                 * @brief Retrieves mesh data for a given node
+                 *
+                 * @param uuid The UUID of the node to retieve data about
+                 *
+                 * @return The mesh data for the node given, or nullptr is no mesh data is stored for the given node
+                 */
+                MeshNodeData* getMeshNodeData(const QUuid &uuid);
+
+                /**
+                 * @brief Retrieves mesh data for a given node - const edition
+                 *
+                 * @param uuid The UUID of the node to retieve data about
+                 *
+                 * @return The mesh data for the node given, or nullptr is no mesh data is stored for the given node
+                 */
+                const MeshNodeData* getMeshNodeData(const QUuid &uuid) const;
 
             public slots:
+                /**
+                 * @brief Appends models to the scene from the mesh vector given
+                 *
+                 * @param meshes The meshes to append
+                 *
+                 * @throws WS2Editor::Exception::RuntimeException When Assimp fails to generate an aiScene
+                 */
+                void addModel(const QVector<WS2Common::Resource::ResourceMesh*> &meshes);
+
                 /**
                  * @brief Slot for when the selected nodes has been changed
                  *

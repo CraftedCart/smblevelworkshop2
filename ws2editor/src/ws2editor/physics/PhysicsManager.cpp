@@ -1,4 +1,4 @@
-#include "ws2editor/physics/PhysicsManger.hpp"
+#include "ws2editor/physics/PhysicsManager.hpp"
 
 namespace WS2Editor {
     namespace Physics {
@@ -25,6 +25,10 @@ namespace WS2Editor {
 
         void PhysicsManager::addRigidBody(btRigidBody *rb) {
             dynamicsWorld->addRigidBody(rb);
+        }
+
+        void PhysicsManager::removeRigidBody(btRigidBody *rb) {
+            dynamicsWorld->removeRigidBody(rb);
         }
     }
 }

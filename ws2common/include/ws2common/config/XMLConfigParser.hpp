@@ -3,9 +3,13 @@
  * @brief Header for the XMLConfigParser class
  */
 
+#ifndef SMBLEVELWORKSHOP2_WS2COMMON_CONFIG_XMLCONFIGPARSER_HPP
+#define SMBLEVELWORKSHOP2_WS2COMMON_CONFIG_XMLCONFIGPARSER_HPP
+
 #include "ws2common/Stage.hpp"
 #include "ws2common/scene/StartSceneNode.hpp"
 #include "ws2common/scene/MeshSceneNode.hpp"
+#include "ws2common_export.h"
 #include "ws2common/scene/GroupSceneNode.hpp"
 #include "ws2common/scene/GoalSceneNode.hpp"
 #include "ws2common/scene/BumperSceneNode.hpp"
@@ -14,6 +18,7 @@
 #include "ws2common/scene/FalloutVolumeSceneNode.hpp"
 #include "ws2common/scene/SwitchSceneNode.hpp"
 #include "ws2common/scene/WormholeSceneNode.hpp"
+#include "ws2common/scene/MeshCollisionSceneNode.hpp"
 #include "ws2common/EnumAnimationSeesawType.hpp"
 #include "ws2common/CollisionGrid.hpp"
 #include <QXmlStreamAttributes>
@@ -23,7 +28,7 @@
 
 namespace WS2Common {
     namespace Config {
-        class XMLConfigParser {
+        class WS2COMMON_EXPORT XMLConfigParser {
             protected:
                 QHash<Scene::WormholeSceneNode*, QString> wormholeDestMap;
 
@@ -174,6 +179,39 @@ namespace WS2Common {
                 Scene::MeshSceneNode* parseLevelModel(QXmlStreamReader &xml);
 
                 /**
+                 * @brief Parses a stage model in an XML config
+                 *
+                 * Make sure the XML reader is within the stageModel element before calling this
+                 *
+                 * @param xml The QXmlStreamReader
+                 *
+                 * @return The stage model parsed from the config
+                 */
+                Scene::MeshSceneNode* parseStageModel(QXmlStreamReader &xml);
+
+                /**
+                 * @brief Parses a collision block in an XML config
+                 *
+                 * Make sure the XML reader is within the collision element before calling this
+                 *
+                 * @param xml The QXmlStreamReader
+                 *
+                 * @return A vector of collision objects to attach to a node
+                 */
+                QVector<Scene::CollisionSceneNode*> parseCollision(QXmlStreamReader &xml);
+
+                /**
+                 * @brief Parses a mesh collision block in an XML config
+                 *
+                 * Make sure the XML reader is within the meshCollision element before calling this
+                 *
+                 * @param xml The QXmlStreamReader
+                 *
+                 * @return The mesh collision parsed from the config
+                 */
+                Scene::MeshCollisionSceneNode* parseMeshCollision(QXmlStreamReader &xml);
+
+                /**
                  * @brief Parses collision information in an XML config
                  *
                  * Make sure the XML reader is within the collisionGrid element before calling this
@@ -182,7 +220,7 @@ namespace WS2Common {
                  *
                  * @return The collision parsed from the config
                  */
-                CollisionGrid* parseCollisionGrid(QXmlStreamReader &xml);
+                CollisionGrid parseCollisionGrid(QXmlStreamReader &xml);
 
                 /**
                  * @brief Parses the animation/seesaw type in an XML config
@@ -211,59 +249,17 @@ namespace WS2Common {
                  *
                  * @param xml The QXmlStreamReader
                  * @param keyframes The keyframe map to populate
+                 * @param convertToRadians Whether keyframe values should be interpreted as degrees and converted to
+                 *                         radians first
                  */
                 void parseKeyframes(
                         QXmlStreamReader &xml,
-                        std::set<Animation::KeyframeF*, Animation::KeyframeCompare> &keyframes
+                        std::set<Animation::KeyframeF*, Animation::KeyframeCompare> &keyframes,
+                        bool convertToRadians = false
                         );
-
-                /**
-                 * @brief Gets an XML attribute with the name attrName
-                 *
-                 * @param attrs The attributes to search through
-                 * @param attrName The name of the attribute to fetch
-                 *
-                 * @return The value of the attribute
-                 */
-                QStringRef getAttribute(const QXmlStreamAttributes &attrs, const QString attrName);
-
-                /**
-                 * @brief Gets 3 XML attributes with the names x, y, z, and puts them in a glm::vec3
-                 *
-                 * @param attrs The attributes to search through
-                 * @param x The X attribute name
-                 * @param y The Y attribute name
-                 * @param z The Z attribute name
-                 *
-                 * @return A vec3 of the float values read from the x, y, z attrubutes
-                 */
-                glm::vec3 getVec3Attributes(const QXmlStreamAttributes &attrs,
-                        const QString x = "x", const QString y = "y", const QString z = "z");
-
-                /**
-                 * @brief Gets 2 XML attributes with the names x, y and puts them in a glm::vec2
-                 *
-                 * @param attrs The attributes to search through
-                 * @param x The X attribute name
-                 * @param y The Y attribute name
-                 *
-                 * @return A vec2 of the float values read from the x, y attrubutes
-                 */
-                glm::vec2 getVec2Attributes(const QXmlStreamAttributes &attrs,
-                        const QString x = "x", const QString y = "y");
-
-                /**
-                 * @brief Gets 2 XML attributes with the names x, y and puts them in a glm::uvec2
-                 *
-                 * @param attrs The attributes to search through
-                 * @param x The X attribute name
-                 * @param y The Y attribute name
-                 *
-                 * @return A uvec2 of the float values read from the x, y attrubutes
-                 */
-                glm::uvec2 getUvec2Attributes(const QXmlStreamAttributes &attrs,
-                        const QString x = "x", const QString y = "y");
         };
     }
 }
+
+#endif
 

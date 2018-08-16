@@ -1,6 +1,12 @@
 SMB Level Workshop 2 (WS2)
 ==========================
 
+Linux/macOS builds: [![Travis CI build status](https://travis-ci.org/CraftedCart/smblevelworkshop2.svg?branch=master)](https://travis-ci.org/CraftedCart/smblevelworkshop2)  
+Windows builds: [![Appveyor build status](https://ci.appveyor.com/api/projects/status/xgkxkfuh5r8tu9is/branch/master?svg=true)](https://ci.appveyor.com/project/CraftedCart/smblevelworkshop2/branch/master)  
+Development downloads: [![Development downloads](https://api.bintray.com/packages/craftedcart/the-workshop/smblevelworkshop2-develop/images/download.svg)](https://bintray.com/craftedcart/the-workshop/smblevelworkshop2-develop/_latestVersion)
+
+---
+
 Another installment in Super Monkey Ball hacking - SMB Level Workshop 2 is a stage editor for SMB 1 and 2.
 
 WS2 is very early in development for now, and is not at all useable as a level editor. It may not be ready for a while, with me needing to learn and apply modern OpenGL and Qt 5. In the meanwhile, I refer you to the [original SMB Level Workshop](https://github.com/CraftedCart/SMBLevelWorkshop).
@@ -15,7 +21,7 @@ The original SMB Level Workshop has been quite the learning experience for me, i
 
 ## Dependencies
 
-- Qt 5.9
+- Qt 5
     - Qt Core
     - Qt Widgets
 - OpenGL
@@ -145,43 +151,6 @@ cd build
 cmake -G "MSYS Makefiles" -DCMAKE_BUILD_TYPE="RelWithDebInfo" ..
 make -j 4
 ```
-
-You will also need to copy over a lot of DLLs into the same directory as smblevelworkshop2.exe if they aren't in your PATH, or if you want to redistribute this.
-You can find the DLLs in C:\msys64\mingw64\bin (Assuming you installed MSYS2 to the default location, and you want x86_64 DLLs).
-
-- platforms\qwindowsd.dll (Debug builds only)
-- platforms\qwindows.dll (Non-debug builds only)
-- glew32.dll
-- libassimp.dll
-- libBulletCollision.dll
-- libBulletDynamics.dll
-- libbz2-1.dll
-- libfreetype-6.dll
-- libgcc_s_seh-1.dll
-- libglib-2.0-0.dll
-- libgraphite2.dll
-- libharfbuzz-0.dll
-- libiconv-2.dll
-- libicudtd58.dll (Debug builds only)
-- libicudt58.dll (Non-debug builds only)
-- libicuind58.dll (Debug builds only)
-- libicuin58.dll (Non-debug builds only)
-- libicuucd58.dll (Debug builds only)
-- libicuuc58.dll (Non-debug builds only)
-- libintl-8.dll
-- libLinearMath.dll
-- libminizip-1.dll
-- libpcre-1.dll
-- libpng16-16.dll
-- libstdc++-6.dll
-- libwinpthread-1.dll
-- Qt5Cored.dll (Debug builds only)
-- Qt5Core.dll (Non-debug builds only)
-- Qt5Guid.dll (Debug builds only)
-- Qt5Gui.dll (Non-debug builds only)
-- Qt5Widgetsd.dll (Debug builds only)
-- Qt5Widgets.dll (Non-debug builds only)
-- zlib1.dll
 
 ### With Visual Studio
 

@@ -31,6 +31,10 @@ QMenu::item:selected {
     background-color: #2196F3;
 }
 
+QMenu::item:disabled {
+    color: #80FFFFFF;
+}
+
 QMenu::separator {
     height: 1px;
     background: #616161;
@@ -138,14 +142,12 @@ QScrollBar:vertical {
 QScrollBar::handle:horizontal {
     background: #9E9E9E;
     min-width: 20px;
-    border-radius: 0;
     margin: 0;
 }
 
 QScrollBar::handle:vertical {
     background: #9E9E9E;
     min-height: 20px;
-    border-radius: 0;
     margin: 0;
 }
 
@@ -167,7 +169,6 @@ QToolButton {
     background: none;
     padding: 2px;
     margin: 2px;
-    border-radius: 2px;
     border: none;
 }
 
@@ -175,18 +176,25 @@ QPushButton {
     background: #424242;
     padding: 4px;
     min-width: 72px;
-    border-radius: 2px;
     border: none;
 }
 
 QPushButton:hover, QPushButton:focus,
 QToolButton:hover, QToolButton:focus {
-    background: #2196F3;
+    background: #1565C0; /* Material blue 800 */
 }
 
 QPushButton:pressed,
 QToolButton:pressed {
     background: #616161;
+}
+
+QToolButton:disabled {
+    background: #424242;
+}
+
+QPushButton:checked {
+    border-left: 4px solid #2196F3;
 }
 
 QToolBar::separator:horizontal {
@@ -225,6 +233,31 @@ QLineEdit, QTextEdit, QSpinBox, QDoubleSpinBox, QComboBox {
     border: none;
 }
 
+QLineEdit:disabled, QLineEdit:read-only, QSpinBox:disabled, QDoubleSpinBox:disabled, QComboBox:disabled {
+    color: #80FFFFFF;
+}
+
+QSpinBox::up-button, QDoubleSpinBox::up-button {
+    subcontrol-origin: border;
+    subcontrol-position: top right;
+
+    border: none;
+    background: #616161;
+}
+
+QSpinBox::up-button:hover, QDoubleSpinBox::up-button:hover,
+QSpinBox::down-button:hover, QDoubleSpinBox::down-button:hover {
+    background: #757575;
+}
+
+QSpinBox::down-button, QDoubleSpinBox::down-button {
+    subcontrol-origin: border;
+    subcontrol-position: bottom right;
+
+    border: none;
+    background: #616161;
+}
+
 QComboBox::drop-down {
     subcontrol-origin: padding;
     subcontrol-position: top right;
@@ -237,6 +270,92 @@ QComboBox::down-arrow {
     image: url(":/Styles/FlatDark/Icons/MenuArrow.png");
     width: 16px;
     height: 16px;
+}
+
+/* Less generic stuff */
+
+#collapsableWidgetToggleButton {
+    background: #424242;
+    padding: 0;
+    margin-top: 2px;
+    margin-left: 0;
+    margin-bottom: 0;
+    margin-right: 0;
+}
+
+#collapsableWidgetToggleButton:hover,
+#collapsableWidgetToggleButton:focus {
+    background: #1565C0; /* Material blue 800 */
+}
+
+#collapsableWidgetToggleButton:pressed {
+    background: #757575;
+}
+
+#collapsableWidgetToggleButton:checked {
+    border-left: 4px solid #2196F3;
+}
+
+#collapsableWidgetContent {
+    /*border-left: 4px solid #2196F3;*/
+    border-left-width: 4px;
+    border-left-style: solid;
+    border-left-color: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1, stop: 0 #2196F3, stop: 0.1 #802196F3);
+    /*border-bottom: 2px solid #424242;*/
+
+    /*padding: 4px;*/
+}
+
+/* Even less generic stuff */
+
+#xColorMarkerWidget {
+    background: #F44336;
+    min-width: 4px;
+    max-width: 4px;
+}
+
+#xColorMarkerWidget:disabled {
+    background: #80F44336;
+}
+
+#yColorMarkerWidget {
+    background: #4CAF50;
+    min-width: 4px;
+    max-width: 4px;
+}
+
+#yColorMarkerWidget:disabled {
+    background: #804CAF50;
+}
+
+#zColorMarkerWidget {
+    background: #2196F3;
+    min-width: 4px;
+    max-width: 4px;
+}
+
+#zColorMarkerWidget:disabled {
+    background: #802196F3;
+}
+
+#destinationAlertWidget {
+    border-left: 4px solid #F44336;
+    background: #80F44336;
+}
+
+#destinationInfoWidget {
+    border-left: 4px solid #2196F3;
+    background: #802196F3;
+}
+
+#destinationAlertWidget *, #destinationInfoWidget * {
+    background: #00000000;
+}
+
+#statusMessageFailed {
+    border-left: 4px solid #F44336;
+    background: #80F44336;
+    padding: 8px;
 }
 
 /* vim: set syntax=css: */

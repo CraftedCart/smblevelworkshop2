@@ -6,11 +6,13 @@
 #ifndef SMBLEVELWORKSHOP2_WS2COMMON_MODEL_MODELLOADER_HPP
 #define SMBLEVELWORKSHOP2_WS2COMMON_MODEL_MODELLOADER_HPP
 
+#include "ws2common_export.h"
 #include "ws2common/resource/ResourceMesh.hpp"
 #include <assimp/scene.h>
 #include <QVector>
 #include <QFile>
 #include <QDir>
+#include <QMutex>
 
 namespace WS2Common {
     namespace Model {
@@ -22,10 +24,18 @@ namespace WS2Common {
                  * @param shouldLoad Should the model be loaded into the GPU
                  * @param resources A vector of resources (Optional) - Used to prevent creating duplicate resources, and
                  *                  is appended to when loading models and textures
+                 * @param resourcesMutex A mutex to prevent multiple threads from writing to resources simultaneously (optional)
                  *
                  * @return A vector of added meshes
+                 *
+                 * @throws IOException When failing to read the file
+                 * @throws RuntimeException When Assimp fails to generate an aiScene
                  */
-                QVector<WS2Common::Resource::ResourceMesh*> loadModel(QFile &file, QVector<Resource::AbstractResource*> *resources);
+                WS2COMMON_EXPORT QVector<WS2Common::Resource::ResourceMesh*> loadModel(
+                        QFile &file,
+                        QVector<Resource::AbstractResource*> *resources = nullptr,
+                        QMutex *resourcesMutex = nullptr
+                        );
 
                 /**
                  * @brief Append a model to the scene from the file given
@@ -33,10 +43,36 @@ namespace WS2Common {
                  * @param filePath The file path to the model file to append
                  * @param resources A vector of resources (Optional) - Used to prevent creating duplicate resources, and
                  *                  is appended to when loading models and textures
+                 * @param resourcesMutex A mutex to prevent multiple threads from writing to resources simultaneously (optional)
                  *
                  * @return A vector of added meshes
+                 *
+                 * @throws ModelLoadingException When Assimp fails to generate an aiScene
                  */
-                QVector<WS2Common::Resource::ResourceMesh*> addModelFromFile(const char *filePath, QVector<Resource::AbstractResource*> *resources);
+                WS2COMMON_EXPORT QVector<WS2Common::Resource::ResourceMesh*> addModelFromFile(
+                        const char *filePath,
+                        QVector<Resource::AbstractResource*> *resources = nullptr,
+                        QMutex *resourcesMutex = nullptr
+                        );
+
+                /**
+                 * @brief Append a model to the scene from the binary data given
+                 *
+                 * @param filePath The file path to the model file to append
+                 * @param resources A vector of resources (Optional) - Used to prevent creating duplicate resources, and
+                 *                  is appended to when loading models and textures
+                 * @param resourcesMutex A mutex to prevent multiple threads from writing to resources simultaneously (optional)
+                 *
+                 * @return A vector of added meshes
+                 *
+                 * @throws ModelLoadingException When Assimp fails to generate an aiScene
+                 */
+                WS2COMMON_EXPORT QVector<WS2Common::Resource::ResourceMesh*> addModelFromMemory(
+                        const void *bytes,
+                        size_t byteCount,
+                        QVector<Resource::AbstractResource*> *resources = nullptr,
+                        QMutex *resourcesMutex = nullptr
+                        );
 
                 /**
                  * @brief Recursive function that keeps calling itself for each child node in the parent node given.
@@ -49,15 +85,17 @@ namespace WS2Common {
                  * @param meshVector A reference to a vector that will be populated with all meshes processed
                  * @param resources A vector of resources (Optional) - Used to prevent creating duplicate resources, and
                  *                  is appended to when loading models and textures
+                 * @param resourcesMutex A mutex to prevent multiple threads from writing to resources simultaneously (optional)
                  */
-                void processNode(
+                WS2COMMON_EXPORT void processNode(
                         const aiNode *node,
                         const aiScene *scene,
                         const glm::mat4 globalTransform,
                         const QString *filePath,
                         const QDir *parentDir,
                         QVector<WS2Common::Resource::ResourceMesh*> &meshVector,
-                        QVector<Resource::AbstractResource*> *resources
+                        QVector<Resource::AbstractResource*> *resources = nullptr,
+                        QMutex *resourcesMutex = nullptr
                         );
 
                 /**
@@ -69,15 +107,17 @@ namespace WS2Common {
                  * @param parentDir The parent directory of the file
                  * @param resources A vector of resources (Optional) - Used to prevent creating duplicate resources, and
                  *                  is appended to when loading models and textures
+                 * @param resourcesMutex A mutex to prevent multiple threads from writing to resources simultaneously (optional)
                  *
                  * @return The converted mesh
                  */
-                WS2Common::Model::MeshSegment* processMeshSegment(
+                WS2COMMON_EXPORT WS2Common::Model::MeshSegment* processMeshSegment(
                         const aiMesh *mesh,
                         const aiScene *scene,
                         const glm::mat4 globalTransform,
                         const QDir *parentDir,
-                        QVector<Resource::AbstractResource*> *resources
+                        QVector<Resource::AbstractResource*> *resources = nullptr,
+                        QMutex *resourcesMutex = nullptr
                         );
 
                 /**
@@ -89,14 +129,16 @@ namespace WS2Common {
                  * @param shouldLoad Should the model be loaded into the GPU
                  * @param resources A vector of resources (Optional) - Used to prevent creating duplicate resources, and
                  *                  is appended to when loading models and textures
+                 * @param resourcesMutex A mutex to prevent multiple threads from writing to resources simultaneously (optional)
                  *
                  * @return A vector of textures
                  */
-                QVector<WS2Common::Resource::ResourceTexture*> loadMaterialTextures(
+                WS2COMMON_EXPORT QVector<WS2Common::Resource::ResourceTexture*> loadMaterialTextures(
                         aiMaterial *material,
                         aiTextureType type,
                         const QDir *parentDir,
-                        QVector<Resource::AbstractResource*> *resources
+                        QVector<Resource::AbstractResource*> *resources = nullptr,
+                        QMutex *resourcesMutex = nullptr
                         );
 
                 /**
@@ -107,11 +149,16 @@ namespace WS2Common {
                  * @tparam T The type to cast the resource to. This should be a pointer type.
                  * @param filePath The file path of the resource
                  * @param vec The resource vector to search through
+                 * @param resourcesMutex A mutex to prevent multiple threads from writing to resources simultaneously (optional)
                  *
                  * @return A pointer to the resource if it already exists, or nullptr otherwise
                  */
                 template <class T>
-                T getResourceFromFilePath(QString filePath, QVector<Resource::AbstractResource*> &vec);
+                WS2COMMON_EXPORT T getResourceFromFilePath(
+                        QString filePath,
+                        QVector<Resource::AbstractResource*> *resources = nullptr,
+                        QMutex *resourcesMutex = nullptr
+                        );
         }
     }
 }

@@ -6,6 +6,7 @@
 #ifndef SMBLEVELWORKSHOP2_WS2COMMON_ENUMGOALTYPE_HPP
 #define SMBLEVELWORKSHOP2_WS2COMMON_ENUMGOALTYPE_HPP
 
+#include "ws2common_export.h"
 #include <QString>
 
 namespace WS2Common {
@@ -22,6 +23,8 @@ namespace WS2Common {
     };
 
     namespace GoalType {
+        WS2COMMON_EXPORT QString toString(EnumGoalType type);
+
         /**
          * @brief Converts a string to an EnumGoalType
          *
@@ -29,7 +32,7 @@ namespace WS2Common {
          *
          * @return The EnumGoalType for the string. If the string is invalid, BLUE will be returned.
          */
-        EnumGoalType fromString(QString str);
+        WS2COMMON_EXPORT EnumGoalType fromString(QString str);
     }
 }
 

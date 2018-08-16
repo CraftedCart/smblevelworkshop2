@@ -6,26 +6,62 @@
 #ifndef SMBLEVELWORKSHOP2_WS2EDITOR_UI_MAINWINDOW_HPP
 #define SMBLEVELWORKSHOP2_WS2EDITOR_UI_MAINWINDOW_HPP
 
+#include "ws2editor_export.h"
+#include "ws2editor/widget/ViewportWidget.hpp"
+#include "ws2editor/widget/PropertiesWidget.hpp"
+#include "ws2editor/IExportProvider.hpp"
 #include <QMainWindow>
 #include <QLabel>
-#include <QProgressBar>
 
 namespace Ui {
-    class StageEditorWindow;
+    class WS2EDITOR_EXPORT StageEditorWindow;
 }
 
 namespace WS2Editor {
     namespace UI {
-        class StageEditorWindow : public QMainWindow {
+        class WS2EDITOR_EXPORT StageEditorWindow : public QMainWindow {
             Q_OBJECT
+
+            friend class ViewportEventFilter;
+
+            private:
+                Ui::StageEditorWindow *ui;
+
+            public:
+                QLabel *statusTaskLabel = new QLabel();
+                QLabel *statusFramerateLabel = new QLabel();
+
+            protected:
+                /**
+                 * @brief Checks if any mouse buttons are down and disables/enables shortcuts appropriately
+                 */
+                void checkShortcutsEnabled();
+
+                void addNodeToRoot(
+                        WS2Common::Scene::SceneNode *node,
+                        QVector<WS2Common::Resource::ResourceMesh*>& meshes
+                        );
+
+                void addNodeToStaticGroup(
+                        WS2Common::Scene::SceneNode *node,
+                        QVector<WS2Common::Resource::ResourceMesh*>& meshes
+                        );
 
             public:
                 explicit StageEditorWindow(QWidget *parent = 0);
                 ~StageEditorWindow();
 
-                QProgressBar *statusTaskProgressBar = new QProgressBar();
-                QLabel *statusTaskLabel = new QLabel();
-                QLabel *statusFramerateLabel = new QLabel();
+                /**
+                 * @brief Returns the viewport widget in the stage editor
+                 * @return The viewport widget
+                 */
+                Widget::ViewportWidget* getViewportWidget();
+
+                /**
+                 * @brief Returns the properties widget in the stage editor
+                 * @return The properties widget
+                 */
+                Widget::PropertiesWidget* getPropertiesWidget();
 
             public slots:
                 void viewportFrameRendered(qint64 deltaNanoseconds);
@@ -36,9 +72,31 @@ namespace WS2Editor {
                 void askImportFiles();
 
                 /**
-                 * @brief Adds an empty scene node to the currently active project
+                 * @brief Shows a pop up menu to select an export provider
+                 */
+                void askExportFilesProvider();
+
+                /**
+                 * @brief Shows a file chooser to export files using the given export provider
+                 *
+                 * @param provider The export provider to use when generating data to write
+                 */
+                void askExportFiles(IExportProvider *provider);
+
+                /**
+                 * @brief Adds an empty group scene node to the currently active project
                  */
                 void addSceneNode();
+
+                /**
+                 * @brief Adds an empty background scene node to the currently active project
+                 */
+                void addBackgroundNode();
+
+                /**
+                 * @brief Deletes selected nodes
+                 */
+                void deleteSelected();
 
                 /**
                  * @brief Shows the settings dialog
@@ -55,8 +113,41 @@ namespace WS2Editor {
                  */
                 void showStageIdeaGenerator();
 
-            private:
-                Ui::StageEditorWindow *ui;
+                /**
+                 * @brief Shows the plugins dialog
+                 */
+                void showPlugins();
+
+                /**
+                 * @brief Shows the command line widget as a pop-up
+                 */
+                void showCommandLine();
+
+                void addStart();
+                void addGoalBlue();
+                void addGoalGreen();
+                void addGoalRed();
+                void addBumper();
+                void addBananaSingle();
+                void addBananaBunch();
+                void addJamabar();
+                void addWormhole();
+        };
+
+        /**
+         * @brief Used to check if the mouse is pressed over the viewport and disable shortcuts if so
+         */
+        class WS2EDITOR_EXPORT ViewportEventFilter : public QObject {
+            Q_OBJECT
+
+            protected:
+                StageEditorWindow *w;
+
+            public:
+                ViewportEventFilter(StageEditorWindow *w, QObject *parent = nullptr);
+
+            protected:
+                bool eventFilter(QObject *watched, QEvent *event);
         };
     }
 }

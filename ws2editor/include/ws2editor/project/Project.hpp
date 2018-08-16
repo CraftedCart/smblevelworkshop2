@@ -1,16 +1,17 @@
 /**
  * @file
- * @brief Header for the WS2Editor::Project::Project
+ * @brief Header for the Project
  */
 
 #ifndef SMBLEVELWORKSHOP2_WS2EDITOR_PROJECT_PROJECT_HPP
 #define SMBLEVELWORKSHOP2_WS2EDITOR_PROJECT_PROJECT_HPP
 
+#include "ws2editor_export.h"
 #include "ws2editor/resource/ResourceScene.hpp"
 
 namespace WS2Editor {
     namespace Project {
-        class Project {
+        class WS2EDITOR_EXPORT Project {
             protected:
                 Resource::ResourceScene *scene = new Resource::ResourceScene();
 

@@ -18,15 +18,41 @@
         <file>Icons/Import.png</file>
         <file>Icons/Add.png</file>
         <file>Icons/Settings.png</file>
+        <file>Icons/Start.png</file>
+        <file>Icons/GoalBlue.png</file>
+        <file>Icons/GoalGreen.png</file>
+        <file>Icons/GoalRed.png</file>
+        <file>Icons/Bumper.png</file>
+        <file>Icons/Banana.png</file>
+        <file>Icons/Banana10.png</file>
+        <file>Icons/Jamabar.png</file>
+        <file>Icons/Wormhole.png</file>
+        <file>Icons/Console.png</file>
+        <file>Icons/Plugin.png</file>
+        <file>Icons/PluginFail.png</file>
+        <file>Icons/ArrowsUpDown.png</file>
+        <file>Icons/Alert.png</file>
         <file>Shaders/stage.vert</file>
         <file>Shaders/stage.frag</file>
+        <file>Shaders/unlit.vert</file>
+        <file>Shaders/unlit.frag</file>
         <file>Shaders/physicsDebug.vert</file>
         <file>Shaders/physicsDebug.frag</file>
+        <file>Shaders/composite.vert</file>
+        <file>Shaders/composite.frag</file>
         <file>Images/banner.png</file>
         <file>Images/tooltip.png</file>
+        <file>Images/defaultgrid.png</file>
         <file>Lang/tips-en_US.txt</file>
         <file>Lang/stageThemes-en_US.txt</file>
         <file>Lang/stageMechanics-en_US.txt</file>
+        <file>Models/playerBall.fbx</file>
+        <file>Models/goal.fbx</file>
+        <file>Models/bumper.fbx</file>
+        <file>Models/bananaSingle.fbx</file>
+        <file>Models/bananaBunch.fbx</file>
+        <file>Models/jamabar.fbx</file>
+        <file>Models/wormhole.fbx</file>
     </qresource>
 </RCC>
 

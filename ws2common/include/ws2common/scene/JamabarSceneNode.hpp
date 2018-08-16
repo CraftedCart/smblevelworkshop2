@@ -10,8 +10,12 @@
 
 namespace WS2Common {
     namespace Scene {
-        class JamabarSceneNode : public SceneNode {
+        class WS2COMMON_EXPORT JamabarSceneNode : public SceneNode {
+            protected:
+                virtual const QString getSerializableName() const;
+
             public:
+                JamabarSceneNode() = default;
                 JamabarSceneNode(const QString name);
         };
     }

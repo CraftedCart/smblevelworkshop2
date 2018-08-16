@@ -84,10 +84,35 @@
       <number>8</number>
      </property>
      <item>
-      <widget class="QLabel" name="compileDateLabel">
-       <property name="text">
-        <string extracomment="This should never be shown, therefore should not need translating">Compiled on... MISSING TIMESTAMP - Timestamp should be added within C++</string>
-       </property>
+      <widget class="QWidget" name="widget" native="true">
+       <layout class="QHBoxLayout" name="horizontalLayout">
+        <property name="leftMargin">
+         <number>0</number>
+        </property>
+        <property name="topMargin">
+         <number>0</number>
+        </property>
+        <property name="rightMargin">
+         <number>0</number>
+        </property>
+        <item>
+         <widget class="QLabel" name="versionLabel">
+          <property name="text">
+           <string>MISSING VERSION</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QLabel" name="compileDateLabel">
+          <property name="text">
+           <string extracomment="This should never be shown, therefore should not need translating">&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Compiled on... MISSING TIMESTAMP&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+          </property>
+          <property name="alignment">
+           <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+          </property>
+         </widget>
+        </item>
+       </layout>
       </widget>
      </item>
      <item>
@@ -105,7 +130,7 @@
       </widget>
      </item>
      <item>
-      <widget class="QLabel" name="craftedcartLabel">
+      <widget class="QLabel" name="developedByNamesLabel">
        <property name="text">
         <string>CraftedCart</string>
        </property>
@@ -124,42 +149,13 @@
       </widget>
      </item>
      <item>
-      <widget class="QLabel" name="yoshimaster96Label">
+      <widget class="QLabel" name="specialThanksHackingNamesLabel">
        <property name="text">
-        <string>Yoshimaster96</string>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QLabel" name="bobjrseniorLabel">
-       <property name="text">
-        <string>bobjrsenior</string>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QLabel" name="mechalicoLabel">
-       <property name="text">
-        <string>Mechalico</string>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QLabel" name="specialThanksKnownLabel">
-       <property name="font">
-        <font>
-         <pointsize>14</pointsize>
-        </font>
-       </property>
-       <property name="text">
-        <string>Special thanks for helping to get SMB Level Workshop known</string>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QLabel" name="geoffLabel">
-       <property name="text">
-        <string>Geoff</string>
+        <string>Yoshimaster96
+bobjrsenior
+Mechalico
+CraftSpider
+TwixNinja411</string>
        </property>
       </widget>
      </item>
@@ -176,9 +172,9 @@
       </widget>
      </item>
      <item>
-      <widget class="QPushButton" name="githubButton">
+      <widget class="QPushButton" name="gitlabButton">
        <property name="text">
-        <string>CraftedCart/smblevelworkshop2 on GitHub</string>
+        <string>CraftedCart/smblevelworkshop2 on GitLab</string>
        </property>
       </widget>
      </item>
@@ -884,7 +880,7 @@ Public License instead of this License.  But first, please read
  </widget>
  <resources>
   <include location="../../../resources/Workshop2/Workshop2Resources.qrc"/>
-  <include location="../../resources/Workshop2/Workshop2Resources.qrc"/>
+  <include location="../../../resources/Workshop2/Workshop2Resources.qrc"/>
  </resources>
  <connections/>
 </ui>

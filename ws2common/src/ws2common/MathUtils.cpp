@@ -1,5 +1,7 @@
 #include "ws2common/MathUtils.hpp"
 #include "ws2common/WS2Common.hpp"
+#include <QtMath>
+#include <climits>
 
 namespace WS2Common {
     namespace MathUtils {
@@ -24,13 +26,32 @@ namespace WS2Common {
                     );
         }
 
+        glm::quat eulerZyxToGlmQuat(const glm::vec3 &euler) {
+            glm::quat xQuat = glm::angleAxis(euler.x, glm::vec3(1.0f, 0.0f, 0.0f));
+            glm::quat yQuat = glm::angleAxis(euler.y, glm::vec3(0.0f, 1.0f, 0.0f));
+            glm::quat zQuat = glm::angleAxis(euler.z, glm::vec3(0.0f, 0.0f, 1.0f));
+            return zQuat * yQuat * xQuat;
+        }
+
         QPoint toQPoint(const glm::vec2 &vec) {
             return QPoint(vec.x, vec.y);
+        }
+
+        glm::vec3 degreesToRadians(const glm::vec3 &vec) {
+            return glm::vec3(
+                    qDegreesToRadians(vec.x),
+                    qDegreesToRadians(vec.y),
+                    qDegreesToRadians(vec.z)
+                    );
         }
 
         int randInt(const int a, const int b) {
             std::uniform_int_distribution<> distr(a, b);
             return distr(*WS2Common::getRandGen());
+        }
+
+        bool areAlmostEqual(const float a, const float b) {
+            return qFabs(a - b) < FLT_EPSILON;
         }
     }
 }

@@ -6,6 +6,7 @@
 #ifndef SMBLEVELWORKSHOP2_WS2COMMON_RESOURCE_ABSTRACTRESOURCE_HPP
 #define SMBLEVELWORKSHOP2_WS2COMMON_RESOURCE_ABSTRACTRESOURCE_HPP
 
+#include "ws2common_export.h"
 #include <QVector>
 #include <QString>
 #include <QObject>
@@ -16,7 +17,7 @@ namespace WS2Common {
         /**
          * @brief Base class for all resources
          */
-        class AbstractResource : public QObject {
+        class WS2COMMON_EXPORT AbstractResource : public QObject {
             Q_OBJECT
 
             protected:

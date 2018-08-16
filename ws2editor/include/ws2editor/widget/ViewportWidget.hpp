@@ -4,7 +4,9 @@
 #include "ws2editor/glplatform.hpp"
 #include "ws2editor/EnumCameraNav.hpp"
 #include "ws2editor/resource/ResourceScene.hpp"
+#include "ws2editor/RenderManager.hpp"
 #include <QOpenGLWidget>
+#include "ws2editor_export.h"
 #include <QWidget>
 #include <QElapsedTimer>
 #include <QOpenGLTexture>
@@ -14,22 +16,24 @@
 
 namespace WS2Editor {
     namespace Widget {
-        class ViewportWidget : public QOpenGLWidget {
+        class WS2EDITOR_EXPORT ViewportWidget : public QOpenGLWidget {
             Q_OBJECT
 
             protected:
+                RenderManager *renderManager = new RenderManager();
+
                 //Used to calculate delta time
                 QElapsedTimer elapsedTimer;
                 qint64 prevNanosecondsElapsed;
                 qint64 deltaNanoseconds;
                 float deltaSeconds;
 
-                QSet<int> *keysDown = new QSet<int>();
+                QSet<int> keysDown;
                 bool mouseLocked = false;
 
-                glm::vec3 *targetCameraPos = new glm::vec3(10.0f, 10.0f, 10.0f);
-                glm::vec3 *cameraPos = new glm::vec3(10.0f, 10.0f, 10.0f);
-                glm::vec2 *cameraRot = new glm::vec2(0.0f, 0.0f);
+                glm::vec3 targetCameraPos = glm::vec3(10.0f, 10.0f, 10.0f);
+                glm::vec3 cameraPos = glm::vec3(10.0f, 10.0f, 10.0f);
+                glm::vec2 cameraRot = glm::vec2(0.0f, 0.0f);
                 float cameraPivotDistance = 15.0f;
                 glm::vec3 forward;
                 glm::vec3 right;
@@ -45,6 +49,12 @@ namespace WS2Editor {
                 QPainter *painter;
 
                 QPixmap *tooltipPixmap;
+                QPixmap *importPixmap;
+
+                /**
+                 * @brief Should drag and drop info be shown around the cursor
+                 */
+                bool showDrop = false;
 
                 /**
                  * @brief Tip of the day string
@@ -58,17 +68,64 @@ namespace WS2Editor {
                 qint64 getDeltaNanoseconds();
                 float getDeltaSeconds();
 
+                RenderManager* getRenderManager();
+
                 void makeCurrentContext();
 
+                /**
+                 * @brief Gets the current camera position
+                 *
+                 * This will be interpolated every frame towards the target camera position
+                 *
+                 * @return The current camera position
+                 */
+                const glm::vec3 getCameraPos();
+
+                /**
+                 * @brief Gets the target camera position
+                 *
+                 * The current camera position will be interpolated every frame towards the target camera position
+                 *
+                 * @return The target camera positon
+                 */
+                const glm::vec3 getTargetCameraPos();
+
+                /**
+                 * @brief Gets the view matrix for the current camera
+                 *
+                 * @return The view matrix
+                 */
+                const glm::mat4 getViewMatrix();
+
+                /**
+                 * @brief Gets the projection matrix for the current camera
+                 *
+                 * @return The projection matrix
+                 */
+                const glm::mat4 getProjMatrix();
+
+                /**
+                 * @brief Raycast along the camera Z plane
+                 *
+                 * @param viewportPos X/Y: pixel coordinates, Z: NDC depth coordinate
+                 *
+                 * @return The 3D point where the raycast hit
+                 */
+                glm::vec3 zPlaneRaycast(const glm::vec3 viewportPos);
+
             protected:
-                void initializeGL() override;
-                //void resizeGL(int w, int h) override;
-                void paintGL() override;
-                void keyPressEvent(QKeyEvent *event) override;
-                void keyReleaseEvent(QKeyEvent *event) override;
-                void mousePressEvent(QMouseEvent *event) override;
-                void mouseReleaseEvent(QMouseEvent *event) override;
-                void wheelEvent(QWheelEvent *event) override;
+                virtual void initializeGL() override;
+                virtual void resizeGL(int w, int h) override;
+                virtual void paintGL() override;
+                virtual void keyPressEvent(QKeyEvent *event) override;
+                virtual void keyReleaseEvent(QKeyEvent *event) override;
+                virtual void mousePressEvent(QMouseEvent *event) override;
+                virtual void mouseReleaseEvent(QMouseEvent *event) override;
+                virtual void wheelEvent(QWheelEvent *event) override;
+                virtual void dragEnterEvent(QDragEnterEvent *event) override;
+                virtual void dragMoveEvent(QDragMoveEvent *event) override;
+                virtual void dropEvent(QDropEvent *event) override;
+                virtual void dragLeaveEvent(QDragLeaveEvent *event) override;
 
                 /**
                  * @brief Gets the cursor position relative to the this widget
@@ -113,14 +170,6 @@ namespace WS2Editor {
                 void drawText(QPainter &painter, const glm::vec3 &pos, const QString &str, const QColor &col);
 
                 /**
-                 * @brief Recursively draws the node and all the node's children
-                 *
-                 * @param node The node to draw and/or recursively iterate over its children to draw
-                 * @param transform The world transform of the parent node
-                 */
-                void recursiveDrawSceneNode(WS2Common::Scene::SceneNode *node, const glm::mat4 parentTransform) const;
-
-                /**
                  * @brief Draws info on the viewport (such as a tip of the day)
                  *
                  * For use when the scene is empty, such as before a project is opened or before any models have been
@@ -141,15 +190,6 @@ namespace WS2Editor {
                 void calcVectors();
 
                 /**
-                 * @brief Checks for OpenGL errors and logs them if any are found
-                 *
-                 * @param location This text is tacked on to the end of the log message.
-                 *                 It's recommended you put where in the code the function is called, to aid with tracking
-                 *                 down issues.
-                 */
-                void checkGLErrors(QString location);
-
-                /**
                  * @brief Performs a raycast taking normalized device coordinates into mind
                  * Useful for camera
                  *
@@ -161,13 +201,75 @@ namespace WS2Editor {
                  *
                  * @return A pointer to the raycast callback (Don't forget to delete this when you're done!)
                  */
-                btCollisionWorld::ClosestRayResultCallback* ndcRaycast(const glm::vec2 pos, const glm::vec3 startPos,
+                btCollisionWorld::AllHitsRayResultCallback* ndcRaycast(const glm::vec2 pos, const glm::vec3 startPos,
                         const float distance, const glm::mat4 proj, const glm::mat4 view);
 
-                void selectNodeAtScreenPos(const glm::vec2 pos);
+                /**
+                 * @brief Sorts the ray callback result values by each hit point's distance from sourcePoint and returns an indices vector
+                 *
+                 * Elements are not directly sorted in the rayCallback. Rather, an indices vector is created, sorted based on the fractions in the ray callback, and returned
+                 *
+                 * @param rayCallback The ray callback result to sort the returned indices vector
+                 *
+                 * @return An indices array sorted based on distance
+                 */
+                QVector<int> sortAllHitsRayResultCallback(const btCollisionWorld::AllHitsRayResultCallback *rayCallback);
+
+                /**
+                 * @brief Selects the node at the given gcreen position
+                 *
+                 * @param pos The screen position
+                 * @param toggleSelect If true, the selection of the object will be toggled, else the selection will be
+                 *                     overwritten with the object at the screen position
+                 */
+                void selectNodeAtScreenPos(const glm::vec2 pos, bool toggleSelect);
 
             signals:
+                void postConstruct(ViewportWidget &viewportWidget);
+                void preDestroy(ViewportWidget &viewportWidget);
+                void postInitializeGl(ViewportWidget &viewportWidget);
+
+                /**
+                 * @brief Emitted at the end of the preDraw function
+                 *
+                 * *naming is hard, ok?*
+                 */
+                void postPreDraw(ViewportWidget &viewportWidget);
+
                 void frameRendered(qint64 deltaNanoseconds);
+                void postRenderScene(Resource::ResourceScene &scene);
+
+                /**
+                 * @brief Emitted when a physics object has been clicked on
+                 *
+                 * @note Never set outHandled to false - it defaults to false when called and you should only set it to
+                 *       true if you handle it
+                 *
+                 * @param rayCallback The raytrace callback
+                 * @param outHandled Set this reference to true if your event handler takes care of this
+                 *                   (To prevent crahing when trying to handle a SceneNode)
+                 */
+                void onPhysicsObjectSelected(btCollisionWorld::AllHitsRayResultCallback *rayCallback, bool &outHandled);
+
+                /**
+                 * @brief Emitted when a physics object is hovered over
+                 *
+                 * @note Never set outHandled to false - it defaults to false when called and you should only set it to
+                 *       true if you handle it
+                 *
+                 * @param rayCallback The raytrace callback
+                 * @param outHandled Set this reference to true if your event handler takes care of this
+                 *                   (To prevent crahing when trying to handle a SceneNode)
+                 */
+                void onPhysicsObjectMouseOver(btCollisionWorld::AllHitsRayResultCallback *rayCallback, bool &outHandled);
+
+                /**
+                 * @brief Emitted when the physics raytrace hit nothing
+                 */
+                void onPhysicsObjectMouseOverNothing();
+
+                void onMousePressed(QMouseEvent *event);
+                void onMouseReleased(QMouseEvent *event);
         };
     }
 }

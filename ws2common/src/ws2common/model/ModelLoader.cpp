@@ -1,4 +1,5 @@
 #include "ws2common/model/ModelLoader.hpp"
+#include "ws2common/exception/IOException.hpp"
 #include "ws2common/exception/ModelLoadingException.hpp"
 #include "ws2common/MathUtils.hpp"
 #include <assimp/Importer.hpp>
@@ -8,19 +9,32 @@
 namespace WS2Common {
     namespace Model {
         namespace ModelLoader {
-                /**
-                 * @throws IOException When failing to read the file
-                 * @throws RuntimeException When Assimp fails to generate an aiScene
-                 */
-                QVector<WS2Common::Resource::ResourceMesh*> loadModel(QFile &file, QVector<Resource::AbstractResource*> *resources) {
-                    //The file is from elsewhere - Assume it's from the local filesystem, and pass it to Assimp
-                    return addModelFromFile(file.fileName().toLatin1().constData(), resources);
+                QVector<WS2Common::Resource::ResourceMesh*> loadModel(
+                        QFile &file,
+                        QVector<Resource::AbstractResource*> *resources,
+                        QMutex *resourcesMutex
+                        ) {
+                    QString fileName = file.fileName();
+
+                    if (fileName.startsWith(":")) {
+                        //Is's from the resources - we must load binary data outselves
+                        if (!file.open(QIODevice::ReadOnly)) {
+                            throw WS2Common::Exception::IOException("Failed to open the resource file for reading");
+                        }
+
+                        QByteArray bytes = file.readAll();
+                        return addModelFromMemory(bytes.data(), bytes.size(), resources, resourcesMutex);
+                    } else {
+                        //The file is from elsewhere - Assume it's from the local filesystem, and pass it to Assimp
+                        return addModelFromFile(fileName.toLatin1().constData(), resources, resourcesMutex);
+                    }
                 }
 
-                /**
-                 * @throws ModelLoadingException When Assimp fails to generate an aiScene
-                 */
-                QVector<WS2Common::Resource::ResourceMesh*> addModelFromFile(const char *filePath, QVector<Resource::AbstractResource*> *resources) {
+                QVector<WS2Common::Resource::ResourceMesh*> addModelFromFile(
+                        const char *filePath,
+                        QVector<Resource::AbstractResource*> *resources,
+                        QMutex *resourcesMutex
+                        ) {
                     Assimp::Importer importer;
                     const aiScene *scene = importer.ReadFile(
                             filePath,
@@ -40,7 +54,36 @@ namespace WS2Common {
 
                     const glm::mat4 globalTransform = MathUtils::toGlmMat4(scene->mRootNode->mTransformation);
                     const QString filePathStr(filePath);
-                    processNode(scene->mRootNode, scene, globalTransform, &filePathStr, &parentDir, meshVector, resources);
+                    processNode(scene->mRootNode, scene, globalTransform, &filePathStr, &parentDir, meshVector, resources, resourcesMutex);
+
+                    return meshVector;
+                }
+
+                QVector<WS2Common::Resource::ResourceMesh*> addModelFromMemory(
+                        const void *bytes,
+                        size_t byteCount,
+                        QVector<Resource::AbstractResource*> *resources,
+                        QMutex *resourcesMutex
+                        ) {
+                    Assimp::Importer importer;
+                    const aiScene *scene = importer.ReadFileFromMemory(
+                            bytes,
+                            byteCount,
+                            aiProcess_Triangulate | aiProcess_GenNormals
+                            );
+
+                    //Check if stuff went wrong
+                    if (!scene || scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE || !scene->mRootNode) {
+                        //Oh noes!
+                        throw WS2Common::Exception::ModelLoadingException(QString(importer.GetErrorString()));
+                    }
+
+                    QVector<WS2Common::Resource::ResourceMesh*> meshVector;
+
+                    const glm::mat4 globalTransform = MathUtils::toGlmMat4(scene->mRootNode->mTransformation);
+                    QString filePath;
+                    QDir parentDir;
+                    processNode(scene->mRootNode, scene, globalTransform, &filePath, &parentDir, meshVector, resources, resourcesMutex);
 
                     return meshVector;
                 }
@@ -52,7 +95,8 @@ namespace WS2Common {
                         const QString *filePath,
                         const QDir *parentDir,
                         QVector<WS2Common::Resource::ResourceMesh*> &meshVector,
-                        QVector<Resource::AbstractResource*> *resources
+                        QVector<Resource::AbstractResource*> *resources,
+                        QMutex *resourcesMutex
                         ) {
                     //qDebug() << "Processing node" << node->mName.C_Str() << node->mNumMeshes;
 
@@ -60,7 +104,7 @@ namespace WS2Common {
                     //Process this node's mesh segments
                     for (unsigned int i = 0; i < node->mNumMeshes; i++) {
                         aiMesh *mesh = scene->mMeshes[node->mMeshes[i]];
-                        WS2Common::Model::MeshSegment *segment = processMeshSegment(mesh, scene, globalTransform, parentDir, resources);
+                        WS2Common::Model::MeshSegment *segment = processMeshSegment(mesh, scene, globalTransform, parentDir, resources, resourcesMutex);
                         segments.append(segment);
                     }
 
@@ -74,13 +118,18 @@ namespace WS2Common {
                             resMesh->addMeshSegment(segments.at(j));
                         }
 
-                        if (resources != nullptr) resources->append(resMesh);
+                        if (resources != nullptr) {
+                            if (resourcesMutex != nullptr) resourcesMutex->lock();
+                            resources->append(resMesh);
+                            if (resourcesMutex != nullptr) resourcesMutex->unlock();
+                        }
+
                         meshVector.append(resMesh);
                     }
 
                     //Recursively call this function to process meshes for all children
                     for (unsigned int i = 0; i < node->mNumChildren; i++) {
-                        processNode(node->mChildren[i], scene, globalTransform, filePath, parentDir, meshVector, resources);
+                        processNode(node->mChildren[i], scene, globalTransform, filePath, parentDir, meshVector, resources, resourcesMutex);
                     }
                 }
 
@@ -89,7 +138,8 @@ namespace WS2Common {
                         const aiScene *scene,
                         const glm::mat4 globalTransform,
                         const QDir *parentDir,
-                        QVector<Resource::AbstractResource*> *resources
+                        QVector<Resource::AbstractResource*> *resources,
+                        QMutex *resourcesMutex
                         ) {
                     QVector<WS2Common::Model::Vertex> vertices;
                     QVector<unsigned int> indices;
@@ -145,9 +195,9 @@ namespace WS2Common {
 
                     //Process material
                     aiMaterial *material = scene->mMaterials[mesh->mMaterialIndex];
-                    QVector<WS2Common::Resource::ResourceTexture*> diffuseMaps = loadMaterialTextures(material, aiTextureType_DIFFUSE, parentDir, resources);
+                    QVector<WS2Common::Resource::ResourceTexture*> diffuseMaps = loadMaterialTextures(material, aiTextureType_DIFFUSE, parentDir, resources, resourcesMutex);
                     textures.append(diffuseMaps);
-                    QVector<WS2Common::Resource::ResourceTexture*> specularMaps = loadMaterialTextures(material, aiTextureType_SPECULAR, parentDir, resources);
+                    QVector<WS2Common::Resource::ResourceTexture*> specularMaps = loadMaterialTextures(material, aiTextureType_SPECULAR, parentDir, resources, resourcesMutex);
                     textures.append(specularMaps);
 
                     WS2Common::Model::MeshSegment *segment = new WS2Common::Model::MeshSegment(vertices, indices, textures);
@@ -159,7 +209,8 @@ namespace WS2Common {
                         aiMaterial *mat,
                         aiTextureType type,
                         const QDir *parentDir,
-                        QVector<Resource::AbstractResource*> *resources
+                        QVector<Resource::AbstractResource*> *resources,
+                        QMutex *resourcesMutex
                         ) {
                     QVector<WS2Common::Resource::ResourceTexture*> textures;
 
@@ -189,14 +240,18 @@ namespace WS2Common {
                         WS2Common::Resource::ResourceTexture *texture = nullptr;
                         //Don't load another copy of the texture if it is already in the ResourceManager
                         if (resources != nullptr) {
-                            texture = getResourceFromFilePath<WS2Common::Resource::ResourceTexture*>(filePath, *resources);
+                            texture = getResourceFromFilePath<WS2Common::Resource::ResourceTexture*>(filePath, *resources, resourcesMutex);
                         }
 
                         if (texture == nullptr) {
                             texture = new WS2Common::Resource::ResourceTexture();
                             texture->setId(filePath);
                             texture->setFilePath(filePath);
-                            if (resources != nullptr) resources->append(texture);
+                            if (resources != nullptr) {
+                                if (resourcesMutex != nullptr) resourcesMutex->lock();
+                                resources->append(texture);
+                                if (resourcesMutex != nullptr) resourcesMutex->unlock();
+                            }
                         }
 
                         if (!textures.contains(texture)) textures.append(texture);

@@ -6,6 +6,7 @@
 #ifndef SMBLEVELWORKSHOP2_WS2COMMON_ANIMATION_ENUMLOOPTYPE_HPP
 #define SMBLEVELWORKSHOP2_WS2COMMON_ANIMATION_ENUMLOOPTYPE_HPP
 
+#include "ws2common_export.h"
 #include <QString>
 
 namespace WS2Common {
@@ -28,7 +29,7 @@ namespace WS2Common {
              *
              * @return The EnumLoopType for the string. If the string is invalid, LOOPING will be returned.
              */
-            EnumLoopType fromString(QString str);
+            WS2COMMON_EXPORT EnumLoopType fromString(QString str);
         }
     }
 }

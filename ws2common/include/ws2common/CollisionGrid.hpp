@@ -6,14 +6,16 @@
 #ifndef SMBLEVELWORKSHOP2_WS2COMMON_COLLISIONGRID_HPP
 #define SMBLEVELWORKSHOP2_WS2COMMON_COLLISIONGRID_HPP
 
+#include "ws2common_export.h"
+#include <QXmlStreamWriter>
 #include <glm/glm.hpp>
 
 namespace WS2Common {
-    class CollisionGrid {
+    class WS2COMMON_EXPORT CollisionGrid {
         protected:
-            glm::vec2 gridStart;
-            glm::vec2 gridStep;
-            glm::uvec2 gridStepCount;
+            glm::vec2 gridStart = glm::vec2(-256.0f, -256.0f);
+            glm::vec2 gridStep = glm::vec2(32.0f, 32.0f);
+            glm::uvec2 gridStepCount = glm::uvec2(16, 16);
 
         public:
             /**
@@ -57,6 +59,9 @@ namespace WS2Common {
              * @return How many grid tiles there are in the X x Y direction
              */
             const glm::uvec2 getGridStepCount() const;
+
+            void serializeDataXml(QXmlStreamWriter &s) const;
+            static CollisionGrid deserializeDataXml(QXmlStreamReader &xml);
     };
 }
 

@@ -1,30 +1,35 @@
 /**
  * @file
- * @brief Header for the WS2Editor::Resource::ResourceManager namespace
+ * @brief Header for the ResourceManager namespace
  */
 
 #ifndef SMBLEVELWORKSHOP2_WS2EDITOR_RESOURCEMANAGER_HPP
 #define SMBLEVELWORKSHOP2_WS2EDITOR_RESOURCEMANAGER_HPP
 
-#include "ws2editor/resource/ResourceEditorMesh.hpp"
-#include "ws2common/resource/AbstractResource.hpp"
+#include "ws2editor_export.h"
+#include "ws2common/resource/ResourceMesh.hpp"
 #include <QVector>
 #include <QFile>
 #include <QDir>
+#include <QMutex>
 
 namespace WS2Editor {
     namespace Resource {
-
         /**
          * @brief Stores and manages various runtime resources
          */
         namespace ResourceManager {
             /**
+             * @brief Use this when modifying the resources vector, to ensure thread safety
+             */
+            WS2EDITOR_EXPORT extern QMutex resourcesMutex;
+
+            /**
              * @brief Getter for the resources vector
              *
              * @return A reference to the resources vector
              */
-            QVector<WS2Common::Resource::AbstractResource*>& getResources();
+            WS2EDITOR_EXPORT QVector<WS2Common::Resource::AbstractResource*>& getResources();
 
             /**
              * @brief Adds a resource to the WS2Editor::Resource::ResourceManager::resources vector
@@ -33,12 +38,12 @@ namespace WS2Editor {
              *
              * @param res The resource to add
              */
-            void addResource(WS2Common::Resource::AbstractResource *res);
+            WS2EDITOR_EXPORT void addResource(WS2Common::Resource::AbstractResource *res);
 
             /**
              * @brief Unloads all registered resources if they are loaded
              */
-            void unloadAllResources();
+            WS2EDITOR_EXPORT void unloadAllResources();
 
             /**
              * @brief Gets a resource originating from the given file path
@@ -51,7 +56,7 @@ namespace WS2Editor {
              * @return A pointer to the resource if it already exists, or nullptr otherwise
              */
             template <class T>
-            T getResourceFromFilePath(QString filePath);
+            WS2EDITOR_EXPORT T getResourceFromFilePath(QString filePath);
 
             /**
              * @brief Addes the meshes in a 3D model to the resource manager
@@ -60,8 +65,11 @@ namespace WS2Editor {
              * @param shouldLoad Should the model be loaded into the GPU
              *
              * @return A vector of added meshes
+             *
+             * @throws IOException When failing to read the file
+             * @throws RuntimeException When Assimp fails to generate an aiScene
              */
-            QVector<ResourceEditorMesh*> addModel(QFile &file, bool shouldLoad = false);
+            WS2EDITOR_EXPORT QVector<WS2Common::Resource::ResourceMesh*> addModel(QFile &file, bool shouldLoad = false);
 
             /**
              * @brief Generates a unique resource ID prefixed with prefix
@@ -70,7 +78,7 @@ namespace WS2Editor {
              *
              * @return A unique resource ID, starting with prefix and ending with a number
              */
-            QString generateUniqueId(QString prefix);
+            WS2EDITOR_EXPORT QString generateUniqueId(QString prefix);
         }
     }
 }

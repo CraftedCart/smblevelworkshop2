@@ -6,12 +6,13 @@
 #ifndef SMBLEVELWORKSHOP2_WS2EDITOR_RESOURCE_RESOURCETEXTURE_HPP
 #define SMBLEVELWORKSHOP2_WS2EDITOR_RESOURCE_RESOURCETEXTURE_HPP
 
+#include "ws2common_export.h"
 #include "ws2common/resource/AbstractResource.hpp"
 #include <QImage>
 
 namespace WS2Common {
     namespace Resource {
-        class ResourceTexture : public WS2Common::Resource::AbstractResource {
+        class WS2COMMON_EXPORT ResourceTexture : public WS2Common::Resource::AbstractResource {
             Q_OBJECT
 
             protected:

@@ -6,12 +6,13 @@
 #ifndef SMBLEVELWORKSHOP2_WS2EDITOR_WIDGET_OUTLINERWIDGET_HPP
 #define SMBLEVELWORKSHOP2_WS2EDITOR_WIDGET_OUTLINERWIDGET_HPP
 
+#include "ws2editor_export.h"
 #include "ws2common/scene/SceneNode.hpp"
 #include <QTreeView>
 
 namespace WS2Editor {
     namespace Widget {
-        class OutlinerWidget : public QTreeView {
+        class WS2EDITOR_EXPORT OutlinerWidget : public QTreeView {
             Q_OBJECT
 
             public:

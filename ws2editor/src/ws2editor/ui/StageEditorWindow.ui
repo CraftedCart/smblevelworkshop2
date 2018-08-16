@@ -31,7 +31,7 @@
      <number>0</number>
     </property>
     <item row="0" column="0">
-     <widget class="WS2Editor::Widget::ViewportWidget" name="viewportWidget" native="true"/>
+     <widget class="WS2Editor::Widget::ViewportWidget" name="viewportWidget"/>
     </item>
    </layout>
   </widget>
@@ -41,12 +41,12 @@
      <x>0</x>
      <y>0</y>
      <width>1280</width>
-     <height>23</height>
+     <height>24</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuFile">
     <property name="title">
-     <string>File</string>
+     <string>&amp;File</string>
     </property>
     <addaction name="separator"/>
     <addaction name="actionNew"/>
@@ -57,11 +57,15 @@
     <addaction name="actionImport"/>
     <addaction name="actionExport"/>
     <addaction name="separator"/>
+    <addaction name="actionRunCommand"/>
+    <addaction name="separator"/>
+    <addaction name="actionViewPlugins"/>
+    <addaction name="separator"/>
     <addaction name="actionQuit"/>
    </widget>
    <widget class="QMenu" name="menuEdit">
     <property name="title">
-     <string>Edit</string>
+     <string>&amp;Edit</string>
     </property>
     <addaction name="actionUndo"/>
     <addaction name="actionRedo"/>
@@ -77,38 +81,54 @@
     <addaction name="actionFocusSelected"/>
     <addaction name="separator"/>
     <addaction name="actionNewNode"/>
+    <addaction name="actionNewBackgroundGroupNode"/>
     <addaction name="separator"/>
     <addaction name="actionSettings"/>
    </widget>
    <widget class="QMenu" name="menuView">
     <property name="title">
-     <string>View</string>
+     <string>&amp;View</string>
     </property>
-    <widget class="QMenu" name="menuDebug">
-     <property name="title">
-      <string>Debug</string>
-     </property>
-     <addaction name="actionToggleViewResources"/>
-    </widget>
     <addaction name="actionToggleViewOutliner"/>
     <addaction name="actionToggleViewProperties"/>
     <addaction name="actionToggleViewTimeline"/>
-    <addaction name="menuDebug"/>
     <addaction name="separator"/>
     <addaction name="actionToggleViewToolbar"/>
    </widget>
    <widget class="QMenu" name="menuHelp">
     <property name="title">
-     <string>Help</string>
+     <string>&amp;Help</string>
     </property>
     <addaction name="actionAbout"/>
     <addaction name="actionStageIdeaGenerator"/>
     <addaction name="actionWorkshopDiscord"/>
    </widget>
+   <widget class="QMenu" name="menuDebug">
+    <property name="title">
+     <string>&amp;Debug</string>
+    </property>
+    <widget class="QMenu" name="menuDebugView">
+     <property name="title">
+      <string>&amp;View</string>
+     </property>
+     <addaction name="actionToggleViewResources"/>
+    </widget>
+    <widget class="QMenu" name="menuRendering">
+     <property name="title">
+      <string>&amp;Rendering</string>
+     </property>
+     <addaction name="actionClearAllRenderManagerCaches"/>
+     <addaction name="actionClearRenderManagerMeshCache"/>
+     <addaction name="actionClearRenderManagerTextureCache"/>
+    </widget>
+    <addaction name="menuDebugView"/>
+    <addaction name="menuRendering"/>
+   </widget>
    <addaction name="menuFile"/>
    <addaction name="menuEdit"/>
    <addaction name="menuView"/>
    <addaction name="menuHelp"/>
+   <addaction name="menuDebug"/>
   </widget>
   <widget class="QToolBar" name="mainToolBar">
    <property name="windowTitle">
@@ -141,6 +161,16 @@
    <addaction name="actionPaste"/>
    <addaction name="separator"/>
    <addaction name="actionDelete"/>
+   <addaction name="separator"/>
+   <addaction name="actionAddStart"/>
+   <addaction name="actionAddGoalBlue"/>
+   <addaction name="actionAddGoalGreen"/>
+   <addaction name="actionAddGoalRed"/>
+   <addaction name="actionAddBumper"/>
+   <addaction name="actionAddBanana"/>
+   <addaction name="actionAddBananaBunch"/>
+   <addaction name="actionAddJamabar"/>
+   <addaction name="actionAddWormhole"/>
   </widget>
   <widget class="QStatusBar" name="statusBar"/>
   <widget class="QDockWidget" name="outlinerDockWidget">
@@ -169,6 +199,12 @@
      </property>
      <item row="0" column="0">
       <widget class="WS2Editor::Widget::OutlinerWidget" name="outlinerTreeView">
+       <property name="dragEnabled">
+        <bool>true</bool>
+       </property>
+       <property name="dragDropMode">
+        <enum>QAbstractItemView::DragDrop</enum>
+       </property>
        <property name="selectionMode">
         <enum>QAbstractItemView::ExtendedSelection</enum>
        </property>
@@ -187,7 +223,59 @@
    <attribute name="dockWidgetArea">
     <number>2</number>
    </attribute>
-   <widget class="QWidget" name="propertiesContentsWidget"/>
+   <widget class="QWidget" name="propertiesContentsWidget">
+    <layout class="QGridLayout" name="gridLayout_4">
+     <property name="leftMargin">
+      <number>0</number>
+     </property>
+     <property name="topMargin">
+      <number>0</number>
+     </property>
+     <property name="rightMargin">
+      <number>0</number>
+     </property>
+     <property name="bottomMargin">
+      <number>0</number>
+     </property>
+     <property name="spacing">
+      <number>0</number>
+     </property>
+     <item row="0" column="0">
+      <widget class="QScrollArea" name="scrollArea">
+       <property name="widgetResizable">
+        <bool>true</bool>
+       </property>
+       <widget class="QWidget" name="scrollAreaWidgetContents">
+        <property name="geometry">
+         <rect>
+          <x>0</x>
+          <y>0</y>
+          <width>256</width>
+          <height>58</height>
+         </rect>
+        </property>
+        <layout class="QGridLayout" name="gridLayout_5">
+         <property name="leftMargin">
+          <number>0</number>
+         </property>
+         <property name="rightMargin">
+          <number>0</number>
+         </property>
+         <property name="bottomMargin">
+          <number>0</number>
+         </property>
+         <property name="spacing">
+          <number>0</number>
+         </property>
+         <item row="0" column="0">
+          <widget class="WS2Editor::Widget::PropertiesWidget" name="propertiesWidget" native="true"/>
+         </item>
+        </layout>
+       </widget>
+      </widget>
+     </item>
+    </layout>
+   </widget>
   </widget>
   <widget class="QDockWidget" name="timelineDockWidget">
    <property name="windowTitle">
@@ -256,6 +344,9 @@
      <normaloff>:/Workshop2/Icons/File.png</normaloff>:/Workshop2/Icons/File.png</iconset>
    </property>
    <property name="text">
+    <string>&amp;New</string>
+   </property>
+   <property name="toolTip">
     <string>New</string>
    </property>
    <property name="shortcut">
@@ -268,7 +359,7 @@
      <normaloff>:/Workshop2/Icons/Folder.png</normaloff>:/Workshop2/Icons/Folder.png</iconset>
    </property>
    <property name="text">
-    <string>Open</string>
+    <string>&amp;Open</string>
    </property>
    <property name="shortcut">
     <string>Ctrl+O</string>
@@ -280,7 +371,7 @@
      <normaloff>:/Workshop2/Icons/Close.png</normaloff>:/Workshop2/Icons/Close.png</iconset>
    </property>
    <property name="text">
-    <string>Quit</string>
+    <string>&amp;Quit</string>
    </property>
    <property name="shortcut">
     <string>Ctrl+Q</string>
@@ -292,7 +383,7 @@
      <normaloff>:/Workshop2/Icons/Undo.png</normaloff>:/Workshop2/Icons/Undo.png</iconset>
    </property>
    <property name="text">
-    <string>Undo</string>
+    <string>&amp;Undo</string>
    </property>
    <property name="shortcut">
     <string>Ctrl+Z</string>
@@ -304,7 +395,7 @@
      <normaloff>:/Workshop2/Icons/Redo.png</normaloff>:/Workshop2/Icons/Redo.png</iconset>
    </property>
    <property name="text">
-    <string>Redo</string>
+    <string>&amp;Redo</string>
    </property>
    <property name="shortcut">
     <string>Ctrl+Shift+Z</string>
@@ -316,7 +407,7 @@
      <normaloff>:/Workshop2/Icons/Cut.png</normaloff>:/Workshop2/Icons/Cut.png</iconset>
    </property>
    <property name="text">
-    <string>Cut</string>
+    <string>Cu&amp;t</string>
    </property>
    <property name="shortcut">
     <string>Ctrl+X</string>
@@ -328,7 +419,7 @@
      <normaloff>:/Workshop2/Icons/Copy.png</normaloff>:/Workshop2/Icons/Copy.png</iconset>
    </property>
    <property name="text">
-    <string>Copy</string>
+    <string>&amp;Copy</string>
    </property>
    <property name="shortcut">
     <string>Ctrl+C</string>
@@ -340,7 +431,7 @@
      <normaloff>:/Workshop2/Icons/Paste.png</normaloff>:/Workshop2/Icons/Paste.png</iconset>
    </property>
    <property name="text">
-    <string>Paste</string>
+    <string>&amp;Paste</string>
    </property>
    <property name="shortcut">
     <string>Ctrl+V</string>
@@ -352,7 +443,7 @@
      <normaloff>:/Workshop2/Icons/SelectAll.png</normaloff>:/Workshop2/Icons/SelectAll.png</iconset>
    </property>
    <property name="text">
-    <string>Select All</string>
+    <string>Select &amp;All</string>
    </property>
    <property name="shortcut">
     <string>Ctrl+A</string>
@@ -364,7 +455,7 @@
      <normaloff>:/Workshop2/Icons/Duplicate.png</normaloff>:/Workshop2/Icons/Duplicate.png</iconset>
    </property>
    <property name="text">
-    <string>Duplicate</string>
+    <string>Du&amp;plicate</string>
    </property>
    <property name="shortcut">
     <string>Ctrl+D</string>
@@ -376,7 +467,7 @@
      <normaloff>:/Workshop2/Icons/Delete.png</normaloff>:/Workshop2/Icons/Delete.png</iconset>
    </property>
    <property name="text">
-    <string>Delete</string>
+    <string>&amp;Delete</string>
    </property>
    <property name="shortcut">
     <string>Del</string>
@@ -388,7 +479,7 @@
      <normaloff>:/Workshop2/Icons/Focus.png</normaloff>:/Workshop2/Icons/Focus.png</iconset>
    </property>
    <property name="text">
-    <string>Focus Selected</string>
+    <string>&amp;Focus Selected</string>
    </property>
    <property name="shortcut">
     <string>F</string>
@@ -400,7 +491,7 @@
      <normaloff>:/Workshop2/Icons/Save.png</normaloff>:/Workshop2/Icons/Save.png</iconset>
    </property>
    <property name="text">
-    <string>Save</string>
+    <string>&amp;Save</string>
    </property>
    <property name="shortcut">
     <string>Ctrl+S</string>
@@ -423,7 +514,7 @@
     <bool>true</bool>
    </property>
    <property name="text">
-    <string>Toolbar</string>
+    <string>&amp;Toolbar</string>
    </property>
   </action>
   <action name="actionToggleViewOutliner">
@@ -431,7 +522,7 @@
     <bool>true</bool>
    </property>
    <property name="text">
-    <string>Outliner</string>
+    <string>&amp;Outliner</string>
    </property>
   </action>
   <action name="actionToggleViewProperties">
@@ -439,7 +530,7 @@
     <bool>true</bool>
    </property>
    <property name="text">
-    <string>Properties</string>
+    <string>&amp;Properties</string>
    </property>
   </action>
   <action name="actionToggleViewTimeline">
@@ -447,7 +538,7 @@
     <bool>true</bool>
    </property>
    <property name="text">
-    <string>Timeline</string>
+    <string>Time&amp;line</string>
    </property>
   </action>
   <action name="actionImport">
@@ -456,7 +547,7 @@
      <normaloff>:/Workshop2/Icons/Import.png</normaloff>:/Workshop2/Icons/Import.png</iconset>
    </property>
    <property name="text">
-    <string>Import</string>
+    <string>&amp;Import</string>
    </property>
    <property name="toolTip">
     <string>Import</string>
@@ -471,7 +562,7 @@
      <normaloff>:/Workshop2/Icons/Export.png</normaloff>:/Workshop2/Icons/Export.png</iconset>
    </property>
    <property name="text">
-    <string>Export</string>
+    <string>&amp;Export</string>
    </property>
    <property name="toolTip">
     <string>Export</string>
@@ -485,7 +576,7 @@
     <bool>true</bool>
    </property>
    <property name="text">
-    <string>Resources</string>
+    <string>&amp;Resources</string>
    </property>
   </action>
   <action name="actionNewNode">
@@ -494,7 +585,7 @@
      <normaloff>:/Workshop2/Icons/Add.png</normaloff>:/Workshop2/Icons/Add.png</iconset>
    </property>
    <property name="text">
-    <string>New Group Node</string>
+    <string>New &amp;Group Node</string>
    </property>
    <property name="toolTip">
     <string>Adds a new empty node to the scene</string>
@@ -505,7 +596,7 @@
   </action>
   <action name="actionAbout">
    <property name="text">
-    <string>About</string>
+    <string>&amp;About</string>
    </property>
   </action>
   <action name="actionSettings">
@@ -514,12 +605,12 @@
      <normaloff>:/Workshop2/Icons/Settings.png</normaloff>:/Workshop2/Icons/Settings.png</iconset>
    </property>
    <property name="text">
-    <string>Settings</string>
+    <string>&amp;Settings</string>
    </property>
   </action>
   <action name="actionStageIdeaGenerator">
    <property name="text">
-    <string>Stage Idea Generator</string>
+    <string>Stage Idea &amp;Generator</string>
    </property>
    <property name="toolTip">
     <string>Randomly select a theme and mechanic for stages</string>
@@ -527,7 +618,136 @@
   </action>
   <action name="actionWorkshopDiscord">
    <property name="text">
-    <string>Workshop 2 on Discord</string>
+    <string>Workshop 2 on &amp;Discord</string>
+   </property>
+  </action>
+  <action name="actionClearRenderManagerMeshCache">
+   <property name="text">
+    <string>Clear RenderManager::&amp;meshCache</string>
+   </property>
+  </action>
+  <action name="actionClearRenderManagerTextureCache">
+   <property name="text">
+    <string>Clear RenderManager::&amp;textureCache</string>
+   </property>
+  </action>
+  <action name="actionClearAllRenderManagerCaches">
+   <property name="text">
+    <string>Clear &amp;all RenderManager caches</string>
+   </property>
+  </action>
+  <action name="actionAddGoalBlue">
+   <property name="icon">
+    <iconset resource="../../../resources/Workshop2/Workshop2Resources.qrc">
+     <normaloff>:/Workshop2/Icons/GoalBlue.png</normaloff>:/Workshop2/Icons/GoalBlue.png</iconset>
+   </property>
+   <property name="text">
+    <string>Add &amp;Blue Goal</string>
+   </property>
+  </action>
+  <action name="actionAddGoalGreen">
+   <property name="icon">
+    <iconset resource="../../../resources/Workshop2/Workshop2Resources.qrc">
+     <normaloff>:/Workshop2/Icons/GoalGreen.png</normaloff>:/Workshop2/Icons/GoalGreen.png</iconset>
+   </property>
+   <property name="text">
+    <string>Add &amp;Green Goal</string>
+   </property>
+  </action>
+  <action name="actionAddGoalRed">
+   <property name="icon">
+    <iconset resource="../../../resources/Workshop2/Workshop2Resources.qrc">
+     <normaloff>:/Workshop2/Icons/GoalRed.png</normaloff>:/Workshop2/Icons/GoalRed.png</iconset>
+   </property>
+   <property name="text">
+    <string>Add &amp;Red Goal</string>
+   </property>
+  </action>
+  <action name="actionRunCommand">
+   <property name="icon">
+    <iconset resource="../../../resources/Workshop2/Workshop2Resources.qrc">
+     <normaloff>:/Workshop2/Icons/Console.png</normaloff>:/Workshop2/Icons/Console.png</iconset>
+   </property>
+   <property name="text">
+    <string>Run &amp;command</string>
+   </property>
+   <property name="shortcut">
+    <string>:</string>
+   </property>
+  </action>
+  <action name="actionViewPlugins">
+   <property name="icon">
+    <iconset resource="../../../resources/Workshop2/Workshop2Resources.qrc">
+     <normaloff>:/Workshop2/Icons/Plugin.png</normaloff>:/Workshop2/Icons/Plugin.png</iconset>
+   </property>
+   <property name="text">
+    <string>&amp;Plugins</string>
+   </property>
+  </action>
+  <action name="actionAddBumper">
+   <property name="icon">
+    <iconset resource="../../../resources/Workshop2/Workshop2Resources.qrc">
+     <normaloff>:/Workshop2/Icons/Bumper.png</normaloff>:/Workshop2/Icons/Bumper.png</iconset>
+   </property>
+   <property name="text">
+    <string>Add &amp;Bumper</string>
+   </property>
+  </action>
+  <action name="actionAddBanana">
+   <property name="icon">
+    <iconset resource="../../../resources/Workshop2/Workshop2Resources.qrc">
+     <normaloff>:/Workshop2/Icons/Banana.png</normaloff>:/Workshop2/Icons/Banana.png</iconset>
+   </property>
+   <property name="text">
+    <string>Add B&amp;anana</string>
+   </property>
+  </action>
+  <action name="actionAddBananaBunch">
+   <property name="icon">
+    <iconset resource="../../../resources/Workshop2/Workshop2Resources.qrc">
+     <normaloff>:/Workshop2/Icons/Banana10.png</normaloff>:/Workshop2/Icons/Banana10.png</iconset>
+   </property>
+   <property name="text">
+    <string>Add Banana B&amp;unch</string>
+   </property>
+  </action>
+  <action name="actionAddJamabar">
+   <property name="icon">
+    <iconset resource="../../../resources/Workshop2/Workshop2Resources.qrc">
+     <normaloff>:/Workshop2/Icons/Jamabar.png</normaloff>:/Workshop2/Icons/Jamabar.png</iconset>
+   </property>
+   <property name="text">
+    <string>Add &amp;Jamabar</string>
+   </property>
+  </action>
+  <action name="actionAddWormhole">
+   <property name="icon">
+    <iconset resource="../../../resources/Workshop2/Workshop2Resources.qrc">
+     <normaloff>:/Workshop2/Icons/Wormhole.png</normaloff>:/Workshop2/Icons/Wormhole.png</iconset>
+   </property>
+   <property name="text">
+    <string>Add &amp;Wormhole</string>
+   </property>
+  </action>
+  <action name="actionNewBackgroundGroupNode">
+   <property name="icon">
+    <iconset resource="../../../resources/Workshop2/Workshop2Resources.qrc">
+     <normaloff>:/Workshop2/Icons/Add.png</normaloff>:/Workshop2/Icons/Add.png</iconset>
+   </property>
+   <property name="text">
+    <string>New &amp;Background Group Node</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+Shift+B</string>
+   </property>
+  </action>
+  <action name="actionAddStart">
+   <property name="icon">
+    <iconset resource="../../../resources/Workshop2/Workshop2Resources.qrc">
+     <normaloff>:/Workshop2/Icons/Start.png</normaloff>:/Workshop2/Icons/Start.png</iconset>
+   </property>
+   <property name="text">
+    <string>Add &amp;Start</string>
    </property>
   </action>
  </widget>
@@ -540,8 +760,14 @@
   </customwidget>
   <customwidget>
    <class>WS2Editor::Widget::ViewportWidget</class>
-   <extends>QWidget</extends>
+   <extends>QOpenGLWidget</extends>
    <header>ws2editor/widget/ViewportWidget.hpp</header>
+  </customwidget>
+  <customwidget>
+   <class>WS2Editor::Widget::PropertiesWidget</class>
+   <extends>QWidget</extends>
+   <header>ws2editor/widget/PropertiesWidget.hpp</header>
+   <container>1</container>
   </customwidget>
  </customwidgets>
  <resources>

@@ -1,26 +1,33 @@
 /**
  * @file
- * @brief Header for the WS2Editor::Task::TaskManager class
+ * @brief Header for the TaskManager class
  */
 
 #ifndef SMBLEVELWORKSHOP2_WS2EDITOR_TASK_TASKMANAGER_HPP
 #define SMBLEVELWORKSHOP2_WS2EDITOR_TASK_TASKMANAGER_HPP
 
+#include "ws2editor_export.h"
 #include "Task.hpp"
 #include <QQueue>
+#include <QHash>
 
 namespace WS2Editor {
     namespace Task {
-        class TaskManager : public QObject {
+        class WS2EDITOR_EXPORT TaskManager : public QObject {
             Q_OBJECT
 
             protected:
-                QQueue<Task*> taskQueue;
                 Progress *progress = new Progress();
 
-            public:
-                TaskManager();
+                /**
+                 * @brief A vector of tasks that are currently running async/queued up to run soon
+                 *
+                 * @tparam Task* The task to perform
+                 * @tparam Progress* A progress tracker for the task
+                 */
+                QHash<Task*, Progress*> runningTasks;
 
+            public:
                 /**
                  * @brief Queue a task to be executed
                  *
@@ -35,19 +42,9 @@ namespace WS2Editor {
                  */
                 void enqueueTasks(QVector<Task*> &tasks);
 
-                /**
-                 * @brief Getter for progress
-                 *
-                 * @return A pointer to the progress object
-                 */
-                Progress* getProgress();
+                QString getStatusString();
 
             signals:
-                /**
-                 * @brief Used to call execTasks() on the main thread
-                 */
-                void signalExecTasks();
-
                 /**
                  * @brief Emitted when the task has changed and a user friendly message status needs to be updated
                  *
@@ -57,9 +54,11 @@ namespace WS2Editor {
 
             public slots:
                 /**
-                 * @brief Keeps executing tasks until there's no more to execute
+                 * @brief Removes the task from the runningTasks vector and emits messageChanged
+                 *
+                 * @param obj The task that just finished
                  */
-                void execTasks();
+                void onTaskFinished(Task *obj);
         };
     }
 }

@@ -6,19 +6,25 @@
 #ifndef SMBLEVELWORKSHOP2_WS2COMMON_SCENE_BANANASCENENODE_HPP
 #define SMBLEVELWORKSHOP2_WS2COMMON_SCENE_BANANASCENENODE_HPP
 
+#include "ws2common_export.h"
 #include "ws2common/scene/SceneNode.hpp"
 #include "ws2common/EnumBananaType.hpp"
 
 namespace WS2Common {
     namespace Scene {
-        class BananaSceneNode : public SceneNode {
+        class WS2COMMON_EXPORT BananaSceneNode : public SceneNode {
             protected:
                 /**
                  * @brief The type of this node
                  */
                 EnumBananaType type;
 
+            protected:
+                virtual void serializeNodeDataXml(QXmlStreamWriter &s) const;
+                virtual const QString getSerializableName() const;
+
             public:
+                BananaSceneNode() = default;
                 BananaSceneNode(const QString name);
 
                 /**

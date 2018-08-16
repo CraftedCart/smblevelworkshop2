@@ -11,6 +11,20 @@ namespace WS2Common {
         void GoalSceneNode::setType(EnumGoalType type) {
             this->type = type;
         }
+
+        const QString GoalSceneNode::getSerializableName() const {
+            return "goalSceneNode";
+        }
+
+        void GoalSceneNode::serializeNodeDataXml(QXmlStreamWriter &s) const {
+            SceneNode::serializeNodeDataXml(s);
+
+            s.writeStartElement("data-" + GoalSceneNode::getSerializableName());
+
+            s.writeTextElement("type", GoalType::toString(type));
+
+            s.writeEndElement();
+        }
     }
 }
 

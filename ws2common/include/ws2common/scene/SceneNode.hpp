@@ -1,15 +1,19 @@
 /**
  * @file
- * @brief Header for the WS2Common::Scene::SceneNode class
+ * @brief Header for the SceneNode class
  */
 
 #ifndef SMBLEVELWORKSHOP2_WS2COMMON_SCENE_SCENENODE_HPP
 #define SMBLEVELWORKSHOP2_WS2COMMON_SCENE_SCENENODE_HPP
 
+#include "ws2common_export.h"
 #include "ws2common/animation/TransformAnimation.hpp"
 #include "ws2common/EnumAnimationSeesawType.hpp"
+#include "ws2common/Transform.hpp"
 #include <glm/glm.hpp>
 #include <QVector>
+#include <QXmlStreamWriter>
+#include <QUuid>
 
 namespace WS2Common {
     namespace Scene {
@@ -18,9 +22,18 @@ namespace WS2Common {
          *
          * A node contains a transform, as well as various children which inherit the transform.
          */
-        class SceneNode {
+        class WS2COMMON_EXPORT SceneNode {
             protected:
                 QString name;
+
+                /**
+                 * @brief A unique identifier for this node
+                 *
+                 * Guaranteed to be 99.99% unique!
+                 *
+                 * @todo Check for collisions... maybe... It would likely be a waste of time tbh
+                 */
+                QUuid uuid = QUuid::createUuid();
 
                 QVector<SceneNode*> children;
                 SceneNode *parent;
@@ -28,9 +41,7 @@ namespace WS2Common {
                 glm::vec3 originPosition = glm::vec3(0.0f, 0.0f, 0.0f);
                 glm::vec3 originRotation = glm::vec3(0.0f, 0.0f, 0.0f);
 
-                glm::vec3 position = glm::vec3(0.0f, 0.0f, 0.0f);
-                glm::vec3 rotation = glm::vec3(0.0f, 0.0f, 0.0f);
-                glm::vec3 scale = glm::vec3(1.0f, 1.0f, 1.0f);
+                Transform transform;
 
                 glm::vec3 conveyorSpeed = glm::vec3(0.0f, 0.0f, 0.0f);
 
@@ -42,7 +53,28 @@ namespace WS2Common {
                 float seesawResetStiffness = 0.0f;
                 float seesawRotationBounds = 0.0f;
 
+            protected:
+                /**
+                 * @brief Serializes the data stored in this node to an XML format
+                 *
+                 * @note When overriding this, you must call the super
+                 *
+                 * @param sT he XML stream writer to write to
+                 */
+                virtual void serializeNodeDataXml(QXmlStreamWriter &s) const;
+
+                /**
+                 * @brief This returns the identifier used to serialize this node class
+                 *
+                 * This should be just the class name in camelCase
+                 *
+                 * @return The identifier used to serialize this node class
+                 */
+                virtual const QString getSerializableName() const;
+
             public:
+                SceneNode() = default;
+
                 /**
                  * @brief Constructs a new SceneNode with the name specified
                  *
@@ -54,6 +86,13 @@ namespace WS2Common {
                  * @brief Deletes all children
                  */
                 virtual ~SceneNode();
+
+                /**
+                 * @brief Serializes the data stored in this node to an XML format
+                 *
+                 * @param stream The XML stream writer to write to
+                 */
+                void serializeXml(QXmlStreamWriter &stream) const;
 
                 /**
                  * @brief Getter for WS2::Scene::SceneNode::name
@@ -68,6 +107,29 @@ namespace WS2Common {
                  * @param name The new name to set for the node
                  */
                 void setName(const QString name);
+
+                /**
+                 * @brief Getter for uuid
+                 *
+                 * @return The uuid of this node
+                 */
+                const QUuid getUuid() const;
+
+                /**
+                 * @brief Setter for uuid
+                 *
+                 * @param uuid The new uuid to set for the node
+                 */
+                void setUuid(const QUuid uuid);
+
+                /**
+                 * @brief Recursively searches this node and its children for a node with a matching UUID
+                 *
+                 * @param uuid The UUID to search for
+                 *
+                 * @return The node found, or nullptr if none was
+                 */
+                SceneNode* findNodeByUuid(const QUuid &uuid);
 
                 /**
                  * @brief Getter for WS2::Scene::SceneNode::children
@@ -114,6 +176,21 @@ namespace WS2Common {
                  * @param child The child node to add
                  */
                 virtual void addChild(SceneNode *child);
+
+                /**
+                 * @brief Removes a child node from this node and optionally deletes it
+                 *
+                 * @param child The child node to remove and delete
+                 * @param shouldDelete Whether the object should be deleted
+                 *
+                 * @return The number of nodes removed
+                 */
+                virtual int removeChild(SceneNode *child, bool shouldDelete = true);
+
+                /**
+                 * @brief Removes this node from its parent - this will delete it
+                 */
+                virtual void removeFromParent();
 
                 /**
                  * @brief Gets the number of children that belong to this node
@@ -163,6 +240,20 @@ namespace WS2Common {
                  * @param position The new origin point to set
                  */
                 void setOriginRotation(const glm::vec3 originRotationPosition);
+
+                /**
+                 * @brief Getter for transform
+                 *
+                 * @return The transform of the node relative to its parent
+                 */
+                const Transform& getTransform() const;
+
+                /**
+                 * @brief Const getter for transform
+                 *
+                 * @return The transform of the node relative to its parent
+                 */
+                Transform& getTransform();
 
                 /**
                  * @brief Getter for position

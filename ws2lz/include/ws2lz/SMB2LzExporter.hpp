@@ -3,6 +3,10 @@
  * @brief Header for the SMB2LzExporter class
  */
 
+#ifndef SMBLEVELWORKSHOP2_WS2LZ_SMB2LZEXPORTER_HPP
+#define SMBLEVELWORKSHOP2_WS2LZ_SMB2LZEXPORTER_HPP
+
+#include "ws2lz_export.h"
 #include "ws2lz/TriangleIntersectionGrid.hpp"
 #include "ws2common/Stage.hpp"
 #include "ws2common/scene/GroupSceneNode.hpp"
@@ -19,8 +23,6 @@
 #include <QHash>
 
 namespace WS2Lz {
-    using namespace WS2Common;
-
     /**
      * @brief Class for generating an uncompressed LZ for Super Monkey Ball 2
      *
@@ -49,8 +51,7 @@ namespace WS2Lz {
      * - Animaton headers (Background models)
      * - Animation keyframes (Background models)
      */
-    class SMB2LzExporter {
-
+    class WS2LZ_EXPORT SMB2LzExporter {
         protected:
             //Constants
             const unsigned int FILE_HEADER_LENGTH = 2204;
@@ -79,38 +80,38 @@ namespace WS2Lz {
              * @brief The TriangleIntersectionGrid per collision header - The TriangleIntersectionGrid stores which
              *        triangles should be checked for collision in each grid tile
              */
-            QHash<const Scene::GroupSceneNode*, TriangleIntersectionGrid*> triangleIntGridMap;
+            QHash<const WS2Common::Scene::GroupSceneNode*, TriangleIntersectionGrid*> triangleIntGridMap;
 
             //Offsets and counts
             //Key: Offset, Value: What the offset points to
-            QMultiMap<quint32, const Scene::GroupSceneNode*> collisionHeaderOffsetMap;
+            QMultiMap<quint32, const WS2Common::Scene::GroupSceneNode*> collisionHeaderOffsetMap;
             quint32 startOffset;
             quint32 falloutOffset;
-            QMultiMap<quint32, const Scene::GroupSceneNode*> gridTriangleListPointersOffsetMap;
-            QMap<const Scene::GroupSceneNode*, QVector<quint32>> gridTriangleIndexListOffsetMap;
-            QMultiMap<quint32, const Scene::GroupSceneNode*> gridTriangleListOffsetMap;
+            QMultiMap<quint32, const WS2Common::Scene::GroupSceneNode*> gridTriangleListPointersOffsetMap;
+            QMap<const WS2Common::Scene::GroupSceneNode*, QVector<quint32>> gridTriangleIndexListOffsetMap;
+            QMultiMap<quint32, const WS2Common::Scene::GroupSceneNode*> gridTriangleListOffsetMap;
             //Offsets and counts for goals, bumpers, etc per collision header
-            QMultiMap<quint32, const Scene::GroupSceneNode*> goalOffsetMap;
-            QMap<const Scene::GroupSceneNode*, quint32> goalCountMap;
-            QMultiMap<quint32, const Scene::GroupSceneNode*> bumperOffsetMap;
-            QMap<const Scene::GroupSceneNode*, quint32> bumperCountMap;
-            QMultiMap<quint32, const Scene::GroupSceneNode*> jamabarOffsetMap;
-            QMap<const Scene::GroupSceneNode*, quint32> jamabarCountMap;
-            QMultiMap<quint32, const Scene::GroupSceneNode*> bananaOffsetMap;
-            QMap<const Scene::GroupSceneNode*, quint32> bananaCountMap;
-            QMultiMap<quint32, const Scene::GroupSceneNode*> switchOffsetMap;
-            QMap<const Scene::GroupSceneNode*, quint32> switchCountMap;
-            QMultiMap<quint32, const Scene::GroupSceneNode*> wormholeOffsetMap; //Per collision header
-            QMultiMap<quint32, const Scene::WormholeSceneNode*> wormholeIndividualOffsetMap; //Per wormhole (Needed to link wormholes together)
-            QMap<const Scene::GroupSceneNode*, quint32> wormholeCountMap;
-            QMultiMap<quint32, const Scene::GroupSceneNode*> groupAnimHeaderOffsetMap;
-            QMultiMap<quint32, const Scene::MeshSceneNode*> bgAnimHeaderOffsetMap;
-            QMultiMap<quint32, const Animation::TransformAnimation*> animPosXKeyframesOffsetMap;
-            QMultiMap<quint32, const Animation::TransformAnimation*> animPosYKeyframesOffsetMap;
-            QMultiMap<quint32, const Animation::TransformAnimation*> animPosZKeyframesOffsetMap;
-            QMultiMap<quint32, const Animation::TransformAnimation*> animRotXKeyframesOffsetMap;
-            QMultiMap<quint32, const Animation::TransformAnimation*> animRotYKeyframesOffsetMap;
-            QMultiMap<quint32, const Animation::TransformAnimation*> animRotZKeyframesOffsetMap;
+            QMultiMap<quint32, const WS2Common::Scene::GroupSceneNode*> goalOffsetMap;
+            QMap<const WS2Common::Scene::GroupSceneNode*, quint32> goalCountMap;
+            QMultiMap<quint32, const WS2Common::Scene::GroupSceneNode*> bumperOffsetMap;
+            QMap<const WS2Common::Scene::GroupSceneNode*, quint32> bumperCountMap;
+            QMultiMap<quint32, const WS2Common::Scene::GroupSceneNode*> jamabarOffsetMap;
+            QMap<const WS2Common::Scene::GroupSceneNode*, quint32> jamabarCountMap;
+            QMultiMap<quint32, const WS2Common::Scene::GroupSceneNode*> bananaOffsetMap;
+            QMap<const WS2Common::Scene::GroupSceneNode*, quint32> bananaCountMap;
+            QMultiMap<quint32, const WS2Common::Scene::GroupSceneNode*> switchOffsetMap;
+            QMap<const WS2Common::Scene::GroupSceneNode*, quint32> switchCountMap;
+            QMultiMap<quint32, const WS2Common::Scene::GroupSceneNode*> wormholeOffsetMap; //Per collision header
+            QMultiMap<quint32, QUuid> wormholeIndividualOffsetMap; //Per wormhole (Needed to link wormholes together) - the value is each wormhole's UUID
+            QMap<const WS2Common::Scene::GroupSceneNode*, quint32> wormholeCountMap;
+            QMultiMap<quint32, const WS2Common::Scene::GroupSceneNode*> groupAnimHeaderOffsetMap;
+            QMultiMap<quint32, const WS2Common::Scene::MeshSceneNode*> bgAnimHeaderOffsetMap;
+            QMultiMap<quint32, const WS2Common::Animation::TransformAnimation*> animPosXKeyframesOffsetMap;
+            QMultiMap<quint32, const WS2Common::Animation::TransformAnimation*> animPosYKeyframesOffsetMap;
+            QMultiMap<quint32, const WS2Common::Animation::TransformAnimation*> animPosZKeyframesOffsetMap;
+            QMultiMap<quint32, const WS2Common::Animation::TransformAnimation*> animRotXKeyframesOffsetMap;
+            QMultiMap<quint32, const WS2Common::Animation::TransformAnimation*> animRotYKeyframesOffsetMap;
+            QMultiMap<quint32, const WS2Common::Animation::TransformAnimation*> animRotZKeyframesOffsetMap;
             //TODO: Replace all this with maps \/
             quint32 coneCollisionObjectCount;
             quint32 coneCollisionObjectListOffset;
@@ -120,27 +121,27 @@ namespace WS2Lz {
             quint32 cylinderCollisionObjectListOffset;
             quint32 falloutVolumeCount;
             quint32 falloutVolumeListOffset;
-            QMultiMap<quint32, const Scene::MeshSceneNode*> bgOffsetMap;
+            QMultiMap<quint32, const WS2Common::Scene::MeshSceneNode*> bgOffsetMap;
             QMultiMap<quint32, QString> bgNameOffsetMap;
             //TODO: Mystery 8
             //TODO: Reflective level models
             //TODO: Level model instances
-            QMultiMap<quint32, const Scene::GroupSceneNode*> levelModelPointerAOffsetMap;
-            QMultiMap<quint32, const Scene::GroupSceneNode*> levelModelPointerBOffsetMap;
-            QMultiMap<quint32, const Scene::GroupSceneNode*> levelModelOffsetMap;
-            QMap<const Scene::GroupSceneNode*, quint32> levelModelCountMap;
+            QMultiMap<quint32, const WS2Common::Scene::GroupSceneNode*> levelModelPointerAOffsetMap;
+            QMultiMap<quint32, const WS2Common::Scene::GroupSceneNode*> levelModelPointerBOffsetMap;
+            QMultiMap<quint32, const WS2Common::Scene::GroupSceneNode*> levelModelOffsetMap;
+            QMap<const WS2Common::Scene::GroupSceneNode*, quint32> levelModelCountMap;
             QMultiMap<quint32, QString> levelModelNameOffsetMap;
             //TODO: Fog anim header
             //TODO: Fog
             //TODO: Mystery 3
 
             //All 3D models for mesh collision
-            QHash<QString, Resource::ResourceMesh*> models; //name, mesh - Using a hashmap as it will have a quicker lookup
+            QHash<QString, WS2Common::Resource::ResourceMesh*> models; //name, mesh - Using a hashmap as it will have a quicker lookup
 
         public:
             virtual ~SMB2LzExporter();
 
-            void setModels(QHash<QString, Resource::ResourceMesh*> &models);
+            void setModels(QHash<QString, WS2Common::Resource::ResourceMesh*> &models);
 
             /**
              * @brief Generates an uncompressed LZ for SMB 2, and writes it to dev
@@ -148,7 +149,7 @@ namespace WS2Lz {
              * @param dev The QDataStream to write bytes to
              * @param stage The stage to generate an uncompressed LZ for
              */
-            void generate(QDataStream &dev, const Stage &stage);
+            void generate(QDataStream &dev, const WS2Common::Stage &stage);
 
         protected:
             /**
@@ -160,19 +161,19 @@ namespace WS2Lz {
              * @param indices Every 3 integers here corresponds to vertices for a triangle in the vertices vector - This will be added to
              */
             void addCollisionTriangles(
-                    const Scene::SceneNode *node,
-                    QVector<Model::Vertex> &allVertices,
+                    const WS2Common::Scene::SceneNode *node,
+                    QVector<WS2Common::Model::Vertex> &allVertices,
                     QVector<unsigned int> &allIndices
                     );
 
-            void optimizeCollision(const Stage &stage);
+            void optimizeCollision(const WS2Common::Stage &stage);
 
             /**
              * @brief Calculates offsets and item counts and writes it to class scoped variables
              *
              * @param stage The stage to calculate offsets for
              */
-            void calculateOffsets(const Stage &stage);
+            void calculateOffsets(const WS2Common::Stage &stage);
 
             /**
              * @brief Recursive function - Searches through the node's children, and their children, and their children, etc
@@ -181,20 +182,20 @@ namespace WS2Lz {
              * @param node The node to recursively search
              * @param nextOffset The value to add to
              */
-            void addCollisionTriangleOffsets(const Scene::SceneNode *node, quint32 &nextOffset);
+            void addCollisionTriangleOffsets(const WS2Common::Scene::SceneNode *node, quint32 &nextOffset);
 
             void writeFileHeader(QDataStream &dev);
-            void writeStart(QDataStream &dev, const Stage &stage);
-            void writeFallout(QDataStream &dev, const Stage &stage);
-            void writeCollisionHeader(QDataStream &dev, const Scene::GroupSceneNode *node);
+            void writeStart(QDataStream &dev, const WS2Common::Stage &stage);
+            void writeFallout(QDataStream &dev, const WS2Common::Stage &stage);
+            void writeCollisionHeader(QDataStream &dev, const WS2Common::Scene::GroupSceneNode *node);
             void writeCollisionTriangleIndexList(QDataStream &dev, const TriangleIntersectionGrid *intGrid);
-            void writeCollisionTriangleIndexListPointers(QDataStream &dev, const Scene::GroupSceneNode *node);
-            void writeGoal(QDataStream &dev, const Scene::GoalSceneNode *node);
-            void writeBumper(QDataStream &dev, const Scene::BumperSceneNode *node);
-            void writeJamabar(QDataStream &dev, const Scene::JamabarSceneNode *node);
-            void writeBanana(QDataStream &dev, const Scene::BananaSceneNode *node);
-            void writeSwitch(QDataStream &dev, const Scene::SwitchSceneNode *node);
-            void writeWormhole(QDataStream &dev, const Scene::WormholeSceneNode *node);
+            void writeCollisionTriangleIndexListPointers(QDataStream &dev, const WS2Common::Scene::GroupSceneNode *node);
+            void writeGoal(QDataStream &dev, const WS2Common::Scene::GoalSceneNode *node);
+            void writeBumper(QDataStream &dev, const WS2Common::Scene::BumperSceneNode *node);
+            void writeJamabar(QDataStream &dev, const WS2Common::Scene::JamabarSceneNode *node);
+            void writeBanana(QDataStream &dev, const WS2Common::Scene::BananaSceneNode *node);
+            void writeSwitch(QDataStream &dev, const WS2Common::Scene::SwitchSceneNode *node);
+            void writeWormhole(QDataStream &dev, const WS2Common::Scene::WormholeSceneNode *node);
 
             /**
              * @brief Recursive function - Searches through the node's children, and their children, and their children, etc
@@ -203,18 +204,26 @@ namespace WS2Lz {
              * @param dev The QDataStream to write to
              * @param node The node to recursively search
              */
-            void writeCollisionTriangles(QDataStream &dev, const Scene::SceneNode *node);
+            void writeCollisionTriangles(QDataStream &dev, const WS2Common::Scene::SceneNode *node);
 
-            void writeLevelModelPointerAList(QDataStream &dev, const Scene::GroupSceneNode *node);
-            void writeLevelModelPointerBList(QDataStream &dev, const Scene::GroupSceneNode *node);
-            void writeLevelModelList(QDataStream &dev, const Scene::GroupSceneNode *node);
-            void writeLevelModelNameList(QDataStream &dev, const Scene::GroupSceneNode *node);
-            void writeBackgroundModel(QDataStream &dev, const Scene::MeshSceneNode *node);
-            void writeBackgroundName(QDataStream &dev, const Scene::MeshSceneNode *node);
-            void writeAnimationHeader(QDataStream &dev, const Animation::TransformAnimation *anim);
-            void writeBackgroundAnimationHeader(QDataStream &dev, const Animation::TransformAnimation *anim);
-            void writeTransformAnimation(QDataStream &dev, const Animation::TransformAnimation *anim);
-            void writeKeyframeF(QDataStream &dev, const Animation::KeyframeF *k);
+            void writeLevelModelPointerAList(QDataStream &dev, const WS2Common::Scene::GroupSceneNode *node);
+            void writeLevelModelPointerBList(QDataStream &dev, const WS2Common::Scene::GroupSceneNode *node);
+            void writeLevelModelList(QDataStream &dev, const WS2Common::Scene::GroupSceneNode *node);
+            void writeLevelModelNameList(QDataStream &dev, const WS2Common::Scene::GroupSceneNode *node);
+            void writeBackgroundModel(QDataStream &dev, const WS2Common::Scene::MeshSceneNode *node);
+            void writeBackgroundName(QDataStream &dev, const WS2Common::Scene::MeshSceneNode *node);
+            void writeAnimationHeader(QDataStream &dev, const WS2Common::Animation::TransformAnimation *anim);
+            void writeBackgroundAnimationHeader(QDataStream &dev, const WS2Common::Animation::TransformAnimation *anim);
+            void writeTransformAnimation(QDataStream &dev, const WS2Common::Animation::TransformAnimation *anim);
+            void writeKeyframeF(QDataStream &dev, const WS2Common::Animation::KeyframeF *k);
+
+            /**
+             * @brief Like `writeKeyframeF`, but converts the value from radians to degrees first
+             *
+             * @param dev The data stream to write to
+             * @param k The keyframe to write
+             */
+            void writeKeyframeAngleF(QDataStream &dev, const WS2Common::Animation::KeyframeF *k);
 
             void writeNull(QDataStream &dev, const unsigned int count);
 
@@ -234,7 +243,7 @@ namespace WS2Lz {
              *
              * @return All values summed
              */
-            quint32 addAllCounts(QMap<const Scene::GroupSceneNode*, quint32> &m);
+            quint32 addAllCounts(QMap<const WS2Common::Scene::GroupSceneNode*, quint32> &m);
 
             /**
              * @brief Rounds up a value to the nearest multiple of 4
@@ -252,4 +261,6 @@ namespace WS2Lz {
             float reverseAngle(float c, float s);
     };
 }
+
+#endif
 

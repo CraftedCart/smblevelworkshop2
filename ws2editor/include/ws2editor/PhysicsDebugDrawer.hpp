@@ -6,13 +6,14 @@
 #ifndef SMBLEVELWORKSHOP2_WS2EDITOR_PHYSICSDEBUGDRAWER_HPP
 #define SMBLEVELWORKSHOP2_WS2EDITOR_PHYSICSDEBUGDRAWER_HPP
 
+#include "ws2editor_export.h"
 #include "glplatform.hpp"
 #include "MathUtils.hpp"
 #include <btBulletDynamicsCommon.h>
 #include <QVector>
 
 namespace WS2Editor {
-    class PhysicsDebugDrawer : public btIDebugDraw {
+    class WS2EDITOR_EXPORT PhysicsDebugDrawer : public btIDebugDraw {
         protected:
             int debugMode;
 
@@ -40,6 +41,11 @@ namespace WS2Editor {
              * @note This assumes an appropriate shader is already bound and its uniforms specified
              */
             void drawAll();
+
+            /**
+             * @brief Clears any queued data to be drawn
+             */
+            void clearBuffers();
     };
 }
 

@@ -6,6 +6,7 @@
 #ifndef SMBLEVELWORKSHOP2_WS2COMMON_SCENE_MESHCOLLISIONSCENENODE_HPP
 #define SMBLEVELWORKSHOP2_WS2COMMON_SCENE_MESHCOLLISIONSCENENODE_HPP
 
+#include "ws2common_export.h"
 #include "ws2common/scene/CollisionSceneNode.hpp"
 
 namespace WS2Common {
@@ -14,14 +15,19 @@ namespace WS2Common {
         /**
          * @brief Collision shape that uses every triangle of a mesh
          */
-        class MeshCollisionSceneNode : public CollisionSceneNode {
+        class WS2COMMON_EXPORT MeshCollisionSceneNode : public CollisionSceneNode {
             protected:
                 /**
                  * @brief The name of the referenced mesh
                  */
                 QString meshName;
 
+            protected:
+                virtual void serializeNodeDataXml(QXmlStreamWriter &s) const;
+                virtual const QString getSerializableName() const;
+
             public:
+                MeshCollisionSceneNode() = default;
                 MeshCollisionSceneNode(const QString name);
 
                 /**
