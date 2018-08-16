@@ -48,6 +48,7 @@ namespace WS2Lz {
      * - Level model name
      * - Animaton headers
      * - Animation keyframes
+     * - Reflective models
      */
     class WS2LZ_EXPORT SMB2LzExporter {
         protected:
@@ -71,6 +72,7 @@ namespace WS2Lz {
             const unsigned int BACKGROUND_MODEL_LENGTH = 56;
             const unsigned int ANIMATION_HEADER_LENGTH = 64;
             const unsigned int ANIMATION_KEYFRAME_LENGTH = 20;
+            const unsigned int RUNTIME_REFLECTIVE_MODEL_LENGTH = 12;
 
             //Other guff
             /**
@@ -101,6 +103,8 @@ namespace WS2Lz {
             QMultiMap<quint32, const WS2Common::Scene::GroupSceneNode*> wormholeOffsetMap; //Per collision header
             QMultiMap<quint32, QUuid> wormholeIndividualOffsetMap; //Per wormhole (Needed to link wormholes together) - the value is each wormhole's UUID
             QMap<const WS2Common::Scene::GroupSceneNode*, quint32> wormholeCountMap;
+            QMultiMap<quint32, const WS2Common::Scene::GroupSceneNode*> runtimeReflectiveModelOffsetMap;
+            QMap<const WS2Common::Scene::GroupSceneNode*, quint32> runtimeReflectiveModelCountMap;
             QMultiMap<quint32, const WS2Common::Scene::GroupSceneNode*> groupAnimHeaderOffsetMap;
             QMultiMap<quint32, const WS2Common::Animation::TransformAnimation*> animPosXKeyframesOffsetMap;
             QMultiMap<quint32, const WS2Common::Animation::TransformAnimation*> animPosYKeyframesOffsetMap;
@@ -210,6 +214,7 @@ namespace WS2Lz {
             void writeBackgroundName(QDataStream &dev, const WS2Common::Scene::MeshSceneNode *node);
             void writeAnimationHeader(QDataStream &dev, const WS2Common::Animation::TransformAnimation *anim);
             void writeTransformAnimation(QDataStream &dev, const WS2Common::Animation::TransformAnimation *anim);
+            void writeRuntimeReflectiveModelList(QDataStream &dev, const WS2Common::Scene::GroupSceneNode *node);
             void writeKeyframeF(QDataStream &dev, const WS2Common::Animation::KeyframeF *k);
 
             /**

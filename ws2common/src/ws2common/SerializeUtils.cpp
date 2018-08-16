@@ -184,6 +184,8 @@ namespace WS2Common {
 
                 if (xml.name() == "meshName") {
                     node->setMeshName(xml.readElementText());
+                } else if (xml.name() == "runtimeReflective") {
+                    node->setRuntimeReflective(xml.readElementText() == "true");
                 } else {
                     qWarning().noquote() << "Unrecognised tag: data-meshSceneNode > " + xml.name();
                 }
