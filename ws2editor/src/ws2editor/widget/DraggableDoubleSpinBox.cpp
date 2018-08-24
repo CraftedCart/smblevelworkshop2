@@ -7,7 +7,7 @@
 namespace WS2Editor {
     namespace Widget {
         DraggableDoubleSpinBox::DraggableDoubleSpinBox(QWidget *parent) : QDoubleSpinBox(parent) {
-            upDownPixmap = QPixmap(":/Workshop2/Icons/ArrowsUpDown.png");
+            upDownPixmap = QPixmap(":/ws2editor/icons/ArrowsUpDown.png");
 
             setCursor(Qt::SizeHorCursor);
         }

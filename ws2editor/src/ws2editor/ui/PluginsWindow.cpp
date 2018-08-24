@@ -17,8 +17,8 @@ namespace WS2Editor {
             layout->addWidget(listWidget);
 
             //Create loaded, initialized, and failed icons
-            QImage pluginImage = QImage(":/Workshop2/Icons/Plugin.png").scaled(24, 24);
-            QImage pluginFailImage = QImage(":/Workshop2/Icons/PluginFail.png").scaled(24, 24);
+            QImage pluginImage = QImage(":/ws2editor/icons/Plugin.png").scaled(24, 24);
+            QImage pluginFailImage = QImage(":/ws2editor/icons/PluginFail.png").scaled(24, 24);
 
             QImage loadedImage(24, 24, QImage::Format_ARGB32);
             tintImage(loadedImage, pluginFailImage, QColor(255, 235, 59));

@@ -167,8 +167,8 @@ set(UI_FILES
     )
 
 set(RESOURCE_FILES
-    ./resources/Workshop2/Workshop2Resources.qrc
-    ./resources/Styles/FlatDark/flatdark.qrc
+    ./resources/ws2editor/resources.qrc
+    ./resources/ws2editor/styles/flatdark/resources.qrc
     )
 
 #TRANSLATIONS is defined by the parent CMakeLists.txt
@@ -212,8 +212,8 @@ install(TARGETS ${PROJECT_NAME}launcher DESTINATION bin)
 
 #.desktop and icon files
 if(UNIX AND NOT APPLE)
-    install(FILES ./resources/Raw/ws2editor.desktop DESTINATION share/applications)
-    install(FILES ./resources/Raw/ws2editor.png DESTINATION share/icons)
+    install(FILES ./resources/raw/ws2editor.desktop DESTINATION share/applications)
+    install(FILES ./resources/raw/ws2editor.png DESTINATION share/icons)
 endif(UNIX AND NOT APPLE)
 
 #Translations

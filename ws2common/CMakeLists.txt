@@ -129,7 +129,7 @@ set(HEADER_FILES
     )
 
 set(RESOURCE_FILES
-    ./resources/ws2common/WS2CommonResources.qrc
+    ./resources/ws2common/resources.qrc
     )
 
 add_library(${PROJECT_NAME} SHARED ${SOURCE_FILES} ${HEADER_FILES} ${RESOURCE_FILES})

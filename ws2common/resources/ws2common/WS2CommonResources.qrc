@@ -1,8 +1,0 @@
-<RCC>
-    <qresource prefix="/WS2Common">
-        <file>Images/uvtemplate.png</file>
-    </qresource>
-</RCC>
-
-<!-- vim: set syntax=xml: -->
-

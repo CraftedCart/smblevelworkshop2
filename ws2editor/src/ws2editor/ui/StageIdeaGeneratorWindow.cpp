@@ -11,7 +11,7 @@ namespace WS2Editor {
             ui->setupUi(this);
 
             //Read all themes
-            QFile themeFile(tr(":/Workshop2/Lang/stageThemes-en_US.txt"));
+            QFile themeFile(tr(":/ws2editor/lang/stageThemes-en_US.txt"));
             if (themeFile.open(QIODevice::ReadOnly)) {
                 QTextStream in(&themeFile);
 
@@ -24,7 +24,7 @@ namespace WS2Editor {
             }
 
             //Read all mechanics
-            QFile mechanicsFile(tr(":/Workshop2/Lang/stageMechanics-en_US.txt"));
+            QFile mechanicsFile(tr(":/ws2editor/lang/stageMechanics-en_US.txt"));
             if (mechanicsFile.open(QIODevice::ReadOnly)) {
                 QTextStream in(&mechanicsFile);
 

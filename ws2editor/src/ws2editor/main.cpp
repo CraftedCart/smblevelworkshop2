@@ -40,10 +40,10 @@ namespace WS2Editor {
         Command::CommandInterpreter::createInstance();
 
         //Splash screen
-        QPixmap pixmap(":/Workshop2/Images/banner.png");
+        QPixmap pixmap(":/ws2editor/images/banner.png");
         QSplashScreen splash(pixmap);
         splash.show();
-        splash.showMessage(QApplication::translate("main", "Initializing WS2"), Qt::AlignRight | Qt::AlignBottom, Qt::white);
+        splash.showMessage(QApplication::translate("main", "Initializing ws2editor"), Qt::AlignRight | Qt::AlignBottom, Qt::white);
         qApp->processEvents();
 
         splash.showMessage(QApplication::translate("main", "Setting default OpenGL format"), Qt::AlignRight | Qt::AlignBottom, Qt::white);
@@ -65,7 +65,7 @@ namespace WS2Editor {
         splash.showMessage(QApplication::translate("main", "Setting style"), Qt::AlignRight | Qt::AlignBottom, Qt::white);
         qApp->processEvents();
 
-        QFile styleFile(":/Styles/FlatDark/FlatDark.qss");
+        QFile styleFile(":/ws2editor/styles/flatdark/style.qss");
         styleFile.open(QFile::ReadOnly);
         QString style(styleFile.readAll());
         styleFile.close();

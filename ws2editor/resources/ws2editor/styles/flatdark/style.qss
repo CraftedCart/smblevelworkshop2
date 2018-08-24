@@ -10,12 +10,12 @@ QMenuBar {
 }
 
 QMenuBar::item {
-    spacing: 3px; /* spacing between menu bar items */
+    spacing: 3px; /* Spacing between menu bar items */
     padding: 1px 4px;
     background: transparent;
 }
 
-QMenuBar::item:selected { /* when selected using mouse or keyboard */
+QMenuBar::item:selected { /* When selected using mouse or keyboard */
     background: #616161;
 }
 
@@ -45,7 +45,7 @@ QMenu::separator {
 }
 
 QMenu::indicator:checked {
-    image: url(:/Styles/FlatDark/Icons/Check18.png);
+    image: url(:/ws2editor/styles/flatdark/icons/Check18.png);
 }
 
 QStatusBar {
@@ -64,8 +64,8 @@ QStatusBar * {
 }
 
 QDockWidget {
-    titlebar-close-icon: url(:/Styles/FlatDark/Icons/Close.png);
-    titlebar-normal-icon: url(:/Styles/FlatDark/Icons/Undock.png);
+    titlebar-close-icon: url(:/ws2editor/styles/flatdark/icons/Close.png);
+    titlebar-normal-icon: url(:/ws2editor/styles/flatdark/icons/Undock.png);
 }
 
 QDockWidget::title {
@@ -198,19 +198,19 @@ QPushButton:checked {
 }
 
 QToolBar::separator:horizontal {
-    image: url(":/Styles/FlatDark/Icons/HSeparator.png");
+    image: url(":/ws2editor/styles/flatdark/icons/HSeparator.png");
 }
 
 QToolBar::separator:vertical {
-    image: url(":/Styles/FlatDark/Icons/VSeparator.png");
+    image: url(":/ws2editor/styles/flatdark/icons/VSeparator.png");
 }
 
 QToolBar::handle:horizontal {
-    image: url(":/Styles/FlatDark/Icons/HHandle.png");
+    image: url(":/ws2editor/styles/flatdark/icons/HHandle.png");
 }
 
 QToolBar::handle:vertical {
-    image: url(":/Styles/FlatDark/Icons/VHandle.png");
+    image: url(":/ws2editor/styles/flatdark/icons/VHandle.png");
 }
 
 QProgressBar {
@@ -267,7 +267,7 @@ QComboBox::drop-down {
 }
 
 QComboBox::down-arrow {
-    image: url(":/Styles/FlatDark/Icons/MenuArrow.png");
+    image: url(":/ws2editor/styles/flatdark/icons/MenuArrow.png");
     width: 16px;
     height: 16px;
 }
@@ -359,4 +359,7 @@ QComboBox::down-arrow {
 }
 
 /* vim: set syntax=css: */
+/* Local Variables: */
+/* mode: css */
+/* End: */
 

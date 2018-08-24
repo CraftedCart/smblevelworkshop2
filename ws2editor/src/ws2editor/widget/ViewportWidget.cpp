@@ -40,7 +40,7 @@ namespace WS2Editor {
 
             //Read all tips of the days
             QStringList tips;
-            QFile tipFile(tr(":/Workshop2/Lang/tips-en_US.txt"));
+            QFile tipFile(tr(":/ws2editor/lang/tips-en_US.txt"));
             if (tipFile.open(QIODevice::ReadOnly)) {
                 QTextStream in(&tipFile);
 
@@ -146,8 +146,8 @@ namespace WS2Editor {
             glEnable(GL_CULL_FACE);
 
             //Load pixmaps
-            tooltipPixmap = new QPixmap(":/Workshop2/Images/tooltip.png");
-            importPixmap = new QPixmap(":/Workshop2/Icons/Import.png");
+            tooltipPixmap = new QPixmap(":/ws2editor/images/tooltip.png");
+            importPixmap = new QPixmap(":/ws2editor/icons/Import.png");
 
             //Mark the initial project as loaded, so that models added to the scene are also loaded
             Project::ProjectManager::getActiveProject()->getScene()->load();

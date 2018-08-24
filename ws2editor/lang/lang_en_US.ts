@@ -1429,12 +1429,12 @@ Public License instead of this License.  But first, please read
     <name>WS2Editor::UI::StageIdeaGeneratorWindow</name>
     <message>
         <location filename="../src/ws2editor/ui/StageIdeaGeneratorWindow.cpp" line="14"/>
-        <source>:/Workshop2/Lang/stageThemes-en_US.txt</source>
+        <source>:/ws2editor/lang/stageThemes-en_US.txt</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../src/ws2editor/ui/StageIdeaGeneratorWindow.cpp" line="27"/>
-        <source>:/Workshop2/Lang/stageMechanics-en_US.txt</source>
+        <source>:/ws2editor/lang/stageMechanics-en_US.txt</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -1442,7 +1442,7 @@ Public License instead of this License.  But first, please read
     <name>WS2Editor::Widget::ViewportWidget</name>
     <message>
         <location filename="../src/ws2editor/widget/ViewportWidget.cpp" line="43"/>
-        <source>:/Workshop2/Lang/tips-en_US.txt</source>
+        <source>:/ws2editor/lang/tips-en_US.txt</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -1478,7 +1478,7 @@ Public License instead of this License.  But first, please read
     <name>main</name>
     <message>
         <location filename="../src/ws2editor/main.cpp" line="46"/>
-        <source>Initializing WS2</source>
+        <source>Initializing ws2editor</source>
         <translation type="unfinished"></translation>
     </message>
     <message>

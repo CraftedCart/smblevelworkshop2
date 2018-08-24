@@ -1,0 +1,63 @@
+<RCC>
+    <qresource prefix="/ws2editor">
+        <file>icons/Paste.png</file>
+        <file>icons/Copy.png</file>
+        <file>icons/Cut.png</file>
+        <file>icons/Redo.png</file>
+        <file>icons/Undo.png</file>
+        <file>icons/Save.png</file>
+        <file>icons/Folder.png</file>
+        <file>icons/File.png</file>
+        <file>icons/Focus.png</file>
+        <file>icons/SelectAll.png</file>
+        <file>icons/Close.png</file>
+        <file>icons/Duplicate.png</file>
+        <file>icons/Delete.png</file>
+        <file>icons/SaveAs.png</file>
+        <file>icons/Export.png</file>
+        <file>icons/Import.png</file>
+        <file>icons/Add.png</file>
+        <file>icons/Settings.png</file>
+        <file>icons/Start.png</file>
+        <file>icons/GoalBlue.png</file>
+        <file>icons/GoalGreen.png</file>
+        <file>icons/GoalRed.png</file>
+        <file>icons/Bumper.png</file>
+        <file>icons/Banana.png</file>
+        <file>icons/Banana10.png</file>
+        <file>icons/Jamabar.png</file>
+        <file>icons/Wormhole.png</file>
+        <file>icons/Console.png</file>
+        <file>icons/Plugin.png</file>
+        <file>icons/PluginFail.png</file>
+        <file>icons/ArrowsUpDown.png</file>
+        <file>icons/Alert.png</file>
+        <file>shaders/stage.vert</file>
+        <file>shaders/stage.frag</file>
+        <file>shaders/unlit.vert</file>
+        <file>shaders/unlit.frag</file>
+        <file>shaders/physicsDebug.vert</file>
+        <file>shaders/physicsDebug.frag</file>
+        <file>shaders/composite.vert</file>
+        <file>shaders/composite.frag</file>
+        <file>images/banner.png</file>
+        <file>images/tooltip.png</file>
+        <file>images/defaultgrid.png</file>
+        <file>lang/tips-en_US.txt</file>
+        <file>lang/stageThemes-en_US.txt</file>
+        <file>lang/stageMechanics-en_US.txt</file>
+        <file>models/playerBall.fbx</file>
+        <file>models/goal.fbx</file>
+        <file>models/bumper.fbx</file>
+        <file>models/bananaSingle.fbx</file>
+        <file>models/bananaBunch.fbx</file>
+        <file>models/jamabar.fbx</file>
+        <file>models/wormhole.fbx</file>
+    </qresource>
+</RCC>
+
+<!-- vim: set syntax=xml: -->
+<!-- Local Variables: -->
+<!-- mode: xml -->
+<!-- End: -->
+

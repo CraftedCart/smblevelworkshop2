@@ -1,0 +1,19 @@
+<RCC>
+    <qresource prefix="/ws2editor/styles/flatdark">
+        <file>style.qss</file>
+        <file>icons/VSeparator.png</file>
+        <file>icons/HSeparator.png</file>
+        <file>icons/VHandle.png</file>
+        <file>icons/HHandle.png</file>
+        <file>icons/Close.png</file>
+        <file>icons/Undock.png</file>
+        <file>icons/Check18.png</file>
+        <file>icons/MenuArrow.png</file>
+    </qresource>
+</RCC>
+
+<!-- vim: set syntax=xml: -->
+<!-- Local Variables: -->
+<!-- mode: xml -->
+<!-- End: -->
+

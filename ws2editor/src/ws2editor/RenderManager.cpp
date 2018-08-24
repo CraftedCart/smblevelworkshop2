@@ -26,7 +26,7 @@ namespace WS2Editor {
         viewportHeight = fboHeight;
 
         qDebug() << "Loading default texture";
-        QImage defaultImage = convertToGLFormat(QImage(":/Workshop2/Images/defaultgrid.png"));
+        QImage defaultImage = convertToGLFormat(QImage(":/ws2editor/images/defaultgrid.png"));
         defaultTexture = loadTexture(defaultImage);
 
         //Create fbo
@@ -61,8 +61,8 @@ namespace WS2Editor {
         qDebug() << "Creating shaders";
 
         //Load the stage shaders
-        QFile stageVertFile(":/Workshop2/Shaders/stage.vert");
-        QFile stageFragFile(":/Workshop2/Shaders/stage.frag");
+        QFile stageVertFile(":/ws2editor/shaders/stage.vert");
+        QFile stageFragFile(":/ws2editor/shaders/stage.frag");
         progID = loadShaders(&stageVertFile, &stageFragFile);
 
         //Get uniform IDs
@@ -76,8 +76,8 @@ namespace WS2Editor {
         shaderRenderCameraNormals = glGetUniformLocation(progID, "renderCameraNormals");
 
         //Load the unlit shaders
-        QFile unlitVertFile(":/Workshop2/Shaders/unlit.vert");
-        QFile unlitFragFile(":/Workshop2/Shaders/unlit.frag");
+        QFile unlitVertFile(":/ws2editor/shaders/unlit.vert");
+        QFile unlitFragFile(":/ws2editor/shaders/unlit.frag");
         unlitProgID = loadShaders(&unlitVertFile, &unlitFragFile);
 
         //Get uniform IDs
@@ -88,34 +88,34 @@ namespace WS2Editor {
 
         //Load the physics debug shaders
         //TODO: Make loading this an option
-        QFile physVertFile(":/Workshop2/Shaders/physicsDebug.vert");
-        QFile physFragFile(":/Workshop2/Shaders/physicsDebug.frag");
+        QFile physVertFile(":/ws2editor/shaders/physicsDebug.vert");
+        QFile physFragFile(":/ws2editor/shaders/physicsDebug.frag");
         physicsDebugProgID = loadShaders(&physVertFile, &physFragFile);
 
         //Get uniform IDs
         physicsDebugShaderViewID = glGetUniformLocation(physicsDebugProgID, "viewMat");
         physicsDebugShaderProjID = glGetUniformLocation(physicsDebugProgID, "projMat");
 
-        QFile compositeVertFile(":/Workshop2/Shaders/composite.vert");
-        QFile compositeFragFile(":/Workshop2/Shaders/composite.frag");
+        QFile compositeVertFile(":/ws2editor/shaders/composite.vert");
+        QFile compositeFragFile(":/ws2editor/shaders/composite.frag");
         compositeShaderProg = loadShaders(&compositeVertFile, &compositeFragFile);
         compositeShaderTextureId = glGetUniformLocation(compositeShaderProg, "texSampler");
         compositeShaderCameraNormalsTextureId = glGetUniformLocation(compositeShaderProg, "cameraNormalsTexSampler");
 
         //Load default models
-        QFile playerBallFile(":/Workshop2/Models/playerBall.fbx");
+        QFile playerBallFile(":/ws2editor/models/playerBall.fbx");
         playerBallMesh = WS2Common::Model::ModelLoader::loadModel(playerBallFile);
-        QFile goalFile(":/Workshop2/Models/goal.fbx");
+        QFile goalFile(":/ws2editor/models/goal.fbx");
         goalMesh = WS2Common::Model::ModelLoader::loadModel(goalFile);
-        QFile bumperFile(":/Workshop2/Models/bumper.fbx");
+        QFile bumperFile(":/ws2editor/models/bumper.fbx");
         bumperMesh = WS2Common::Model::ModelLoader::loadModel(bumperFile);
-        QFile bananaSingleFile(":/Workshop2/Models/bananaSingle.fbx");
+        QFile bananaSingleFile(":/ws2editor/models/bananaSingle.fbx");
         bananaSingleMesh = WS2Common::Model::ModelLoader::loadModel(bananaSingleFile);
-        QFile bananaBunchFile(":/Workshop2/Models/bananaBunch.fbx");
+        QFile bananaBunchFile(":/ws2editor/models/bananaBunch.fbx");
         bananaBunchMesh = WS2Common::Model::ModelLoader::loadModel(bananaBunchFile);
-        QFile jamabarFile(":/Workshop2/Models/jamabar.fbx");
+        QFile jamabarFile(":/ws2editor/models/jamabar.fbx");
         jamabarMesh = WS2Common::Model::ModelLoader::loadModel(jamabarFile);
-        QFile wormholeFile(":/Workshop2/Models/wormhole.fbx");
+        QFile wormholeFile(":/ws2editor/models/wormhole.fbx");
         wormholeMesh = WS2Common::Model::ModelLoader::loadModel(wormholeFile);
 
         checkErrors("After RenderManager::init()");

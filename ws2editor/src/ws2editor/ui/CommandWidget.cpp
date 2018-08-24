@@ -19,7 +19,7 @@ namespace WS2Editor {
             QHBoxLayout *layout = new QHBoxLayout;
 
             QLabel *label = new QLabel(this);
-            label->setPixmap(QPixmap(":/Workshop2/Icons/Console.png"));
+            label->setPixmap(QPixmap(":/ws2editor/icons/Console.png"));
             label->setScaledContents(true);
             label->setFixedSize(24, 24);
             layout->addWidget(label);

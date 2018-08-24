@@ -62,7 +62,7 @@
       <string/>
      </property>
      <property name="pixmap">
-      <pixmap resource="../../../resources/Workshop2/Workshop2Resources.qrc">:/Workshop2/Images/banner.png</pixmap>
+      <pixmap resource="../../../resources/Workshop2/Workshop2Resources.qrc">:/ws2editor/images/banner.png</pixmap>
      </property>
      <property name="alignment">
       <set>Qt::AlignHCenter|Qt::AlignTop</set>

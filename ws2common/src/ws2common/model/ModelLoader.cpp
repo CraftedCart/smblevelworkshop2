@@ -234,7 +234,7 @@ namespace WS2Common {
 
                         //Check if the file doesn't exist, and load the uvtemplate texture instead
                         if (!QFileInfo(filePath).exists()) {
-                            filePath = ":/WS2Common/Images/uvtemplate.png";
+                            filePath = ":/ws2common/images/uvtemplate.png";
                         }
 
                         WS2Common::Resource::ResourceTexture *texture = nullptr;

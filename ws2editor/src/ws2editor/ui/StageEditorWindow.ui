@@ -341,7 +341,7 @@
   <action name="actionNew">
    <property name="icon">
     <iconset resource="../../../resources/Workshop2/Workshop2Resources.qrc">
-     <normaloff>:/Workshop2/Icons/File.png</normaloff>:/Workshop2/Icons/File.png</iconset>
+     <normaloff>:/ws2editor/icons/File.png</normaloff>:/ws2editor/icons/File.png</iconset>
    </property>
    <property name="text">
     <string>&amp;New</string>
@@ -356,7 +356,7 @@
   <action name="actionOpen">
    <property name="icon">
     <iconset resource="../../../resources/Workshop2/Workshop2Resources.qrc">
-     <normaloff>:/Workshop2/Icons/Folder.png</normaloff>:/Workshop2/Icons/Folder.png</iconset>
+     <normaloff>:/ws2editor/icons/Folder.png</normaloff>:/ws2editor/icons/Folder.png</iconset>
    </property>
    <property name="text">
     <string>&amp;Open</string>
@@ -368,7 +368,7 @@
   <action name="actionQuit">
    <property name="icon">
     <iconset resource="../../../resources/Workshop2/Workshop2Resources.qrc">
-     <normaloff>:/Workshop2/Icons/Close.png</normaloff>:/Workshop2/Icons/Close.png</iconset>
+     <normaloff>:/ws2editor/icons/Close.png</normaloff>:/ws2editor/icons/Close.png</iconset>
    </property>
    <property name="text">
     <string>&amp;Quit</string>
@@ -380,7 +380,7 @@
   <action name="actionUndo">
    <property name="icon">
     <iconset resource="../../../resources/Workshop2/Workshop2Resources.qrc">
-     <normaloff>:/Workshop2/Icons/Undo.png</normaloff>:/Workshop2/Icons/Undo.png</iconset>
+     <normaloff>:/ws2editor/icons/Undo.png</normaloff>:/ws2editor/icons/Undo.png</iconset>
    </property>
    <property name="text">
     <string>&amp;Undo</string>
@@ -392,7 +392,7 @@
   <action name="actionRedo">
    <property name="icon">
     <iconset resource="../../../resources/Workshop2/Workshop2Resources.qrc">
-     <normaloff>:/Workshop2/Icons/Redo.png</normaloff>:/Workshop2/Icons/Redo.png</iconset>
+     <normaloff>:/ws2editor/icons/Redo.png</normaloff>:/ws2editor/icons/Redo.png</iconset>
    </property>
    <property name="text">
     <string>&amp;Redo</string>
@@ -404,7 +404,7 @@
   <action name="actionCut">
    <property name="icon">
     <iconset resource="../../../resources/Workshop2/Workshop2Resources.qrc">
-     <normaloff>:/Workshop2/Icons/Cut.png</normaloff>:/Workshop2/Icons/Cut.png</iconset>
+     <normaloff>:/ws2editor/icons/Cut.png</normaloff>:/ws2editor/icons/Cut.png</iconset>
    </property>
    <property name="text">
     <string>Cu&amp;t</string>
@@ -416,7 +416,7 @@
   <action name="actionCopy">
    <property name="icon">
     <iconset resource="../../../resources/Workshop2/Workshop2Resources.qrc">
-     <normaloff>:/Workshop2/Icons/Copy.png</normaloff>:/Workshop2/Icons/Copy.png</iconset>
+     <normaloff>:/ws2editor/icons/Copy.png</normaloff>:/ws2editor/icons/Copy.png</iconset>
    </property>
    <property name="text">
     <string>&amp;Copy</string>
@@ -428,7 +428,7 @@
   <action name="actionPaste">
    <property name="icon">
     <iconset resource="../../../resources/Workshop2/Workshop2Resources.qrc">
-     <normaloff>:/Workshop2/Icons/Paste.png</normaloff>:/Workshop2/Icons/Paste.png</iconset>
+     <normaloff>:/ws2editor/icons/Paste.png</normaloff>:/ws2editor/icons/Paste.png</iconset>
    </property>
    <property name="text">
     <string>&amp;Paste</string>
@@ -440,7 +440,7 @@
   <action name="actionSelectAll">
    <property name="icon">
     <iconset resource="../../../resources/Workshop2/Workshop2Resources.qrc">
-     <normaloff>:/Workshop2/Icons/SelectAll.png</normaloff>:/Workshop2/Icons/SelectAll.png</iconset>
+     <normaloff>:/ws2editor/icons/SelectAll.png</normaloff>:/ws2editor/icons/SelectAll.png</iconset>
    </property>
    <property name="text">
     <string>Select &amp;All</string>
@@ -452,7 +452,7 @@
   <action name="actionDuplicate">
    <property name="icon">
     <iconset resource="../../../resources/Workshop2/Workshop2Resources.qrc">
-     <normaloff>:/Workshop2/Icons/Duplicate.png</normaloff>:/Workshop2/Icons/Duplicate.png</iconset>
+     <normaloff>:/ws2editor/icons/Duplicate.png</normaloff>:/ws2editor/icons/Duplicate.png</iconset>
    </property>
    <property name="text">
     <string>Du&amp;plicate</string>
@@ -464,7 +464,7 @@
   <action name="actionDelete">
    <property name="icon">
     <iconset resource="../../../resources/Workshop2/Workshop2Resources.qrc">
-     <normaloff>:/Workshop2/Icons/Delete.png</normaloff>:/Workshop2/Icons/Delete.png</iconset>
+     <normaloff>:/ws2editor/icons/Delete.png</normaloff>:/ws2editor/icons/Delete.png</iconset>
    </property>
    <property name="text">
     <string>&amp;Delete</string>
@@ -476,7 +476,7 @@
   <action name="actionFocusSelected">
    <property name="icon">
     <iconset resource="../../../resources/Workshop2/Workshop2Resources.qrc">
-     <normaloff>:/Workshop2/Icons/Focus.png</normaloff>:/Workshop2/Icons/Focus.png</iconset>
+     <normaloff>:/ws2editor/icons/Focus.png</normaloff>:/ws2editor/icons/Focus.png</iconset>
    </property>
    <property name="text">
     <string>&amp;Focus Selected</string>
@@ -488,7 +488,7 @@
   <action name="actionSave">
    <property name="icon">
     <iconset resource="../../../resources/Workshop2/Workshop2Resources.qrc">
-     <normaloff>:/Workshop2/Icons/Save.png</normaloff>:/Workshop2/Icons/Save.png</iconset>
+     <normaloff>:/ws2editor/icons/Save.png</normaloff>:/ws2editor/icons/Save.png</iconset>
    </property>
    <property name="text">
     <string>&amp;Save</string>
@@ -500,7 +500,7 @@
   <action name="actionSaveAs">
    <property name="icon">
     <iconset resource="../../../resources/Workshop2/Workshop2Resources.qrc">
-     <normaloff>:/Workshop2/Icons/SaveAs.png</normaloff>:/Workshop2/Icons/SaveAs.png</iconset>
+     <normaloff>:/ws2editor/icons/SaveAs.png</normaloff>:/ws2editor/icons/SaveAs.png</iconset>
    </property>
    <property name="text">
     <string>Save As</string>
@@ -544,7 +544,7 @@
   <action name="actionImport">
    <property name="icon">
     <iconset resource="../../../resources/Workshop2/Workshop2Resources.qrc">
-     <normaloff>:/Workshop2/Icons/Import.png</normaloff>:/Workshop2/Icons/Import.png</iconset>
+     <normaloff>:/ws2editor/icons/Import.png</normaloff>:/ws2editor/icons/Import.png</iconset>
    </property>
    <property name="text">
     <string>&amp;Import</string>
@@ -559,7 +559,7 @@
   <action name="actionExport">
    <property name="icon">
     <iconset resource="../../../resources/Workshop2/Workshop2Resources.qrc">
-     <normaloff>:/Workshop2/Icons/Export.png</normaloff>:/Workshop2/Icons/Export.png</iconset>
+     <normaloff>:/ws2editor/icons/Export.png</normaloff>:/ws2editor/icons/Export.png</iconset>
    </property>
    <property name="text">
     <string>&amp;Export</string>
@@ -582,7 +582,7 @@
   <action name="actionNewNode">
    <property name="icon">
     <iconset resource="../../../resources/Workshop2/Workshop2Resources.qrc">
-     <normaloff>:/Workshop2/Icons/Add.png</normaloff>:/Workshop2/Icons/Add.png</iconset>
+     <normaloff>:/ws2editor/icons/Add.png</normaloff>:/ws2editor/icons/Add.png</iconset>
    </property>
    <property name="text">
     <string>New &amp;Group Node</string>
@@ -602,7 +602,7 @@
   <action name="actionSettings">
    <property name="icon">
     <iconset resource="../../../resources/Workshop2/Workshop2Resources.qrc">
-     <normaloff>:/Workshop2/Icons/Settings.png</normaloff>:/Workshop2/Icons/Settings.png</iconset>
+     <normaloff>:/ws2editor/icons/Settings.png</normaloff>:/ws2editor/icons/Settings.png</iconset>
    </property>
    <property name="text">
     <string>&amp;Settings</string>
@@ -639,7 +639,7 @@
   <action name="actionAddGoalBlue">
    <property name="icon">
     <iconset resource="../../../resources/Workshop2/Workshop2Resources.qrc">
-     <normaloff>:/Workshop2/Icons/GoalBlue.png</normaloff>:/Workshop2/Icons/GoalBlue.png</iconset>
+     <normaloff>:/ws2editor/icons/GoalBlue.png</normaloff>:/ws2editor/icons/GoalBlue.png</iconset>
    </property>
    <property name="text">
     <string>Add &amp;Blue Goal</string>
@@ -648,7 +648,7 @@
   <action name="actionAddGoalGreen">
    <property name="icon">
     <iconset resource="../../../resources/Workshop2/Workshop2Resources.qrc">
-     <normaloff>:/Workshop2/Icons/GoalGreen.png</normaloff>:/Workshop2/Icons/GoalGreen.png</iconset>
+     <normaloff>:/ws2editor/icons/GoalGreen.png</normaloff>:/ws2editor/icons/GoalGreen.png</iconset>
    </property>
    <property name="text">
     <string>Add &amp;Green Goal</string>
@@ -657,7 +657,7 @@
   <action name="actionAddGoalRed">
    <property name="icon">
     <iconset resource="../../../resources/Workshop2/Workshop2Resources.qrc">
-     <normaloff>:/Workshop2/Icons/GoalRed.png</normaloff>:/Workshop2/Icons/GoalRed.png</iconset>
+     <normaloff>:/ws2editor/icons/GoalRed.png</normaloff>:/ws2editor/icons/GoalRed.png</iconset>
    </property>
    <property name="text">
     <string>Add &amp;Red Goal</string>
@@ -666,7 +666,7 @@
   <action name="actionRunCommand">
    <property name="icon">
     <iconset resource="../../../resources/Workshop2/Workshop2Resources.qrc">
-     <normaloff>:/Workshop2/Icons/Console.png</normaloff>:/Workshop2/Icons/Console.png</iconset>
+     <normaloff>:/ws2editor/icons/Console.png</normaloff>:/ws2editor/icons/Console.png</iconset>
    </property>
    <property name="text">
     <string>Run &amp;command</string>
@@ -678,7 +678,7 @@
   <action name="actionViewPlugins">
    <property name="icon">
     <iconset resource="../../../resources/Workshop2/Workshop2Resources.qrc">
-     <normaloff>:/Workshop2/Icons/Plugin.png</normaloff>:/Workshop2/Icons/Plugin.png</iconset>
+     <normaloff>:/ws2editor/icons/Plugin.png</normaloff>:/ws2editor/icons/Plugin.png</iconset>
    </property>
    <property name="text">
     <string>&amp;Plugins</string>
@@ -687,7 +687,7 @@
   <action name="actionAddBumper">
    <property name="icon">
     <iconset resource="../../../resources/Workshop2/Workshop2Resources.qrc">
-     <normaloff>:/Workshop2/Icons/Bumper.png</normaloff>:/Workshop2/Icons/Bumper.png</iconset>
+     <normaloff>:/ws2editor/icons/Bumper.png</normaloff>:/ws2editor/icons/Bumper.png</iconset>
    </property>
    <property name="text">
     <string>Add &amp;Bumper</string>
@@ -696,7 +696,7 @@
   <action name="actionAddBanana">
    <property name="icon">
     <iconset resource="../../../resources/Workshop2/Workshop2Resources.qrc">
-     <normaloff>:/Workshop2/Icons/Banana.png</normaloff>:/Workshop2/Icons/Banana.png</iconset>
+     <normaloff>:/ws2editor/icons/Banana.png</normaloff>:/ws2editor/icons/Banana.png</iconset>
    </property>
    <property name="text">
     <string>Add B&amp;anana</string>
@@ -705,7 +705,7 @@
   <action name="actionAddBananaBunch">
    <property name="icon">
     <iconset resource="../../../resources/Workshop2/Workshop2Resources.qrc">
-     <normaloff>:/Workshop2/Icons/Banana10.png</normaloff>:/Workshop2/Icons/Banana10.png</iconset>
+     <normaloff>:/ws2editor/icons/Banana10.png</normaloff>:/ws2editor/icons/Banana10.png</iconset>
    </property>
    <property name="text">
     <string>Add Banana B&amp;unch</string>
@@ -714,7 +714,7 @@
   <action name="actionAddJamabar">
    <property name="icon">
     <iconset resource="../../../resources/Workshop2/Workshop2Resources.qrc">
-     <normaloff>:/Workshop2/Icons/Jamabar.png</normaloff>:/Workshop2/Icons/Jamabar.png</iconset>
+     <normaloff>:/ws2editor/icons/Jamabar.png</normaloff>:/ws2editor/icons/Jamabar.png</iconset>
    </property>
    <property name="text">
     <string>Add &amp;Jamabar</string>
@@ -723,7 +723,7 @@
   <action name="actionAddWormhole">
    <property name="icon">
     <iconset resource="../../../resources/Workshop2/Workshop2Resources.qrc">
-     <normaloff>:/Workshop2/Icons/Wormhole.png</normaloff>:/Workshop2/Icons/Wormhole.png</iconset>
+     <normaloff>:/ws2editor/icons/Wormhole.png</normaloff>:/ws2editor/icons/Wormhole.png</iconset>
    </property>
    <property name="text">
     <string>Add &amp;Wormhole</string>
@@ -732,7 +732,7 @@
   <action name="actionNewBackgroundGroupNode">
    <property name="icon">
     <iconset resource="../../../resources/Workshop2/Workshop2Resources.qrc">
-     <normaloff>:/Workshop2/Icons/Add.png</normaloff>:/Workshop2/Icons/Add.png</iconset>
+     <normaloff>:/ws2editor/icons/Add.png</normaloff>:/ws2editor/icons/Add.png</iconset>
    </property>
    <property name="text">
     <string>New &amp;Background Group Node</string>
@@ -744,7 +744,7 @@
   <action name="actionAddStart">
    <property name="icon">
     <iconset resource="../../../resources/Workshop2/Workshop2Resources.qrc">
-     <normaloff>:/Workshop2/Icons/Start.png</normaloff>:/Workshop2/Icons/Start.png</iconset>
+     <normaloff>:/ws2editor/icons/Start.png</normaloff>:/ws2editor/icons/Start.png</iconset>
    </property>
    <property name="text">
     <string>Add &amp;Start</string>
