@@ -699,14 +699,14 @@ namespace WS2Lz {
 
     void SMB2LzExporter::writeCollisionTriangles(QDataStream &dev, const Scene::SceneNode *node) {
         if (dynamic_cast<const Scene::MeshCollisionSceneNode*>(node)) {
-            const Scene::MeshCollisionSceneNode *coli= static_cast<const Scene::MeshCollisionSceneNode*>(node);
+            const Scene::MeshCollisionSceneNode *coli = static_cast<const Scene::MeshCollisionSceneNode*>(node);
             //This node is a MeshCollisionSceneNode - Loop over all the triangles and write them
             //First, find the MeshSceneNode in the models QHash
             if (models.contains(coli->getMeshName())) {
                 const Resource::ResourceMesh *mesh = models.value(coli->getMeshName());
                 //Now loop over all MeshSegements, and write thier collision triangles
 
-                foreach (const Model::MeshSegment *seg, mesh->getMeshSegments()) {
+                foreach(const Model::MeshSegment *seg, mesh->getMeshSegments()) {
                     //Now loop over all triangles
                     for (int i = 0; i < seg->getIndices().size(); i += 3) {
                         glm::tvec3<Model::Vertex> verts(
