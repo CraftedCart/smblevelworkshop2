@@ -26,8 +26,10 @@ namespace WS2Common {
 
                 virtual const QString& getMessage() const;
 
-                Exception* clone() const override;
-                void raise() const override;
+                virtual Exception* clone() const override;
+                virtual void raise() const override;
+
+                virtual const char* what() const noexcept override;
         };
     }
 }

@@ -21,6 +21,10 @@ namespace WS2Common {
         void Exception::raise() const {
             throw *this;
         }
+
+        const char* Exception::what() const noexcept {
+            return message.toUtf8().constData();
+        }
     }
 }
 
