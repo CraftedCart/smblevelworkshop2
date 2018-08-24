@@ -57,3 +57,6 @@ ui_*.h
 #Windows
 Thumbs.db
 
+#Tags
+TAGS
+
