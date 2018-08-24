@@ -1,6 +1,7 @@
 <RCC>
     <qresource prefix="/ws2common">
         <file>images/uvtemplate.png</file>
+        <file>models/wormhole.fbx</file>
     </qresource>
 </RCC>
 

@@ -88,7 +88,6 @@ namespace WS2Common {
 
         QUrl XMLConfigParser::parseModelImport(QXmlStreamReader &xml, QDir relativeRoot) {
             QString value = xml.readElementText();
-
             if (value.startsWith("//")) { //Beginning with // denotes a relative path
                 QFileInfo fileInfo(relativeRoot, value.mid(2));
 
@@ -99,6 +98,14 @@ namespace WS2Common {
                 }
 
                 return QUrl::fromLocalFile(fileInfo.absoluteFilePath());
+            } else if (value.startsWith(":/")) { //Beginning with :/ denotes an application resource
+                QFileInfo fileInfo(relativeRoot, value);
+                //Check if the file is missing, and return am empty QUrl if so
+                if (!fileInfo.exists()) {
+                    qWarning().noquote() << "modelImport file missing:" << fileInfo.absoluteFilePath();
+                    return QUrl();
+                }
+                return QUrl("qrc://" + value.mid(2));
             } else { //Else it should be a URL (Like file:///something/or/other.obj)
                 QUrl url(value);
                 QFileInfo fileInfo(url.toLocalFile());

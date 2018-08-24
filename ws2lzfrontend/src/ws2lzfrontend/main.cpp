@@ -115,10 +115,26 @@ int main(int argc, char *argv[]) {
 
     //Load each model
     foreach(QUrl url, stage->getModels()) {
-        QFile file(url.toLocalFile()); //Assumes the URL is local //TODO: Allow network locations maybe
-        QVector<WS2Common::Resource::ResourceMesh*> meshVec = WS2Common::Model::ModelLoader::loadModel(file, &resources, &resourcesMutex);
-        foreach(WS2Common::Resource::ResourceMesh* mesh, meshVec) {
-            models[mesh->getId()] = mesh; //TODO: Use some getMeshName function or something if I ever add that
+        qInfo().noquote() << QString("Loading model \"%1\"...").arg(url.toString());
+
+        if (url.scheme() == "qrc") {
+            //This has to be loaded into memory then fed to assimp, rather than just passing assimp the filepath
+            //TODO: Write an assimp file loader for Qt resources, maybe
+            QFile file(":/" + url.toString().mid(6)); //Assumes the URL is local //TODO: Allow network locations maybe
+            file.open(QFile::ReadOnly);
+            QByteArray buffer = file.readAll();
+            file.close();
+
+            QVector<WS2Common::Resource::ResourceMesh*> meshVec = WS2Common::Model::ModelLoader::addModelFromMemory(buffer.constData(), buffer.size(), &resources, &resourcesMutex);
+            foreach(WS2Common::Resource::ResourceMesh* mesh, meshVec) {
+                models[mesh->getId()] = mesh; //TODO: Use some getMeshName function or something if I ever add that
+            }
+        } else {
+            QFile file(url.toLocalFile()); //Assumes the URL is local //TODO: Allow network locations maybe
+            QVector<WS2Common::Resource::ResourceMesh*> meshVec = WS2Common::Model::ModelLoader::loadModel(file, &resources, &resourcesMutex);
+            foreach(WS2Common::Resource::ResourceMesh* mesh, meshVec) {
+                models[mesh->getId()] = mesh; //TODO: Use some getMeshName function or something if I ever add that
+            }
         }
     }
 
