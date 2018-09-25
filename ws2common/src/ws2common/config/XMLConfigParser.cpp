@@ -473,6 +473,8 @@ namespace WS2Common {
                     QString name = xml.readElementText();
                     mesh->setName(name);
                     mesh->setMeshName(name);
+                } else if (xml.name() == "runtimeReflective") {
+                    mesh->setRuntimeReflective(xml.readElementText() == "true");
                 } else if (xml.name() == "collision") {
                     for (Scene::CollisionSceneNode *collision : parseCollision(xml)) mesh->addChild(collision);
                 } else {

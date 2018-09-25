@@ -76,6 +76,7 @@ namespace WS2Lz {
         forEachBg(mesh) writeBackgroundName(dev, mesh); //Background model names
         forEachGroup(group) writeAnimationHeader(dev, group->getTransformAnimation());
         forEachGroup(group) writeTransformAnimation(dev, group->getTransformAnimation());
+        forEachGroup(group) writeRuntimeReflectiveModelList(dev, group); //Runtime reflective models
     }
 
     void SMB2LzExporter::addCollisionTriangles(
@@ -455,6 +456,33 @@ namespace WS2Lz {
             }
         }
 
+        //Reflective model names
+        // forEachGroup(group) {
+        //     forEachChildType(group, Scene::MeshSceneNode*, node) {
+        //         if (node->isRuntimeReflective()) {
+        //             runtimeReflectiveModelNameOffsetMap.insert(nextOffset, node->getMeshName());
+
+        //             //+ 1 because size() does not include a null terminator
+        //             nextOffset += roundUpNearest4(node->getMeshName().size() + 1);
+        //         }
+        //     }
+        // }
+
+        //Reflective models
+        forEachGroup(group) {
+            runtimeReflectiveModelOffsetMap.insert(nextOffset, group);
+            quint32 runtimeReflectiveModelCount = 0; //Number of reflective models in this collision header
+
+            forEachChildType(group, Scene::MeshSceneNode*, node) {
+                if (node->isRuntimeReflective()) {
+                    nextOffset += RUNTIME_REFLECTIVE_MODEL_LENGTH;
+                    runtimeReflectiveModelCount++;
+                }
+            }
+
+            runtimeReflectiveModelCountMap[group] = runtimeReflectiveModelCount;
+        }
+
         //Just set all this guff to null for now in case it isn't
         coneCollisionObjectCount = 0;
         coneCollisionObjectListOffset = 0;
@@ -523,7 +551,8 @@ namespace WS2Lz {
         writeNull(dev, 8); //TODO: Mystery 8
         writeNull(dev, 4);
         dev << (quint32) 0x00000001;
-        writeNull(dev, 8); //TODO: Reflective level models
+        dev << addAllCounts(runtimeReflectiveModelCountMap);
+        dev << (quint32) (runtimeReflectiveModelOffsetMap.size() > 0 ? runtimeReflectiveModelOffsetMap.firstKey() : 0); //Reflective model list offset
         writeNull(dev, 12);
         writeNull(dev, 8); //TODO: Level model instances
         dev << addAllCounts(levelModelCountMap);
@@ -595,7 +624,10 @@ namespace WS2Lz {
         dev << jamabarOffsetMap.key(node);
         dev << bananaCountMap.value(node);
         dev << bananaOffsetMap.key(node);
-        writeNull(dev, 48); //TODO: Everything else
+        writeNull(dev, 32); //TODO: Everything else
+        dev << runtimeReflectiveModelCountMap.value(node);
+        dev << runtimeReflectiveModelOffsetMap.key(node);
+        writeNull(dev, 8); //TODO: Everything else
         dev << levelModelCountMap.value(node);
         dev << levelModelPointerBOffsetMap.key(node);
         writeNull(dev, 8); //Unknown/Null
@@ -923,6 +955,15 @@ namespace WS2Lz {
         foreach(Animation::KeyframeF *k, anim->getRotXKeyframes()) writeKeyframeAngleF(dev, k);
         foreach(Animation::KeyframeF *k, anim->getRotYKeyframes()) writeKeyframeAngleF(dev, k);
         foreach(Animation::KeyframeF *k, anim->getRotZKeyframes()) writeKeyframeAngleF(dev, k);
+    }
+
+    void SMB2LzExporter::writeRuntimeReflectiveModelList(QDataStream &dev, const Scene::GroupSceneNode *node) {
+        forEachChildType(node, Scene::MeshSceneNode*, child) {
+            if (child->isRuntimeReflective()) {
+                dev << levelModelNameOffsetMap.key(child->getMeshName());
+                writeNull(dev, 8);
+            }
+        }
     }
 
     void SMB2LzExporter::writeKeyframeF(QDataStream &dev, const Animation::KeyframeF *k) {

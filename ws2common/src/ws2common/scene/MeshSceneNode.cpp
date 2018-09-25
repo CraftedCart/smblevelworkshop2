@@ -12,6 +12,14 @@ namespace WS2Common {
             return meshName;
         }
 
+        void MeshSceneNode::setRuntimeReflective(bool runtimeReflective) {
+            this->runtimeReflective = runtimeReflective;
+        }
+
+        bool MeshSceneNode::isRuntimeReflective() const {
+            return runtimeReflective;
+        }
+
         const QString MeshSceneNode::getSerializableName() const {
             return "meshSceneNode";
         }
@@ -22,6 +30,7 @@ namespace WS2Common {
             s.writeStartElement("data-" + MeshSceneNode::getSerializableName());
 
             s.writeTextElement("meshName", meshName);
+            s.writeTextElement("runtimeReflective", runtimeReflective ? "true" : "false");
 
             s.writeEndElement();
         }

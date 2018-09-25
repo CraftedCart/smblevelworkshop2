@@ -18,6 +18,11 @@ namespace WS2Common {
                  */
                 QString meshName;
 
+                /**
+                 * @brief Whether the mesh should have runtime reflections of not
+                 */
+                bool runtimeReflective = false;
+
             protected:
                 virtual void serializeNodeDataXml(QXmlStreamWriter &s) const;
                 virtual const QString getSerializableName() const;
@@ -39,6 +44,20 @@ namespace WS2Common {
                  * @return The name of the referenced mesh
                  */
                 const QString getMeshName() const;
+
+                /**
+                 * @brief Setter for runtimeReflective
+                 *
+                 * @param runtimeReflective Whether this mesh should be reflective (Using runtime generated reflections)
+                 */
+                void setRuntimeReflective(bool runtimeReflective);
+
+                /**
+                 * @brief Getter for runtimeReflective
+                 *
+                 * @return Whether this mesh is be reflective or not (Using runtime generated reflections)
+                 */
+                bool isRuntimeReflective() const;
         };
     }
 }
