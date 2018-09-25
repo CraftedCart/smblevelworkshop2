@@ -457,16 +457,16 @@ namespace WS2Lz {
         }
 
         //Reflective model names
-        forEachGroup(group) {
-            forEachChildType(group, Scene::MeshSceneNode*, node) {
-                if (node->isRuntimeReflective()) {
-                    runtimeReflectiveModelNameOffsetMap.insert(nextOffset, node->getMeshName());
+        // forEachGroup(group) {
+        //     forEachChildType(group, Scene::MeshSceneNode*, node) {
+        //         if (node->isRuntimeReflective()) {
+        //             runtimeReflectiveModelNameOffsetMap.insert(nextOffset, node->getMeshName());
 
-                    //+ 1 because size() does not include a null terminator
-                    nextOffset += roundUpNearest4(node->getMeshName().size() + 1);
-                }
-            }
-        }
+        //             //+ 1 because size() does not include a null terminator
+        //             nextOffset += roundUpNearest4(node->getMeshName().size() + 1);
+        //         }
+        //     }
+        // }
 
         //Reflective models
         forEachGroup(group) {
@@ -551,8 +551,8 @@ namespace WS2Lz {
         writeNull(dev, 8); //TODO: Mystery 8
         writeNull(dev, 4);
         dev << (quint32) 0x00000001;
-        dev << (quint32) (runtimeReflectiveModelOffsetMap.size() > 0 ? runtimeReflectiveModelOffsetMap.firstKey() : 0); //Reflective model list offset
         dev << addAllCounts(runtimeReflectiveModelCountMap);
+        dev << (quint32) (runtimeReflectiveModelOffsetMap.size() > 0 ? runtimeReflectiveModelOffsetMap.firstKey() : 0); //Reflective model list offset
         writeNull(dev, 12);
         writeNull(dev, 8); //TODO: Level model instances
         dev << addAllCounts(levelModelCountMap);
