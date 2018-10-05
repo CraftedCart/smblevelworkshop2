@@ -524,6 +524,10 @@ namespace WS2Lz {
     }
 
     void SMB2LzExporter::writeFileHeader(QDataStream &dev) {
+        quint32 goalCount = addAllCounts(goalCountMap);
+        quint32 bumperCount = addAllCounts(bumperCountMap);
+        quint32 jamabarCount = addAllCounts(jamabarCountMap);
+        quint32 bananaCount = addAllCounts(bananaCountMap);
         quint32 wormholeCount = addAllCounts(runtimeReflectiveModelCountMap);
 
         writeNull(dev, 4); dev << 0x447A0000; //Magic number (Probably)
@@ -531,15 +535,15 @@ namespace WS2Lz {
         dev << (quint32) (collisionHeaderOffsetMap.size() > 0 ? collisionHeaderOffsetMap.firstKey() : 0);
         dev << startOffset;
         dev << falloutOffset;
-        dev << addAllCounts(goalCountMap);
+        dev << goalCount;
         //firstKey will crash if the list is empty - so just use 0 if size() is not > 0
-        dev << (quint32) (goalOffsetMap.size() > 0 ? goalOffsetMap.firstKey() : 0); //Goal list offset
-        dev << addAllCounts(bumperCountMap);
-        dev << (quint32) (bumperOffsetMap.size() > 0 ? bumperOffsetMap.firstKey() : 0); //Bumper list offset
-        dev << addAllCounts(bumperCountMap);
-        dev << (quint32) (jamabarOffsetMap.size() > 0 ? jamabarOffsetMap.firstKey() : 0); //Jamabar list offset
-        dev << addAllCounts(bananaCountMap);
-        dev << (quint32) (bananaOffsetMap.size() > 0 ? bananaOffsetMap.firstKey() : 0); //Banana list offset
+        dev << (quint32) (goalCount > 0 ? goalOffsetMap.firstKey() : 0); //Goal list offset
+        dev << bumperCount;
+        dev << (quint32) (bumperCount > 0 ? bumperOffsetMap.firstKey() : 0); //Bumper list offset
+        dev << jamabarCount;
+        dev << (quint32) (jamabarCount > 0 ? jamabarOffsetMap.firstKey() : 0); //Jamabar list offset
+        dev << bananaCount;
+        dev << (quint32) (bananaCount > 0 ? bananaOffsetMap.firstKey() : 0); //Banana list offset
         dev << coneCollisionObjectCount;
         dev << coneCollisionObjectListOffset;
         dev << sphereCollisionObjectCount;
@@ -549,7 +553,7 @@ namespace WS2Lz {
         dev << falloutVolumeCount;
         dev << falloutVolumeListOffset;
         dev << (quint32) bgOffsetMap.size();
-        dev << (quint32) (bgOffsetMap.size() > 0 ? bgOffsetMap.firstKey() : 0); //Banana list offset
+        dev << (quint32) (bgOffsetMap.size() > 0 ? bgOffsetMap.firstKey() : 0); //Background list offset
         writeNull(dev, 8); //TODO: Mystery 8
         writeNull(dev, 4);
         dev << (quint32) 0x00000001;
