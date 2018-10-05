@@ -524,6 +524,8 @@ namespace WS2Lz {
     }
 
     void SMB2LzExporter::writeFileHeader(QDataStream &dev) {
+        quint32 wormholeCount = addAllCounts(runtimeReflectiveModelCountMap);
+
         writeNull(dev, 4); dev << 0x447A0000; //Magic number (Probably)
         dev << (quint32) collisionHeaderOffsetMap.size();
         dev << (quint32) (collisionHeaderOffsetMap.size() > 0 ? collisionHeaderOffsetMap.firstKey() : 0);
@@ -551,8 +553,10 @@ namespace WS2Lz {
         writeNull(dev, 8); //TODO: Mystery 8
         writeNull(dev, 4);
         dev << (quint32) 0x00000001;
-        dev << addAllCounts(runtimeReflectiveModelCountMap);
-        dev << (quint32) (runtimeReflectiveModelOffsetMap.size() > 0 ? runtimeReflectiveModelOffsetMap.firstKey() : 0); //Reflective model list offset
+        dev << wormholeCount;
+        //We have to write 0 here if we want wormhole surfaces to work
+        //This also means wormholes + reflective surfaces won't co-operate
+        dev << (quint32) (wormholeCount > 0 ? runtimeReflectiveModelOffsetMap.firstKey() : 0); //Reflective model list offset
         writeNull(dev, 12);
         writeNull(dev, 8); //TODO: Level model instances
         dev << addAllCounts(levelModelCountMap);
