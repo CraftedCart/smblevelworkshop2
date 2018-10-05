@@ -3,10 +3,10 @@
         "name": "smblevelworkshop2-develop",
         "repo": "the-workshop",
         "subject": "craftedcart",
-        "desc": "Automatic uploads are pushed here from Travis CI, taken from the GitHub repo",
+        "desc": "Automatic uploads are pushed here from Travis CI, taken from the GitLab repo",
         "website_url": "",
-        "issue_tracker_url": "https://github.com/CraftedCart/smblevelworkshop2/issues",
-        "vcs_url": "https://github.com/CraftedCart/smblevelworkshop2.git",
+        "issue_tracker_url": "https://gitlab.com/CraftedCart/smblevelworkshop2/issues",
+        "vcs_url": "https://gitlab.com/CraftedCart/smblevelworkshop2.git",
         "licenses": ["GPL-3.0"],
         "labels": ["hacking", "modding", "super monkey ball"],
         "public_download_numbers": true,
@@ -15,7 +15,7 @@
     },
     "version": {
         "name": "|||COMMIT|||",
-        "desc": "Bleeding edge development build from GitHub commit |||COMMIT|||"
+        "desc": "Bleeding edge development build from GitLab commit |||COMMIT|||"
     },
     "files": [
         {"includePattern": "ws2install/deploy/(.*).tar.gz",  "uploadPattern": "smblevelworkshop2-develop/|||COMMIT|||/$1-|||ARCH|||-|||COMMIT|||.tar.gz"}
