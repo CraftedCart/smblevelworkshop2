@@ -6,6 +6,23 @@ SMB Level Workshop 2 Changelog
 These features are still a work in progress. You can download the latest development build from https://bintray.com/craftedcart/the-workshop/smblevelworkshop2-develop  
 [ ![Download](https://api.bintray.com/packages/craftedcart/the-workshop/smblevelworkshop2-develop/images/download.svg) ](https://bintray.com/craftedcart/the-workshop/smblevelworkshop2-develop/_latestVersion)
 
+### Added
+
+- ws2editor
+    - You can now define the fallout Y position
+
+- ws2lz
+    - Added support for exporting runtime reflective surfaces
+    
+- ws2common
+    - Added support for `stageModel` parsing in XML configs
+    - Added support for defining runtime reflective surfaces in the XML config (`<runtimeReflective>true</runtimeReflectime>` in `stageModel`)
+    
+### Deprecated
+
+- ws2common
+    - Using `levelModel` in XML configs has been deprecated - prefer `stageModel` instead
+
 ### Fixed
 
 - ws2editor

@@ -9,7 +9,7 @@ Development downloads: [![Development downloads](https://api.bintray.com/package
 
 Another installment in Super Monkey Ball hacking - SMB Level Workshop 2 is a stage editor for SMB 1 and 2.
 
-WS2 is very early in development for now, and is not at all useable as a level editor. It may not be ready for a while, with me needing to learn and apply modern OpenGL and Qt 5. In the meanwhile, I refer you to the [original SMB Level Workshop](https://github.com/CraftedCart/SMBLevelWorkshop).
+![SMB Level Workshop 2 Stage Editor screenshot](https://i.imgur.com/X0bNIdN.png)
 
 ## Discord
 
