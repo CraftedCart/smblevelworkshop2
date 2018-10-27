@@ -206,20 +206,20 @@ namespace WS2Common {
             seesawSensitivity = value;
         }
 
-        float SceneNode::getSeesawResetStiffness() const {
-            return seesawResetStiffness;
+        float SceneNode::getSeesawFriction() const {
+            return seesawFriction;
         }
 
-        void SceneNode::setSeesawResetStiffness(float value) {
-            seesawResetStiffness = value;
+        void SceneNode::setSeesawFriction(float value) {
+            seesawFriction = value;
         }
 
-        float SceneNode::getSeesawRotationBounds() const {
-            return seesawRotationBounds;
+        float SceneNode::getSeesawSpring() const {
+            return seesawSpring;
         }
 
-        void SceneNode::setSeesawRotationBounds(float value) {
-            seesawRotationBounds = value;
+        void SceneNode::setSeesawSpring(float value) {
+            seesawSpring = value;
         }
 
         void SceneNode::serializeXml(QXmlStreamWriter &s) const {
@@ -263,8 +263,8 @@ namespace WS2Common {
             s.writeTextElement("animationSeesawType", AnimationSeesawType::toString(animationSeesawType));
 
             s.writeTextElement("seesawSensitivity", QString::number(seesawSensitivity));
-            s.writeTextElement("seesawResetStiffness", QString::number(seesawResetStiffness));
-            s.writeTextElement("seesawRotationBounds", QString::number(seesawRotationBounds));
+            s.writeTextElement("seesawResetStiffness", QString::number(seesawFriction));
+            s.writeTextElement("seesawRotationBounds", QString::number(seesawSpring));
 
             s.writeEndElement();
         }

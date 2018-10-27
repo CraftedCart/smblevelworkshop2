@@ -50,8 +50,8 @@ namespace WS2Common {
                 EnumAnimationSeesawType animationSeesawType = ANIMATION;
 
                 float seesawSensitivity = 0.0f;
-                float seesawResetStiffness = 0.0f;
-                float seesawRotationBounds = 0.0f;
+                float seesawFriction = 0.0f;
+                float seesawSpring = 0.0f;
 
             protected:
                 /**
@@ -378,32 +378,32 @@ namespace WS2Common {
                 void setSeesawSensitivity(float value);
 
                 /**
-                 * @brief Getter for seesawResetStiffness
+                 * @brief Getter for seesawFriction
                  *
-                 * @return The seesaw reset stiffness (Lower is looser)
+                 * @return The seesaw friction (Lower is looser)
                  */
-                float getSeesawResetStiffness() const;
+                float getSeesawFriction() const;
 
                 /**
-                 * @brief Setter for seesawResetStiffness
+                 * @brief Setter for seesawFriction
                  *
-                 * @param value The new seesaw reset stiffness (Lower is looser)
+                 * @param value The new seesaw friction (Lower is looser)
                  */
-                void setSeesawResetStiffness(float value);
+                void setSeesawFriction(float value);
 
                 /**
-                 * @brief Getter for seesawRotationBounds
+                 * @brief Getter for seesawSpring
                  *
-                 * @return The seesaw bounds of rotation (Higher is less)
+                 * @return The seesaw spring (0 prevents the seesaw from resetting)
                  */
-                float getSeesawRotationBounds() const;
+                float getSeesawSpring() const;
 
                 /**
-                 * @brief Setter for seesawRotationBounds
+                 * @brief Setter for seesawSpring
                  *
-                 * @param value The new seesaw seesaw bounds of rotation (Higher is less)
+                 * @param value The new seesaw spring (0 prevents the seesaw from resetting)
                  */
-                void setSeesawRotationBounds(float value);
+                void setSeesawSpring(float value);
         };
     }
 }
