@@ -116,9 +116,9 @@ namespace WS2Common {
                 } else if (xml.name() == "seesawSensitivity") {
                     node->setSeesawSensitivity(xml.readElementText().toFloat());
                 } else if (xml.name() == "seesawResetStiffness") {
-                    node->setSeesawResetStiffness(xml.readElementText().toFloat());
+                    node->setSeesawFriction(xml.readElementText().toFloat());
                 } else if (xml.name() == "seesawRotationBounds") {
-                    node->setSeesawRotationBounds(xml.readElementText().toFloat());
+                    node->setSeesawSpring(xml.readElementText().toFloat());
                 } else {
                     qWarning().noquote() << "Unrecognised tag: data-sceneNode > " + xml.name();
                 }

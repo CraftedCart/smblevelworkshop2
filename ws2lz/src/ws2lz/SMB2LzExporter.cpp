@@ -646,8 +646,8 @@ namespace WS2Lz {
         writeNull(dev, 4); //Unknown/Null (Mystery 5 count?)
         writeNull(dev, 4); //TODO: Offset to mystery 5
         dev << node->getSeesawSensitivity();
-        dev << node->getSeesawResetStiffness();
-        dev << node->getSeesawRotationBounds();
+        dev << node->getSeesawFriction();
+        dev << node->getSeesawSpring();
         dev << wormholeCountMap.value(node);
         dev << wormholeOffsetMap.key(node);
 

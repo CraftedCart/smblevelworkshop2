@@ -199,10 +199,16 @@ namespace WS2Common {
                     group->setConveyorSpeed(SerializeUtils::getVec3Attributes(xml.attributes()));
                 } else if (xml.name() == "seesawSensitivity") {
                     group->setSeesawSensitivity(xml.readElementText().toFloat()); //TODO: Error checking
-                } else if (xml.name() == "seesawResetStiffness") {
-                    group->setSeesawResetStiffness(xml.readElementText().toFloat()); //TODO: Error checking
-                } else if (xml.name() == "seesawRotationBounds") {
-                    group->setSeesawRotationBounds(xml.readElementText().toFloat()); //TODO: Error checking
+                } else if (xml.name() == "seesawResetStiffness") { //Deprecated
+                    qWarning() << "seesawResetStiffness is deprecated! Prefer seesawFriction instead";
+                    group->setSeesawFriction(xml.readElementText().toFloat()); //TODO: Error checking
+                } else if (xml.name() == "seesawFriction") {
+                    group->setSeesawFriction(xml.readElementText().toFloat()); //TODO: Error checking
+                } else if (xml.name() == "seesawRotationBounds") { //Deprecated
+                    qWarning() << "seesawRotationBounds is deprecated! Prefer seesawSpring instead";
+                    group->setSeesawSpring(xml.readElementText().toFloat()); //TODO: Error checking
+                } else if (xml.name() == "seesawSpring") {
+                    group->setSeesawSpring(xml.readElementText().toFloat()); //TODO: Error checking
                 } else if (xml.name() == "animKeyframes") {
                     Animation::TransformAnimation *transformAnim = parseTransformAnimation(xml);
                     group->setTransformAnimation(transformAnim);
