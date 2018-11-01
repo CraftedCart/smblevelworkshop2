@@ -73,8 +73,9 @@
     <addaction name="actionCut"/>
     <addaction name="actionCopy"/>
     <addaction name="actionPaste"/>
-    <addaction name="separator"/>
     <addaction name="actionDuplicate"/>
+    <addaction name="separator"/>
+    <addaction name="actionDropToGround"/>
     <addaction name="actionDelete"/>
     <addaction name="separator"/>
     <addaction name="actionSelectAll"/>
@@ -159,7 +160,9 @@
    <addaction name="actionCut"/>
    <addaction name="actionCopy"/>
    <addaction name="actionPaste"/>
+   <addaction name="actionDuplicate"/>
    <addaction name="separator"/>
+   <addaction name="actionDropToGround"/>
    <addaction name="actionDelete"/>
    <addaction name="separator"/>
    <addaction name="actionAddStart"/>
@@ -251,7 +254,7 @@
           <x>0</x>
           <y>0</y>
           <width>256</width>
-          <height>58</height>
+          <height>74</height>
          </rect>
         </property>
         <layout class="QGridLayout" name="gridLayout_5">
@@ -748,6 +751,21 @@
    </property>
    <property name="text">
     <string>Add &amp;Start</string>
+   </property>
+  </action>
+  <action name="actionDropToGround">
+   <property name="icon">
+    <iconset resource="../../../resources/Workshop2/Workshop2Resources.qrc">
+     <normaloff>:/Workshop2/Icons/DropToGround.png</normaloff>:/Workshop2/Icons/DropToGround.png</iconset>
+   </property>
+   <property name="text">
+    <string>Drop to ground</string>
+   </property>
+   <property name="toolTip">
+    <string>Move selected objects down onto the surface below them</string>
+   </property>
+   <property name="shortcut">
+    <string>End</string>
    </property>
   </action>
  </widget>

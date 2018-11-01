@@ -10,6 +10,7 @@
 #include "ws2editor/widget/ViewportWidget.hpp"
 #include "ws2editor/widget/PropertiesWidget.hpp"
 #include "ws2editor/IExportProvider.hpp"
+#include <BulletCollision/NarrowPhaseCollision/btRaycastCallback.h>
 #include <QMainWindow>
 #include <QLabel>
 
@@ -46,6 +47,21 @@ namespace WS2Editor {
                         WS2Common::Scene::SceneNode *node,
                         QVector<WS2Common::Resource::ResourceMesh*>& meshes
                         );
+
+                btCollisionWorld::AllHitsRayResultCallback* raycastWorld(glm::vec3 startPos, glm::vec3 endPos);
+
+                /**
+                 * @brief Sorts the ray callback result values by each hit point's distance from sourcePoint and returns an indices vector
+                 *
+                 * Elements are not directly sorted in the rayCallback. Rather, an indices vector is created, sorted based on the fractions in the ray callback, and returned
+                 *
+                 * @todo Move into a helper namespace instead of duplicating it in ViewportWidget
+                 *
+                 * @param rayCallback The ray callback result to sort the returned indices vector
+                 *
+                 * @return An indices array sorted based on distance
+                 */
+                QVector<int> sortAllHitsRayResultCallback(const btCollisionWorld::AllHitsRayResultCallback *rayCallback);
 
             public:
                 explicit StageEditorWindow(QWidget *parent = 0);
@@ -92,6 +108,11 @@ namespace WS2Editor {
                  * @brief Adds an empty background scene node to the currently active project
                  */
                 void addBackgroundNode();
+
+                /**
+                 * @brief Drops selected nodes to the ground below them
+                 */
+                void dropToGroundSelected();
 
                 /**
                  * @brief Deletes selected nodes
