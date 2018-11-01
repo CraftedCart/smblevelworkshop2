@@ -292,11 +292,16 @@ namespace WS2Editor {
                 if (rayCallback->hasHit()) {
                     //Fetch the closest hit
                     QVector<int> indices = sortAllHitsRayResultCallback(rayCallback);
-                    btVector3 hitPoint = rayCallback->m_hitPointWorld[indices.at(0)];
-                    // btVector3 hitNorm = rayCallback->m_hitNormalWorld[indices.at(0)];
+                    glm::vec3 hitPoint = MathUtils::toGlmVec3(rayCallback->m_hitPointWorld[indices.at(0)]);
+                    glm::vec3 hitNorm = MathUtils::toGlmVec3(rayCallback->m_hitNormalWorld[indices.at(0)]);
 
-                    node->setPosition(MathUtils::toGlmVec3(hitPoint));
-                    // node->setRotation(MathUtils::toGlmVec3(hitNorm));
+                    //Some objects require an offset
+                    if (dynamic_cast<BananaSceneNode*>(node) || dynamic_cast<StartSceneNode*>(node)) {
+                        hitPoint += 0.5f * hitNorm;
+                    }
+
+                    node->setPosition(hitPoint);
+                    // node->setRotation(hitNorm);
                     ModelManager::modelOutliner->nodeModified(node);
                 }
             }

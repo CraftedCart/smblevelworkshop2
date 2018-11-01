@@ -1370,37 +1370,37 @@ Public License instead of this License.  But first, please read
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/ws2editor/ui/StageEditorWindow.cpp" line="414"/>
+        <location filename="../src/ws2editor/ui/StageEditorWindow.cpp" line="419"/>
         <source>Player Start</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/ws2editor/ui/StageEditorWindow.cpp" line="419"/>
+        <location filename="../src/ws2editor/ui/StageEditorWindow.cpp" line="424"/>
         <source>New Blue Goal</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/ws2editor/ui/StageEditorWindow.cpp" line="441"/>
+        <location filename="../src/ws2editor/ui/StageEditorWindow.cpp" line="446"/>
         <source>New Banana Single</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/ws2editor/ui/StageEditorWindow.cpp" line="446"/>
+        <location filename="../src/ws2editor/ui/StageEditorWindow.cpp" line="451"/>
         <source>New Banana Bunch</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/ws2editor/ui/StageEditorWindow.cpp" line="452"/>
+        <location filename="../src/ws2editor/ui/StageEditorWindow.cpp" line="457"/>
         <source>New Jamabar</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/ws2editor/ui/StageEditorWindow.cpp" line="457"/>
+        <location filename="../src/ws2editor/ui/StageEditorWindow.cpp" line="462"/>
         <source>New Wormhole</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/ws2editor/ui/StageEditorWindow.cpp" line="354"/>
+        <location filename="../src/ws2editor/ui/StageEditorWindow.cpp" line="359"/>
         <source>Static</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1425,17 +1425,17 @@ Public License instead of this License.  But first, please read
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/ws2editor/ui/StageEditorWindow.cpp" line="424"/>
+        <location filename="../src/ws2editor/ui/StageEditorWindow.cpp" line="429"/>
         <source>New Green Goal</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/ws2editor/ui/StageEditorWindow.cpp" line="430"/>
+        <location filename="../src/ws2editor/ui/StageEditorWindow.cpp" line="435"/>
         <source>New Red Goal</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/ws2editor/ui/StageEditorWindow.cpp" line="436"/>
+        <location filename="../src/ws2editor/ui/StageEditorWindow.cpp" line="441"/>
         <source>New Bumper</source>
         <translation type="unfinished"></translation>
     </message>
