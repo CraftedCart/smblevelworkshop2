@@ -10,6 +10,7 @@ These features are still a work in progress. You can download the latest develop
 
 - ws2editor
     - You can now define the fallout Y position
+    - Added drop to ground action (Bound to the End key, or found on the toolbar/in the edit menu)
 
 - ws2lz
     - Added support for exporting runtime reflective surfaces
