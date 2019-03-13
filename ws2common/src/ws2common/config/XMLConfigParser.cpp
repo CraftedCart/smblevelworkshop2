@@ -25,6 +25,9 @@ namespace WS2Common {
                         xml.readNext();
                         if (!xml.isStartElement()) continue; //Ignore all end elements, again
 
+                        qDebug().nospace() << "XML config parsing [Line: " << xml.lineNumber() << ", Col: " << xml.columnNumber() << "]: " <<
+                            "superMonkeyBallStage > " << xml.name();
+
                         if (xml.name() == "modelImport") {
                             QUrl url = parseModelImport(xml, relativeRoot);
                             if (!url.isEmpty()) stage->addModel(url);
@@ -121,6 +124,9 @@ namespace WS2Common {
                 xml.readNext();
                 if (!xml.isStartElement()) continue; //Ignore all end elements
 
+                qDebug().nospace() << "XML config parsing [Line: " << xml.lineNumber() << ", Col: " << xml.columnNumber() << "]: " <<
+                    "start > " << xml.name();
+
                 if (xml.name() == "name") {
                     start->setName(xml.readElementText());
                 } else if (xml.name() == "position") {
@@ -142,6 +148,9 @@ namespace WS2Common {
             while (!(xml.isEndElement() && xml.name() == "backgroundModel")) {
                 xml.readNext();
                 if (!xml.isStartElement()) continue; //Ignore all end elements
+
+                qDebug().nospace() << "XML config parsing [Line: " << xml.lineNumber() << ", Col: " << xml.columnNumber() << "]: " <<
+                    "backgroundModel > " << xml.name();
 
                 if (xml.name() == "name") {
                     QString name = xml.readElementText();
@@ -184,6 +193,9 @@ namespace WS2Common {
             while (!(xml.isEndElement() && xml.name() == "itemGroup")) {
                 xml.readNext();
                 if (!xml.isStartElement()) continue; //Ignore all end elements
+
+                qDebug().nospace() << "XML config parsing [Line: " << xml.lineNumber() << ", Col: " << xml.columnNumber() << "]: " <<
+                    "itemGroup > " << xml.name();
 
                 if (xml.name() == "name") {
                     group->setName(xml.readElementText());
@@ -262,6 +274,9 @@ namespace WS2Common {
                 xml.readNext();
                 if (!xml.isStartElement()) continue; //Ignore all end elements
 
+                qDebug().nospace() << "XML config parsing [Line: " << xml.lineNumber() << ", Col: " << xml.columnNumber() << "]: " <<
+                    "goal > " << xml.name();
+
                 if (xml.name() == "name") {
                     goal->setName(xml.readElementText());
                 } else if (xml.name() == "position") {
@@ -288,6 +303,9 @@ namespace WS2Common {
             while (!(xml.isEndElement() && xml.name() == "bumper")) {
                 xml.readNext();
                 if (!xml.isStartElement()) continue; //Ignore all end elements
+
+                qDebug().nospace() << "XML config parsing [Line: " << xml.lineNumber() << ", Col: " << xml.columnNumber() << "]: " <<
+                    "bumper > " << xml.name();
 
                 if (xml.name() == "name") {
                     bumper->setName(xml.readElementText());
@@ -316,6 +334,9 @@ namespace WS2Common {
                 xml.readNext();
                 if (!xml.isStartElement()) continue; //Ignore all end elements
 
+                qDebug().nospace() << "XML config parsing [Line: " << xml.lineNumber() << ", Col: " << xml.columnNumber() << "]: " <<
+                    "jamabar > " << xml.name();
+
                 if (xml.name() == "name") {
                     jamabar->setName(xml.readElementText());
                 } else if (xml.name() == "position") {
@@ -343,6 +364,9 @@ namespace WS2Common {
                 xml.readNext();
                 if (!xml.isStartElement()) continue; //Ignore all end elements
 
+                qDebug().nospace() << "XML config parsing [Line: " << xml.lineNumber() << ", Col: " << xml.columnNumber() << "]: " <<
+                    "banana > " << xml.name();
+
                 if (xml.name() == "name") {
                     banana->setName(xml.readElementText());
                 } else if (xml.name() == "position") {
@@ -367,6 +391,9 @@ namespace WS2Common {
             while (!(xml.isEndElement() && xml.name() == "falloutVolume")) {
                 xml.readNext();
                 if (!xml.isStartElement()) continue; //Ignore all end elements
+
+                qDebug().nospace() << "XML config parsing [Line: " << xml.lineNumber() << ", Col: " << xml.columnNumber() << "]: " <<
+                    "falloutVolume > " << xml.name();
 
                 if (xml.name() == "name") {
                     volume->setName(xml.readElementText());
@@ -395,6 +422,9 @@ namespace WS2Common {
                 xml.readNext();
                 if (!xml.isStartElement()) continue; //Ignore all end elements
 
+                qDebug().nospace() << "XML config parsing [Line: " << xml.lineNumber() << ", Col: " << xml.columnNumber() << "]: " <<
+                    "wormhole > " << xml.name();
+
                 if (xml.name() == "name") {
                     wh->setName(xml.readElementText());
                 } else if (xml.name() == "position") {
@@ -422,6 +452,9 @@ namespace WS2Common {
             while (!(xml.isEndElement() && xml.name() == "switch")) {
                 xml.readNext();
                 if (!xml.isStartElement()) continue; //Ignore all end elements
+
+                qDebug().nospace() << "XML config parsing [Line: " << xml.lineNumber() << ", Col: " << xml.columnNumber() << "]: " <<
+                    "switch > " << xml.name();
 
                 if (xml.name() == "name") {
                     sw->setName(xml.readElementText());
@@ -475,6 +508,9 @@ namespace WS2Common {
                 xml.readNext();
                 if (!xml.isStartElement()) continue; //Ignore all end elements
 
+                qDebug().nospace() << "XML config parsing [Line: " << xml.lineNumber() << ", Col: " << xml.columnNumber() << "]: " <<
+                    "stageModel > " << xml.name();
+
                 if (xml.name() == "name") {
                     QString name = xml.readElementText();
                     mesh->setName(name);
@@ -498,6 +534,9 @@ namespace WS2Common {
                 xml.readNext();
                 if (!xml.isStartElement()) continue; //Ignore all end elements
 
+                qDebug().nospace() << "XML config parsing [Line: " << xml.lineNumber() << ", Col: " << xml.columnNumber() << "]: " <<
+                    "collision > " << xml.name();
+
                 if (xml.name() == "meshCollision") {
                     outNodes.append(parseMeshCollision(xml));
                 } else {
@@ -514,6 +553,9 @@ namespace WS2Common {
             while (!(xml.isEndElement() && xml.name() == "meshCollision")) {
                 xml.readNext();
                 if (!xml.isStartElement()) continue; //Ignore all end elements
+
+                qDebug().nospace() << "XML config parsing [Line: " << xml.lineNumber() << ", Col: " << xml.columnNumber() << "]: " <<
+                    "meshCollision > " << xml.name();
 
                 if (xml.name() == "name") {
                     QString name = xml.readElementText();
@@ -533,6 +575,9 @@ namespace WS2Common {
             while (!(xml.isEndElement() && xml.name() == "collisionGrid")) {
                 xml.readNext();
                 if (!xml.isStartElement()) continue; //Ignore all end elements
+
+                qDebug().nospace() << "XML config parsing [Line: " << xml.lineNumber() << ", Col: " << xml.columnNumber() << "]: " <<
+                    "collisionGrid > " << xml.name();
 
                 if (xml.name() == "start") {
                     grid.setGridStart(SerializeUtils::getVec2Attributes(xml.attributes(), "x", "z"));
@@ -573,6 +618,9 @@ namespace WS2Common {
                 xml.readNext();
                 if (!xml.isStartElement()) continue; //Ignore all end elements
 
+                qDebug().nospace() << "XML config parsing [Line: " << xml.lineNumber() << ", Col: " << xml.columnNumber() << "]: " <<
+                    "animKeyframes > " << xml.name();
+
                 if (xml.name() == "posX") {
                     parseKeyframes(xml, anim->getPosXKeyframes());
                 } else if (xml.name() == "posY") {
@@ -606,6 +654,9 @@ namespace WS2Common {
                 xml.readNext();
                 if (!xml.isStartElement()) continue; //Ignore all end elements
 
+                qDebug().nospace() << "XML config parsing [Line: " << xml.lineNumber() << ", Col: " << xml.columnNumber() << "]: " <<
+                    parentName << " > " << xml.name();
+
                 if (xml.name() == "keyframe") {
                     float time;
                     float value;
@@ -634,4 +685,3 @@ namespace WS2Common {
         }
     }
 }
-
