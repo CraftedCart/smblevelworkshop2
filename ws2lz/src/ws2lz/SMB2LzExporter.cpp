@@ -113,7 +113,7 @@ namespace WS2Lz {
 
     void SMB2LzExporter::optimizeCollision(const Stage &stage) {
         //First check what triangles intersect which grid times, in order to optimize collision
-        qDebug() << "Now optimizing collision... This may take a little while";
+        qInfo() << "Now optimizing collision... This may take a little while";
         QElapsedTimer timer; //Measure how long this operation takes - probably a little while
         timer.start();
 
@@ -186,7 +186,7 @@ namespace WS2Lz {
         fflush(stdout);
 
         //Finished - log the amount of time it took
-        qDebug().noquote().nospace() << "Finished optimizing collision in " << timer.nsecsElapsed() / 1000000000.0f << "s";
+        qInfo().noquote().nospace() << "Finished optimizing collision in " << timer.nsecsElapsed() / 1000000000.0f << "s";
     }
 
     void SMB2LzExporter::calculateOffsets(const Stage &stage) {

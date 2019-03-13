@@ -98,7 +98,7 @@ namespace WS2Common {
                         QVector<Resource::AbstractResource*> *resources,
                         QMutex *resourcesMutex
                         ) {
-                    //qDebug() << "Processing node" << node->mName.C_Str() << node->mNumMeshes;
+                    //qInfo() << "Processing node" << node->mName.C_Str() << node->mNumMeshes;
 
                     QVector<WS2Common::Model::MeshSegment*> segments; //Will contain all mesh segments for each material of this node's mesh
                     //Process this node's mesh segments

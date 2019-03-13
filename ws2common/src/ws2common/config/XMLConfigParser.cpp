@@ -58,7 +58,7 @@ namespace WS2Common {
             }
 
             //Done parsing - now link wormholes
-            if (wormholeDestMap.size() > 0) qDebug().noquote() << QString("Linking %1 wormholes...").arg(wormholeDestMap.size());
+            if (wormholeDestMap.size() > 0) qInfo().noquote() << QString("Linking %1 wormholes...").arg(wormholeDestMap.size());
 
             QHashIterator<Scene::WormholeSceneNode*, QString> i(wormholeDestMap);
             while (i.hasNext()) {
