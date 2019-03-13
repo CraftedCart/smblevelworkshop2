@@ -43,7 +43,8 @@ int main(int argc, char *argv[]) {
             {{"c", "config"}, QCoreApplication::translate("main", "Input path to the XML configuration file."), QCoreApplication::translate("main", "configuration file")},
             {{"o", "output"}, QCoreApplication::translate("main", "Output path to an uncompressed LZ file."), QCoreApplication::translate("main", "uncompressed output file")},
             {{"s", "compressed-output"}, QCoreApplication::translate("main", "Output path to a compressed LZ file."), QCoreApplication::translate("main", "output file")},
-            {{"g", "game-version"}, QCoreApplication::translate("main", "The version of SMB to generate an LZ file for (1/2/deluxe)."), QCoreApplication::translate("main", "version")}
+            {{"g", "game-version"}, QCoreApplication::translate("main", "The version of SMB to generate an LZ file for (1/2/deluxe)."), QCoreApplication::translate("main", "version")},
+            {{"v", "verbose"}, QCoreApplication::translate("main", "Enable verbose logging")}
             });
 
     parser.process(app);
@@ -61,6 +62,9 @@ int main(int argc, char *argv[]) {
         qCritical().noquote() << err;
         return EXIT_FAILURE;
     }
+
+    //Check for verbose logging
+    WS2Common::setDebugLoggingEnabled(parser.isSet("v"));
 
     //Check for a valid input
     if (!parser.isSet("c")) {
