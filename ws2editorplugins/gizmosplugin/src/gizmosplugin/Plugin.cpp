@@ -30,7 +30,7 @@ namespace WS2EditorPlugins {
                     Qt::DirectConnection);
 
             //The plugin initialized successfully, return true
-            qDebug() << "WS2Editor GizmosPlugin successfully initialized";
+            qInfo() << "WS2Editor GizmosPlugin successfully initialized";
             return true;
         }
 

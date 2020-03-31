@@ -20,17 +20,17 @@ namespace WS2Editor {
     using namespace WS2Common::Scene;
 
     void RenderManager::init(int fboWidth, int fboHeight) {
-        qDebug() << "Initializing RenderManager";
+        qInfo() << "Initializing RenderManager";
 
         viewportWidth = fboWidth;
         viewportHeight = fboHeight;
 
-        qDebug() << "Loading default texture";
+        qInfo() << "Loading default texture";
         QImage defaultImage = convertToGLFormat(QImage(":/Workshop2/Images/defaultgrid.png"));
         defaultTexture = loadTexture(defaultImage);
 
         //Create fbo
-        qDebug() << "Creating framebuffers";
+        qInfo() << "Creating framebuffers";
         glGenFramebuffers(1, &fbo);
         glBindFramebuffer(GL_FRAMEBUFFER, fbo);
 
@@ -38,7 +38,7 @@ namespace WS2Editor {
         generateFboAttachments(fboWidth, fboHeight);
 
         //Generate the fullscreen quad buffers, to draw the framebuffer
-        qDebug() << "Creating fullscreen quad buffers";
+        qInfo() << "Creating fullscreen quad buffers";
         glGenVertexArrays(1, &fullscreenQuadVao);
         glBindVertexArray(fullscreenQuadVao);
 
@@ -58,7 +58,7 @@ namespace WS2Editor {
         glEnableVertexAttribArray(EnumVertexAttribs::VERTEX_POSITION);
         glVertexAttribPointer(EnumVertexAttribs::VERTEX_POSITION, 3, GL_FLOAT, GL_FALSE, 0, (void*) 0);
 
-        qDebug() << "Creating shaders";
+        qInfo() << "Creating shaders";
 
         //Load the stage shaders
         QFile stageVertFile(":/Workshop2/Shaders/stage.vert");
@@ -390,7 +390,7 @@ namespace WS2Editor {
     void RenderManager::loadTextureAsync(const ResourceTexture *texture) {
         using namespace WS2Editor::Task;
 
-        qDebug().noquote() << "Loading GL texture:" << *texture->getFirstFilePath();
+        qInfo().noquote() << "Loading GL texture:" << *texture->getFirstFilePath();
 
         //TODO: Actually make this async
 
@@ -447,7 +447,7 @@ namespace WS2Editor {
         const char *cFragCode = fragBytes.constData();
 
         //Compile vert shader
-        qDebug() << "Compiling vertex shader:" << vertFile->fileName();
+        qInfo() << "Compiling vertex shader:" << vertFile->fileName();
         glShaderSource(vertID, 1, &cVertCode, NULL);
         glCompileShader(vertID);
 
@@ -463,7 +463,7 @@ namespace WS2Editor {
         }
 
         //Compile frag shader
-        qDebug() << "Compiling fragment shader:" << fragFile->fileName();
+        qInfo() << "Compiling fragment shader:" << fragFile->fileName();
         glShaderSource(fragID, 1, &cFragCode, NULL);
         glCompileShader(fragID);
 
@@ -479,7 +479,7 @@ namespace WS2Editor {
         }
 
         //Link the program
-        qDebug() << "Linking program";
+        qInfo() << "Linking program";
         GLuint programID = glCreateProgram();
         glAttachShader(programID, vertID);
         glAttachShader(programID, fragID);
@@ -649,8 +649,8 @@ namespace WS2Editor {
             }
         }
 
-        if (deletedMeshes > 0) qDebug().noquote() << QString("Purged %1 mesh(es) from the RenderManager cache").arg(deletedMeshes);
-        if (deletedTextures > 0) qDebug().noquote() << QString("Purged %1 texture(s) from the RenderManager cache").arg(deletedTextures);
+        if (deletedMeshes > 0) qInfo().noquote() << QString("Purged %1 mesh(es) from the RenderManager cache").arg(deletedMeshes);
+        if (deletedTextures > 0) qInfo().noquote() << QString("Purged %1 texture(s) from the RenderManager cache").arg(deletedTextures);
     }
 
     void RenderManager::checkErrors(QString location) {
@@ -682,7 +682,7 @@ namespace WS2Editor {
     }
 
     void RenderManager::clearMeshCache() {
-        qDebug().noquote() << QString("Clearing %1 cached meshes").arg(meshCache.size());
+        qInfo().noquote() << QString("Clearing %1 cached meshes").arg(meshCache.size());
 
         //Unload all meshes
         GLuint *vertexArrays = new GLuint[meshCache.size()];
@@ -708,7 +708,7 @@ namespace WS2Editor {
     }
 
     void RenderManager::clearTextureCache() {
-        qDebug().noquote() << QString("Clearing %1 cached textures").arg(textureCache.size());
+        qInfo().noquote() << QString("Clearing %1 cached textures").arg(textureCache.size());
 
         //Unload all meshes
         GLuint *textures = new GLuint[textureCache.size()];

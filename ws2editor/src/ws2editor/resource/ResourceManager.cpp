@@ -37,7 +37,7 @@ namespace WS2Editor {
                 for (int i = 0; i < getResources().size(); i++) {
                     WS2Common::Resource::AbstractResource *res = getResources().at(i);
                     if (res->isLoaded()) {
-                        qDebug() << "Unloading:" << res->getId();
+                        qInfo() << "Unloading:" << res->getId();
                         res->unload();
                     }
                 }

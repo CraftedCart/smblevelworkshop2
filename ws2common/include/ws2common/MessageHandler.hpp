@@ -13,7 +13,10 @@
 #define SMBLEVELWORKSHOP2_WS2COMMON_MESSAGEHANDLER_HPP
 
 namespace WS2Common {
+    WS2COMMON_EXPORT extern bool enableDebugLogging;
+
     WS2COMMON_EXPORT void messageHandler(QtMsgType type, const QMessageLogContext &context, const QString &msg);
+    WS2COMMON_EXPORT void setDebugLoggingEnabled(bool enable);
 }
 
 //Custom types
@@ -23,4 +26,3 @@ WS2COMMON_EXPORT QDebug operator<<(QDebug debug, const glm::uvec2 &vec);
 WS2COMMON_EXPORT QDebug operator<<(QDebug debug, const WS2Common::Scene::SceneNode *node);
 
 #endif
-

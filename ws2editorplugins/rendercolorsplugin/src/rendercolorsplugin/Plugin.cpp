@@ -24,7 +24,7 @@ namespace WS2EditorPlugins {
                     Qt::DirectConnection);
 
             //The plugin initialized successfully, return true
-            qDebug() << "WS2Editor RenderColorsPlugin successfully initialized";
+            qInfo() << "WS2Editor RenderColorsPlugin successfully initialized";
             return true;
         }
 

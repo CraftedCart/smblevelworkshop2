@@ -535,7 +535,7 @@ namespace WS2Editor {
 
                 WS2EditorInstance::getInstance()->getTaskManager()->enqueueTasks(tasks);
             } else {
-                qDebug() << "Invalid kind of data dropped onto the viewport";
+                qInfo() << "Invalid kind of data dropped onto the viewport";
             }
 
             showDrop = false;

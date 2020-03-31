@@ -150,7 +150,7 @@ namespace WS2Editor {
             }
 
             QByteArray encodedData = data->data("text/xml");
-            qDebug().noquote().nospace() << data->data("text/xml");
+            qInfo().noquote().nospace() << data->data("text/xml");
             QXmlStreamReader xml(encodedData);
 
             while (!(xml.isEndElement() && xml.name() == "root")) {

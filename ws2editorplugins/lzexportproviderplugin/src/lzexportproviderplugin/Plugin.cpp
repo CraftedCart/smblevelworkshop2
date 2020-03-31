@@ -12,7 +12,7 @@ namespace WS2EditorPlugins {
             WS2EditorInstance::getInstance()->registerExportProvider(new SMB2RawLzExportProvider());
 
             //The plugin initialized successfully, return true
-            qDebug() << "WS2Editor LZExportProviderPlugin successfully initialized";
+            qInfo() << "WS2Editor LZExportProviderPlugin successfully initialized";
             return true;
         }
     }

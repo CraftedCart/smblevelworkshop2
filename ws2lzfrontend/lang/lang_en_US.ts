@@ -44,22 +44,27 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/ws2lzfrontend/main.cpp" line="67"/>
+        <location filename="../src/ws2lzfrontend/main.cpp" line="47"/>
+        <source>Enable verbose logging</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/ws2lzfrontend/main.cpp" line="71"/>
         <source>No confiuration file specified. Use --help for more info.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/ws2lzfrontend/main.cpp" line="73"/>
+        <location filename="../src/ws2lzfrontend/main.cpp" line="77"/>
         <source>No output file specified. Use --help for more info.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/ws2lzfrontend/main.cpp" line="79"/>
+        <location filename="../src/ws2lzfrontend/main.cpp" line="83"/>
         <source>No game version specified - defaulting to Super Monkey Ball 2 - Use --game-version to specify a different one</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/ws2lzfrontend/main.cpp" line="91"/>
+        <location filename="../src/ws2lzfrontend/main.cpp" line="95"/>
         <source>Invalid game version specified. Use --help for more info.</source>
         <translation type="unfinished"></translation>
     </message>

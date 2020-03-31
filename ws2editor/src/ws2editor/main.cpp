@@ -75,7 +75,7 @@ namespace WS2Editor {
         splash.showMessage(QApplication::translate("main", "Finding plugins"), Qt::AlignRight | Qt::AlignBottom, Qt::white);
         qApp->processEvents();
 
-        qDebug() << "Loading plugins";
+        qInfo() << "Loading plugins";
         QDir pluginsDir = QDir(QApplication::applicationDirPath());
         pluginsDir.cdUp();
         pluginsDir.cd("share");
@@ -87,23 +87,23 @@ namespace WS2Editor {
         for (QString fileName : pluginsDir.entryList(QDir::Files)) {
 #ifdef Q_OS_LINUX
             if (!fileName.toLower().endsWith(".so")) {
-                qDebug().noquote() << "Ignoring" << fileName << "- Filename does not end in .so";
+                qInfo().noquote() << "Ignoring" << fileName << "- Filename does not end in .so";
                 continue;
             }
 #elif defined(Q_OS_DARWIN)
             if (!fileName.toLower().endsWith(".dylib")) {
-                qDebug().noquote() << "Ignoring" << fileName << "- Filename does not end in .dylib";
+                qInfo().noquote() << "Ignoring" << fileName << "- Filename does not end in .dylib";
                 continue;
             }
 #elif defined(Q_OS_WIN)
             if (!fileName.toLower().endsWith(".dll")) {
-                qDebug().noquote() << "Ignoring" << fileName << "- Filename does not end in .dll";
+                qInfo().noquote() << "Ignoring" << fileName << "- Filename does not end in .dll";
                 continue;
             }
 #endif
             //Otherwise if we're on some unknown OS, we'll just try and load everything
 
-            qDebug().noquote() << "Loading plugin" << fileName;
+            qInfo().noquote() << "Loading plugin" << fileName;
             splash.showMessage(QApplication::translate("main", "Loading plugin %1").arg(fileName), Qt::AlignRight | Qt::AlignBottom, Qt::white);
             qApp->processEvents();
 
@@ -113,7 +113,7 @@ namespace WS2Editor {
             if (plugin) {
                 ws2Instance->getLoadedPlugins() << loader;
             } else {
-                qDebug().noquote() << "Failed to load plugin" << fileName << "-" << loader->errorString();
+                qInfo().noquote() << "Failed to load plugin" << fileName << "-" << loader->errorString();
                 loader->unload();
 
                 ws2Instance->getFailedPlugins() << loader;
@@ -122,7 +122,7 @@ namespace WS2Editor {
 
         //Now that we've loaded all the plugins, try to initialize them
         for (QPluginLoader *loader : ws2Instance->getLoadedPlugins()) {
-            qDebug().noquote() << "Initializing plugin" << loader->fileName();
+            qInfo().noquote() << "Initializing plugin" << loader->fileName();
             splash.showMessage(QApplication::translate("main", "Initializing plugin %1").arg(loader->fileName()), Qt::AlignRight | Qt::AlignBottom, Qt::white);
             qApp->processEvents();
 
