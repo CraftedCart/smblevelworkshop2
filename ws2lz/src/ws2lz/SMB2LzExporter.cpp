@@ -77,6 +77,7 @@ namespace WS2Lz {
         forEachGroup(group) writeAnimationHeader(dev, group->getTransformAnimation());
         forEachGroup(group) writeTransformAnimation(dev, group->getTransformAnimation());
         forEachGroup(group) writeRuntimeReflectiveModelList(dev, group); //Runtime reflective models
+        forEachGroupChildType(const Scene::FalloutVolumeSceneNode*, node) writeFalloutVolume(dev, node); //Fallout volumes
     }
 
     void SMB2LzExporter::addCollisionTriangles(
@@ -483,6 +484,19 @@ namespace WS2Lz {
             runtimeReflectiveModelCountMap[group] = runtimeReflectiveModelCount;
         }
 
+        //Fallout volumes
+        forEachGroup(group) {
+            falloutVolumeOffsetMap.insert(nextOffset, group);
+            quint32 falloutVolumeCount = 0; //Number of fallout volumes in this collision header
+
+            forEachChildType(group, Scene::FalloutVolumeSceneNode*, node) {
+                nextOffset += FALLOUT_VOLUME_LENGTH;
+                falloutVolumeCount++;
+            }
+
+            falloutVolumeCountMap[group] = falloutVolumeCount;
+        }
+
         //Just set all this guff to null for now in case it isn't
         coneCollisionObjectCount = 0;
         coneCollisionObjectListOffset = 0;
@@ -490,8 +504,6 @@ namespace WS2Lz {
         sphereCollisionObjectListOffset = 0;
         cylinderCollisionObjectCount = 0;
         cylinderCollisionObjectListOffset = 0;
-        falloutVolumeCount = 0;
-        falloutVolumeListOffset = 0;
         //TODO: Mystery 8
         //TODO: Reflective level model
         //TODO: Level model instances
@@ -529,6 +541,7 @@ namespace WS2Lz {
         quint32 jamabarCount = addAllCounts(jamabarCountMap);
         quint32 bananaCount = addAllCounts(bananaCountMap);
         quint32 wormholeCount = addAllCounts(runtimeReflectiveModelCountMap);
+        quint32 falloutVolumeCount = addAllCounts(falloutVolumeCountMap);
 
         writeNull(dev, 4); dev << 0x447A0000; //Magic number (Probably)
         dev << (quint32) collisionHeaderOffsetMap.size();
@@ -551,7 +564,7 @@ namespace WS2Lz {
         dev << cylinderCollisionObjectCount;
         dev << cylinderCollisionObjectListOffset;
         dev << falloutVolumeCount;
-        dev << falloutVolumeListOffset;
+        dev << (quint32) (falloutVolumeCount > 0 ? falloutVolumeOffsetMap.firstKey() : 0); //Fallout volume list offset
         dev << (quint32) bgOffsetMap.size();
         dev << (quint32) (bgOffsetMap.size() > 0 ? bgOffsetMap.firstKey() : 0); //Background list offset
         writeNull(dev, 8); //TODO: Mystery 8
@@ -632,7 +645,11 @@ namespace WS2Lz {
         dev << jamabarOffsetMap.key(node);
         dev << bananaCountMap.value(node);
         dev << bananaOffsetMap.key(node);
-        writeNull(dev, 32); //TODO: Everything else
+        writeNull(dev, 8); //TODO: Cone collision objects
+        writeNull(dev, 8); //TODO: Sphere collision objects
+        writeNull(dev, 8); //TODO: Cylinder collision objects
+        dev << falloutVolumeCountMap.value(node);
+        dev << falloutVolumeOffsetMap.key(node);
         dev << runtimeReflectiveModelCountMap.value(node);
         dev << runtimeReflectiveModelOffsetMap.key(node);
         writeNull(dev, 8); //TODO: Everything else
@@ -735,6 +752,13 @@ namespace WS2Lz {
         dev << convertRotation(node->getRotation());
         writeNull(dev, 2);
         dev << wormholeIndividualOffsetMap.key(node->getDestinationUuid()); //Destination wormhole offset
+    }
+
+    void SMB2LzExporter::writeFalloutVolume(QDataStream &dev, const Scene::FalloutVolumeSceneNode *node) {
+        dev << node->getPosition();
+        dev << node->getScale();
+        dev << convertRotation(node->getRotation());
+        writeNull(dev, 2);
     }
 
     void SMB2LzExporter::writeCollisionTriangles(QDataStream &dev, const Scene::SceneNode *node) {

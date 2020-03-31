@@ -140,7 +140,7 @@ namespace WS2Common {
                  *
                  * @param xml The QXmlStreamReader
                  *
-                 * @return The jamabar parsed from the config
+                 * @return The fallout volume parsed from the config
                  */
                 Scene::FalloutVolumeSceneNode* parseFalloutVolume(QXmlStreamReader &xml);
 

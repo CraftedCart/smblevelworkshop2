@@ -16,6 +16,7 @@
 #include "ws2common/scene/BananaSceneNode.hpp"
 #include "ws2common/scene/SwitchSceneNode.hpp"
 #include "ws2common/scene/WormholeSceneNode.hpp"
+#include "ws2common/scene/FalloutVolumeSceneNode.hpp"
 #include "ws2common/scene/MeshSceneNode.hpp"
 #include "ws2common/resource/ResourceMesh.hpp"
 #include <QDataStream>
@@ -49,6 +50,7 @@ namespace WS2Lz {
      * - Animaton headers
      * - Animation keyframes
      * - Reflective models
+     * - Fallout volumes
      */
     class WS2LZ_EXPORT SMB2LzExporter {
         protected:
@@ -73,6 +75,7 @@ namespace WS2Lz {
             const unsigned int ANIMATION_HEADER_LENGTH = 64;
             const unsigned int ANIMATION_KEYFRAME_LENGTH = 20;
             const unsigned int RUNTIME_REFLECTIVE_MODEL_LENGTH = 12;
+            const unsigned int FALLOUT_VOLUME_LENGTH = 32;
 
             //Other guff
             /**
@@ -105,6 +108,8 @@ namespace WS2Lz {
             QMap<const WS2Common::Scene::GroupSceneNode*, quint32> wormholeCountMap;
             QMultiMap<quint32, const WS2Common::Scene::GroupSceneNode*> runtimeReflectiveModelOffsetMap;
             QMap<const WS2Common::Scene::GroupSceneNode*, quint32> runtimeReflectiveModelCountMap;
+            QMultiMap<quint32, const WS2Common::Scene::GroupSceneNode*> falloutVolumeOffsetMap;
+            QMap<const WS2Common::Scene::GroupSceneNode*, quint32> falloutVolumeCountMap;
             QMultiMap<quint32, const WS2Common::Scene::GroupSceneNode*> groupAnimHeaderOffsetMap;
             QMultiMap<quint32, const WS2Common::Animation::TransformAnimation*> animPosXKeyframesOffsetMap;
             QMultiMap<quint32, const WS2Common::Animation::TransformAnimation*> animPosYKeyframesOffsetMap;
@@ -119,8 +124,6 @@ namespace WS2Lz {
             quint32 sphereCollisionObjectListOffset;
             quint32 cylinderCollisionObjectCount;
             quint32 cylinderCollisionObjectListOffset;
-            quint32 falloutVolumeCount;
-            quint32 falloutVolumeListOffset;
             QMultiMap<quint32, const WS2Common::Scene::MeshSceneNode*> bgOffsetMap;
             QMultiMap<quint32, QString> bgNameOffsetMap;
             //TODO: Mystery 8
@@ -196,6 +199,7 @@ namespace WS2Lz {
             void writeBanana(QDataStream &dev, const WS2Common::Scene::BananaSceneNode *node);
             void writeSwitch(QDataStream &dev, const WS2Common::Scene::SwitchSceneNode *node);
             void writeWormhole(QDataStream &dev, const WS2Common::Scene::WormholeSceneNode *node);
+            void writeFalloutVolume(QDataStream &dev, const WS2Common::Scene::FalloutVolumeSceneNode *node);
 
             /**
              * @brief Recursive function - Searches through the node's children, and their children, and their children, etc
