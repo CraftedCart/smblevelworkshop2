@@ -17,6 +17,9 @@
 #include "ws2common/scene/SwitchSceneNode.hpp"
 #include "ws2common/scene/WormholeSceneNode.hpp"
 #include "ws2common/scene/FalloutVolumeSceneNode.hpp"
+#include "ws2common/scene/ConeCollisionObjectSceneNode.hpp"
+#include "ws2common/scene/SphereCollisionObjectSceneNode.hpp"
+#include "ws2common/scene/CylinderCollisionObjectSceneNode.hpp"
 #include "ws2common/scene/MeshSceneNode.hpp"
 #include "ws2common/resource/ResourceMesh.hpp"
 #include <QDataStream>
@@ -41,6 +44,9 @@ namespace WS2Lz {
      * - Bumpers
      * - Jamabars
      * - Bananas
+     * - Cone Collision Objects
+     * - Sphere Collision Objects
+     * - Cylinder Collision Objects
      * - Switches
      * - Wormholes
      * - Level model pointer type A
@@ -69,6 +75,9 @@ namespace WS2Lz {
             const unsigned int BUMPER_LENGTH = 32;
             const unsigned int JAMABAR_LENGTH = 32;
             const unsigned int BANANA_LENGTH = 16;
+            const unsigned int CONE_COLLISION_LENGTH = 32;
+            const unsigned int SPHERE_COLLISION_LENGTH = 20;
+            const unsigned int CYLINDER_COLLISION_LENGTH = 28;
             const unsigned int SWITCH_LENGTH = 24;
             const unsigned int WORMHOLE_LENGTH = 28;
             const unsigned int BACKGROUND_MODEL_LENGTH = 56;
@@ -101,6 +110,12 @@ namespace WS2Lz {
             QMap<const WS2Common::Scene::GroupSceneNode*, quint32> jamabarCountMap;
             QMultiMap<quint32, const WS2Common::Scene::GroupSceneNode*> bananaOffsetMap;
             QMap<const WS2Common::Scene::GroupSceneNode*, quint32> bananaCountMap;
+            QMultiMap<quint32, const WS2Common::Scene::GroupSceneNode*> coneCollisionObjectOffsetMap;
+            QMap<const WS2Common::Scene::GroupSceneNode*, quint32> coneCollisionObjectCountMap;
+            QMultiMap<quint32, const WS2Common::Scene::GroupSceneNode*> sphereCollisionObjectOffsetMap;
+            QMap<const WS2Common::Scene::GroupSceneNode*, quint32> sphereCollisionObjectCountMap;
+            QMultiMap<quint32, const WS2Common::Scene::GroupSceneNode*> cylinderCollisionObjectOffsetMap;
+            QMap<const WS2Common::Scene::GroupSceneNode*, quint32> cylinderCollisionObjectCountMap;
             QMultiMap<quint32, const WS2Common::Scene::GroupSceneNode*> switchOffsetMap;
             QMap<const WS2Common::Scene::GroupSceneNode*, quint32> switchCountMap;
             QMultiMap<quint32, const WS2Common::Scene::GroupSceneNode*> wormholeOffsetMap; //Per collision header
@@ -117,13 +132,6 @@ namespace WS2Lz {
             QMultiMap<quint32, const WS2Common::Animation::TransformAnimation*> animRotXKeyframesOffsetMap;
             QMultiMap<quint32, const WS2Common::Animation::TransformAnimation*> animRotYKeyframesOffsetMap;
             QMultiMap<quint32, const WS2Common::Animation::TransformAnimation*> animRotZKeyframesOffsetMap;
-            //TODO: Replace all this with maps \/
-            quint32 coneCollisionObjectCount;
-            quint32 coneCollisionObjectListOffset;
-            quint32 sphereCollisionObjectCount;
-            quint32 sphereCollisionObjectListOffset;
-            quint32 cylinderCollisionObjectCount;
-            quint32 cylinderCollisionObjectListOffset;
             QMultiMap<quint32, const WS2Common::Scene::MeshSceneNode*> bgOffsetMap;
             QMultiMap<quint32, QString> bgNameOffsetMap;
             //TODO: Mystery 8
@@ -197,6 +205,9 @@ namespace WS2Lz {
             void writeBumper(QDataStream &dev, const WS2Common::Scene::BumperSceneNode *node);
             void writeJamabar(QDataStream &dev, const WS2Common::Scene::JamabarSceneNode *node);
             void writeBanana(QDataStream &dev, const WS2Common::Scene::BananaSceneNode *node);
+            void writeConeCollisionObject(QDataStream &dev, const WS2Common::Scene::ConeCollisionObjectSceneNode *node);
+            void writeSphereCollisionObject(QDataStream &dev, const WS2Common::Scene::SphereCollisionObjectSceneNode *node);
+            void writeCylinderCollisionObject(QDataStream &dev, const WS2Common::Scene::CylinderCollisionObjectSceneNode *node);
             void writeSwitch(QDataStream &dev, const WS2Common::Scene::SwitchSceneNode *node);
             void writeWormhole(QDataStream &dev, const WS2Common::Scene::WormholeSceneNode *node);
             void writeFalloutVolume(QDataStream &dev, const WS2Common::Scene::FalloutVolumeSceneNode *node);

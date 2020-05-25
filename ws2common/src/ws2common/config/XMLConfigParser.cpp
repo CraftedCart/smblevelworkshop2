@@ -241,6 +241,12 @@ namespace WS2Common {
                     group->addChild(parseJamabar(xml));
                 } else if (xml.name() == "banana") {
                     group->addChild(parseBanana(xml));
+                } else if (xml.name() == "cone") {
+                    group->addChild(parseConeCollisionObject(xml));  
+                } else if (xml.name() == "sphere") {
+                    group->addChild(parseSphereCollisionObject(xml));
+                } else if (xml.name() == "cylinder") {
+                    group->addChild(parseCylinderCollisionObject(xml));
                 } else if (xml.name() == "falloutVolume") {
                     group->addChild(parseFalloutVolume(xml));
                 } else if (xml.name() == "wormhole") {
@@ -381,6 +387,98 @@ namespace WS2Common {
             id++;
 
             return banana;
+        }
+
+        Scene::ConeCollisionObjectSceneNode* XMLConfigParser::parseConeCollisionObject(QXmlStreamReader &xml) {
+            //Default name is "Cone Collision Object x", translated
+            static unsigned int id = 0;
+            Scene::ConeCollisionObjectSceneNode *cone = new Scene::ConeCollisionObjectSceneNode(QCoreApplication::translate("XMLConfigParser", "Cone Collision Object %1").arg(id));
+
+            while (!(xml.isEndElement() && xml.name() == "cone")) {
+                xml.readNext();
+                if (!xml.isStartElement()) continue; //Ignore all end elements
+
+                qDebug().nospace() << "XML config parsing [Line: " << xml.lineNumber() << ", Col: " << xml.columnNumber() << "]: " <<
+                    "cone > " << xml.name();
+
+                if (xml.name() == "name") {
+                    cone->setName(xml.readElementText());
+                } else if (xml.name() == "position") {
+                    cone->setPosition(SerializeUtils::getVec3Attributes(xml.attributes()));
+                } else if (xml.name() == "rotation") {
+                    cone->setRotation(MathUtils::degreesToRadians(SerializeUtils::getVec3Attributes(xml.attributes())));
+                } else if (xml.name() == "radius") {
+                    cone->setRadius(xml.readElementText().toFloat());
+                } else if (xml.name() == "height") {
+                    cone->setHeight(xml.readElementText().toFloat());
+                } else {
+                    qWarning().noquote() << "Unrecognised tag: cone >" << xml.name();
+                }
+            }
+
+            id++;
+
+            return cone;
+        }
+
+        Scene::SphereCollisionObjectSceneNode* XMLConfigParser::parseSphereCollisionObject(QXmlStreamReader &xml) {
+            //Default name is "Sphere Collision Object x", translated
+            static unsigned int id = 0;
+            Scene::SphereCollisionObjectSceneNode *sphere = new Scene::SphereCollisionObjectSceneNode(QCoreApplication::translate("XMLConfigParser", "Sphere Collision Object %1").arg(id));
+
+            while (!(xml.isEndElement() && xml.name() == "sphere")) {
+                xml.readNext();
+                if (!xml.isStartElement()) continue; //Ignore all end elements
+
+                qDebug().nospace() << "XML config parsing [Line: " << xml.lineNumber() << ", Col: " << xml.columnNumber() << "]: " <<
+                    "sphere > " << xml.name();
+
+                if (xml.name() == "name") {
+                    sphere->setName(xml.readElementText());
+                } else if (xml.name() == "position") {
+                    sphere->setPosition(SerializeUtils::getVec3Attributes(xml.attributes()));
+                } else if (xml.name() == "radius") {
+                    sphere->setRadius(xml.readElementText().toFloat());
+                } else {
+                    qWarning().noquote() << "Unrecognised tag: sphere >" << xml.name();
+                }
+            }
+
+            id++;
+
+            return sphere;
+        }
+
+        Scene::CylinderCollisionObjectSceneNode* XMLConfigParser::parseCylinderCollisionObject(QXmlStreamReader &xml) {
+            //Default name is "Cylinder Collision Object x", translated
+            static unsigned int id = 0;
+            Scene::CylinderCollisionObjectSceneNode *cylinder = new Scene::CylinderCollisionObjectSceneNode(QCoreApplication::translate("XMLConfigParser", "Cylinder Collision Object %1").arg(id));
+
+            while (!(xml.isEndElement() && xml.name() == "cylinder")) {
+                xml.readNext();
+                if (!xml.isStartElement()) continue; //Ignore all end elements
+
+                qDebug().nospace() << "XML config parsing [Line: " << xml.lineNumber() << ", Col: " << xml.columnNumber() << "]: " <<
+                    "cylinder > " << xml.name();
+
+                if (xml.name() == "name") {
+                    cylinder->setName(xml.readElementText());
+                } else if (xml.name() == "position") {
+                    cylinder->setPosition(SerializeUtils::getVec3Attributes(xml.attributes()));
+                } else if (xml.name() == "rotation") {
+                    cylinder->setRotation(MathUtils::degreesToRadians(SerializeUtils::getVec3Attributes(xml.attributes())));
+                } else if (xml.name() == "radius") {
+                    cylinder->setRadius(xml.readElementText().toFloat());
+                } else if (xml.name() == "height") {
+                    cylinder->setHeight(xml.readElementText().toFloat());
+                } else {
+                    qWarning().noquote() << "Unrecognised tag: cylinder >" << xml.name();
+                }
+            }
+
+            id++;
+
+            return cylinder;
         }
 
         Scene::FalloutVolumeSceneNode* XMLConfigParser::parseFalloutVolume(QXmlStreamReader &xml) {

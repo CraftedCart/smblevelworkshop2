@@ -66,6 +66,9 @@ namespace WS2Lz {
         forEachGroupChildType(const Scene::BumperSceneNode*, node) writeBumper(dev, node); //Bumpers
         forEachGroupChildType(const Scene::JamabarSceneNode*, node) writeJamabar(dev, node); //Jamabars
         forEachGroupChildType(const Scene::BananaSceneNode*, node) writeBanana(dev, node); //Bananas
+        forEachGroupChildType(const Scene::ConeCollisionObjectSceneNode*, node) writeConeCollisionObject(dev, node); //ConeCollisionObjects
+        forEachGroupChildType(const Scene::SphereCollisionObjectSceneNode*, node) writeSphereCollisionObject(dev, node); //SphereCollisionObjects
+        forEachGroupChildType(const Scene::CylinderCollisionObjectSceneNode*, node) writeCylinderCollisionObject(dev, node); //CylinderCollisionObjects
         forEachGroupChildType(const Scene::SwitchSceneNode*, node) writeSwitch(dev, node); //Switches
         forEachGroupChildType(const Scene::WormholeSceneNode*, node) writeWormhole(dev, node); //Wormholes
         forEachGroup(group) writeLevelModelPointerAList(dev, group); //Level model pointers type A
@@ -312,6 +315,51 @@ namespace WS2Lz {
             bananaCountMap[group] = bananaCount;
         }
 
+        //Iterate over all GroupSceneNodes/collision headers, and count coneCollisionObjects to add to nextOffset
+        //Basically the exact same as before with goals
+        forEachGroup(group) {
+            coneCollisionObjectOffsetMap.insert(nextOffset, group);
+            quint32 coneCollisionObjectCount = 0; //Number of coneCollisionObjects in this collision header
+
+            forEachChildType(group, Scene::ConeCollisionObjectSceneNode*, node) {
+                nextOffset += CONE_COLLISION_LENGTH;
+                coneCollisionObjectCount++;
+            }
+
+            //Store coneCollisionObject count in the map
+            coneCollisionObjectCountMap[group] = coneCollisionObjectCount;
+        }
+
+        //Iterate over all GroupSceneNodes/collision headers, and count sphereCollisionObjects to add to nextOffset
+        //Basically the exact same as before with goals
+        forEachGroup(group) {
+            sphereCollisionObjectOffsetMap.insert(nextOffset, group);
+            quint32 sphereCollisionObjectCount = 0; //Number of sphereCollisionObjects in this collision header
+
+            forEachChildType(group, Scene::SphereCollisionObjectSceneNode*, node) {
+                nextOffset += SPHERE_COLLISION_LENGTH;
+                sphereCollisionObjectCount++;
+            }
+
+            //Store sphereCollisionObject count in the map
+            sphereCollisionObjectCountMap[group] = sphereCollisionObjectCount;
+        }
+
+        //Iterate over all GroupSceneNodes/collision headers, and count cylinderCollisionObjects to add to nextOffset
+        //Basically the exact same as before with goals
+        forEachGroup(group) {
+            cylinderCollisionObjectOffsetMap.insert(nextOffset, group);
+            quint32 cylinderCollisionObjectCount = 0; //Number of cylinderCollisionObjects in this collision header
+
+            forEachChildType(group, Scene::CylinderCollisionObjectSceneNode*, node) {
+                nextOffset += CYLINDER_COLLISION_LENGTH;
+                cylinderCollisionObjectCount++;
+            }
+
+            //Store cylinderCollisionObject count in the map
+            cylinderCollisionObjectCountMap[group] = cylinderCollisionObjectCount;
+        }
+
         //Iterate over all GroupSceneNodes/collision headers, and count switches to add to nextOffset
         //Basically the exact same as before with goals
         forEachGroup(group) {
@@ -498,12 +546,6 @@ namespace WS2Lz {
         }
 
         //Just set all this guff to null for now in case it isn't
-        coneCollisionObjectCount = 0;
-        coneCollisionObjectListOffset = 0;
-        sphereCollisionObjectCount = 0;
-        sphereCollisionObjectListOffset = 0;
-        cylinderCollisionObjectCount = 0;
-        cylinderCollisionObjectListOffset = 0;
         //TODO: Mystery 8
         //TODO: Reflective level model
         //TODO: Level model instances
@@ -540,6 +582,9 @@ namespace WS2Lz {
         quint32 bumperCount = addAllCounts(bumperCountMap);
         quint32 jamabarCount = addAllCounts(jamabarCountMap);
         quint32 bananaCount = addAllCounts(bananaCountMap);
+        quint32 coneCollisionObjectCount = addAllCounts(coneCollisionObjectCountMap);
+        quint32 sphereCollisionObjectCount = addAllCounts(sphereCollisionObjectCountMap);
+        quint32 cylinderCollisionObjectCount = addAllCounts(cylinderCollisionObjectCountMap);
         quint32 wormholeCount = addAllCounts(runtimeReflectiveModelCountMap);
         quint32 falloutVolumeCount = addAllCounts(falloutVolumeCountMap);
 
@@ -558,11 +603,11 @@ namespace WS2Lz {
         dev << bananaCount;
         dev << (quint32) (bananaCount > 0 ? bananaOffsetMap.firstKey() : 0); //Banana list offset
         dev << coneCollisionObjectCount;
-        dev << coneCollisionObjectListOffset;
+        dev << (quint32) (coneCollisionObjectCount > 0 ? coneCollisionObjectOffsetMap.firstKey() : 0); //Banana list offset
         dev << sphereCollisionObjectCount;
-        dev << sphereCollisionObjectListOffset;
+        dev << (quint32) (sphereCollisionObjectCount > 0 ? sphereCollisionObjectOffsetMap.firstKey() : 0); //Banana list offset
         dev << cylinderCollisionObjectCount;
-        dev << cylinderCollisionObjectListOffset;
+        dev << (quint32) (cylinderCollisionObjectCount > 0 ? cylinderCollisionObjectOffsetMap.firstKey() : 0); //Banana list offset
         dev << falloutVolumeCount;
         dev << (quint32) (falloutVolumeCount > 0 ? falloutVolumeOffsetMap.firstKey() : 0); //Fallout volume list offset
         dev << (quint32) bgOffsetMap.size();
@@ -645,9 +690,12 @@ namespace WS2Lz {
         dev << jamabarOffsetMap.key(node);
         dev << bananaCountMap.value(node);
         dev << bananaOffsetMap.key(node);
-        writeNull(dev, 8); //TODO: Cone collision objects
-        writeNull(dev, 8); //TODO: Sphere collision objects
-        writeNull(dev, 8); //TODO: Cylinder collision objects
+        dev << coneCollisionObjectCountMap.value(node);
+        dev << coneCollisionObjectOffsetMap.key(node);
+        dev << sphereCollisionObjectCountMap.value(node);
+        dev << sphereCollisionObjectOffsetMap.key(node);
+        dev << cylinderCollisionObjectCountMap.value(node);
+        dev << cylinderCollisionObjectOffsetMap.key(node);
         dev << falloutVolumeCountMap.value(node);
         dev << falloutVolumeOffsetMap.key(node);
         dev << runtimeReflectiveModelCountMap.value(node);
@@ -757,6 +805,29 @@ namespace WS2Lz {
     void SMB2LzExporter::writeFalloutVolume(QDataStream &dev, const Scene::FalloutVolumeSceneNode *node) {
         dev << node->getPosition();
         dev << node->getScale();
+        dev << convertRotation(node->getRotation());
+        writeNull(dev, 2);
+    }
+
+    void SMB2LzExporter::writeConeCollisionObject(QDataStream &dev, const Scene::ConeCollisionObjectSceneNode *node) {
+        dev << node->getPosition();
+        dev << convertRotation(node->getRotation());
+        writeNull(dev, 2);
+        dev << node->getRadius();
+        dev << node->getHeight();
+        dev << node->getRadius();
+    }
+
+    void SMB2LzExporter::writeSphereCollisionObject(QDataStream &dev, const Scene::SphereCollisionObjectSceneNode *node) {
+        dev << node->getPosition();
+        dev << node->getRadius();
+        writeNull(dev, 4);
+    }
+
+    void SMB2LzExporter::writeCylinderCollisionObject(QDataStream &dev, const Scene::CylinderCollisionObjectSceneNode *node) {
+        dev << node->getPosition();
+        dev << node->getRadius();
+        dev << node->getHeight();
         dev << convertRotation(node->getRotation());
         writeNull(dev, 2);
     }
