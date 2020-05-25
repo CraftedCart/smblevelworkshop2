@@ -165,6 +165,8 @@ namespace WS2Common {
                     bg->setRotation(MathUtils::degreesToRadians(SerializeUtils::getVec3Attributes(xml.attributes())));
                 } else if (xml.name() == "scale") {
                     bg->setScale(SerializeUtils::getVec3Attributes(xml.attributes()));
+                } else if (xml.name() == "meshType") {
+                    bg->setMeshType(xml.readElementText().toUInt());
                 } else if (xml.name() == "animKeyframes") { //TODO
                     qWarning() << "backgroundModel > animKeyframes not yet implemented!";
                     xml.skipCurrentElement();
@@ -204,6 +206,8 @@ namespace WS2Common {
                     fg->setRotation(MathUtils::degreesToRadians(SerializeUtils::getVec3Attributes(xml.attributes())));
                 } else if (xml.name() == "scale") {
                     fg->setScale(SerializeUtils::getVec3Attributes(xml.attributes()));
+                } else if (xml.name() == "meshType") {
+                    fg->setMeshType(xml.readElementText().toUInt());
                 } else if (xml.name() == "animKeyframes") { //TODO
                     qWarning() << "foregroundModel > animKeyframes not yet implemented!";
                     xml.skipCurrentElement();

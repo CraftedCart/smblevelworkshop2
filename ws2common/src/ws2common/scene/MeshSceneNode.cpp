@@ -28,6 +28,14 @@ namespace WS2Common {
             return bitflag;
         }
 
+        void MeshSceneNode::setMeshType(unsigned int meshType) {
+            this->meshType = meshType;
+        }
+
+        unsigned int MeshSceneNode::getMeshType() const {
+            return meshType;
+        }
+
         const QString MeshSceneNode::getSerializableName() const {
             return "meshSceneNode";
         }

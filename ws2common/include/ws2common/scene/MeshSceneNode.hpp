@@ -29,6 +29,13 @@ namespace WS2Common {
                  */
                 unsigned int bitflag = 0;
 
+                /**
+                 * @brief Mesh 'type' for background and foreground objects. We don't actually know
+                 * what the differences between these types are yet, though...
+                 */
+
+                unsigned int meshType = 0x1f;
+
             protected:
                 virtual void serializeNodeDataXml(QXmlStreamWriter &s) const;
                 virtual const QString getSerializableName() const;
@@ -67,6 +74,8 @@ namespace WS2Common {
 
                 void setBitflag(unsigned int bitflag);
                 unsigned int getBitflag() const;
+                void setMeshType(unsigned int meshType);
+                unsigned int getMeshType() const;
         };
     }
 }

@@ -1046,7 +1046,7 @@ namespace WS2Lz {
     }
 
     void SMB2LzExporter::writeBackgroundModel(QDataStream &dev, const Scene::MeshSceneNode *node) {
-        dev << (quint32) 0x0000001F;
+        dev << (quint32) node->getMeshType();
         dev << bgNameOffsetMap.key(node->getMeshName());
         writeNull(dev, 4);
         dev << node->getPosition();
@@ -1057,7 +1057,7 @@ namespace WS2Lz {
     }
 
     void SMB2LzExporter::writeForegroundModel(QDataStream &dev, const Scene::MeshSceneNode *node) {
-        dev << (quint32) 0x0000001F;
+        dev << (quint32) node->getMeshType();
         dev << fgNameOffsetMap.key(node->getMeshName());
         writeNull(dev, 4);
         dev << node->getPosition();
