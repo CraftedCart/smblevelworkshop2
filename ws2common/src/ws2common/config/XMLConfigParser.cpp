@@ -291,6 +291,8 @@ namespace WS2Common {
                     goal->setRotation(MathUtils::degreesToRadians(SerializeUtils::getVec3Attributes(xml.attributes())));
                 } else if (xml.name() == "type") {
                     goal->setType(GoalType::fromString(xml.readElementText()));
+                } else if (xml.name() == "castShadow") {
+                    goal->setCastShadow((bool)xml.readElementText().toUInt());    
                 } else {
                     qWarning().noquote() << "Unrecognised tag: goal >" << xml.name();
                 }

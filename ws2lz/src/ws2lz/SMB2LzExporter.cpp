@@ -764,7 +764,8 @@ namespace WS2Lz {
     void SMB2LzExporter::writeGoal(QDataStream &dev, const Scene::GoalSceneNode *node) {
         dev << node->getPosition();
         dev << convertRotation(node->getRotation());
-        dev << (quint16) node->getType();
+        dev << (quint8) node->getType();
+        dev << (quint8) node->getCastShadow();
     }
 
     void SMB2LzExporter::writeBumper(QDataStream &dev, const Scene::BumperSceneNode *node) {

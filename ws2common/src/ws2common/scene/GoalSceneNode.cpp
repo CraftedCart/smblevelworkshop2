@@ -16,6 +16,14 @@ namespace WS2Common {
             return "goalSceneNode";
         }
 
+        bool GoalSceneNode::getCastShadow() const {
+            return castShadow;
+        }
+
+        void GoalSceneNode::setCastShadow(bool castShadow) {
+            this->castShadow = castShadow;
+        }
+
         void GoalSceneNode::serializeNodeDataXml(QXmlStreamWriter &s) const {
             SceneNode::serializeNodeDataXml(s);
 
