@@ -969,7 +969,7 @@ namespace WS2Lz {
         quint32 nextOffset = levelModelOffsetMap.key(node);
 
         forEachChildType(node, Scene::MeshSceneNode*, child) {
-            writeNull(dev, 4);
+            dev << (quint32) (child->getBitflag());
             dev << (quint32) 0x00000001;
             dev << nextOffset;
 

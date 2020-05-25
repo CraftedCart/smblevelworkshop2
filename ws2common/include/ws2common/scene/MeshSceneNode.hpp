@@ -23,6 +23,12 @@ namespace WS2Common {
                  */
                 bool runtimeReflective = false;
 
+                /**
+                 * @brief Bitflag for effects such as shadow casting/receiving and transparency
+                 * TODO: Make this an actual bitflag instead of a uint handled by Blend2SMB or whatever
+                 */
+                unsigned int bitflag = 0;
+
             protected:
                 virtual void serializeNodeDataXml(QXmlStreamWriter &s) const;
                 virtual const QString getSerializableName() const;
@@ -58,6 +64,9 @@ namespace WS2Common {
                  * @return Whether this mesh is be reflective or not (Using runtime generated reflections)
                  */
                 bool isRuntimeReflective() const;
+
+                void setBitflag(unsigned int bitflag);
+                unsigned int getBitflag() const;
         };
     }
 }

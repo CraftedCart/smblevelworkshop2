@@ -292,7 +292,7 @@ namespace WS2Common {
                 } else if (xml.name() == "type") {
                     goal->setType(GoalType::fromString(xml.readElementText()));
                 } else if (xml.name() == "castShadow") {
-                    goal->setCastShadow((bool)xml.readElementText().toUInt());    
+                    goal->setCastShadow(xml.readElementText() == "true");    
                 } else {
                     qWarning().noquote() << "Unrecognised tag: goal >" << xml.name();
                 }
@@ -619,6 +619,8 @@ namespace WS2Common {
                     mesh->setRuntimeReflective(xml.readElementText() == "true");
                 } else if (xml.name() == "collision") {
                     for (Scene::CollisionSceneNode *collision : parseCollision(xml)) mesh->addChild(collision);
+                } else if (xml.name() == "bitflag") {
+                    mesh->setBitflag(xml.readElementText().toUInt()); 
                 } else {
                     qWarning().noquote() << "Unrecognised tag: stageModel >" << xml.name();
                 }
