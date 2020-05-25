@@ -35,6 +35,8 @@ namespace WS2Common {
                             stage->getRootNode()->addChild(parseStart(xml));
                         } else if (xml.name() == "backgroundModel") {
                             stage->getFirstBackgroundGroup(true)->addChild(parseBackgroundModel(xml));
+                        } else if (xml.name() == "foregroundModel") {
+                            stage->getFirstForegroundGroup(true)->addChild(parseForegroundModel(xml));
                         } else if (xml.name() == "falloutPlane") {
                             stage->setFalloutY(SerializeUtils::getAttribute(xml.attributes(), "y").toFloat());
                         } else if (xml.name() == "fog") {
@@ -178,6 +180,45 @@ namespace WS2Common {
             }
 
             return bg;
+        }
+
+        Scene::MeshSceneNode* XMLConfigParser::parseForegroundModel(QXmlStreamReader &xml) {
+            //A valid XML config should set the name of the fg model - It should never be UNDEFINED!
+            Scene::MeshSceneNode *fg = new Scene::MeshSceneNode("UNDEFINED!");
+
+            while (!(xml.isEndElement() && xml.name() == "foregroundModel")) {
+                xml.readNext();
+                if (!xml.isStartElement()) continue; //Ignore all end elements
+
+                qDebug().nospace() << "XML config parsing [Line: " << xml.lineNumber() << ", Col: " << xml.columnNumber() << "]: " <<
+                    "foregroundModel > " << xml.name();
+
+                if (xml.name() == "name") {
+                    QString name = xml.readElementText();
+
+                    fg->setName(name);
+                    fg->setMeshName(name);
+                } else if (xml.name() == "position") {
+                    fg->setPosition(SerializeUtils::getVec3Attributes(xml.attributes()));
+                } else if (xml.name() == "rotation") {
+                    fg->setRotation(MathUtils::degreesToRadians(SerializeUtils::getVec3Attributes(xml.attributes())));
+                } else if (xml.name() == "scale") {
+                    fg->setScale(SerializeUtils::getVec3Attributes(xml.attributes()));
+                } else if (xml.name() == "animKeyframes") { //TODO
+                    qWarning() << "foregroundModel > animKeyframes not yet implemented!";
+                    xml.skipCurrentElement();
+                } else if (xml.name() == "animLoopTime") { //TODO
+                    qWarning() << "foregroundModel > animLoopTime not yet implemented!";
+                    xml.skipCurrentElement();
+                } else if (xml.name() == "textureScroll") { //TODO
+                    qWarning() << "foregroundModel > textureScroll not yet implemented!";
+                    xml.skipCurrentElement();
+                } else {
+                    qWarning().noquote() << "Unrecognised tag: foregroundModel >" << xml.name();
+                }
+            }
+
+            return fg;
         }
 
         Scene::GroupSceneNode* XMLConfigParser::parseItemGroup(QXmlStreamReader &xml) {

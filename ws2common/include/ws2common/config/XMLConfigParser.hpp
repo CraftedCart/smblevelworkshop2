@@ -82,6 +82,17 @@ namespace WS2Common {
                 Scene::MeshSceneNode* parseBackgroundModel(QXmlStreamReader &xml);
 
                 /**
+                 * @brief Parses a background model in an XML config
+                 *
+                 * Make sure the XML reader is within the backgroundModel element before calling this
+                 *
+                 * @param xml The QXmlStreamReader
+                 *
+                 * @return The background model parsed from the config
+                 */
+                Scene::MeshSceneNode* parseForegroundModel(QXmlStreamReader &xml);
+
+                /**
                  * @brief Parses an item group in an XML config
                  *
                  * Make sure the XML reader is within the itemGroup element before calling this

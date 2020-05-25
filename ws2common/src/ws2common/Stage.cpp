@@ -6,6 +6,7 @@ namespace WS2Common {
     Stage::Stage() {
         rootNode = new Scene::SceneNode("root");
         rootNode->addChild(new Scene::BackgroundGroupSceneNode(QCoreApplication::translate("Stage", "Background Group")));
+        rootNode->addChild(new Scene::ForegroundGroupSceneNode(QCoreApplication::translate("Stage", "Foreground Group")));
     }
 
     Stage::~Stage() {
@@ -53,6 +54,22 @@ namespace WS2Common {
         //No background nodes found
         if (createIfNonExistent) {
             Scene::BackgroundGroupSceneNode *node = new Scene::BackgroundGroupSceneNode(QCoreApplication::translate("Stage", "Background Group"));
+            rootNode->addChild(node);
+            return node;
+        } else {
+            return nullptr;
+        }
+    }
+
+    Scene::ForegroundGroupSceneNode* Stage::getFirstForegroundGroup(bool createIfNonExistent) {
+        foreach(Scene::SceneNode *node, rootNode->getChildren()) {
+            //TODO: Replace this with some dynamic cast thingy
+            if (Scene::ForegroundGroupSceneNode *fg = dynamic_cast<Scene::ForegroundGroupSceneNode*>(node)) return fg;
+        }
+
+        //No foreground nodes found
+        if (createIfNonExistent) {
+            Scene::ForegroundGroupSceneNode *node = new Scene::ForegroundGroupSceneNode(QCoreApplication::translate("Stage", "Foreground Group"));
             rootNode->addChild(node);
             return node;
         } else {

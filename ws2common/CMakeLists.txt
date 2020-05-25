@@ -52,6 +52,7 @@ set(SOURCE_FILES
     ./src/ws2common/scene/StartSceneNode.cpp
     ./src/ws2common/scene/GroupSceneNode.cpp
     ./src/ws2common/scene/BackgroundGroupSceneNode.cpp
+    ./src/ws2common/scene/ForegroundGroupSceneNode.cpp
     ./src/ws2common/scene/MeshSceneNode.cpp
     ./src/ws2common/scene/GoalSceneNode.cpp
     ./src/ws2common/scene/BumperSceneNode.cpp
@@ -101,6 +102,7 @@ set(HEADER_FILES
     ./include/ws2common/scene/StartSceneNode.hpp
     ./include/ws2common/scene/GroupSceneNode.hpp
     ./include/ws2common/scene/BackgroundGroupSceneNode.hpp
+    ./include/ws2common/scene/ForegroundGroupSceneNode.hpp
     ./include/ws2common/scene/SceneNode.hpp
     ./include/ws2common/scene/MeshSceneNode.hpp
     ./include/ws2common/scene/GoalSceneNode.hpp

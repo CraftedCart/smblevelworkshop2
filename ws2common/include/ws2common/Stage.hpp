@@ -9,6 +9,7 @@
 #include "ws2common_export.h"
 #include "ws2common/scene/SceneNode.hpp"
 #include "ws2common/scene/BackgroundGroupSceneNode.hpp"
+#include "ws2common/scene/ForegroundGroupSceneNode.hpp"
 #include <glm/glm.hpp>
 #include <QVector>
 #include <QUrl>
@@ -104,6 +105,7 @@ namespace WS2Common {
              * @return The first background group scene node, or nullptr if there are none and createIfNonExistent is false
              */
             Scene::BackgroundGroupSceneNode* getFirstBackgroundGroup(bool createIfNonExistent = false);
+            Scene::ForegroundGroupSceneNode* getFirstForegroundGroup(bool createIfNonExistent = false);
     };
 }
 

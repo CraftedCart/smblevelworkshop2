@@ -22,6 +22,11 @@
 #define forEachBg(mesh) foreach(const Scene::MeshSceneNode* mesh, bgOffsetMap)
 
 /**
+ * @brief Iterates over all foreground - The value of group will be the GroupSceneNode at the current iteration
+ */
+#define forEachFg(mesh) foreach(const Scene::MeshSceneNode* mesh, fgOffsetMap)
+
+/**
  * @brief Iterates over all of a SceneNode's children, and runs the following code if the child can be dynamically
  *        casted to type
  */
@@ -77,6 +82,8 @@ namespace WS2Lz {
         forEachGroup(group) writeLevelModelNameList(dev, group); //Level model names
         forEachBg(mesh) writeBackgroundModel(dev, mesh); //Background models
         forEachBg(mesh) writeBackgroundName(dev, mesh); //Background model names
+        forEachFg(mesh) writeForegroundModel(dev, mesh); // Foreground models
+        forEachFg(mesh) writeForegroundName(dev, mesh); // Foreground model names
         forEachGroup(group) writeAnimationHeader(dev, group->getTransformAnimation());
         forEachGroup(group) writeTransformAnimation(dev, group->getTransformAnimation());
         forEachGroup(group) writeRuntimeReflectiveModelList(dev, group); //Runtime reflective models
@@ -467,6 +474,33 @@ namespace WS2Lz {
             nextOffset += roundUpNearest4(node->getMeshName().size() + 1);
         }
 
+        //Find all foreground models
+        foreach(Scene::SceneNode *node, stage.getRootNode()->getChildren()) {
+            if (dynamic_cast<Scene::ForegroundGroupSceneNode*>(node)) {
+                Scene::ForegroundGroupSceneNode *group = static_cast<Scene::ForegroundGroupSceneNode*>(node);
+
+                //Found one, now iterate over all children
+                foreach(Scene::SceneNode *fg, group->getChildren()) {
+                    if (Scene::MeshSceneNode *mesh = dynamic_cast<Scene::MeshSceneNode*>(fg)) {
+                        //Found a foreground mesh
+                        //Add it to a map
+                        fgOffsetMap.insert(nextOffset, mesh);
+                        nextOffset += BACKGROUND_MODEL_LENGTH;
+                    } else {
+                        qWarning() << "There's a non-MeshSceneNode within a foreground group. This should never happen. Ignoring for now.";
+                    }
+                }
+            }
+        }
+
+        //Iterate over all foreground models, and add the model name + null terminator padded to 4 bytes to nextOffset
+        forEachFg(node) {
+            fgNameOffsetMap.insert(nextOffset, node->getMeshName());
+
+            //+ 1 because size() does not include a null terminator
+            nextOffset += roundUpNearest4(node->getMeshName().size() + 1);
+        }
+
         //Animation headers
         forEachGroup(group) {
             if (group->getTransformAnimation() != nullptr) {
@@ -612,7 +646,8 @@ namespace WS2Lz {
         dev << (quint32) (falloutVolumeCount > 0 ? falloutVolumeOffsetMap.firstKey() : 0); //Fallout volume list offset
         dev << (quint32) bgOffsetMap.size();
         dev << (quint32) (bgOffsetMap.size() > 0 ? bgOffsetMap.firstKey() : 0); //Background list offset
-        writeNull(dev, 8); //TODO: Mystery 8
+        dev << (quint32) fgOffsetMap.size();
+        dev << (quint32) (fgOffsetMap.size() > 0 ? fgOffsetMap.firstKey() : 0); //Foreground list offset
         writeNull(dev, 4);
         dev << (quint32) 0x00000001;
         dev << wormholeCount;
@@ -1021,7 +1056,27 @@ namespace WS2Lz {
         writeNull(dev, 12); //TODO: Add background animation
     }
 
+    void SMB2LzExporter::writeForegroundModel(QDataStream &dev, const Scene::MeshSceneNode *node) {
+        dev << (quint32) 0x0000001F;
+        dev << fgNameOffsetMap.key(node->getMeshName());
+        writeNull(dev, 4);
+        dev << node->getPosition();
+        dev << convertRotation(node->getRotation());
+        writeNull(dev, 2);
+        dev << node->getScale();
+        writeNull(dev, 12); //TODO: Add foreground animation
+    }
+
     void SMB2LzExporter::writeBackgroundName(QDataStream &dev, const Scene::MeshSceneNode *node) {
+        //Write the object name
+        dev.writeRawData(node->getMeshName().toLatin1(), node->getMeshName().size());
+
+        writeNull(dev, 1); //Add a null terminator
+        //Pad to 4 bytes
+        writeNull(dev, roundUpNearest4(node->getMeshName().size() + 1) - (node->getMeshName().size() + 1));
+    }
+
+    void SMB2LzExporter::writeForegroundName(QDataStream &dev, const Scene::MeshSceneNode *node) {
         //Write the object name
         dev.writeRawData(node->getMeshName().toLatin1(), node->getMeshName().size());
 

@@ -134,7 +134,8 @@ namespace WS2Lz {
             QMultiMap<quint32, const WS2Common::Animation::TransformAnimation*> animRotZKeyframesOffsetMap;
             QMultiMap<quint32, const WS2Common::Scene::MeshSceneNode*> bgOffsetMap;
             QMultiMap<quint32, QString> bgNameOffsetMap;
-            //TODO: Mystery 8
+            QMultiMap<quint32, const WS2Common::Scene::MeshSceneNode*> fgOffsetMap;
+            QMultiMap<quint32, QString> fgNameOffsetMap;
             //TODO: Reflective level models
             //TODO: Level model instances
             QMultiMap<quint32, const WS2Common::Scene::GroupSceneNode*> levelModelPointerAOffsetMap;
@@ -227,6 +228,8 @@ namespace WS2Lz {
             void writeLevelModelNameList(QDataStream &dev, const WS2Common::Scene::GroupSceneNode *node);
             void writeBackgroundModel(QDataStream &dev, const WS2Common::Scene::MeshSceneNode *node);
             void writeBackgroundName(QDataStream &dev, const WS2Common::Scene::MeshSceneNode *node);
+            void writeForegroundModel(QDataStream &dev, const WS2Common::Scene::MeshSceneNode *node);
+            void writeForegroundName(QDataStream &dev, const WS2Common::Scene::MeshSceneNode *node);
             void writeAnimationHeader(QDataStream &dev, const WS2Common::Animation::TransformAnimation *anim);
             void writeTransformAnimation(QDataStream &dev, const WS2Common::Animation::TransformAnimation *anim);
             void writeRuntimeReflectiveModelList(QDataStream &dev, const WS2Common::Scene::GroupSceneNode *node);
