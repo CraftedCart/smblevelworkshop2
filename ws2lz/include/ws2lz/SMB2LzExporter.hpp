@@ -83,6 +83,7 @@ namespace WS2Lz {
             const unsigned int BACKGROUND_MODEL_LENGTH = 56;
             const unsigned int ANIMATION_HEADER_LENGTH = 64;
             const unsigned int ANIMATION_KEYFRAME_LENGTH = 20;
+            const unsigned int BACKGROUND_ANIMATION_HEADER_LENGTH = 96;
             const unsigned int RUNTIME_REFLECTIVE_MODEL_LENGTH = 12;
             const unsigned int FALLOUT_VOLUME_LENGTH = 32;
 
@@ -126,12 +127,17 @@ namespace WS2Lz {
             QMultiMap<quint32, const WS2Common::Scene::GroupSceneNode*> falloutVolumeOffsetMap;
             QMap<const WS2Common::Scene::GroupSceneNode*, quint32> falloutVolumeCountMap;
             QMultiMap<quint32, const WS2Common::Scene::GroupSceneNode*> groupAnimHeaderOffsetMap;
+            QMultiMap<quint32, const WS2Common::Scene::MeshSceneNode*> bgAnimHeaderOffsetMap;
+            QMultiMap<quint32, const WS2Common::Scene::MeshSceneNode*> fgAnimHeaderOffsetMap;
             QMultiMap<quint32, const WS2Common::Animation::TransformAnimation*> animPosXKeyframesOffsetMap;
             QMultiMap<quint32, const WS2Common::Animation::TransformAnimation*> animPosYKeyframesOffsetMap;
             QMultiMap<quint32, const WS2Common::Animation::TransformAnimation*> animPosZKeyframesOffsetMap;
             QMultiMap<quint32, const WS2Common::Animation::TransformAnimation*> animRotXKeyframesOffsetMap;
             QMultiMap<quint32, const WS2Common::Animation::TransformAnimation*> animRotYKeyframesOffsetMap;
             QMultiMap<quint32, const WS2Common::Animation::TransformAnimation*> animRotZKeyframesOffsetMap;
+            QMultiMap<quint32, const WS2Common::Animation::TransformAnimation*> animScaleXKeyframesOffsetMap;
+            QMultiMap<quint32, const WS2Common::Animation::TransformAnimation*> animScaleYKeyframesOffsetMap;
+            QMultiMap<quint32, const WS2Common::Animation::TransformAnimation*> animScaleZKeyframesOffsetMap;
             QMultiMap<quint32, const WS2Common::Scene::MeshSceneNode*> bgOffsetMap;
             QMultiMap<quint32, QString> bgNameOffsetMap;
             QMultiMap<quint32, const WS2Common::Scene::MeshSceneNode*> fgOffsetMap;
@@ -230,8 +236,9 @@ namespace WS2Lz {
             void writeBackgroundName(QDataStream &dev, const WS2Common::Scene::MeshSceneNode *node);
             void writeForegroundModel(QDataStream &dev, const WS2Common::Scene::MeshSceneNode *node);
             void writeForegroundName(QDataStream &dev, const WS2Common::Scene::MeshSceneNode *node);
+            void writeBgFgAnimationHeader(QDataStream &dev, const WS2Common::Animation::TransformAnimation *node);
             void writeAnimationHeader(QDataStream &dev, const WS2Common::Animation::TransformAnimation *anim);
-            void writeTransformAnimation(QDataStream &dev, const WS2Common::Animation::TransformAnimation *anim);
+            void writeTransformAnimation(QDataStream &dev, const WS2Common::Animation::TransformAnimation *anim, bool scale);
             void writeRuntimeReflectiveModelList(QDataStream &dev, const WS2Common::Scene::GroupSceneNode *node);
             void writeKeyframeF(QDataStream &dev, const WS2Common::Animation::KeyframeF *k);
 

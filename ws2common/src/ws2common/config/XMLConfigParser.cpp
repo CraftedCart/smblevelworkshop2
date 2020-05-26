@@ -146,6 +146,8 @@ namespace WS2Common {
         Scene::MeshSceneNode* XMLConfigParser::parseBackgroundModel(QXmlStreamReader &xml) {
             //A valid XML config should set the name of the bg model - It should never be UNDEFINED!
             Scene::MeshSceneNode *bg = new Scene::MeshSceneNode("UNDEFINED!");
+            Animation::TransformAnimation *anim = nullptr;
+            float loopTime = 0.0f;
 
             while (!(xml.isEndElement() && xml.name() == "backgroundModel")) {
                 xml.readNext();
@@ -167,26 +169,32 @@ namespace WS2Common {
                     bg->setScale(SerializeUtils::getVec3Attributes(xml.attributes()));
                 } else if (xml.name() == "meshType") {
                     bg->setMeshType(xml.readElementText().toUInt());
-                } else if (xml.name() == "animKeyframes") { //TODO
-                    qWarning() << "backgroundModel > animKeyframes not yet implemented!";
-                    xml.skipCurrentElement();
-                } else if (xml.name() == "animLoopTime") { //TODO
-                    qWarning() << "backgroundModel > animLoopTime not yet implemented!";
-                    xml.skipCurrentElement();
+                } else if (xml.name() == "animKeyframes") { 
+                    Animation::TransformAnimation *transformAnim = parseTransformAnimation(xml, true);
+                    bg->setTransformAnimation(transformAnim);
+                    anim = transformAnim; //For later linking (So that the loop type is set in the transformAnim)
+                } else if (xml.name() == "animLoopTime") { 
+                    loopTime = (xml.readElementText().toFloat());
                 } else if (xml.name() == "textureScroll") { //TODO
                     qWarning() << "backgroundModel > textureScroll not yet implemented!";
                     xml.skipCurrentElement();
                 } else {
                     qWarning().noquote() << "Unrecognised tag: backgroundModel >" << xml.name();
                 }
+
             }
 
+            if (anim != nullptr) {
+                anim->setLoopTime(loopTime);
+            }
             return bg;
         }
 
         Scene::MeshSceneNode* XMLConfigParser::parseForegroundModel(QXmlStreamReader &xml) {
             //A valid XML config should set the name of the fg model - It should never be UNDEFINED!
             Scene::MeshSceneNode *fg = new Scene::MeshSceneNode("UNDEFINED!");
+            Animation::TransformAnimation *anim = nullptr;
+            float loopTime = 0.0f;
 
             while (!(xml.isEndElement() && xml.name() == "foregroundModel")) {
                 xml.readNext();
@@ -209,17 +217,22 @@ namespace WS2Common {
                 } else if (xml.name() == "meshType") {
                     fg->setMeshType(xml.readElementText().toUInt());
                 } else if (xml.name() == "animKeyframes") { //TODO
-                    qWarning() << "foregroundModel > animKeyframes not yet implemented!";
-                    xml.skipCurrentElement();
-                } else if (xml.name() == "animLoopTime") { //TODO
-                    qWarning() << "foregroundModel > animLoopTime not yet implemented!";
-                    xml.skipCurrentElement();
+                    Animation::TransformAnimation *transformAnim = parseTransformAnimation(xml, true);
+                    fg->setTransformAnimation(transformAnim);
+                    anim = transformAnim; //For later linking (So that the loop type is set in the transformAnim)
+                } else if (xml.name() == "animLoopTime") { 
+                    loopTime = (xml.readElementText().toFloat());
                 } else if (xml.name() == "textureScroll") { //TODO
                     qWarning() << "foregroundModel > textureScroll not yet implemented!";
                     xml.skipCurrentElement();
                 } else {
                     qWarning().noquote() << "Unrecognised tag: foregroundModel >" << xml.name();
                 }
+
+            }
+
+            if (anim != nullptr) {
+                anim->setLoopTime(loopTime);
             }
 
             return fg;
@@ -267,7 +280,7 @@ namespace WS2Common {
                 } else if (xml.name() == "seesawSpring") {
                     group->setSeesawSpring(xml.readElementText().toFloat()); //TODO: Error checking
                 } else if (xml.name() == "animKeyframes") {
-                    Animation::TransformAnimation *transformAnim = parseTransformAnimation(xml);
+                    Animation::TransformAnimation *transformAnim = parseTransformAnimation(xml, false);
                     group->setTransformAnimation(transformAnim);
                     anim = transformAnim; //For later linking (So that the loop type is set in the transformAnim)
                 } else if (xml.name() == "animLoopTime") {
@@ -758,7 +771,7 @@ namespace WS2Common {
             return QPair<EnumAnimationSeesawType, Animation::EnumLoopType>(animSeesawType, loopType);
         }
 
-        Animation::TransformAnimation* XMLConfigParser::parseTransformAnimation(QXmlStreamReader &xml) {
+        Animation::TransformAnimation* XMLConfigParser::parseTransformAnimation(QXmlStreamReader &xml, bool supportsScale) {
             Animation::TransformAnimation *anim = new Animation::TransformAnimation;
 
             while (!(xml.isEndElement() && xml.name() == "animKeyframes")) {
@@ -780,6 +793,12 @@ namespace WS2Common {
                     parseKeyframes(xml, anim->getRotYKeyframes(), true);
                 } else if (xml.name() == "rotZ") {
                     parseKeyframes(xml, anim->getRotZKeyframes(), true);
+                } else if (xml.name() == "scaleX" && supportsScale) {
+                    parseKeyframes(xml, anim->getScaleXKeyframes()); 
+                } else if (xml.name() == "scaleY" && supportsScale) {
+                    parseKeyframes(xml, anim->getScaleYKeyframes()); 
+                } else if (xml.name() == "scaleZ" && supportsScale) {
+                    parseKeyframes(xml, anim->getScaleZKeyframes()); 
                 } else {
                     qWarning().noquote() << "Unrecognised tag: animKeyframes >" << xml.name();
                 }

@@ -85,7 +85,11 @@ namespace WS2Lz {
         forEachFg(mesh) writeForegroundModel(dev, mesh); // Foreground models
         forEachFg(mesh) writeForegroundName(dev, mesh); // Foreground model names
         forEachGroup(group) writeAnimationHeader(dev, group->getTransformAnimation());
-        forEachGroup(group) writeTransformAnimation(dev, group->getTransformAnimation());
+        forEachBg(mesh) writeBgFgAnimationHeader(dev, mesh->getTransformAnimation());
+        forEachFg(mesh) writeBgFgAnimationHeader(dev, mesh->getTransformAnimation());
+        forEachGroup(group) writeTransformAnimation(dev, group->getTransformAnimation(), false);
+        forEachBg(mesh) writeTransformAnimation(dev, mesh->getTransformAnimation(), true);
+        forEachFg(mesh) writeTransformAnimation(dev, mesh->getTransformAnimation(), true);
         forEachGroup(group) writeRuntimeReflectiveModelList(dev, group); //Runtime reflective models
         forEachGroupChildType(const Scene::FalloutVolumeSceneNode*, node) writeFalloutVolume(dev, node); //Fallout volumes
     }
@@ -510,12 +514,109 @@ namespace WS2Lz {
             }
         }
 
+        //BG animation headers
+        forEachBg(group) {
+            if (group->getTransformAnimation() != nullptr) {
+                //This node has animation
+                bgAnimHeaderOffsetMap.insert(nextOffset, group);
+                  nextOffset += BACKGROUND_ANIMATION_HEADER_LENGTH;          
+            }
+        }
+
+        //FG animation headers
+        forEachFg(group) {
+            if (group->getTransformAnimation() != nullptr) {
+                //This node has animation
+                fgAnimHeaderOffsetMap.insert(nextOffset, group);
+                  nextOffset += BACKGROUND_ANIMATION_HEADER_LENGTH;          
+            }
+        }
+
         //Animation keyframes
         forEachGroup(group) {
             const Animation::TransformAnimation *anim = group->getTransformAnimation();
 
             if (anim != nullptr) {
                 //This node has animation
+
+                //PosX
+                animPosXKeyframesOffsetMap.insert(nextOffset, anim);
+                nextOffset += ANIMATION_KEYFRAME_LENGTH * anim->getPosXKeyframes().size();
+                //PosY
+                animPosYKeyframesOffsetMap.insert(nextOffset, anim);
+                nextOffset += ANIMATION_KEYFRAME_LENGTH * anim->getPosYKeyframes().size();
+                //PosZ
+                animPosZKeyframesOffsetMap.insert(nextOffset, anim);
+                nextOffset += ANIMATION_KEYFRAME_LENGTH * anim->getPosZKeyframes().size();
+
+                //RotX
+                animRotXKeyframesOffsetMap.insert(nextOffset, anim);
+                nextOffset += ANIMATION_KEYFRAME_LENGTH * anim->getRotXKeyframes().size();
+                //RotY
+                animRotYKeyframesOffsetMap.insert(nextOffset, anim);
+                nextOffset += ANIMATION_KEYFRAME_LENGTH * anim->getRotYKeyframes().size();
+                //RotZ
+                animRotZKeyframesOffsetMap.insert(nextOffset, anim);
+                nextOffset += ANIMATION_KEYFRAME_LENGTH * anim->getRotZKeyframes().size();
+            }
+        }
+
+
+        //BG animation keyframes
+        forEachBg(group) {
+            const Animation::TransformAnimation *anim = group->getTransformAnimation();
+
+            if (anim != nullptr) {
+                //This node has animation
+
+                //ScaleX
+                animScaleXKeyframesOffsetMap.insert(nextOffset, anim);
+                nextOffset += ANIMATION_KEYFRAME_LENGTH * anim->getScaleXKeyframes().size();
+                //ScaleY
+                animScaleYKeyframesOffsetMap.insert(nextOffset, anim);
+                nextOffset += ANIMATION_KEYFRAME_LENGTH * anim->getScaleYKeyframes().size();
+                //ScaleZ
+                animScaleZKeyframesOffsetMap.insert(nextOffset, anim);
+                nextOffset += ANIMATION_KEYFRAME_LENGTH * anim->getScaleZKeyframes().size();
+
+                //PosX
+                animPosXKeyframesOffsetMap.insert(nextOffset, anim);
+                nextOffset += ANIMATION_KEYFRAME_LENGTH * anim->getPosXKeyframes().size();
+                //PosY
+                animPosYKeyframesOffsetMap.insert(nextOffset, anim);
+                nextOffset += ANIMATION_KEYFRAME_LENGTH * anim->getPosYKeyframes().size();
+                //PosZ
+                animPosZKeyframesOffsetMap.insert(nextOffset, anim);
+                nextOffset += ANIMATION_KEYFRAME_LENGTH * anim->getPosZKeyframes().size();
+
+                //RotX
+                animRotXKeyframesOffsetMap.insert(nextOffset, anim);
+                nextOffset += ANIMATION_KEYFRAME_LENGTH * anim->getRotXKeyframes().size();
+                //RotY
+                animRotYKeyframesOffsetMap.insert(nextOffset, anim);
+                nextOffset += ANIMATION_KEYFRAME_LENGTH * anim->getRotYKeyframes().size();
+                //RotZ
+                animRotZKeyframesOffsetMap.insert(nextOffset, anim);
+                nextOffset += ANIMATION_KEYFRAME_LENGTH * anim->getRotZKeyframes().size();
+            }
+        }
+
+        //FG animation keyframes
+        forEachFg(group) {
+            const Animation::TransformAnimation *anim = group->getTransformAnimation();
+
+            if (anim != nullptr) {
+                //This node has animation
+
+                //ScaleX
+                animScaleXKeyframesOffsetMap.insert(nextOffset, anim);
+                nextOffset += ANIMATION_KEYFRAME_LENGTH * anim->getScaleXKeyframes().size();
+                //ScaleY
+                animScaleYKeyframesOffsetMap.insert(nextOffset, anim);
+                nextOffset += ANIMATION_KEYFRAME_LENGTH * anim->getScaleYKeyframes().size();
+                //ScaleZ
+                animScaleZKeyframesOffsetMap.insert(nextOffset, anim);
+                nextOffset += ANIMATION_KEYFRAME_LENGTH * anim->getScaleZKeyframes().size();
 
                 //PosX
                 animPosXKeyframesOffsetMap.insert(nextOffset, anim);
@@ -1046,6 +1147,7 @@ namespace WS2Lz {
     }
 
     void SMB2LzExporter::writeBackgroundModel(QDataStream &dev, const Scene::MeshSceneNode *node) {
+        const Animation::TransformAnimation *anim = node->getTransformAnimation();
         dev << (quint32) node->getMeshType();
         dev << bgNameOffsetMap.key(node->getMeshName());
         writeNull(dev, 4);
@@ -1053,10 +1155,13 @@ namespace WS2Lz {
         dev << convertRotation(node->getRotation());
         writeNull(dev, 2);
         dev << node->getScale();
-        writeNull(dev, 12); //TODO: Add background animation
+        writeNull(dev, 4); //TODO: Figure out use of header #1
+        dev << (anim != nullptr ? bgAnimHeaderOffsetMap.key(node) : (quint32) 0); //Offset to animation header
+        writeNull(dev, 4); //TODO: Texture scroll
     }
 
     void SMB2LzExporter::writeForegroundModel(QDataStream &dev, const Scene::MeshSceneNode *node) {
+        const Animation::TransformAnimation *anim = node->getTransformAnimation();
         dev << (quint32) node->getMeshType();
         dev << fgNameOffsetMap.key(node->getMeshName());
         writeNull(dev, 4);
@@ -1064,7 +1169,9 @@ namespace WS2Lz {
         dev << convertRotation(node->getRotation());
         writeNull(dev, 2);
         dev << node->getScale();
-        writeNull(dev, 12); //TODO: Add foreground animation
+        writeNull(dev, 4); //TODO: Figure out use of header #1
+        dev << (anim != nullptr ? fgAnimHeaderOffsetMap.key(node) : (quint32) 0); //Offset to animation header
+        writeNull(dev, 4); //TODO: Texture scroll
     }
 
     void SMB2LzExporter::writeBackgroundName(QDataStream &dev, const Scene::MeshSceneNode *node) {
@@ -1104,10 +1211,40 @@ namespace WS2Lz {
         writeNull(dev, 16);
     }
 
-    void SMB2LzExporter::writeTransformAnimation(QDataStream &dev, const Animation::TransformAnimation *anim) {
+    void SMB2LzExporter::writeBgFgAnimationHeader(QDataStream &dev, const Animation::TransformAnimation *anim) {
         //Not all groups will have animation - get outta here if nullptr
         if (anim == nullptr) return;
+        writeNull(dev, 4);
+        dev << anim->getLoopTime();
+        dev << (quint32) anim->getScaleXKeyframes().size(); //Number of scale X keyframes
+        dev << (quint32) (anim->getScaleXKeyframes().size() != 0 ? animScaleXKeyframesOffsetMap.key(anim) : 0); //Offset to scale X keyframes
+        dev << (quint32) anim->getScaleYKeyframes().size(); //Number of scale Y keyframes
+        dev << (quint32) (anim->getScaleYKeyframes().size() != 0 ? animScaleYKeyframesOffsetMap.key(anim) : 0); //Offset to pos Y keyframes
+        dev << (quint32) anim->getScaleZKeyframes().size(); //Number of scale Z keyframes
+        dev << (quint32) (anim->getScaleZKeyframes().size() != 0 ? animScaleZKeyframesOffsetMap.key(anim) : 0); //Offset to pos Z keyframes
+        dev << (quint32) anim->getRotXKeyframes().size(); //Number of rot X keyframes
+        dev << (quint32) (anim->getRotXKeyframes().size() != 0 ? animRotXKeyframesOffsetMap.key(anim) : 0); //Offset to pos X keyframes
+        dev << (quint32) anim->getRotYKeyframes().size(); //Number of rot Y keyframes
+        dev << (quint32) (anim->getRotYKeyframes().size() != 0 ? animRotYKeyframesOffsetMap.key(anim) : 0); //Offset to pos Y keyframes
+        dev << (quint32) anim->getRotZKeyframes().size(); //Number of rot Z keyframes
+        dev << (quint32) (anim->getRotZKeyframes().size() != 0 ? animRotZKeyframesOffsetMap.key(anim) : 0); //Offset to pos Z keyframes
+        dev << (quint32) anim->getPosXKeyframes().size(); //Number of pos X keyframes
+        dev << (quint32) (anim->getPosXKeyframes().size() != 0 ? animPosXKeyframesOffsetMap.key(anim) : 0); //Offset to pos X keyframes
+        dev << (quint32) anim->getPosYKeyframes().size(); //Number of pos Y keyframes
+        dev << (quint32) (anim->getPosYKeyframes().size() != 0 ? animPosYKeyframesOffsetMap.key(anim) : 0); //Offset to pos Y keyframes
+        dev << (quint32) anim->getPosZKeyframes().size(); //Number of pos Z keyframes
+        dev << (quint32) (anim->getPosZKeyframes().size() != 0 ? animPosZKeyframesOffsetMap.key(anim) : 0); //Offset to pos Z keyframes
+        writeNull(dev, 16);
+    }
 
+    void SMB2LzExporter::writeTransformAnimation(QDataStream &dev, const Animation::TransformAnimation *anim, bool scale=false) {
+        //Not all groups will have animation - get outta here if nullptr
+        if (anim == nullptr) return;
+        if (scale) {
+            foreach(Animation::KeyframeF *k, anim->getScaleXKeyframes()) writeKeyframeF(dev, k);
+            foreach(Animation::KeyframeF *k, anim->getScaleYKeyframes()) writeKeyframeF(dev, k);
+            foreach(Animation::KeyframeF *k, anim->getScaleZKeyframes()) writeKeyframeF(dev, k);
+        }
         foreach(Animation::KeyframeF *k, anim->getPosXKeyframes()) writeKeyframeF(dev, k);
         foreach(Animation::KeyframeF *k, anim->getPosYKeyframes()) writeKeyframeF(dev, k);
         foreach(Animation::KeyframeF *k, anim->getPosZKeyframes()) writeKeyframeF(dev, k);

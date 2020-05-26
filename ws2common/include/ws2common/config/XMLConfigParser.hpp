@@ -289,7 +289,7 @@ namespace WS2Common {
                  *
                  * @return The TransformAnimation parsed from the config
                  */
-                Animation::TransformAnimation* parseTransformAnimation(QXmlStreamReader &xml);
+                Animation::TransformAnimation* parseTransformAnimation(QXmlStreamReader &xml, bool supportsScale);
 
                 /**
                  * @brief Populates the keyframe set with parsed keyframes
