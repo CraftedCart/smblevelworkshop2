@@ -86,6 +86,8 @@ namespace WS2Lz {
             const unsigned int BACKGROUND_ANIMATION_HEADER_LENGTH = 96;
             const unsigned int RUNTIME_REFLECTIVE_MODEL_LENGTH = 12;
             const unsigned int FALLOUT_VOLUME_LENGTH = 32;
+            const unsigned int EFFECT_HEADER_LENGTH = 48;
+            const unsigned int TEXTURE_SCROLL_LENGTH = 8;
 
             //Other guff
             /**
@@ -129,6 +131,8 @@ namespace WS2Lz {
             QMultiMap<quint32, const WS2Common::Scene::GroupSceneNode*> groupAnimHeaderOffsetMap;
             QMultiMap<quint32, const WS2Common::Scene::MeshSceneNode*> bgAnimHeaderOffsetMap;
             QMultiMap<quint32, const WS2Common::Scene::MeshSceneNode*> fgAnimHeaderOffsetMap;
+            QMultiMap<quint32, const WS2Common::Scene::MeshSceneNode*> effectHeaderOffsetMap;
+            QMultiMap<quint32, const WS2Common::Scene::SceneNode*> textureScrollOffsetMap;
             QMultiMap<quint32, const WS2Common::Animation::TransformAnimation*> animPosXKeyframesOffsetMap;
             QMultiMap<quint32, const WS2Common::Animation::TransformAnimation*> animPosYKeyframesOffsetMap;
             QMultiMap<quint32, const WS2Common::Animation::TransformAnimation*> animPosZKeyframesOffsetMap;
@@ -238,6 +242,8 @@ namespace WS2Lz {
             void writeForegroundName(QDataStream &dev, const WS2Common::Scene::MeshSceneNode *node);
             void writeBgFgAnimationHeader(QDataStream &dev, const WS2Common::Animation::TransformAnimation *node);
             void writeAnimationHeader(QDataStream &dev, const WS2Common::Animation::TransformAnimation *anim);
+            void writeEffectHeader(QDataStream &dev, const WS2Common::Scene::MeshSceneNode *node);
+            void writeTextureScroll(QDataStream &dev, const WS2Common::Scene::SceneNode *node);
             void writeTransformAnimation(QDataStream &dev, const WS2Common::Animation::TransformAnimation *anim, bool scale);
             void writeRuntimeReflectiveModelList(QDataStream &dev, const WS2Common::Scene::GroupSceneNode *node);
             void writeKeyframeF(QDataStream &dev, const WS2Common::Animation::KeyframeF *k);

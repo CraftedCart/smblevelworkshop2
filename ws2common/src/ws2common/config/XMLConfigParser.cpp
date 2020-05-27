@@ -175,9 +175,8 @@ namespace WS2Common {
                     anim = transformAnim; //For later linking (So that the loop type is set in the transformAnim)
                 } else if (xml.name() == "animLoopTime") { 
                     loopTime = (xml.readElementText().toFloat());
-                } else if (xml.name() == "textureScroll") { //TODO
-                    qWarning() << "backgroundModel > textureScroll not yet implemented!";
-                    xml.skipCurrentElement();
+                } else if (xml.name() == "textureScroll") {
+                   bg->setTextureScroll(SerializeUtils::getVec2Attributes(xml.attributes()));
                 } else {
                     qWarning().noquote() << "Unrecognised tag: backgroundModel >" << xml.name();
                 }
@@ -222,9 +221,8 @@ namespace WS2Common {
                     anim = transformAnim; //For later linking (So that the loop type is set in the transformAnim)
                 } else if (xml.name() == "animLoopTime") { 
                     loopTime = (xml.readElementText().toFloat());
-                } else if (xml.name() == "textureScroll") { //TODO
-                    qWarning() << "foregroundModel > textureScroll not yet implemented!";
-                    xml.skipCurrentElement();
+                } else if (xml.name() == "textureScroll") {
+                   fg->setTextureScroll(SerializeUtils::getVec2Attributes(xml.attributes()));
                 } else {
                     qWarning().noquote() << "Unrecognised tag: foregroundModel >" << xml.name();
                 }
@@ -279,6 +277,8 @@ namespace WS2Common {
                     group->setSeesawSpring(xml.readElementText().toFloat()); //TODO: Error checking
                 } else if (xml.name() == "seesawSpring") {
                     group->setSeesawSpring(xml.readElementText().toFloat()); //TODO: Error checking
+                } else if (xml.name() == "textureScroll") {
+                    group->setTextureScroll(SerializeUtils::getVec2Attributes(xml.attributes()));
                 } else if (xml.name() == "animKeyframes") {
                     Animation::TransformAnimation *transformAnim = parseTransformAnimation(xml, false);
                     group->setTransformAnimation(transformAnim);

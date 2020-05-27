@@ -84,12 +84,19 @@ namespace WS2Lz {
         forEachBg(mesh) writeBackgroundName(dev, mesh); //Background model names
         forEachFg(mesh) writeForegroundModel(dev, mesh); // Foreground models
         forEachFg(mesh) writeForegroundName(dev, mesh); // Foreground model names
-        forEachGroup(group) writeAnimationHeader(dev, group->getTransformAnimation());
-        forEachBg(mesh) writeBgFgAnimationHeader(dev, mesh->getTransformAnimation());
-        forEachFg(mesh) writeBgFgAnimationHeader(dev, mesh->getTransformAnimation());
-        forEachGroup(group) writeTransformAnimation(dev, group->getTransformAnimation(), false);
-        forEachBg(mesh) writeTransformAnimation(dev, mesh->getTransformAnimation(), true);
-        forEachFg(mesh) writeTransformAnimation(dev, mesh->getTransformAnimation(), true);
+        forEachGroup(group) writeAnimationHeader(dev, group->getTransformAnimation()); // Item group animation headers
+        forEachBg(mesh) writeBgFgAnimationHeader(dev, mesh->getTransformAnimation()); // Background animation headers
+        forEachFg(mesh) writeBgFgAnimationHeader(dev, mesh->getTransformAnimation()); // Foreground animation headers
+        forEachBg(mesh) writeEffectHeader(dev, mesh); // Background effect headers
+        forEachFg(mesh) writeEffectHeader(dev, mesh); // Foreground effect headers
+        forEachBg(mesh) writeTextureScroll(dev, mesh); // Background texture scroll
+        forEachBg(mesh) writeTextureScroll(dev, mesh); // Foreground texture scroll
+        forEachGroup(group) writeTextureScroll(dev, group); // Item group texture scroll
+        forEachBg(mesh) writeTransformAnimation(dev, mesh->getTransformAnimation(), true); // Background object animations (scaling)
+        forEachFg(mesh) writeTransformAnimation(dev, mesh->getTransformAnimation(), true); // Foreground object animations (scaling)
+
+        forEachGroup(group) writeTransformAnimation(dev, group->getTransformAnimation(), false); // Item group animations (no scaling)
+
         forEachGroup(group) writeRuntimeReflectiveModelList(dev, group); //Runtime reflective models
         forEachGroupChildType(const Scene::FalloutVolumeSceneNode*, node) writeFalloutVolume(dev, node); //Fallout volumes
     }
@@ -519,7 +526,7 @@ namespace WS2Lz {
             if (group->getTransformAnimation() != nullptr) {
                 //This node has animation
                 bgAnimHeaderOffsetMap.insert(nextOffset, group);
-                  nextOffset += BACKGROUND_ANIMATION_HEADER_LENGTH;          
+                nextOffset += BACKGROUND_ANIMATION_HEADER_LENGTH;
             }
         }
 
@@ -528,8 +535,38 @@ namespace WS2Lz {
             if (group->getTransformAnimation() != nullptr) {
                 //This node has animation
                 fgAnimHeaderOffsetMap.insert(nextOffset, group);
-                  nextOffset += BACKGROUND_ANIMATION_HEADER_LENGTH;          
+                nextOffset += BACKGROUND_ANIMATION_HEADER_LENGTH;
             }
+        }
+
+        //BG effect headers
+        forEachBg(node) {
+            effectHeaderOffsetMap.insert(nextOffset, node);
+            nextOffset += EFFECT_HEADER_LENGTH;
+        }
+
+        //FG effect headers
+        forEachFg(node) {
+            effectHeaderOffsetMap.insert(nextOffset, node);
+            nextOffset += EFFECT_HEADER_LENGTH;
+        }
+
+        //BG texture Scroll
+        forEachBg(node) {
+            textureScrollOffsetMap.insert(nextOffset, node);
+            nextOffset += TEXTURE_SCROLL_LENGTH;
+        }
+
+        //FG texture Scroll
+        forEachFg(node) {
+            textureScrollOffsetMap.insert(nextOffset, node);
+            nextOffset += TEXTURE_SCROLL_LENGTH;
+        }
+
+        //IG texture scroll
+        forEachGroup(group) {
+            textureScrollOffsetMap.insert(nextOffset, group);
+            nextOffset += TEXTURE_SCROLL_LENGTH;
         }
 
         //Animation keyframes
@@ -680,8 +717,6 @@ namespace WS2Lz {
             falloutVolumeCountMap[group] = falloutVolumeCount;
         }
 
-        //Just set all this guff to null for now in case it isn't
-        //TODO: Mystery 8
         //TODO: Reflective level model
         //TODO: Level model instances
         //TODO: Fog anim header
@@ -861,7 +896,8 @@ namespace WS2Lz {
 
         writeNull(dev, 4); //TODO: Unknown/Null
         dev << (anim != nullptr ? anim->getLoopTime() : (quint32) 0); //Anim loop time
-        writeNull(dev, 964); //TODO: Everything else
+        dev << textureScrollOffsetMap.key(node);
+        writeNull(dev, 960); //TODO: Everything else
     }
 
     void SMB2LzExporter::writeCollisionTriangleIndexList(QDataStream &dev, const TriangleIntersectionGrid *intGrid) {
@@ -1157,7 +1193,7 @@ namespace WS2Lz {
         dev << node->getScale();
         writeNull(dev, 4); //TODO: Figure out use of header #1
         dev << (anim != nullptr ? bgAnimHeaderOffsetMap.key(node) : (quint32) 0); //Offset to animation header
-        writeNull(dev, 4); //TODO: Texture scroll
+        dev << effectHeaderOffsetMap.key(node);
     }
 
     void SMB2LzExporter::writeForegroundModel(QDataStream &dev, const Scene::MeshSceneNode *node) {
@@ -1171,7 +1207,7 @@ namespace WS2Lz {
         dev << node->getScale();
         writeNull(dev, 4); //TODO: Figure out use of header #1
         dev << (anim != nullptr ? fgAnimHeaderOffsetMap.key(node) : (quint32) 0); //Offset to animation header
-        writeNull(dev, 4); //TODO: Texture scroll
+        dev << effectHeaderOffsetMap.key(node);
     }
 
     void SMB2LzExporter::writeBackgroundName(QDataStream &dev, const Scene::MeshSceneNode *node) {
@@ -1235,6 +1271,16 @@ namespace WS2Lz {
         dev << (quint32) anim->getPosZKeyframes().size(); //Number of pos Z keyframes
         dev << (quint32) (anim->getPosZKeyframes().size() != 0 ? animPosZKeyframesOffsetMap.key(anim) : 0); //Offset to pos Z keyframes
         writeNull(dev, 16);
+    }
+
+    void SMB2LzExporter::writeEffectHeader(QDataStream &dev, const Scene::MeshSceneNode *node) {
+        writeNull(dev, 16); //TODO: Implement effect keyframes one they're figured out
+        dev << textureScrollOffsetMap.key(node);
+        writeNull(dev, 28); //TODO: Whatever this stuff is
+    }
+
+    void SMB2LzExporter::writeTextureScroll(QDataStream &dev, const Scene::SceneNode *node) {
+        dev << node->getTextureScroll();
     }
 
     void SMB2LzExporter::writeTransformAnimation(QDataStream &dev, const Animation::TransformAnimation *anim, bool scale=false) {

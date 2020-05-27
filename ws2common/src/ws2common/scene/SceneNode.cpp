@@ -222,6 +222,14 @@ namespace WS2Common {
             seesawSpring = value;
         }
 
+        glm::vec2 SceneNode::getTextureScroll() const {
+            return textureScroll;
+        }
+
+        void SceneNode::setTextureScroll(glm::vec2 textureScroll) {
+            this->textureScroll = textureScroll;
+        }
+
         void SceneNode::serializeXml(QXmlStreamWriter &s) const {
             s.writeStartElement("node-" + getSerializableName());
 
