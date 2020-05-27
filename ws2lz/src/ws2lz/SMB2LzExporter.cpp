@@ -99,6 +99,7 @@ namespace WS2Lz {
 
         forEachGroup(group) writeRuntimeReflectiveModelList(dev, group); //Runtime reflective models
         forEachGroupChildType(const Scene::FalloutVolumeSceneNode*, node) writeFalloutVolume(dev, node); //Fallout volumes
+        writeNull(dev, 64); // Taking a page out of Deluxe's book - having extra null padding at the end of the file can prevent weird crashes
     }
 
     void SMB2LzExporter::addCollisionTriangles(
