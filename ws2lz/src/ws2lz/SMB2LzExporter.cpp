@@ -418,7 +418,9 @@ namespace WS2Lz {
             levelModelPointerAOffsetMap.insert(nextOffset, group);
 
             forEachChildType(group, Scene::MeshSceneNode*, node) {
-                nextOffset += LEVEL_MODEL_POINTER_TYPE_A_LENGTH;
+                if (!node->isRuntimeReflective()) {
+                    nextOffset += LEVEL_MODEL_POINTER_TYPE_A_LENGTH;
+                }
             }
         }
 
@@ -429,7 +431,9 @@ namespace WS2Lz {
             levelModelPointerBOffsetMap.insert(nextOffset, group);
 
             forEachChildType(group, Scene::MeshSceneNode*, node) {
-                nextOffset += LEVEL_MODEL_POINTER_TYPE_B_LENGTH;
+                if (!node->isRuntimeReflective()) {
+                    nextOffset += LEVEL_MODEL_POINTER_TYPE_B_LENGTH;
+                }
             }
         }
 
@@ -440,8 +444,10 @@ namespace WS2Lz {
             quint32 levelModelCount = 0; //Number of levelModels in this collision header
 
             forEachChildType(group, Scene::MeshSceneNode*, node) {
-                nextOffset += LEVEL_MODEL_LENGTH;
-                levelModelCount++;
+                if (!node->isRuntimeReflective()) {
+                    nextOffset += LEVEL_MODEL_LENGTH;
+                    levelModelCount++;
+                }
             }
 
             //Store levelModel count in the map
@@ -1141,13 +1147,15 @@ namespace WS2Lz {
         quint32 nextOffset = levelModelOffsetMap.key(node);
 
         forEachChildType(node, Scene::MeshSceneNode*, child) {
-            dev << (quint32) (child->getBitflag());
-            dev << (quint32) 0x00000001;
-            dev << nextOffset;
+            if (!child->isRuntimeReflective()) {
+                dev << (quint32) (child->getBitflag());
+                dev << (quint32) 0x00000001;
+                dev << nextOffset;
 
-            //Level models for the same collision header are just sequential stores, so it's fine to just add
-            //on the length of a single level model
-            nextOffset += LEVEL_MODEL_LENGTH;
+                //Level models for the same collision header are just sequential stores, so it's fine to just add
+                //on the length of a single level model
+                nextOffset += LEVEL_MODEL_LENGTH;
+            }
         }
     }
 
@@ -1155,30 +1163,34 @@ namespace WS2Lz {
         quint32 nextOffset = levelModelPointerAOffsetMap.key(node);
 
         forEachChildType(node, Scene::MeshSceneNode*, child) {
-            dev << nextOffset;
+            if (!child->isRuntimeReflective()) {
+                dev << nextOffset;
 
-            //Level model pointer type As for the same collision header are just sequential stores, so it's fine to
-            //just add on the length of a single level model
-            nextOffset += LEVEL_MODEL_POINTER_TYPE_A_LENGTH;
+                //Level model pointer type As for the same collision header are just sequential stores, so it's fine to
+                //just add on the length of a single level model
+                nextOffset += LEVEL_MODEL_POINTER_TYPE_A_LENGTH;
+            }
         }
     }
 
     void SMB2LzExporter::writeLevelModelList(QDataStream &dev, const Scene::GroupSceneNode *node) {
         forEachChildType(node, Scene::MeshSceneNode*, child) {
-            writeNull(dev, 4);
-            dev << levelModelNameOffsetMap.key(child->getMeshName());
-            writeNull(dev, 8);
+            if (!child->isRuntimeReflective()) {
+                writeNull(dev, 4);
+                dev << levelModelNameOffsetMap.key(child->getMeshName());
+                writeNull(dev, 8);
+            }
         }
     }
 
     void SMB2LzExporter::writeLevelModelNameList(QDataStream &dev, const Scene::GroupSceneNode *node) {
         forEachChildType(node, Scene::MeshSceneNode*, child) {
-            //Write the object name
-            dev.writeRawData(child->getMeshName().toLatin1(), child->getMeshName().size());
+                //Write the object name
+                dev.writeRawData(child->getMeshName().toLatin1(), child->getMeshName().size());
 
-            writeNull(dev, 1); //Add a null terminator
-            //Pad to 4 bytes
-            writeNull(dev, roundUpNearest4(child->getMeshName().size() + 1) - (child->getMeshName().size() + 1));
+                writeNull(dev, 1); //Add a null terminator
+                //Pad to 4 bytes
+                writeNull(dev, roundUpNearest4(child->getMeshName().size() + 1) - (child->getMeshName().size() + 1));
         }
     }
 
