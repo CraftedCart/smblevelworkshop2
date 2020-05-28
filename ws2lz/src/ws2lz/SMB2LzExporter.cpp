@@ -79,14 +79,14 @@ namespace WS2Lz {
         forEachGroup(group) writeLevelModelPointerAList(dev, group); //Level model pointers type A
         forEachGroup(group) writeLevelModelPointerBList(dev, group); //Level model pointers type B
         forEachGroup(group) writeLevelModelList(dev, group); //Level models
-        forEachGroup(group) writeLevelModelNameList(dev, group); //Level model names
+        forEachGroup(group) writeLevelModelNameList(dev, group); //Level model names     
         forEachBg(mesh) writeBackgroundModel(dev, mesh); //Background models
         forEachBg(mesh) writeBackgroundName(dev, mesh); //Background model names
         forEachFg(mesh) writeForegroundModel(dev, mesh); // Foreground models
         forEachFg(mesh) writeForegroundName(dev, mesh); // Foreground model names
-        forEachGroup(group) writeAnimationHeader(dev, group->getTransformAnimation()); // Item group animation headers
         forEachBg(mesh) writeBgFgAnimationHeader(dev, mesh->getTransformAnimation()); // Background animation headers
         forEachFg(mesh) writeBgFgAnimationHeader(dev, mesh->getTransformAnimation()); // Foreground animation headers
+        forEachGroup(group) writeAnimationHeader(dev, group->getTransformAnimation()); // Item group animation headers
         forEachBg(mesh) writeEffectHeader(dev, mesh); // Background effect headers
         forEachFg(mesh) writeEffectHeader(dev, mesh); // Foreground effect headers
         forEachBg(mesh) writeTextureScroll(dev, mesh); // Background texture scroll
@@ -94,7 +94,6 @@ namespace WS2Lz {
         forEachGroup(group) writeTextureScroll(dev, group); // Item group texture scroll
         forEachBg(mesh) writeTransformAnimation(dev, mesh->getTransformAnimation(), true); // Background object animations (scaling)
         forEachFg(mesh) writeTransformAnimation(dev, mesh->getTransformAnimation(), true); // Foreground object animations (scaling)
-
         forEachGroup(group) writeTransformAnimation(dev, group->getTransformAnimation(), false); // Item group animations (no scaling)
 
         forEachGroup(group) writeRuntimeReflectiveModelList(dev, group); //Runtime reflective models
@@ -519,14 +518,6 @@ namespace WS2Lz {
             nextOffset += roundUpNearest4(node->getMeshName().size() + 1);
         }
 
-        //Animation headers
-        forEachGroup(group) {
-            if (group->getTransformAnimation() != nullptr) {
-                //This node has animation
-                groupAnimHeaderOffsetMap.insert(nextOffset, group);
-                nextOffset += ANIMATION_HEADER_LENGTH;
-            }
-        }
 
         //BG animation headers
         forEachBg(group) {
@@ -543,6 +534,15 @@ namespace WS2Lz {
                 //This node has animation
                 fgAnimHeaderOffsetMap.insert(nextOffset, group);
                 nextOffset += BACKGROUND_ANIMATION_HEADER_LENGTH;
+            }
+        }
+
+        //Animation headers
+        forEachGroup(group) {
+            if (group->getTransformAnimation() != nullptr) {
+                //This node has animation
+                groupAnimHeaderOffsetMap.insert(nextOffset, group);
+                nextOffset += ANIMATION_HEADER_LENGTH;
             }
         }
 
@@ -574,35 +574,6 @@ namespace WS2Lz {
         forEachGroup(group) {
             textureScrollOffsetMap.insert(nextOffset, group);
             nextOffset += TEXTURE_SCROLL_LENGTH;
-        }
-
-        //Animation keyframes
-        forEachGroup(group) {
-            const Animation::TransformAnimation *anim = group->getTransformAnimation();
-
-            if (anim != nullptr) {
-                //This node has animation
-
-                //PosX
-                animPosXKeyframesOffsetMap.insert(nextOffset, anim);
-                nextOffset += ANIMATION_KEYFRAME_LENGTH * anim->getPosXKeyframes().size();
-                //PosY
-                animPosYKeyframesOffsetMap.insert(nextOffset, anim);
-                nextOffset += ANIMATION_KEYFRAME_LENGTH * anim->getPosYKeyframes().size();
-                //PosZ
-                animPosZKeyframesOffsetMap.insert(nextOffset, anim);
-                nextOffset += ANIMATION_KEYFRAME_LENGTH * anim->getPosZKeyframes().size();
-
-                //RotX
-                animRotXKeyframesOffsetMap.insert(nextOffset, anim);
-                nextOffset += ANIMATION_KEYFRAME_LENGTH * anim->getRotXKeyframes().size();
-                //RotY
-                animRotYKeyframesOffsetMap.insert(nextOffset, anim);
-                nextOffset += ANIMATION_KEYFRAME_LENGTH * anim->getRotYKeyframes().size();
-                //RotZ
-                animRotZKeyframesOffsetMap.insert(nextOffset, anim);
-                nextOffset += ANIMATION_KEYFRAME_LENGTH * anim->getRotZKeyframes().size();
-            }
         }
 
 
@@ -661,6 +632,35 @@ namespace WS2Lz {
                 //ScaleZ
                 animScaleZKeyframesOffsetMap.insert(nextOffset, anim);
                 nextOffset += ANIMATION_KEYFRAME_LENGTH * anim->getScaleZKeyframes().size();
+
+                //PosX
+                animPosXKeyframesOffsetMap.insert(nextOffset, anim);
+                nextOffset += ANIMATION_KEYFRAME_LENGTH * anim->getPosXKeyframes().size();
+                //PosY
+                animPosYKeyframesOffsetMap.insert(nextOffset, anim);
+                nextOffset += ANIMATION_KEYFRAME_LENGTH * anim->getPosYKeyframes().size();
+                //PosZ
+                animPosZKeyframesOffsetMap.insert(nextOffset, anim);
+                nextOffset += ANIMATION_KEYFRAME_LENGTH * anim->getPosZKeyframes().size();
+
+                //RotX
+                animRotXKeyframesOffsetMap.insert(nextOffset, anim);
+                nextOffset += ANIMATION_KEYFRAME_LENGTH * anim->getRotXKeyframes().size();
+                //RotY
+                animRotYKeyframesOffsetMap.insert(nextOffset, anim);
+                nextOffset += ANIMATION_KEYFRAME_LENGTH * anim->getRotYKeyframes().size();
+                //RotZ
+                animRotZKeyframesOffsetMap.insert(nextOffset, anim);
+                nextOffset += ANIMATION_KEYFRAME_LENGTH * anim->getRotZKeyframes().size();
+            }
+        }
+
+        //Animation keyframes
+        forEachGroup(group) {
+            const Animation::TransformAnimation *anim = group->getTransformAnimation();
+
+            if (anim != nullptr) {
+                //This node has animation
 
                 //PosX
                 animPosXKeyframesOffsetMap.insert(nextOffset, anim);
