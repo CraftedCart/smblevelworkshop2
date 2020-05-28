@@ -78,6 +78,30 @@ namespace WS2Common {
         const std::set<KeyframeF*, KeyframeCompare>& TransformAnimation::getRotZKeyframes() const {
             return rotZKeyframes;
         }
+
+        std::set<KeyframeF*, KeyframeCompare>& TransformAnimation::getScaleXKeyframes() {
+            return scaleXKeyframes;
+        }
+
+        const std::set<KeyframeF*, KeyframeCompare>& TransformAnimation::getScaleXKeyframes() const {
+            return scaleXKeyframes;
+        }
+
+        std::set<KeyframeF*, KeyframeCompare>& TransformAnimation::getScaleYKeyframes() {
+            return scaleYKeyframes;
+        }
+
+        const std::set<KeyframeF*, KeyframeCompare>& TransformAnimation::getScaleYKeyframes() const {
+            return scaleYKeyframes;
+        }
+
+        std::set<KeyframeF*, KeyframeCompare>& TransformAnimation::getScaleZKeyframes() {
+            return scaleZKeyframes;
+        }
+
+        const std::set<KeyframeF*, KeyframeCompare>& TransformAnimation::getScaleZKeyframes() const {
+            return scaleZKeyframes;
+        }
     }
 }
 

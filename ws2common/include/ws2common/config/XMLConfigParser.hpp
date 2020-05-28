@@ -15,6 +15,9 @@
 #include "ws2common/scene/BumperSceneNode.hpp"
 #include "ws2common/scene/JamabarSceneNode.hpp"
 #include "ws2common/scene/BananaSceneNode.hpp"
+#include "ws2common/scene/ConeCollisionObjectSceneNode.hpp"
+#include "ws2common/scene/SphereCollisionObjectSceneNode.hpp"
+#include "ws2common/scene/CylinderCollisionObjectSceneNode.hpp"
 #include "ws2common/scene/FalloutVolumeSceneNode.hpp"
 #include "ws2common/scene/SwitchSceneNode.hpp"
 #include "ws2common/scene/WormholeSceneNode.hpp"
@@ -79,6 +82,17 @@ namespace WS2Common {
                 Scene::MeshSceneNode* parseBackgroundModel(QXmlStreamReader &xml);
 
                 /**
+                 * @brief Parses a background model in an XML config
+                 *
+                 * Make sure the XML reader is within the backgroundModel element before calling this
+                 *
+                 * @param xml The QXmlStreamReader
+                 *
+                 * @return The background model parsed from the config
+                 */
+                Scene::MeshSceneNode* parseForegroundModel(QXmlStreamReader &xml);
+
+                /**
                  * @brief Parses an item group in an XML config
                  *
                  * Make sure the XML reader is within the itemGroup element before calling this
@@ -132,6 +146,39 @@ namespace WS2Common {
                  * @return The banana parsed from the config
                  */
                 Scene::BananaSceneNode* parseBanana(QXmlStreamReader &xml);
+
+                /**
+                 * @brief Parses a cone collision object in an XML config
+                 *
+                 * Make sure the XML reader is within the cone collision object element before calling this
+                 *
+                 * @param xml The QXmlStreamReader
+                 *
+                 * @return The cone collision object parsed from the config
+                 */
+                Scene::ConeCollisionObjectSceneNode* parseConeCollisionObject(QXmlStreamReader &xml);
+
+                /**
+                 * @brief Parses a sphere collision object in an XML config
+                 *
+                 * Make sure the XML reader is within the sphere collision object element before calling this
+                 *
+                 * @param xml The QXmlStreamReader
+                 *
+                 * @return The sphere collision object parsed from the config
+                 */
+                Scene::SphereCollisionObjectSceneNode* parseSphereCollisionObject(QXmlStreamReader &xml);
+
+                /**
+                 * @brief Parses a cylinder collision object in an XML config
+                 *
+                 * Make sure the XML reader is within the cylinder collision object element before calling this
+                 *
+                 * @param xml The QXmlStreamReader
+                 *
+                 * @return The cylinder collision object parsed from the config
+                 */
+                Scene::CylinderCollisionObjectSceneNode* parseCylinderCollisionObject(QXmlStreamReader &xml);
 
                 /**
                  * @brief Parses a fallout volume in an XML config
@@ -242,7 +289,7 @@ namespace WS2Common {
                  *
                  * @return The TransformAnimation parsed from the config
                  */
-                Animation::TransformAnimation* parseTransformAnimation(QXmlStreamReader &xml);
+                Animation::TransformAnimation* parseTransformAnimation(QXmlStreamReader &xml, bool supportsScale);
 
                 /**
                  * @brief Populates the keyframe set with parsed keyframes

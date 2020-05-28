@@ -52,11 +52,15 @@ set(SOURCE_FILES
     ./src/ws2common/scene/StartSceneNode.cpp
     ./src/ws2common/scene/GroupSceneNode.cpp
     ./src/ws2common/scene/BackgroundGroupSceneNode.cpp
+    ./src/ws2common/scene/ForegroundGroupSceneNode.cpp
     ./src/ws2common/scene/MeshSceneNode.cpp
     ./src/ws2common/scene/GoalSceneNode.cpp
     ./src/ws2common/scene/BumperSceneNode.cpp
     ./src/ws2common/scene/JamabarSceneNode.cpp
     ./src/ws2common/scene/BananaSceneNode.cpp
+    ./src/ws2common/scene/ConeCollisionObjectSceneNode.cpp
+    ./src/ws2common/scene/SphereCollisionObjectSceneNode.cpp
+    ./src/ws2common/scene/CylinderCollisionObjectSceneNode.cpp
     ./src/ws2common/scene/FalloutVolumeSceneNode.cpp
     ./src/ws2common/scene/SwitchSceneNode.cpp
     ./src/ws2common/scene/WormholeSceneNode.cpp
@@ -98,12 +102,16 @@ set(HEADER_FILES
     ./include/ws2common/scene/StartSceneNode.hpp
     ./include/ws2common/scene/GroupSceneNode.hpp
     ./include/ws2common/scene/BackgroundGroupSceneNode.hpp
+    ./include/ws2common/scene/ForegroundGroupSceneNode.hpp
     ./include/ws2common/scene/SceneNode.hpp
     ./include/ws2common/scene/MeshSceneNode.hpp
     ./include/ws2common/scene/GoalSceneNode.hpp
     ./include/ws2common/scene/BumperSceneNode.hpp
     ./include/ws2common/scene/JamabarSceneNode.hpp
     ./include/ws2common/scene/BananaSceneNode.hpp
+    ./include/ws2common/scene/ConeCollisionObjectSceneNode.hpp
+    ./include/ws2common/scene/SphereCollisionObjectSceneNode.hpp
+    ./include/ws2common/scene/CylinderCollisionObjectSceneNode.hpp
     ./include/ws2common/scene/FalloutVolumeSceneNode.hpp
     ./include/ws2common/scene/SwitchSceneNode.hpp
     ./include/ws2common/scene/WormholeSceneNode.hpp

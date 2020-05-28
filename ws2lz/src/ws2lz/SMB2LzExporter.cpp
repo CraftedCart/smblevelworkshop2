@@ -22,6 +22,11 @@
 #define forEachBg(mesh) foreach(const Scene::MeshSceneNode* mesh, bgOffsetMap)
 
 /**
+ * @brief Iterates over all foreground - The value of group will be the GroupSceneNode at the current iteration
+ */
+#define forEachFg(mesh) foreach(const Scene::MeshSceneNode* mesh, fgOffsetMap)
+
+/**
  * @brief Iterates over all of a SceneNode's children, and runs the following code if the child can be dynamically
  *        casted to type
  */
@@ -66,18 +71,34 @@ namespace WS2Lz {
         forEachGroupChildType(const Scene::BumperSceneNode*, node) writeBumper(dev, node); //Bumpers
         forEachGroupChildType(const Scene::JamabarSceneNode*, node) writeJamabar(dev, node); //Jamabars
         forEachGroupChildType(const Scene::BananaSceneNode*, node) writeBanana(dev, node); //Bananas
+        forEachGroupChildType(const Scene::ConeCollisionObjectSceneNode*, node) writeConeCollisionObject(dev, node); //ConeCollisionObjects
+        forEachGroupChildType(const Scene::SphereCollisionObjectSceneNode*, node) writeSphereCollisionObject(dev, node); //SphereCollisionObjects
+        forEachGroupChildType(const Scene::CylinderCollisionObjectSceneNode*, node) writeCylinderCollisionObject(dev, node); //CylinderCollisionObjects
         forEachGroupChildType(const Scene::SwitchSceneNode*, node) writeSwitch(dev, node); //Switches
         forEachGroupChildType(const Scene::WormholeSceneNode*, node) writeWormhole(dev, node); //Wormholes
         forEachGroup(group) writeLevelModelPointerAList(dev, group); //Level model pointers type A
         forEachGroup(group) writeLevelModelPointerBList(dev, group); //Level model pointers type B
         forEachGroup(group) writeLevelModelList(dev, group); //Level models
-        forEachGroup(group) writeLevelModelNameList(dev, group); //Level model names
+        forEachGroup(group) writeLevelModelNameList(dev, group); //Level model names     
         forEachBg(mesh) writeBackgroundModel(dev, mesh); //Background models
         forEachBg(mesh) writeBackgroundName(dev, mesh); //Background model names
-        forEachGroup(group) writeAnimationHeader(dev, group->getTransformAnimation());
-        forEachGroup(group) writeTransformAnimation(dev, group->getTransformAnimation());
+        forEachFg(mesh) writeForegroundModel(dev, mesh); // Foreground models
+        forEachFg(mesh) writeForegroundName(dev, mesh); // Foreground model names
+        forEachBg(mesh) writeBgFgAnimationHeader(dev, mesh->getTransformAnimation()); // Background animation headers
+        forEachFg(mesh) writeBgFgAnimationHeader(dev, mesh->getTransformAnimation()); // Foreground animation headers
+        forEachGroup(group) writeAnimationHeader(dev, group->getTransformAnimation()); // Item group animation headers
+        forEachBg(mesh) writeEffectHeader(dev, mesh); // Background effect headers
+        forEachFg(mesh) writeEffectHeader(dev, mesh); // Foreground effect headers
+        forEachBg(mesh) writeTextureScroll(dev, mesh); // Background texture scroll
+        forEachBg(mesh) writeTextureScroll(dev, mesh); // Foreground texture scroll
+        forEachGroup(group) writeTextureScroll(dev, group); // Item group texture scroll
+        forEachBg(mesh) writeTransformAnimation(dev, mesh->getTransformAnimation(), true); // Background object animations (scaling)
+        forEachFg(mesh) writeTransformAnimation(dev, mesh->getTransformAnimation(), true); // Foreground object animations (scaling)
+        forEachGroup(group) writeTransformAnimation(dev, group->getTransformAnimation(), false); // Item group animations (no scaling)
+
         forEachGroup(group) writeRuntimeReflectiveModelList(dev, group); //Runtime reflective models
         forEachGroupChildType(const Scene::FalloutVolumeSceneNode*, node) writeFalloutVolume(dev, node); //Fallout volumes
+        writeNull(dev, 64); // Taking a page out of Deluxe's book - having extra null padding at the end of the file can prevent weird crashes
     }
 
     void SMB2LzExporter::addCollisionTriangles(
@@ -312,6 +333,51 @@ namespace WS2Lz {
             bananaCountMap[group] = bananaCount;
         }
 
+        //Iterate over all GroupSceneNodes/collision headers, and count coneCollisionObjects to add to nextOffset
+        //Basically the exact same as before with goals
+        forEachGroup(group) {
+            coneCollisionObjectOffsetMap.insert(nextOffset, group);
+            quint32 coneCollisionObjectCount = 0; //Number of coneCollisionObjects in this collision header
+
+            forEachChildType(group, Scene::ConeCollisionObjectSceneNode*, node) {
+                nextOffset += CONE_COLLISION_LENGTH;
+                coneCollisionObjectCount++;
+            }
+
+            //Store coneCollisionObject count in the map
+            coneCollisionObjectCountMap[group] = coneCollisionObjectCount;
+        }
+
+        //Iterate over all GroupSceneNodes/collision headers, and count sphereCollisionObjects to add to nextOffset
+        //Basically the exact same as before with goals
+        forEachGroup(group) {
+            sphereCollisionObjectOffsetMap.insert(nextOffset, group);
+            quint32 sphereCollisionObjectCount = 0; //Number of sphereCollisionObjects in this collision header
+
+            forEachChildType(group, Scene::SphereCollisionObjectSceneNode*, node) {
+                nextOffset += SPHERE_COLLISION_LENGTH;
+                sphereCollisionObjectCount++;
+            }
+
+            //Store sphereCollisionObject count in the map
+            sphereCollisionObjectCountMap[group] = sphereCollisionObjectCount;
+        }
+
+        //Iterate over all GroupSceneNodes/collision headers, and count cylinderCollisionObjects to add to nextOffset
+        //Basically the exact same as before with goals
+        forEachGroup(group) {
+            cylinderCollisionObjectOffsetMap.insert(nextOffset, group);
+            quint32 cylinderCollisionObjectCount = 0; //Number of cylinderCollisionObjects in this collision header
+
+            forEachChildType(group, Scene::CylinderCollisionObjectSceneNode*, node) {
+                nextOffset += CYLINDER_COLLISION_LENGTH;
+                cylinderCollisionObjectCount++;
+            }
+
+            //Store cylinderCollisionObject count in the map
+            cylinderCollisionObjectCountMap[group] = cylinderCollisionObjectCount;
+        }
+
         //Iterate over all GroupSceneNodes/collision headers, and count switches to add to nextOffset
         //Basically the exact same as before with goals
         forEachGroup(group) {
@@ -352,7 +418,9 @@ namespace WS2Lz {
             levelModelPointerAOffsetMap.insert(nextOffset, group);
 
             forEachChildType(group, Scene::MeshSceneNode*, node) {
-                nextOffset += LEVEL_MODEL_POINTER_TYPE_A_LENGTH;
+                if (!node->isRuntimeReflective()) {
+                    nextOffset += LEVEL_MODEL_POINTER_TYPE_A_LENGTH;
+                }
             }
         }
 
@@ -363,7 +431,9 @@ namespace WS2Lz {
             levelModelPointerBOffsetMap.insert(nextOffset, group);
 
             forEachChildType(group, Scene::MeshSceneNode*, node) {
-                nextOffset += LEVEL_MODEL_POINTER_TYPE_B_LENGTH;
+                if (!node->isRuntimeReflective()) {
+                    nextOffset += LEVEL_MODEL_POINTER_TYPE_B_LENGTH;
+                }
             }
         }
 
@@ -374,8 +444,10 @@ namespace WS2Lz {
             quint32 levelModelCount = 0; //Number of levelModels in this collision header
 
             forEachChildType(group, Scene::MeshSceneNode*, node) {
-                nextOffset += LEVEL_MODEL_LENGTH;
-                levelModelCount++;
+                if (!node->isRuntimeReflective()) {
+                    nextOffset += LEVEL_MODEL_LENGTH;
+                    levelModelCount++;
+                }
             }
 
             //Store levelModel count in the map
@@ -419,12 +491,167 @@ namespace WS2Lz {
             nextOffset += roundUpNearest4(node->getMeshName().size() + 1);
         }
 
+        //Find all foreground models
+        foreach(Scene::SceneNode *node, stage.getRootNode()->getChildren()) {
+            if (dynamic_cast<Scene::ForegroundGroupSceneNode*>(node)) {
+                Scene::ForegroundGroupSceneNode *group = static_cast<Scene::ForegroundGroupSceneNode*>(node);
+
+                //Found one, now iterate over all children
+                foreach(Scene::SceneNode *fg, group->getChildren()) {
+                    if (Scene::MeshSceneNode *mesh = dynamic_cast<Scene::MeshSceneNode*>(fg)) {
+                        //Found a foreground mesh
+                        //Add it to a map
+                        fgOffsetMap.insert(nextOffset, mesh);
+                        nextOffset += BACKGROUND_MODEL_LENGTH;
+                    } else {
+                        qWarning() << "There's a non-MeshSceneNode within a foreground group. This should never happen. Ignoring for now.";
+                    }
+                }
+            }
+        }
+
+        //Iterate over all foreground models, and add the model name + null terminator padded to 4 bytes to nextOffset
+        forEachFg(node) {
+            fgNameOffsetMap.insert(nextOffset, node->getMeshName());
+
+            //+ 1 because size() does not include a null terminator
+            nextOffset += roundUpNearest4(node->getMeshName().size() + 1);
+        }
+
+
+        //BG animation headers
+        forEachBg(group) {
+            if (group->getTransformAnimation() != nullptr) {
+                //This node has animation
+                bgAnimHeaderOffsetMap.insert(nextOffset, group);
+                nextOffset += BACKGROUND_ANIMATION_HEADER_LENGTH;
+            }
+        }
+
+        //FG animation headers
+        forEachFg(group) {
+            if (group->getTransformAnimation() != nullptr) {
+                //This node has animation
+                fgAnimHeaderOffsetMap.insert(nextOffset, group);
+                nextOffset += BACKGROUND_ANIMATION_HEADER_LENGTH;
+            }
+        }
+
         //Animation headers
         forEachGroup(group) {
             if (group->getTransformAnimation() != nullptr) {
                 //This node has animation
                 groupAnimHeaderOffsetMap.insert(nextOffset, group);
                 nextOffset += ANIMATION_HEADER_LENGTH;
+            }
+        }
+
+        //BG effect headers
+        forEachBg(node) {
+            effectHeaderOffsetMap.insert(nextOffset, node);
+            nextOffset += EFFECT_HEADER_LENGTH;
+        }
+
+        //FG effect headers
+        forEachFg(node) {
+            effectHeaderOffsetMap.insert(nextOffset, node);
+            nextOffset += EFFECT_HEADER_LENGTH;
+        }
+
+        //BG texture Scroll
+        forEachBg(node) {
+            textureScrollOffsetMap.insert(nextOffset, node);
+            nextOffset += TEXTURE_SCROLL_LENGTH;
+        }
+
+        //FG texture Scroll
+        forEachFg(node) {
+            textureScrollOffsetMap.insert(nextOffset, node);
+            nextOffset += TEXTURE_SCROLL_LENGTH;
+        }
+
+        //IG texture scroll
+        forEachGroup(group) {
+            textureScrollOffsetMap.insert(nextOffset, group);
+            nextOffset += TEXTURE_SCROLL_LENGTH;
+        }
+
+
+        //BG animation keyframes
+        forEachBg(group) {
+            const Animation::TransformAnimation *anim = group->getTransformAnimation();
+
+            if (anim != nullptr) {
+                //This node has animation
+
+                //ScaleX
+                animScaleXKeyframesOffsetMap.insert(nextOffset, anim);
+                nextOffset += ANIMATION_KEYFRAME_LENGTH * anim->getScaleXKeyframes().size();
+                //ScaleY
+                animScaleYKeyframesOffsetMap.insert(nextOffset, anim);
+                nextOffset += ANIMATION_KEYFRAME_LENGTH * anim->getScaleYKeyframes().size();
+                //ScaleZ
+                animScaleZKeyframesOffsetMap.insert(nextOffset, anim);
+                nextOffset += ANIMATION_KEYFRAME_LENGTH * anim->getScaleZKeyframes().size();
+
+                //PosX
+                animPosXKeyframesOffsetMap.insert(nextOffset, anim);
+                nextOffset += ANIMATION_KEYFRAME_LENGTH * anim->getPosXKeyframes().size();
+                //PosY
+                animPosYKeyframesOffsetMap.insert(nextOffset, anim);
+                nextOffset += ANIMATION_KEYFRAME_LENGTH * anim->getPosYKeyframes().size();
+                //PosZ
+                animPosZKeyframesOffsetMap.insert(nextOffset, anim);
+                nextOffset += ANIMATION_KEYFRAME_LENGTH * anim->getPosZKeyframes().size();
+
+                //RotX
+                animRotXKeyframesOffsetMap.insert(nextOffset, anim);
+                nextOffset += ANIMATION_KEYFRAME_LENGTH * anim->getRotXKeyframes().size();
+                //RotY
+                animRotYKeyframesOffsetMap.insert(nextOffset, anim);
+                nextOffset += ANIMATION_KEYFRAME_LENGTH * anim->getRotYKeyframes().size();
+                //RotZ
+                animRotZKeyframesOffsetMap.insert(nextOffset, anim);
+                nextOffset += ANIMATION_KEYFRAME_LENGTH * anim->getRotZKeyframes().size();
+            }
+        }
+
+        //FG animation keyframes
+        forEachFg(group) {
+            const Animation::TransformAnimation *anim = group->getTransformAnimation();
+
+            if (anim != nullptr) {
+                //This node has animation
+
+                //ScaleX
+                animScaleXKeyframesOffsetMap.insert(nextOffset, anim);
+                nextOffset += ANIMATION_KEYFRAME_LENGTH * anim->getScaleXKeyframes().size();
+                //ScaleY
+                animScaleYKeyframesOffsetMap.insert(nextOffset, anim);
+                nextOffset += ANIMATION_KEYFRAME_LENGTH * anim->getScaleYKeyframes().size();
+                //ScaleZ
+                animScaleZKeyframesOffsetMap.insert(nextOffset, anim);
+                nextOffset += ANIMATION_KEYFRAME_LENGTH * anim->getScaleZKeyframes().size();
+
+                //PosX
+                animPosXKeyframesOffsetMap.insert(nextOffset, anim);
+                nextOffset += ANIMATION_KEYFRAME_LENGTH * anim->getPosXKeyframes().size();
+                //PosY
+                animPosYKeyframesOffsetMap.insert(nextOffset, anim);
+                nextOffset += ANIMATION_KEYFRAME_LENGTH * anim->getPosYKeyframes().size();
+                //PosZ
+                animPosZKeyframesOffsetMap.insert(nextOffset, anim);
+                nextOffset += ANIMATION_KEYFRAME_LENGTH * anim->getPosZKeyframes().size();
+
+                //RotX
+                animRotXKeyframesOffsetMap.insert(nextOffset, anim);
+                nextOffset += ANIMATION_KEYFRAME_LENGTH * anim->getRotXKeyframes().size();
+                //RotY
+                animRotYKeyframesOffsetMap.insert(nextOffset, anim);
+                nextOffset += ANIMATION_KEYFRAME_LENGTH * anim->getRotYKeyframes().size();
+                //RotZ
+                animRotZKeyframesOffsetMap.insert(nextOffset, anim);
+                nextOffset += ANIMATION_KEYFRAME_LENGTH * anim->getRotZKeyframes().size();
             }
         }
 
@@ -497,14 +724,6 @@ namespace WS2Lz {
             falloutVolumeCountMap[group] = falloutVolumeCount;
         }
 
-        //Just set all this guff to null for now in case it isn't
-        coneCollisionObjectCount = 0;
-        coneCollisionObjectListOffset = 0;
-        sphereCollisionObjectCount = 0;
-        sphereCollisionObjectListOffset = 0;
-        cylinderCollisionObjectCount = 0;
-        cylinderCollisionObjectListOffset = 0;
-        //TODO: Mystery 8
         //TODO: Reflective level model
         //TODO: Level model instances
         //TODO: Fog anim header
@@ -540,6 +759,9 @@ namespace WS2Lz {
         quint32 bumperCount = addAllCounts(bumperCountMap);
         quint32 jamabarCount = addAllCounts(jamabarCountMap);
         quint32 bananaCount = addAllCounts(bananaCountMap);
+        quint32 coneCollisionObjectCount = addAllCounts(coneCollisionObjectCountMap);
+        quint32 sphereCollisionObjectCount = addAllCounts(sphereCollisionObjectCountMap);
+        quint32 cylinderCollisionObjectCount = addAllCounts(cylinderCollisionObjectCountMap);
         quint32 wormholeCount = addAllCounts(runtimeReflectiveModelCountMap);
         quint32 falloutVolumeCount = addAllCounts(falloutVolumeCountMap);
 
@@ -558,16 +780,17 @@ namespace WS2Lz {
         dev << bananaCount;
         dev << (quint32) (bananaCount > 0 ? bananaOffsetMap.firstKey() : 0); //Banana list offset
         dev << coneCollisionObjectCount;
-        dev << coneCollisionObjectListOffset;
+        dev << (quint32) (coneCollisionObjectCount > 0 ? coneCollisionObjectOffsetMap.firstKey() : 0); //Banana list offset
         dev << sphereCollisionObjectCount;
-        dev << sphereCollisionObjectListOffset;
+        dev << (quint32) (sphereCollisionObjectCount > 0 ? sphereCollisionObjectOffsetMap.firstKey() : 0); //Banana list offset
         dev << cylinderCollisionObjectCount;
-        dev << cylinderCollisionObjectListOffset;
+        dev << (quint32) (cylinderCollisionObjectCount > 0 ? cylinderCollisionObjectOffsetMap.firstKey() : 0); //Banana list offset
         dev << falloutVolumeCount;
         dev << (quint32) (falloutVolumeCount > 0 ? falloutVolumeOffsetMap.firstKey() : 0); //Fallout volume list offset
         dev << (quint32) bgOffsetMap.size();
         dev << (quint32) (bgOffsetMap.size() > 0 ? bgOffsetMap.firstKey() : 0); //Background list offset
-        writeNull(dev, 8); //TODO: Mystery 8
+        dev << (quint32) fgOffsetMap.size();
+        dev << (quint32) (fgOffsetMap.size() > 0 ? fgOffsetMap.firstKey() : 0); //Foreground list offset
         writeNull(dev, 4);
         dev << (quint32) 0x00000001;
         dev << wormholeCount;
@@ -645,9 +868,12 @@ namespace WS2Lz {
         dev << jamabarOffsetMap.key(node);
         dev << bananaCountMap.value(node);
         dev << bananaOffsetMap.key(node);
-        writeNull(dev, 8); //TODO: Cone collision objects
-        writeNull(dev, 8); //TODO: Sphere collision objects
-        writeNull(dev, 8); //TODO: Cylinder collision objects
+        dev << coneCollisionObjectCountMap.value(node);
+        dev << coneCollisionObjectOffsetMap.key(node);
+        dev << sphereCollisionObjectCountMap.value(node);
+        dev << sphereCollisionObjectOffsetMap.key(node);
+        dev << cylinderCollisionObjectCountMap.value(node);
+        dev << cylinderCollisionObjectOffsetMap.key(node);
         dev << falloutVolumeCountMap.value(node);
         dev << falloutVolumeOffsetMap.key(node);
         dev << runtimeReflectiveModelCountMap.value(node);
@@ -677,7 +903,8 @@ namespace WS2Lz {
 
         writeNull(dev, 4); //TODO: Unknown/Null
         dev << (anim != nullptr ? anim->getLoopTime() : (quint32) 0); //Anim loop time
-        writeNull(dev, 964); //TODO: Everything else
+        dev << textureScrollOffsetMap.key(node);
+        writeNull(dev, 960); //TODO: Everything else
     }
 
     void SMB2LzExporter::writeCollisionTriangleIndexList(QDataStream &dev, const TriangleIntersectionGrid *intGrid) {
@@ -716,7 +943,8 @@ namespace WS2Lz {
     void SMB2LzExporter::writeGoal(QDataStream &dev, const Scene::GoalSceneNode *node) {
         dev << node->getPosition();
         dev << convertRotation(node->getRotation());
-        dev << (quint16) node->getType();
+        dev << (quint8) node->getType();
+        dev << (quint8) node->getCastShadow();
     }
 
     void SMB2LzExporter::writeBumper(QDataStream &dev, const Scene::BumperSceneNode *node) {
@@ -757,6 +985,29 @@ namespace WS2Lz {
     void SMB2LzExporter::writeFalloutVolume(QDataStream &dev, const Scene::FalloutVolumeSceneNode *node) {
         dev << node->getPosition();
         dev << node->getScale();
+        dev << convertRotation(node->getRotation());
+        writeNull(dev, 2);
+    }
+
+    void SMB2LzExporter::writeConeCollisionObject(QDataStream &dev, const Scene::ConeCollisionObjectSceneNode *node) {
+        dev << node->getPosition();
+        dev << convertRotation(node->getRotation());
+        writeNull(dev, 2);
+        dev << node->getRadius();
+        dev << node->getHeight();
+        dev << node->getRadius();
+    }
+
+    void SMB2LzExporter::writeSphereCollisionObject(QDataStream &dev, const Scene::SphereCollisionObjectSceneNode *node) {
+        dev << node->getPosition();
+        dev << node->getRadius();
+        writeNull(dev, 4);
+    }
+
+    void SMB2LzExporter::writeCylinderCollisionObject(QDataStream &dev, const Scene::CylinderCollisionObjectSceneNode *node) {
+        dev << node->getPosition();
+        dev << node->getRadius();
+        dev << node->getHeight();
         dev << convertRotation(node->getRotation());
         writeNull(dev, 2);
     }
@@ -897,13 +1148,15 @@ namespace WS2Lz {
         quint32 nextOffset = levelModelOffsetMap.key(node);
 
         forEachChildType(node, Scene::MeshSceneNode*, child) {
-            writeNull(dev, 4);
-            dev << (quint32) 0x00000001;
-            dev << nextOffset;
+            if (!child->isRuntimeReflective()) {
+                dev << (quint32) (child->getBitflag());
+                dev << (quint32) 0x00000001;
+                dev << nextOffset;
 
-            //Level models for the same collision header are just sequential stores, so it's fine to just add
-            //on the length of a single level model
-            nextOffset += LEVEL_MODEL_LENGTH;
+                //Level models for the same collision header are just sequential stores, so it's fine to just add
+                //on the length of a single level model
+                nextOffset += LEVEL_MODEL_LENGTH;
+            }
         }
     }
 
@@ -911,45 +1164,75 @@ namespace WS2Lz {
         quint32 nextOffset = levelModelPointerAOffsetMap.key(node);
 
         forEachChildType(node, Scene::MeshSceneNode*, child) {
-            dev << nextOffset;
+            if (!child->isRuntimeReflective()) {
+                dev << nextOffset;
 
-            //Level model pointer type As for the same collision header are just sequential stores, so it's fine to
-            //just add on the length of a single level model
-            nextOffset += LEVEL_MODEL_POINTER_TYPE_A_LENGTH;
+                //Level model pointer type As for the same collision header are just sequential stores, so it's fine to
+                //just add on the length of a single level model
+                nextOffset += LEVEL_MODEL_POINTER_TYPE_A_LENGTH;
+            }
         }
     }
 
     void SMB2LzExporter::writeLevelModelList(QDataStream &dev, const Scene::GroupSceneNode *node) {
         forEachChildType(node, Scene::MeshSceneNode*, child) {
-            writeNull(dev, 4);
-            dev << levelModelNameOffsetMap.key(child->getMeshName());
-            writeNull(dev, 8);
+            if (!child->isRuntimeReflective()) {
+                writeNull(dev, 4);
+                dev << levelModelNameOffsetMap.key(child->getMeshName());
+                writeNull(dev, 8);
+            }
         }
     }
 
     void SMB2LzExporter::writeLevelModelNameList(QDataStream &dev, const Scene::GroupSceneNode *node) {
         forEachChildType(node, Scene::MeshSceneNode*, child) {
-            //Write the object name
-            dev.writeRawData(child->getMeshName().toLatin1(), child->getMeshName().size());
+                //Write the object name
+                dev.writeRawData(child->getMeshName().toLatin1(), child->getMeshName().size());
 
-            writeNull(dev, 1); //Add a null terminator
-            //Pad to 4 bytes
-            writeNull(dev, roundUpNearest4(child->getMeshName().size() + 1) - (child->getMeshName().size() + 1));
+                writeNull(dev, 1); //Add a null terminator
+                //Pad to 4 bytes
+                writeNull(dev, roundUpNearest4(child->getMeshName().size() + 1) - (child->getMeshName().size() + 1));
         }
     }
 
     void SMB2LzExporter::writeBackgroundModel(QDataStream &dev, const Scene::MeshSceneNode *node) {
-        dev << (quint32) 0x0000001F;
+        const Animation::TransformAnimation *anim = node->getTransformAnimation();
+        dev << (quint32) node->getMeshType();
         dev << bgNameOffsetMap.key(node->getMeshName());
         writeNull(dev, 4);
         dev << node->getPosition();
         dev << convertRotation(node->getRotation());
         writeNull(dev, 2);
         dev << node->getScale();
-        writeNull(dev, 12); //TODO: Add background animation
+        writeNull(dev, 4); //TODO: Figure out use of header #1
+        dev << (anim != nullptr ? bgAnimHeaderOffsetMap.key(node) : (quint32) 0); //Offset to animation header
+        dev << effectHeaderOffsetMap.key(node);
+    }
+
+    void SMB2LzExporter::writeForegroundModel(QDataStream &dev, const Scene::MeshSceneNode *node) {
+        const Animation::TransformAnimation *anim = node->getTransformAnimation();
+        dev << (quint32) node->getMeshType();
+        dev << fgNameOffsetMap.key(node->getMeshName());
+        writeNull(dev, 4);
+        dev << node->getPosition();
+        dev << convertRotation(node->getRotation());
+        writeNull(dev, 2);
+        dev << node->getScale();
+        writeNull(dev, 4); //TODO: Figure out use of header #1
+        dev << (anim != nullptr ? fgAnimHeaderOffsetMap.key(node) : (quint32) 0); //Offset to animation header
+        dev << effectHeaderOffsetMap.key(node);
     }
 
     void SMB2LzExporter::writeBackgroundName(QDataStream &dev, const Scene::MeshSceneNode *node) {
+        //Write the object name
+        dev.writeRawData(node->getMeshName().toLatin1(), node->getMeshName().size());
+
+        writeNull(dev, 1); //Add a null terminator
+        //Pad to 4 bytes
+        writeNull(dev, roundUpNearest4(node->getMeshName().size() + 1) - (node->getMeshName().size() + 1));
+    }
+
+    void SMB2LzExporter::writeForegroundName(QDataStream &dev, const Scene::MeshSceneNode *node) {
         //Write the object name
         dev.writeRawData(node->getMeshName().toLatin1(), node->getMeshName().size());
 
@@ -977,10 +1260,50 @@ namespace WS2Lz {
         writeNull(dev, 16);
     }
 
-    void SMB2LzExporter::writeTransformAnimation(QDataStream &dev, const Animation::TransformAnimation *anim) {
+    void SMB2LzExporter::writeBgFgAnimationHeader(QDataStream &dev, const Animation::TransformAnimation *anim) {
         //Not all groups will have animation - get outta here if nullptr
         if (anim == nullptr) return;
+        writeNull(dev, 4);
+        dev << anim->getLoopTime();
+        dev << (quint32) anim->getScaleXKeyframes().size(); //Number of scale X keyframes
+        dev << (quint32) (anim->getScaleXKeyframes().size() != 0 ? animScaleXKeyframesOffsetMap.key(anim) : 0); //Offset to scale X keyframes
+        dev << (quint32) anim->getScaleYKeyframes().size(); //Number of scale Y keyframes
+        dev << (quint32) (anim->getScaleYKeyframes().size() != 0 ? animScaleYKeyframesOffsetMap.key(anim) : 0); //Offset to pos Y keyframes
+        dev << (quint32) anim->getScaleZKeyframes().size(); //Number of scale Z keyframes
+        dev << (quint32) (anim->getScaleZKeyframes().size() != 0 ? animScaleZKeyframesOffsetMap.key(anim) : 0); //Offset to pos Z keyframes
+        dev << (quint32) anim->getRotXKeyframes().size(); //Number of rot X keyframes
+        dev << (quint32) (anim->getRotXKeyframes().size() != 0 ? animRotXKeyframesOffsetMap.key(anim) : 0); //Offset to pos X keyframes
+        dev << (quint32) anim->getRotYKeyframes().size(); //Number of rot Y keyframes
+        dev << (quint32) (anim->getRotYKeyframes().size() != 0 ? animRotYKeyframesOffsetMap.key(anim) : 0); //Offset to pos Y keyframes
+        dev << (quint32) anim->getRotZKeyframes().size(); //Number of rot Z keyframes
+        dev << (quint32) (anim->getRotZKeyframes().size() != 0 ? animRotZKeyframesOffsetMap.key(anim) : 0); //Offset to pos Z keyframes
+        dev << (quint32) anim->getPosXKeyframes().size(); //Number of pos X keyframes
+        dev << (quint32) (anim->getPosXKeyframes().size() != 0 ? animPosXKeyframesOffsetMap.key(anim) : 0); //Offset to pos X keyframes
+        dev << (quint32) anim->getPosYKeyframes().size(); //Number of pos Y keyframes
+        dev << (quint32) (anim->getPosYKeyframes().size() != 0 ? animPosYKeyframesOffsetMap.key(anim) : 0); //Offset to pos Y keyframes
+        dev << (quint32) anim->getPosZKeyframes().size(); //Number of pos Z keyframes
+        dev << (quint32) (anim->getPosZKeyframes().size() != 0 ? animPosZKeyframesOffsetMap.key(anim) : 0); //Offset to pos Z keyframes
+        writeNull(dev, 16);
+    }
 
+    void SMB2LzExporter::writeEffectHeader(QDataStream &dev, const Scene::MeshSceneNode *node) {
+        writeNull(dev, 16); //TODO: Implement effect keyframes one they're figured out
+        dev << textureScrollOffsetMap.key(node);
+        writeNull(dev, 28); //TODO: Whatever this stuff is
+    }
+
+    void SMB2LzExporter::writeTextureScroll(QDataStream &dev, const Scene::SceneNode *node) {
+        dev << node->getTextureScroll();
+    }
+
+    void SMB2LzExporter::writeTransformAnimation(QDataStream &dev, const Animation::TransformAnimation *anim, bool scale=false) {
+        //Not all groups will have animation - get outta here if nullptr
+        if (anim == nullptr) return;
+        if (scale) {
+            foreach(Animation::KeyframeF *k, anim->getScaleXKeyframes()) writeKeyframeF(dev, k);
+            foreach(Animation::KeyframeF *k, anim->getScaleYKeyframes()) writeKeyframeF(dev, k);
+            foreach(Animation::KeyframeF *k, anim->getScaleZKeyframes()) writeKeyframeF(dev, k);
+        }
         foreach(Animation::KeyframeF *k, anim->getPosXKeyframes()) writeKeyframeF(dev, k);
         foreach(Animation::KeyframeF *k, anim->getPosYKeyframes()) writeKeyframeF(dev, k);
         foreach(Animation::KeyframeF *k, anim->getPosZKeyframes()) writeKeyframeF(dev, k);

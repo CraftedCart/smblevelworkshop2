@@ -35,6 +35,8 @@ namespace WS2Common {
                             stage->getRootNode()->addChild(parseStart(xml));
                         } else if (xml.name() == "backgroundModel") {
                             stage->getFirstBackgroundGroup(true)->addChild(parseBackgroundModel(xml));
+                        } else if (xml.name() == "foregroundModel") {
+                            stage->getFirstForegroundGroup(true)->addChild(parseForegroundModel(xml));
                         } else if (xml.name() == "falloutPlane") {
                             stage->setFalloutY(SerializeUtils::getAttribute(xml.attributes(), "y").toFloat());
                         } else if (xml.name() == "fog") {
@@ -144,6 +146,8 @@ namespace WS2Common {
         Scene::MeshSceneNode* XMLConfigParser::parseBackgroundModel(QXmlStreamReader &xml) {
             //A valid XML config should set the name of the bg model - It should never be UNDEFINED!
             Scene::MeshSceneNode *bg = new Scene::MeshSceneNode("UNDEFINED!");
+            Animation::TransformAnimation *anim = nullptr;
+            float loopTime = 0.0f;
 
             while (!(xml.isEndElement() && xml.name() == "backgroundModel")) {
                 xml.readNext();
@@ -163,21 +167,73 @@ namespace WS2Common {
                     bg->setRotation(MathUtils::degreesToRadians(SerializeUtils::getVec3Attributes(xml.attributes())));
                 } else if (xml.name() == "scale") {
                     bg->setScale(SerializeUtils::getVec3Attributes(xml.attributes()));
-                } else if (xml.name() == "animKeyframes") { //TODO
-                    qWarning() << "backgroundModel > animKeyframes not yet implemented!";
-                    xml.skipCurrentElement();
-                } else if (xml.name() == "animLoopTime") { //TODO
-                    qWarning() << "backgroundModel > animLoopTime not yet implemented!";
-                    xml.skipCurrentElement();
-                } else if (xml.name() == "textureScroll") { //TODO
-                    qWarning() << "backgroundModel > textureScroll not yet implemented!";
-                    xml.skipCurrentElement();
+                } else if (xml.name() == "meshType") {
+                    bg->setMeshType(xml.readElementText().toUInt());
+                } else if (xml.name() == "animKeyframes") { 
+                    Animation::TransformAnimation *transformAnim = parseTransformAnimation(xml, true);
+                    bg->setTransformAnimation(transformAnim);
+                    anim = transformAnim; //For later linking (So that the loop type is set in the transformAnim)
+                } else if (xml.name() == "animLoopTime") { 
+                    loopTime = (xml.readElementText().toFloat());
+                } else if (xml.name() == "textureScroll") {
+                   bg->setTextureScroll(SerializeUtils::getVec2Attributes(xml.attributes()));
                 } else {
                     qWarning().noquote() << "Unrecognised tag: backgroundModel >" << xml.name();
                 }
+
             }
 
+            if (anim != nullptr) {
+                anim->setLoopTime(loopTime);
+            }
             return bg;
+        }
+
+        Scene::MeshSceneNode* XMLConfigParser::parseForegroundModel(QXmlStreamReader &xml) {
+            //A valid XML config should set the name of the fg model - It should never be UNDEFINED!
+            Scene::MeshSceneNode *fg = new Scene::MeshSceneNode("UNDEFINED!");
+            Animation::TransformAnimation *anim = nullptr;
+            float loopTime = 0.0f;
+
+            while (!(xml.isEndElement() && xml.name() == "foregroundModel")) {
+                xml.readNext();
+                if (!xml.isStartElement()) continue; //Ignore all end elements
+
+                qDebug().nospace() << "XML config parsing [Line: " << xml.lineNumber() << ", Col: " << xml.columnNumber() << "]: " <<
+                    "foregroundModel > " << xml.name();
+
+                if (xml.name() == "name") {
+                    QString name = xml.readElementText();
+
+                    fg->setName(name);
+                    fg->setMeshName(name);
+                } else if (xml.name() == "position") {
+                    fg->setPosition(SerializeUtils::getVec3Attributes(xml.attributes()));
+                } else if (xml.name() == "rotation") {
+                    fg->setRotation(MathUtils::degreesToRadians(SerializeUtils::getVec3Attributes(xml.attributes())));
+                } else if (xml.name() == "scale") {
+                    fg->setScale(SerializeUtils::getVec3Attributes(xml.attributes()));
+                } else if (xml.name() == "meshType") {
+                    fg->setMeshType(xml.readElementText().toUInt());
+                } else if (xml.name() == "animKeyframes") { //TODO
+                    Animation::TransformAnimation *transformAnim = parseTransformAnimation(xml, true);
+                    fg->setTransformAnimation(transformAnim);
+                    anim = transformAnim; //For later linking (So that the loop type is set in the transformAnim)
+                } else if (xml.name() == "animLoopTime") { 
+                    loopTime = (xml.readElementText().toFloat());
+                } else if (xml.name() == "textureScroll") {
+                   fg->setTextureScroll(SerializeUtils::getVec2Attributes(xml.attributes()));
+                } else {
+                    qWarning().noquote() << "Unrecognised tag: foregroundModel >" << xml.name();
+                }
+
+            }
+
+            if (anim != nullptr) {
+                anim->setLoopTime(loopTime);
+            }
+
+            return fg;
         }
 
         Scene::GroupSceneNode* XMLConfigParser::parseItemGroup(QXmlStreamReader &xml) {
@@ -221,8 +277,10 @@ namespace WS2Common {
                     group->setSeesawSpring(xml.readElementText().toFloat()); //TODO: Error checking
                 } else if (xml.name() == "seesawSpring") {
                     group->setSeesawSpring(xml.readElementText().toFloat()); //TODO: Error checking
+                } else if (xml.name() == "textureScroll") {
+                    group->setTextureScroll(SerializeUtils::getVec2Attributes(xml.attributes()));
                 } else if (xml.name() == "animKeyframes") {
-                    Animation::TransformAnimation *transformAnim = parseTransformAnimation(xml);
+                    Animation::TransformAnimation *transformAnim = parseTransformAnimation(xml, false);
                     group->setTransformAnimation(transformAnim);
                     anim = transformAnim; //For later linking (So that the loop type is set in the transformAnim)
                 } else if (xml.name() == "animLoopTime") {
@@ -241,6 +299,12 @@ namespace WS2Common {
                     group->addChild(parseJamabar(xml));
                 } else if (xml.name() == "banana") {
                     group->addChild(parseBanana(xml));
+                } else if (xml.name() == "cone") {
+                    group->addChild(parseConeCollisionObject(xml));  
+                } else if (xml.name() == "sphere") {
+                    group->addChild(parseSphereCollisionObject(xml));
+                } else if (xml.name() == "cylinder") {
+                    group->addChild(parseCylinderCollisionObject(xml));
                 } else if (xml.name() == "falloutVolume") {
                     group->addChild(parseFalloutVolume(xml));
                 } else if (xml.name() == "wormhole") {
@@ -285,6 +349,8 @@ namespace WS2Common {
                     goal->setRotation(MathUtils::degreesToRadians(SerializeUtils::getVec3Attributes(xml.attributes())));
                 } else if (xml.name() == "type") {
                     goal->setType(GoalType::fromString(xml.readElementText()));
+                } else if (xml.name() == "castShadow") {
+                    goal->setCastShadow(xml.readElementText() == "true");    
                 } else {
                     qWarning().noquote() << "Unrecognised tag: goal >" << xml.name();
                 }
@@ -381,6 +447,98 @@ namespace WS2Common {
             id++;
 
             return banana;
+        }
+
+        Scene::ConeCollisionObjectSceneNode* XMLConfigParser::parseConeCollisionObject(QXmlStreamReader &xml) {
+            //Default name is "Cone Collision Object x", translated
+            static unsigned int id = 0;
+            Scene::ConeCollisionObjectSceneNode *cone = new Scene::ConeCollisionObjectSceneNode(QCoreApplication::translate("XMLConfigParser", "Cone Collision Object %1").arg(id));
+
+            while (!(xml.isEndElement() && xml.name() == "cone")) {
+                xml.readNext();
+                if (!xml.isStartElement()) continue; //Ignore all end elements
+
+                qDebug().nospace() << "XML config parsing [Line: " << xml.lineNumber() << ", Col: " << xml.columnNumber() << "]: " <<
+                    "cone > " << xml.name();
+
+                if (xml.name() == "name") {
+                    cone->setName(xml.readElementText());
+                } else if (xml.name() == "position") {
+                    cone->setPosition(SerializeUtils::getVec3Attributes(xml.attributes()));
+                } else if (xml.name() == "rotation") {
+                    cone->setRotation(MathUtils::degreesToRadians(SerializeUtils::getVec3Attributes(xml.attributes())));
+                } else if (xml.name() == "radius") {
+                    cone->setRadius(xml.readElementText().toFloat());
+                } else if (xml.name() == "height") {
+                    cone->setHeight(xml.readElementText().toFloat());
+                } else {
+                    qWarning().noquote() << "Unrecognised tag: cone >" << xml.name();
+                }
+            }
+
+            id++;
+
+            return cone;
+        }
+
+        Scene::SphereCollisionObjectSceneNode* XMLConfigParser::parseSphereCollisionObject(QXmlStreamReader &xml) {
+            //Default name is "Sphere Collision Object x", translated
+            static unsigned int id = 0;
+            Scene::SphereCollisionObjectSceneNode *sphere = new Scene::SphereCollisionObjectSceneNode(QCoreApplication::translate("XMLConfigParser", "Sphere Collision Object %1").arg(id));
+
+            while (!(xml.isEndElement() && xml.name() == "sphere")) {
+                xml.readNext();
+                if (!xml.isStartElement()) continue; //Ignore all end elements
+
+                qDebug().nospace() << "XML config parsing [Line: " << xml.lineNumber() << ", Col: " << xml.columnNumber() << "]: " <<
+                    "sphere > " << xml.name();
+
+                if (xml.name() == "name") {
+                    sphere->setName(xml.readElementText());
+                } else if (xml.name() == "position") {
+                    sphere->setPosition(SerializeUtils::getVec3Attributes(xml.attributes()));
+                } else if (xml.name() == "radius") {
+                    sphere->setRadius(xml.readElementText().toFloat());
+                } else {
+                    qWarning().noquote() << "Unrecognised tag: sphere >" << xml.name();
+                }
+            }
+
+            id++;
+
+            return sphere;
+        }
+
+        Scene::CylinderCollisionObjectSceneNode* XMLConfigParser::parseCylinderCollisionObject(QXmlStreamReader &xml) {
+            //Default name is "Cylinder Collision Object x", translated
+            static unsigned int id = 0;
+            Scene::CylinderCollisionObjectSceneNode *cylinder = new Scene::CylinderCollisionObjectSceneNode(QCoreApplication::translate("XMLConfigParser", "Cylinder Collision Object %1").arg(id));
+
+            while (!(xml.isEndElement() && xml.name() == "cylinder")) {
+                xml.readNext();
+                if (!xml.isStartElement()) continue; //Ignore all end elements
+
+                qDebug().nospace() << "XML config parsing [Line: " << xml.lineNumber() << ", Col: " << xml.columnNumber() << "]: " <<
+                    "cylinder > " << xml.name();
+
+                if (xml.name() == "name") {
+                    cylinder->setName(xml.readElementText());
+                } else if (xml.name() == "position") {
+                    cylinder->setPosition(SerializeUtils::getVec3Attributes(xml.attributes()));
+                } else if (xml.name() == "rotation") {
+                    cylinder->setRotation(MathUtils::degreesToRadians(SerializeUtils::getVec3Attributes(xml.attributes())));
+                } else if (xml.name() == "radius") {
+                    cylinder->setRadius(xml.readElementText().toFloat());
+                } else if (xml.name() == "height") {
+                    cylinder->setHeight(xml.readElementText().toFloat());
+                } else {
+                    qWarning().noquote() << "Unrecognised tag: cylinder >" << xml.name();
+                }
+            }
+
+            id++;
+
+            return cylinder;
         }
 
         Scene::FalloutVolumeSceneNode* XMLConfigParser::parseFalloutVolume(QXmlStreamReader &xml) {
@@ -519,6 +677,8 @@ namespace WS2Common {
                     mesh->setRuntimeReflective(xml.readElementText() == "true");
                 } else if (xml.name() == "collision") {
                     for (Scene::CollisionSceneNode *collision : parseCollision(xml)) mesh->addChild(collision);
+                } else if (xml.name() == "bitflag") {
+                    mesh->setBitflag(xml.readElementText().toUInt()); 
                 } else {
                     qWarning().noquote() << "Unrecognised tag: stageModel >" << xml.name();
                 }
@@ -611,7 +771,7 @@ namespace WS2Common {
             return QPair<EnumAnimationSeesawType, Animation::EnumLoopType>(animSeesawType, loopType);
         }
 
-        Animation::TransformAnimation* XMLConfigParser::parseTransformAnimation(QXmlStreamReader &xml) {
+        Animation::TransformAnimation* XMLConfigParser::parseTransformAnimation(QXmlStreamReader &xml, bool supportsScale) {
             Animation::TransformAnimation *anim = new Animation::TransformAnimation;
 
             while (!(xml.isEndElement() && xml.name() == "animKeyframes")) {
@@ -633,6 +793,12 @@ namespace WS2Common {
                     parseKeyframes(xml, anim->getRotYKeyframes(), true);
                 } else if (xml.name() == "rotZ") {
                     parseKeyframes(xml, anim->getRotZKeyframes(), true);
+                } else if (xml.name() == "scaleX" && supportsScale) {
+                    parseKeyframes(xml, anim->getScaleXKeyframes()); 
+                } else if (xml.name() == "scaleY" && supportsScale) {
+                    parseKeyframes(xml, anim->getScaleYKeyframes()); 
+                } else if (xml.name() == "scaleZ" && supportsScale) {
+                    parseKeyframes(xml, anim->getScaleZKeyframes()); 
                 } else {
                     qWarning().noquote() << "Unrecognised tag: animKeyframes >" << xml.name();
                 }

@@ -18,6 +18,7 @@ namespace WS2Common {
                  * @brief The type that this node is
                  */
                 EnumGoalType type = EnumGoalType::BLUE;
+                bool castShadow = true;
 
             protected:
                 virtual void serializeNodeDataXml(QXmlStreamWriter &s) const;
@@ -40,6 +41,9 @@ namespace WS2Common {
                  * @param type The type to set this as
                  */
                 void setType(EnumGoalType type);
+                bool getCastShadow() const;
+                void setCastShadow(bool castShadow);
+
         };
     }
 }
