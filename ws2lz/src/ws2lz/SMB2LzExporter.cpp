@@ -90,7 +90,7 @@ namespace WS2Lz {
         forEachBg(mesh) writeEffectHeader(dev, mesh); // Background effect headers
         forEachFg(mesh) writeEffectHeader(dev, mesh); // Foreground effect headers
         forEachBg(mesh) writeTextureScroll(dev, mesh); // Background texture scroll
-        forEachBg(mesh) writeTextureScroll(dev, mesh); // Foreground texture scroll
+        forEachFg(mesh) writeTextureScroll(dev, mesh); // Foreground texture scroll
         forEachGroup(group) writeTextureScroll(dev, group); // Item group texture scroll
         forEachBg(mesh) writeTransformAnimation(dev, mesh->getTransformAnimation(), true); // Background object animations (scaling)
         forEachFg(mesh) writeTransformAnimation(dev, mesh->getTransformAnimation(), true); // Foreground object animations (scaling)
@@ -662,6 +662,16 @@ namespace WS2Lz {
             if (anim != nullptr) {
                 //This node has animation
 
+                //RotX
+                animRotXKeyframesOffsetMap.insert(nextOffset, anim);
+                nextOffset += ANIMATION_KEYFRAME_LENGTH * anim->getRotXKeyframes().size();
+                //RotY
+                animRotYKeyframesOffsetMap.insert(nextOffset, anim);
+                nextOffset += ANIMATION_KEYFRAME_LENGTH * anim->getRotYKeyframes().size();
+                //RotZ
+                animRotZKeyframesOffsetMap.insert(nextOffset, anim);
+                nextOffset += ANIMATION_KEYFRAME_LENGTH * anim->getRotZKeyframes().size();
+
                 //PosX
                 animPosXKeyframesOffsetMap.insert(nextOffset, anim);
                 nextOffset += ANIMATION_KEYFRAME_LENGTH * anim->getPosXKeyframes().size();
@@ -672,15 +682,6 @@ namespace WS2Lz {
                 animPosZKeyframesOffsetMap.insert(nextOffset, anim);
                 nextOffset += ANIMATION_KEYFRAME_LENGTH * anim->getPosZKeyframes().size();
 
-                //RotX
-                animRotXKeyframesOffsetMap.insert(nextOffset, anim);
-                nextOffset += ANIMATION_KEYFRAME_LENGTH * anim->getRotXKeyframes().size();
-                //RotY
-                animRotYKeyframesOffsetMap.insert(nextOffset, anim);
-                nextOffset += ANIMATION_KEYFRAME_LENGTH * anim->getRotYKeyframes().size();
-                //RotZ
-                animRotZKeyframesOffsetMap.insert(nextOffset, anim);
-                nextOffset += ANIMATION_KEYFRAME_LENGTH * anim->getRotZKeyframes().size();
             }
         }
 
@@ -1304,12 +1305,12 @@ namespace WS2Lz {
             foreach(Animation::KeyframeF *k, anim->getScaleYKeyframes()) writeKeyframeF(dev, k);
             foreach(Animation::KeyframeF *k, anim->getScaleZKeyframes()) writeKeyframeF(dev, k);
         }
-        foreach(Animation::KeyframeF *k, anim->getPosXKeyframes()) writeKeyframeF(dev, k);
-        foreach(Animation::KeyframeF *k, anim->getPosYKeyframes()) writeKeyframeF(dev, k);
-        foreach(Animation::KeyframeF *k, anim->getPosZKeyframes()) writeKeyframeF(dev, k);
         foreach(Animation::KeyframeF *k, anim->getRotXKeyframes()) writeKeyframeAngleF(dev, k);
         foreach(Animation::KeyframeF *k, anim->getRotYKeyframes()) writeKeyframeAngleF(dev, k);
         foreach(Animation::KeyframeF *k, anim->getRotZKeyframes()) writeKeyframeAngleF(dev, k);
+        foreach(Animation::KeyframeF *k, anim->getPosXKeyframes()) writeKeyframeF(dev, k);
+        foreach(Animation::KeyframeF *k, anim->getPosYKeyframes()) writeKeyframeF(dev, k);
+        foreach(Animation::KeyframeF *k, anim->getPosZKeyframes()) writeKeyframeF(dev, k);
     }
 
     void SMB2LzExporter::writeRuntimeReflectiveModelList(QDataStream &dev, const Scene::GroupSceneNode *node) {
