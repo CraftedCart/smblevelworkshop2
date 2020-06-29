@@ -594,6 +594,16 @@ namespace WS2Lz {
                 animScaleZKeyframesOffsetMap.insert(nextOffset, anim);
                 nextOffset += ANIMATION_KEYFRAME_LENGTH * anim->getScaleZKeyframes().size();
 
+                //RotX
+                animRotXKeyframesOffsetMap.insert(nextOffset, anim);
+                nextOffset += ANIMATION_KEYFRAME_LENGTH * anim->getRotXKeyframes().size();
+                //RotY
+                animRotYKeyframesOffsetMap.insert(nextOffset, anim);
+                nextOffset += ANIMATION_KEYFRAME_LENGTH * anim->getRotYKeyframes().size();
+                //RotZ
+                animRotZKeyframesOffsetMap.insert(nextOffset, anim);
+                nextOffset += ANIMATION_KEYFRAME_LENGTH * anim->getRotZKeyframes().size();
+
                 //PosX
                 animPosXKeyframesOffsetMap.insert(nextOffset, anim);
                 nextOffset += ANIMATION_KEYFRAME_LENGTH * anim->getPosXKeyframes().size();
@@ -604,15 +614,7 @@ namespace WS2Lz {
                 animPosZKeyframesOffsetMap.insert(nextOffset, anim);
                 nextOffset += ANIMATION_KEYFRAME_LENGTH * anim->getPosZKeyframes().size();
 
-                //RotX
-                animRotXKeyframesOffsetMap.insert(nextOffset, anim);
-                nextOffset += ANIMATION_KEYFRAME_LENGTH * anim->getRotXKeyframes().size();
-                //RotY
-                animRotYKeyframesOffsetMap.insert(nextOffset, anim);
-                nextOffset += ANIMATION_KEYFRAME_LENGTH * anim->getRotYKeyframes().size();
-                //RotZ
-                animRotZKeyframesOffsetMap.insert(nextOffset, anim);
-                nextOffset += ANIMATION_KEYFRAME_LENGTH * anim->getRotZKeyframes().size();
+
             }
         }
 
@@ -633,6 +635,16 @@ namespace WS2Lz {
                 animScaleZKeyframesOffsetMap.insert(nextOffset, anim);
                 nextOffset += ANIMATION_KEYFRAME_LENGTH * anim->getScaleZKeyframes().size();
 
+                //RotX
+                animRotXKeyframesOffsetMap.insert(nextOffset, anim);
+                nextOffset += ANIMATION_KEYFRAME_LENGTH * anim->getRotXKeyframes().size();
+                //RotY
+                animRotYKeyframesOffsetMap.insert(nextOffset, anim);
+                nextOffset += ANIMATION_KEYFRAME_LENGTH * anim->getRotYKeyframes().size();
+                //RotZ
+                animRotZKeyframesOffsetMap.insert(nextOffset, anim);
+                nextOffset += ANIMATION_KEYFRAME_LENGTH * anim->getRotZKeyframes().size();
+
                 //PosX
                 animPosXKeyframesOffsetMap.insert(nextOffset, anim);
                 nextOffset += ANIMATION_KEYFRAME_LENGTH * anim->getPosXKeyframes().size();
@@ -643,15 +655,6 @@ namespace WS2Lz {
                 animPosZKeyframesOffsetMap.insert(nextOffset, anim);
                 nextOffset += ANIMATION_KEYFRAME_LENGTH * anim->getPosZKeyframes().size();
 
-                //RotX
-                animRotXKeyframesOffsetMap.insert(nextOffset, anim);
-                nextOffset += ANIMATION_KEYFRAME_LENGTH * anim->getRotXKeyframes().size();
-                //RotY
-                animRotYKeyframesOffsetMap.insert(nextOffset, anim);
-                nextOffset += ANIMATION_KEYFRAME_LENGTH * anim->getRotYKeyframes().size();
-                //RotZ
-                animRotZKeyframesOffsetMap.insert(nextOffset, anim);
-                nextOffset += ANIMATION_KEYFRAME_LENGTH * anim->getRotZKeyframes().size();
             }
         }
 
@@ -1269,15 +1272,15 @@ namespace WS2Lz {
         dev << (quint32) anim->getScaleXKeyframes().size(); //Number of scale X keyframes
         dev << (quint32) (anim->getScaleXKeyframes().size() != 0 ? animScaleXKeyframesOffsetMap.key(anim) : 0); //Offset to scale X keyframes
         dev << (quint32) anim->getScaleYKeyframes().size(); //Number of scale Y keyframes
-        dev << (quint32) (anim->getScaleYKeyframes().size() != 0 ? animScaleYKeyframesOffsetMap.key(anim) : 0); //Offset to pos Y keyframes
+        dev << (quint32) (anim->getScaleYKeyframes().size() != 0 ? animScaleYKeyframesOffsetMap.key(anim) : 0); //Offset to scale Y keyframes
         dev << (quint32) anim->getScaleZKeyframes().size(); //Number of scale Z keyframes
-        dev << (quint32) (anim->getScaleZKeyframes().size() != 0 ? animScaleZKeyframesOffsetMap.key(anim) : 0); //Offset to pos Z keyframes
+        dev << (quint32) (anim->getScaleZKeyframes().size() != 0 ? animScaleZKeyframesOffsetMap.key(anim) : 0); //Offset to scale Z keyframes
         dev << (quint32) anim->getRotXKeyframes().size(); //Number of rot X keyframes
-        dev << (quint32) (anim->getRotXKeyframes().size() != 0 ? animRotXKeyframesOffsetMap.key(anim) : 0); //Offset to pos X keyframes
+        dev << (quint32) (anim->getRotXKeyframes().size() != 0 ? animRotXKeyframesOffsetMap.key(anim) : 0); //Offset to rotation X keyframes
         dev << (quint32) anim->getRotYKeyframes().size(); //Number of rot Y keyframes
-        dev << (quint32) (anim->getRotYKeyframes().size() != 0 ? animRotYKeyframesOffsetMap.key(anim) : 0); //Offset to pos Y keyframes
+        dev << (quint32) (anim->getRotYKeyframes().size() != 0 ? animRotYKeyframesOffsetMap.key(anim) : 0); //Offset to rotation Y keyframes
         dev << (quint32) anim->getRotZKeyframes().size(); //Number of rot Z keyframes
-        dev << (quint32) (anim->getRotZKeyframes().size() != 0 ? animRotZKeyframesOffsetMap.key(anim) : 0); //Offset to pos Z keyframes
+        dev << (quint32) (anim->getRotZKeyframes().size() != 0 ? animRotZKeyframesOffsetMap.key(anim) : 0); //Offset to rotation Z keyframes
         dev << (quint32) anim->getPosXKeyframes().size(); //Number of pos X keyframes
         dev << (quint32) (anim->getPosXKeyframes().size() != 0 ? animPosXKeyframesOffsetMap.key(anim) : 0); //Offset to pos X keyframes
         dev << (quint32) anim->getPosYKeyframes().size(); //Number of pos Y keyframes
