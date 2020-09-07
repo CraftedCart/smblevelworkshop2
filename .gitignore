@@ -24,6 +24,7 @@ moc_*.cpp
 moc_*.h
 qrc_*.cpp
 ui_*.h
+CMakeLists.txt.user
 
 #Prerequisites
 *.d
