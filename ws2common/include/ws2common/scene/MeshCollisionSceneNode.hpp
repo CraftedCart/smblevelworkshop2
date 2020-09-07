@@ -21,6 +21,7 @@ namespace WS2Common {
                  * @brief The name of the referenced mesh
                  */
                 QString meshName;
+                quint16 collisionTriangleFlag = 0x00;
 
             protected:
                 virtual void serializeNodeDataXml(QXmlStreamWriter &s) const;
@@ -43,6 +44,20 @@ namespace WS2Common {
                  * @return The name of the referenced mesh
                  */
                 const QString getMeshName() const;
+
+                /**
+                 * @brief Getter for collisionTriangleFlag
+                 *
+                 * @param The collision triangle flag at 0x1E
+                 */
+                const quint16 getCollisionTriangleFlag() const;
+
+                /**
+                 * @brief Setter for collisionTriangleFlag
+                 *
+                 * @param The collision triangle flag at 0x1E
+                 */
+                void setCollisionTriangleFlag(quint16 collisionTriangleFlag);
         };
     }
 }

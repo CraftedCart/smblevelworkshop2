@@ -1123,7 +1123,7 @@ namespace WS2Lz {
                         dev << normal.y; //Y normal
                         dev << normal.z; //Z normal
                         dev << convertRotation(glm::vec3(rotX, rotY, rotZ)); //XYZ rotation from the XZ plane
-                        writeNull(dev, 2);
+                        dev << coli->getCollisionTriangleFlag();
                         dev << deltaPosB.x; //DX2X1
                         dev << deltaPosB.y; //DY2X1
                         dev << deltaPosC.x; //DX3X1

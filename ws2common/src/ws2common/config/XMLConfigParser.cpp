@@ -721,6 +721,8 @@ namespace WS2Common {
                     QString name = xml.readElementText();
                     node->setName(QCoreApplication::translate("XMLConfigParser", "Mesh Collision: %1").arg(name));
                     node->setMeshName(name);
+                } else if (xml.name() == "collisionFlag") {
+                    node->setCollisionTriangleFlag(xml.readElementText().toShort());
                 } else {
                     qWarning().noquote() << "Unrecognised tag: meshCollision >" << xml.name();
                 }
