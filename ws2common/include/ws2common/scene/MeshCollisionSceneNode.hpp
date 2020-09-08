@@ -21,6 +21,9 @@ namespace WS2Common {
                  * @brief The name of the referenced mesh
                  */
                 QString meshName;
+                /**
+                 * @brief Flag applied to every collision triangle in the mesh (for bunkers in Golf, etc)
+                 */
                 quint16 collisionTriangleFlag = 0x00;
 
             protected:
@@ -50,7 +53,7 @@ namespace WS2Common {
                  *
                  * @param The collision triangle flag at 0x1E
                  */
-                const quint16 getCollisionTriangleFlag() const;
+                quint16 getCollisionTriangleFlag() const;
 
                 /**
                  * @brief Setter for collisionTriangleFlag

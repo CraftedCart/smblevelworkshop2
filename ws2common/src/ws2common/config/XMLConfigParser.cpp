@@ -39,6 +39,8 @@ namespace WS2Common {
                             stage->getFirstForegroundGroup(true)->addChild(parseForegroundModel(xml));
                         } else if (xml.name() == "falloutPlane") {
                             stage->setFalloutY(SerializeUtils::getAttribute(xml.attributes(), "y").toFloat());
+                        } else if (xml.name() == "stageType") {
+                            stage->setStageType(StageType::fromString(xml.readElementText()));
                         } else if (xml.name() == "fog") {
                             qWarning() << "fog not yet implemented!";
                             xml.skipCurrentElement();

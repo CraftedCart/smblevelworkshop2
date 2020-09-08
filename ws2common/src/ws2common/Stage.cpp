@@ -3,9 +3,11 @@
 #include <QCoreApplication>
 
 namespace WS2Common {
-    Stage::Stage() {
-        rootNode = new Scene::SceneNode("root");
-        rootNode->addChild(new Scene::BackgroundGroupSceneNode(QCoreApplication::translate("Stage", "Background Group")));
+
+
+Stage::Stage() {
+    rootNode = new Scene::SceneNode("root");
+    rootNode->addChild(new Scene::BackgroundGroupSceneNode(QCoreApplication::translate("Stage", "Background Group")));
         rootNode->addChild(new Scene::ForegroundGroupSceneNode(QCoreApplication::translate("Stage", "Foreground Group")));
     }
 
@@ -43,6 +45,16 @@ namespace WS2Common {
 
     const QVector<QUrl> Stage::getModels() const {
         return models;
+    }
+
+    EnumStageType Stage::getStageType() const
+    {
+        return stageType;
+    }
+
+    void Stage::setStageType(const EnumStageType &value)
+    {
+        stageType = value;
     }
 
     Scene::BackgroundGroupSceneNode* Stage::getFirstBackgroundGroup(bool createIfNonExistent) {

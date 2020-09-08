@@ -160,6 +160,9 @@ namespace WS2Lz {
             //All 3D models for mesh collision
             QHash<QString, WS2Common::Resource::ResourceMesh*> models; //name, mesh - Using a hashmap as it will have a quicker lookup
 
+            //Some flag related to whether or not the stage is for the main game or some party game mode
+            quint32 stageType;
+
         public:
             virtual ~SMB2LzExporter();
 

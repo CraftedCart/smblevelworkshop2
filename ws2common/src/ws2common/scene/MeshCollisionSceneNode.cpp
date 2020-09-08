@@ -17,7 +17,7 @@ namespace WS2Common {
             return "meshCollisionSceneNode";
         }
 
-        const quint16 MeshCollisionSceneNode::getCollisionTriangleFlag() const {
+        quint16 MeshCollisionSceneNode::getCollisionTriangleFlag() const {
             return collisionTriangleFlag;
         }
 

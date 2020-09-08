@@ -59,6 +59,8 @@ namespace WS2Lz {
         optimizeCollision(stage);
         calculateOffsets(stage);
 
+        stageType = StageType::toStageTypeFlag(stage.getStageType());
+
         //Write the data
         writeFileHeader(dev);
         writeStart(dev, stage);
@@ -796,7 +798,7 @@ namespace WS2Lz {
         dev << (quint32) fgOffsetMap.size();
         dev << (quint32) (fgOffsetMap.size() > 0 ? fgOffsetMap.firstKey() : 0); //Foreground list offset
         writeNull(dev, 4);
-        dev << (quint32) 0x00000001;
+        dev << (quint32) stageType;
         dev << wormholeCount;
         //We have to write 0 here if we want wormhole surfaces to work
         //This also means wormholes + reflective surfaces won't co-operate
