@@ -45,7 +45,9 @@ set(SOURCE_FILES
     ./src/ws2common/EnumPlaybackState.cpp
     ./src/ws2common/EnumAnimationSeesawType.cpp
     ./src/ws2common/EnumStageType.cpp
+    ./src/ws2common/EnumFogType.cpp
     ./src/ws2common/Stage.cpp
+    ./src/ws2common/Fog.cpp
     ./src/ws2common/CollisionGrid.cpp
     ./src/ws2common/SerializeUtils.cpp
     ./src/ws2common/Transform.cpp
@@ -80,6 +82,7 @@ set(SOURCE_FILES
     ./src/ws2common/animation/EnumEasing.cpp
     ./src/ws2common/animation/EnumLoopType.cpp
     ./src/ws2common/animation/TransformAnimation.cpp
+    ./src/ws2common/animation/FogAnimation.cpp
     )
 
 set(HEADER_FILES
@@ -93,7 +96,9 @@ set(HEADER_FILES
     ./include/ws2common/EnumPlaybackState.hpp
     ./include/ws2common/EnumAnimationSeesawType.hpp
     ./include/ws2common/EnumStageType.hpp
+    ./include/ws2common/EnumFogType.hpp
     ./include/ws2common/Stage.hpp
+    ./include/ws2common/Fog.hpp
     ./include/ws2common/CollisionGrid.hpp
     ./include/ws2common/SerializeUtils.hpp
     ./include/ws2common/Transform.hpp
@@ -136,6 +141,7 @@ set(HEADER_FILES
     ./include/ws2common/animation/Keyframe.hpp
     ./include/ws2common/animation/Keyframe.ipp
     ./include/ws2common/animation/TransformAnimation.hpp
+    ./include/ws2common/animation/FogAnimation.hpp
     )
 
 set(RESOURCE_FILES

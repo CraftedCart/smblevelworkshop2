@@ -65,6 +65,9 @@ namespace WS2Lz {
         writeFileHeader(dev);
         writeStart(dev, stage);
         writeFallout(dev, stage);
+        writeFog(dev, stage.getFog());
+        writeFogAnimationHeader(dev, stage.getFogAnimation());
+        writeFogAnimation(dev, stage.getFogAnimation());
         forEachGroup(group) writeCollisionHeader(dev, group); //Collision Headers
         forEachGroup(group) writeCollisionTriangles(dev, group); //Collision triangles
         forEachGroup(group) writeCollisionTriangleIndexListPointers(dev, group); //Collision triangle pointer
@@ -97,7 +100,6 @@ namespace WS2Lz {
         forEachBg(mesh) writeTransformAnimation(dev, mesh->getTransformAnimation(), true); // Background object animations (scaling)
         forEachFg(mesh) writeTransformAnimation(dev, mesh->getTransformAnimation(), true); // Foreground object animations (scaling)
         forEachGroup(group) writeTransformAnimation(dev, group->getTransformAnimation(), false); // Item group animations (no scaling)
-
         forEachGroup(group) writeRuntimeReflectiveModelList(dev, group); //Runtime reflective models
         forEachGroupChildType(const Scene::FalloutVolumeSceneNode*, node) writeFalloutVolume(dev, node); //Fallout volumes
         writeNull(dev, 64); // Taking a page out of Deluxe's book - having extra null padding at the end of the file can prevent weird crashes
@@ -221,6 +223,30 @@ namespace WS2Lz {
 
         falloutOffset = nextOffset;
         nextOffset += FALLOUT_LENGTH;
+
+        // This is for the fog header
+        fogOffset = nextOffset;
+        nextOffset += FOG_LENGTH;
+
+        // This is for the fog animation header and keyframe list (if it exists)
+        fogAnimationHeaderOffset = nextOffset;
+        nextOffset += FOG_ANIMATION_HEADER_LENGTH;
+
+        Animation::FogAnimation *fogAnim = stage.getFogAnimation();
+        if (fogAnim != nullptr) {
+            fogAnimStartKeyframesOffsetMap.insert(nextOffset, fogAnim);
+            nextOffset += ANIMATION_KEYFRAME_LENGTH * fogAnim->getStartDistanceKeyframes().size();
+            fogAnimEndKeyframesOffsetMap.insert(nextOffset, fogAnim);
+            nextOffset += ANIMATION_KEYFRAME_LENGTH * fogAnim->getEndDistanceKeyframes().size();
+            fogAnimRedKeyframesOffsetMap.insert(nextOffset, fogAnim);
+            nextOffset += ANIMATION_KEYFRAME_LENGTH * fogAnim->getRedKeyframes().size();
+            fogAnimGreenKeyframesOffsetMap.insert(nextOffset, fogAnim);
+            nextOffset += ANIMATION_KEYFRAME_LENGTH * fogAnim->getGreenKeyframes().size();
+            fogAnimBlueKeyframesOffsetMap.insert(nextOffset, fogAnim);
+            nextOffset += ANIMATION_KEYFRAME_LENGTH * fogAnim->getBlueKeyframes().size();
+            fogAnimUnknownKeyframesOffsetMap.insert(nextOffset, fogAnim);
+            nextOffset += ANIMATION_KEYFRAME_LENGTH * fogAnim->getUnknownKeyframes().size();
+        }
 
         //Find all GroupSceneNodes/Collision headers
         foreach(Scene::SceneNode *node, stage.getRootNode()->getChildren()) {
@@ -732,7 +758,6 @@ namespace WS2Lz {
 
         //TODO: Reflective level model
         //TODO: Level model instances
-        //TODO: Fog anim header
     }
 
     void SMB2LzExporter::addCollisionTriangleOffsets(const Scene::SceneNode *node, quint32 &nextOffset) {
@@ -812,10 +837,10 @@ namespace WS2Lz {
         writeNull(dev, 12);
         dev << addAllCounts(switchCountMap);
         dev << (quint32) (switchOffsetMap.size() > 0 ? switchOffsetMap.firstKey() : 0); //Switch list offset
-        writeNull(dev, 4); //TODO: Fog animation header
+        dev << (quint32) fogAnimationHeaderOffset;
         dev << addAllCounts(wormholeCountMap);
         dev << (quint32) (wormholeOffsetMap.size() > 0 ? wormholeOffsetMap.firstKey() : 0); //Wormhole list offset
-        writeNull(dev, 4); //TODO: Fog
+        dev << (quint32) fogOffset;
         writeNull(dev, 20);
         writeNull(dev, 4); //TODO: Mystery 3
         writeNull(dev, 1988);
@@ -993,6 +1018,40 @@ namespace WS2Lz {
         dev << node->getScale();
         dev << convertRotation(node->getRotation());
         writeNull(dev, 2);
+    }
+
+    void SMB2LzExporter::writeFog(QDataStream &dev, const Fog *fog)
+    {
+        if (fog == nullptr) return;
+
+        dev << (quint8) fog->getFogType();
+        writeNull(dev, 3);
+        dev << fog->getStartDistance();
+        dev << fog->getEndDistance();
+        dev << fog->getRedValue();
+        dev << fog->getGreenValue();
+        dev << fog->getBlueValue();
+        writeNull(dev, 12);
+
+    }
+
+    void SMB2LzExporter::writeFogAnimationHeader(QDataStream &dev, const Animation::FogAnimation *anim)
+    {
+        if (anim == nullptr) return;
+
+        dev << (quint32) anim->getStartDistanceKeyframes().size();
+        dev << (quint32) fogAnimStartKeyframesOffsetMap.key(anim);
+        dev << (quint32) anim->getEndDistanceKeyframes().size();
+        dev << (quint32) fogAnimEndKeyframesOffsetMap.key(anim);
+        dev << (quint32) anim->getRedKeyframes().size();
+        dev << (quint32) fogAnimRedKeyframesOffsetMap.key(anim);
+        dev << (quint32) anim->getGreenKeyframes().size();
+        dev << (quint32) fogAnimGreenKeyframesOffsetMap.key(anim);
+        dev << (quint32) anim->getBlueKeyframes().size();
+        dev << (quint32) fogAnimBlueKeyframesOffsetMap.key(anim);
+        dev << (quint32) anim->getUnknownKeyframes().size();
+        dev << (quint32) fogAnimUnknownKeyframesOffsetMap.key(anim);
+        writeNull(dev, 16);
     }
 
     void SMB2LzExporter::writeConeCollisionObject(QDataStream &dev, const Scene::ConeCollisionObjectSceneNode *node) {
@@ -1316,6 +1375,18 @@ namespace WS2Lz {
         foreach(Animation::KeyframeF *k, anim->getPosXKeyframes()) writeKeyframeF(dev, k);
         foreach(Animation::KeyframeF *k, anim->getPosYKeyframes()) writeKeyframeF(dev, k);
         foreach(Animation::KeyframeF *k, anim->getPosZKeyframes()) writeKeyframeF(dev, k);
+    }
+
+    void SMB2LzExporter::writeFogAnimation(QDataStream &dev, const Animation::FogAnimation *anim)
+    {
+        if (anim == nullptr) return;
+
+        foreach(Animation::KeyframeF *k, anim->getStartDistanceKeyframes()) writeKeyframeF(dev, k);
+        foreach(Animation::KeyframeF *k, anim->getEndDistanceKeyframes()) writeKeyframeF(dev, k);
+        foreach(Animation::KeyframeF *k, anim->getRedKeyframes()) writeKeyframeF(dev, k);
+        foreach(Animation::KeyframeF *k, anim->getGreenKeyframes()) writeKeyframeF(dev, k);
+        foreach(Animation::KeyframeF *k, anim->getBlueKeyframes()) writeKeyframeF(dev, k);
+        foreach(Animation::KeyframeF *k, anim->getUnknownKeyframes()) writeKeyframeF(dev, k);
     }
 
     void SMB2LzExporter::writeRuntimeReflectiveModelList(QDataStream &dev, const Scene::GroupSceneNode *node) {

@@ -88,6 +88,8 @@ namespace WS2Lz {
             const unsigned int FALLOUT_VOLUME_LENGTH = 32;
             const unsigned int EFFECT_HEADER_LENGTH = 48;
             const unsigned int TEXTURE_SCROLL_LENGTH = 8;
+            const unsigned int FOG_LENGTH = 36;
+            const unsigned int FOG_ANIMATION_HEADER_LENGTH = 48;
 
             //Other guff
             /**
@@ -153,8 +155,14 @@ namespace WS2Lz {
             QMultiMap<quint32, const WS2Common::Scene::GroupSceneNode*> levelModelOffsetMap;
             QMap<const WS2Common::Scene::GroupSceneNode*, quint32> levelModelCountMap;
             QMultiMap<quint32, QString> levelModelNameOffsetMap;
-            //TODO: Fog anim header
-            //TODO: Fog
+            quint32 fogOffset;
+            quint32 fogAnimationHeaderOffset;
+            QMultiMap<quint32, const WS2Common::Animation::FogAnimation*> fogAnimRedKeyframesOffsetMap;
+            QMultiMap<quint32, const WS2Common::Animation::FogAnimation*> fogAnimGreenKeyframesOffsetMap;
+            QMultiMap<quint32, const WS2Common::Animation::FogAnimation*> fogAnimBlueKeyframesOffsetMap;
+            QMultiMap<quint32, const WS2Common::Animation::FogAnimation*> fogAnimStartKeyframesOffsetMap;
+            QMultiMap<quint32, const WS2Common::Animation::FogAnimation*> fogAnimEndKeyframesOffsetMap;
+            QMultiMap<quint32, const WS2Common::Animation::FogAnimation*> fogAnimUnknownKeyframesOffsetMap;
             //TODO: Mystery 3
 
             //All 3D models for mesh collision
@@ -225,6 +233,8 @@ namespace WS2Lz {
             void writeSwitch(QDataStream &dev, const WS2Common::Scene::SwitchSceneNode *node);
             void writeWormhole(QDataStream &dev, const WS2Common::Scene::WormholeSceneNode *node);
             void writeFalloutVolume(QDataStream &dev, const WS2Common::Scene::FalloutVolumeSceneNode *node);
+            void writeFog(QDataStream &dev, const WS2Common::Fog *fog);
+            void writeFogAnimationHeader(QDataStream &dev, const WS2Common::Animation::FogAnimation *anim);
 
             /**
              * @brief Recursive function - Searches through the node's children, and their children, and their children, etc
@@ -248,6 +258,7 @@ namespace WS2Lz {
             void writeEffectHeader(QDataStream &dev, const WS2Common::Scene::MeshSceneNode *node);
             void writeTextureScroll(QDataStream &dev, const WS2Common::Scene::SceneNode *node);
             void writeTransformAnimation(QDataStream &dev, const WS2Common::Animation::TransformAnimation *anim, bool scale);
+            void writeFogAnimation(QDataStream &dev, const WS2Common::Animation::FogAnimation *anim);
             void writeRuntimeReflectiveModelList(QDataStream &dev, const WS2Common::Scene::GroupSceneNode *node);
             void writeKeyframeF(QDataStream &dev, const WS2Common::Animation::KeyframeF *k);
 

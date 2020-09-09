@@ -5,6 +5,7 @@
 namespace WS2Common {
 
 
+
 Stage::Stage() {
     rootNode = new Scene::SceneNode("root");
     rootNode->addChild(new Scene::BackgroundGroupSceneNode(QCoreApplication::translate("Stage", "Background Group")));
@@ -87,6 +88,26 @@ Stage::Stage() {
         } else {
             return nullptr;
         }
+    }
+
+    Fog* Stage::getFog() const
+    {
+        return fog;
+    }
+
+    void Stage::setFog(Fog *value)
+    {
+        fog = value;
+    }
+
+    Animation::FogAnimation* Stage::getFogAnimation() const
+    {
+        return fogAnimation;
+    }
+
+    void Stage::setFogAnimation(Animation::FogAnimation *value)
+    {
+        fogAnimation = value;
     }
 }
 

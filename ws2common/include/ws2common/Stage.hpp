@@ -11,6 +11,8 @@
 #include "ws2common/scene/BackgroundGroupSceneNode.hpp"
 #include "ws2common/scene/ForegroundGroupSceneNode.hpp"
 #include "ws2common/EnumStageType.hpp"
+#include "ws2common/Fog.hpp"
+#include "ws2common/animation/FogAnimation.hpp"
 #include <glm/glm.hpp>
 #include <QVector>
 #include <QUrl>
@@ -22,8 +24,8 @@ namespace WS2Common {
 
             EnumStageType stageType = EnumStageType::MAIN_GAME;
             float falloutY;
-            //TODO: Fog
-            //TODO: Animated fog
+            Fog* fog = nullptr;
+            Animation::FogAnimation* fogAnimation = nullptr;
 
             /**
              * @brief All 3D model files that this stage may or may not use
@@ -120,6 +122,30 @@ namespace WS2Common {
              * @param value
              */
             void setStageType(const EnumStageType &value);
+
+            /**
+             * @brief Getter for fog
+             * @return
+             */
+            Fog *getFog() const;
+
+            /**
+             * @brief Setter for fog
+             * @param value
+             */
+            void setFog(Fog *value);
+
+            /**
+             * @brief Getter for fog animation
+             * @return
+             */
+            Animation::FogAnimation* getFogAnimation() const;
+
+            /**
+             * @brief Setter for fog animation
+             * @param value
+             */
+            void setFogAnimation(Animation::FogAnimation *value);
     };
 }
 

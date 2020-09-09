@@ -42,8 +42,9 @@ namespace WS2Common {
                         } else if (xml.name() == "stageType") {
                             stage->setStageType(StageType::fromString(xml.readElementText()));
                         } else if (xml.name() == "fog") {
-                            qWarning() << "fog not yet implemented!";
-                            xml.skipCurrentElement();
+                            stage->setFog(parseFog(xml));
+                        } else if (xml.name() == "fogAnimationKeyframes") {
+                            stage->setFogAnimation(parseFogAnimation(xml));
                         } else if (xml.name() == "itemGroup") {
                             stage->getRootNode()->addChild(parseItemGroup(xml));
                         } else {
@@ -809,6 +810,70 @@ namespace WS2Common {
             }
 
             return anim;
+        }
+
+        Fog* XMLConfigParser::parseFog(QXmlStreamReader &xml)
+        {
+            Fog* fog = new Fog();
+
+            while (!(xml.isEndElement() && xml.name() == "fog")) {
+                xml.readNext();
+                if (!xml.isStartElement()) continue; //Ignore all end elements
+
+                qDebug().nospace() << "XML config parsing [Line: " << xml.lineNumber() << ", Col: " << xml.columnNumber() << "]: " <<
+                "fog > " << xml.name();
+
+                if (xml.name() == "type") {
+                    fog->setFogType(FogType::fromString(xml.readElementText()));
+                } else if (xml.name() == "red") {
+                    fog->setRedValue(xml.readElementText().toFloat());
+                } else if (xml.name() == "green") {
+                    fog->setGreenValue(xml.readElementText().toFloat());
+                } else if (xml.name() == "blue") {
+                    fog->setBlueValue(xml.readElementText().toFloat());
+                } else if (xml.name() == "start") {
+                    fog->setStartDistance(xml.readElementText().toFloat());
+                } else if (xml.name() == "end") {
+                    fog->setEndDistance(xml.readElementText().toFloat());
+                } else {
+                    qWarning().noquote() << "Unrecgonised tag: fog > " << xml.name();
+                }
+            }
+
+            return fog;
+
+        }
+
+        Animation::FogAnimation* XMLConfigParser::parseFogAnimation(QXmlStreamReader &xml)
+        {
+            Animation::FogAnimation* anim = new Animation::FogAnimation;
+
+            while (!(xml.isEndElement() && xml.name() == "fogAnimationKeyframes")) {
+                xml.readNext();
+                if (!xml.isStartElement()) continue; //Ignore all end elements
+
+                qDebug().nospace() << "XML config parsing [Line: " << xml.lineNumber() << ", Col: " << xml.columnNumber() << "]: " <<
+                    "fogAnimationKeyframes > " << xml.name();
+
+                if (xml.name() == "red") {
+                    parseKeyframes(xml, anim->getRedKeyframes());
+                } else if (xml.name() == "green") {
+                    parseKeyframes(xml, anim->getGreenKeyframes());
+                } else if (xml.name() == "blue") {
+                    parseKeyframes(xml, anim->getBlueKeyframes());
+                } else if (xml.name() == "start") {
+                    parseKeyframes(xml, anim->getStartDistanceKeyframes(), true);
+                } else if (xml.name() == "end") {
+                    parseKeyframes(xml, anim->getEndDistanceKeyframes(), true);
+                } else if (xml.name() == "unknown") {
+                    parseKeyframes(xml, anim->getUnknownKeyframes(), true);
+                } else {
+                    qWarning().noquote() << "Unrecognised tag: fogAnimationKeyframes >" << xml.name();
+                }
+           }
+
+           return anim;
+
         }
 
         void XMLConfigParser::parseKeyframes(

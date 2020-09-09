@@ -292,6 +292,20 @@ namespace WS2Common {
                 Animation::TransformAnimation* parseTransformAnimation(QXmlStreamReader &xml, bool supportsScale);
 
                 /**
+                 * @brief parseFog
+                 * @param xml
+                 * @return
+                 */
+                Fog* parseFog(QXmlStreamReader &xml);
+
+                /**
+                 * @brief parseFogAnimation
+                 * @param xml
+                 * @return
+                 */
+                Animation::FogAnimation* parseFogAnimation(QXmlStreamReader &xml);
+
+                /**
                  * @brief Populates the keyframe set with parsed keyframes
                  *
                  * @param xml The QXmlStreamReader
