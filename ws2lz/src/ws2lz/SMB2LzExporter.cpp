@@ -3,6 +3,9 @@
 #include "ws2common/WS2Common.hpp"
 #include "ws2common/scene/StartSceneNode.hpp"
 #include "ws2common/scene/MeshCollisionSceneNode.hpp"
+#include "ws2common/scene/RaceTrackPathSceneNode.hpp"
+#include "ws2common/scene/BoosterSceneNode.hpp"
+#include "ws2common/scene/GolfHoleSceneNode.hpp"
 #include <QElapsedTimer>
 #include <QThreadPool>
 #include <QDebug>
@@ -68,6 +71,15 @@ namespace WS2Lz {
         writeFog(dev, stage.getFog());
         writeFogAnimationHeader(dev, stage.getFogAnimation());
         writeFogAnimation(dev, stage.getFogAnimation());
+        if (stage.getStageType() == EnumStageType::MONKEY_RACE_2) {
+            writeRaceHeader(dev, stage);
+            writeCPUTrackPathHeaders(dev, stage);
+            forEachChildType(stage.getRootNode(), Scene::RaceTrackPathSceneNode*, node) writeRaceTrackPath(dev, node);
+            forEachChildType(stage.getRootNode(), Scene::BoosterSceneNode*, node) writeBooster(dev, node);
+        }
+        if (stage.getStageType() == EnumStageType::MONKEY_GOLF_2) {
+            forEachChildType(stage.getRootNode(), Scene::GolfHoleSceneNode*, node) writeGolfHole(dev, node);
+        }
         forEachGroup(group) writeCollisionHeader(dev, group); //Collision Headers
         forEachGroup(group) writeCollisionTriangles(dev, group); //Collision triangles
         forEachGroup(group) writeCollisionTriangleIndexListPointers(dev, group); //Collision triangle pointer
@@ -246,6 +258,46 @@ namespace WS2Lz {
             nextOffset += ANIMATION_KEYFRAME_LENGTH * fogAnim->getBlueKeyframes().size();
             fogAnimUnknownKeyframesOffsetMap.insert(nextOffset, fogAnim);
             nextOffset += ANIMATION_KEYFRAME_LENGTH * fogAnim->getUnknownKeyframes().size();
+        }
+
+        if (stage.getStageType() == EnumStageType::MONKEY_RACE_2) {
+            monkeyRaceHeaderOffset = nextOffset;
+            nextOffset += MONKEY_RACE_HEADER_LENGTH;
+            cpuTrackPathHeaderOffset = nextOffset;
+            nextOffset += CPU_TRACK_PATH_HEADER_LENGTH;
+
+            foreach(Scene::SceneNode *node, stage.getRootNode()->getChildren()) {
+                if (Scene::RaceTrackPathSceneNode *path = dynamic_cast<Scene::RaceTrackPathSceneNode*>(node)) {
+                    //PosX
+                    raceTrackPathPosXKeyframesOffsetMap.insert(nextOffset, path->getTrackPath());
+                    nextOffset += ANIMATION_KEYFRAME_LENGTH * path->getTrackPath()->getPosXKeyframes().size();
+                    //PosY
+                    raceTrackPathPosYKeyframesOffsetMap.insert(nextOffset, path->getTrackPath());
+                    nextOffset += ANIMATION_KEYFRAME_LENGTH * path->getTrackPath()->getPosYKeyframes().size();
+                    //PosZ
+                    raceTrackPathPosZKeyframesOffsetMap.insert(nextOffset, path->getTrackPath());
+                    nextOffset += ANIMATION_KEYFRAME_LENGTH * path->getTrackPath()->getPosZKeyframes().size();
+                }
+            }
+
+            foreach(Scene::SceneNode *node, stage.getRootNode()->getChildren()) {
+                if (Scene::BoosterSceneNode *group = dynamic_cast<Scene::BoosterSceneNode*>(node)) {
+                    boosterOffsetMap.insert(nextOffset, group);
+                    quint32 boosterCount = 0; //Number of boosters in this header
+
+                    forEachChildType(group, Scene::BumperSceneNode*, node) {
+                        nextOffset += BOOSTER_LENGTH;
+                        boosterCount++;
+                    }
+
+                    boosterCountMap[group] = boosterCount;
+                }
+            }
+        }
+
+        if (stage.getStageType() == EnumStageType::MONKEY_GOLF_2) {
+            golfHoleOffset = nextOffset;
+            nextOffset += GOLF_HOLE_LENGTH;
         }
 
         //Find all GroupSceneNodes/Collision headers
@@ -1054,6 +1106,42 @@ namespace WS2Lz {
         writeNull(dev, 16);
     }
 
+    void SMB2LzExporter::writeRaceHeader(QDataStream &dev, const Stage &stage)
+    {
+        foreach(Scene::SceneNode *node, stage.getRootNode()->getChildren()) {
+            if (Scene::RaceTrackPathSceneNode *pathNode = dynamic_cast<Scene::RaceTrackPathSceneNode*>(node)) {
+                if (pathNode->getTrackPath()->getPlayerID() == 0) {
+                    dev << (quint32) pathNode->getTrackPath()->getPosXKeyframes().size();
+                    dev << (quint32) raceTrackPathPosXKeyframesOffsetMap.key(pathNode->getTrackPath());
+                    dev << (quint32) pathNode->getTrackPath()->getPosYKeyframes().size();
+                    dev << (quint32) raceTrackPathPosYKeyframesOffsetMap.key(pathNode->getTrackPath());
+                    dev << (quint32) pathNode->getTrackPath()->getPosZKeyframes().size();
+                    dev << (quint32) raceTrackPathPosZKeyframesOffsetMap.key(pathNode->getTrackPath());
+                }
+            }
+        }
+        // We are making the assumption that there will *always* be 7 CPU track paths - this seems to be a requirement of the game
+        dev << (quint32) 0x7;
+        dev << (quint32) cpuTrackPathHeaderOffset;
+        dev << (quint32) boosterOffsetMap.size();
+        dev << (quint32) boosterOffsetMap.key(0);
+
+    }
+
+    void SMB2LzExporter::writeBooster(QDataStream &dev, const Scene::BoosterSceneNode *node)
+    {
+        dev << node->getPosition();
+        dev << convertRotation(node->getRotation());
+        writeNull(dev, 2);
+    }
+
+    void SMB2LzExporter::writeGolfHole(QDataStream &dev, const Scene::GolfHoleSceneNode *node)
+    {
+        dev << node->getPosition();
+        dev << convertRotation(node->getRotation());
+        writeNull(dev, 2);
+    }
+
     void SMB2LzExporter::writeConeCollisionObject(QDataStream &dev, const Scene::ConeCollisionObjectSceneNode *node) {
         dev << node->getPosition();
         dev << convertRotation(node->getRotation());
@@ -1387,6 +1475,35 @@ namespace WS2Lz {
         foreach(Animation::KeyframeF *k, anim->getGreenKeyframes()) writeKeyframeF(dev, k);
         foreach(Animation::KeyframeF *k, anim->getBlueKeyframes()) writeKeyframeF(dev, k);
         foreach(Animation::KeyframeF *k, anim->getUnknownKeyframes()) writeKeyframeF(dev, k);
+    }
+
+    void SMB2LzExporter::writeRaceTrackPath(QDataStream &dev, const Scene::RaceTrackPathSceneNode *node)
+    {
+        foreach(Animation::KeyframeF *k, node->getTrackPath()->getPosXKeyframes()) writeKeyframeF(dev, k);
+        foreach(Animation::KeyframeF *k, node->getTrackPath()->getPosYKeyframes()) writeKeyframeF(dev, k);
+        foreach(Animation::KeyframeF *k, node->getTrackPath()->getPosZKeyframes()) writeKeyframeF(dev, k);
+    }
+
+    void SMB2LzExporter::writeCPUTrackPathHeaders(QDataStream &dev, const Stage &stage)
+    {
+        // Again, assuming there are always 7 CPU players
+
+        QMultiMap<quint32, Animation::RaceTrackPath*> trackPaths;
+        foreach(Scene::SceneNode *node, stage.getRootNode()->getChildren()) {
+            if (dynamic_cast<Scene::RaceTrackPathSceneNode*>(node)) {
+                Scene::RaceTrackPathSceneNode *node = static_cast<Scene::RaceTrackPathSceneNode*>(node);
+                trackPaths.insert(node->getTrackPath()->getPlayerID(), node->getTrackPath());
+            }
+        }
+
+        for (quint32 cpuId = 1; cpuId < 7; cpuId++) {
+            dev << (quint32) trackPaths.value(cpuId)->getPosXKeyframes().size();
+            dev << (quint32) raceTrackPathPosXKeyframesOffsetMap.key(trackPaths.value(cpuId));
+            dev << (quint32) trackPaths.value(cpuId)->getPosYKeyframes().size();
+            dev << (quint32) raceTrackPathPosYKeyframesOffsetMap.key(trackPaths.value(cpuId));
+            dev << (quint32) trackPaths.value(cpuId)->getPosZKeyframes().size();
+            dev << (quint32) raceTrackPathPosZKeyframesOffsetMap.key(trackPaths.value(cpuId));
+       }
     }
 
     void SMB2LzExporter::writeRuntimeReflectiveModelList(QDataStream &dev, const Scene::GroupSceneNode *node) {

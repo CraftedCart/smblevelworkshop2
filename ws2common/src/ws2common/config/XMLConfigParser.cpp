@@ -47,6 +47,12 @@ namespace WS2Common {
                             stage->setFogAnimation(parseFogAnimation(xml));
                         } else if (xml.name() == "itemGroup") {
                             stage->getRootNode()->addChild(parseItemGroup(xml));
+                        } else if (xml.name() == "trackPath") {
+                            stage->getRootNode()->addChild(parseTrackPath(xml));
+                        } else if (xml.name() == "booster") {
+                            stage->getRootNode()->addChild(parseBooster(xml));
+                        } else if (xml.name() == "golfHole") {
+                            stage->getRootNode()->addChild(parseGolfHole(xml));
                         } else {
                             qWarning().noquote() << "Unrecognised tag:" << xml.name();
                         }
@@ -138,6 +144,8 @@ namespace WS2Common {
                     start->setPosition(SerializeUtils::getVec3Attributes(xml.attributes()));
                 } else if (xml.name() == "rotation") {
                     start->setRotation(MathUtils::degreesToRadians(SerializeUtils::getVec3Attributes(xml.attributes())));
+                } else if (xml.name() == "playerID") {
+                    start->setPlayerID(xml.readElementText().toUInt());
                 } else {
                     qWarning().noquote() << "Unrecognised tag: start >" << xml.name();
                 }
@@ -874,6 +882,94 @@ namespace WS2Common {
 
            return anim;
 
+        }
+
+        Scene::BoosterSceneNode *XMLConfigParser::parseBooster(QXmlStreamReader &xml)
+        {
+            //Default name is "Booster x", translated
+            static unsigned int id = 0;
+            Scene::BoosterSceneNode *booster = new Scene::BoosterSceneNode(QCoreApplication::translate("XMLConfigParser", "Booster %1").arg(id));
+
+            while (!(xml.isEndElement() && xml.name() == "booster")) {
+                xml.readNext();
+                if (!xml.isStartElement()) continue; //Ignore all end elements
+
+                qDebug().nospace() << "XML config parsing [Line: " << xml.lineNumber() << ", Col: " << xml.columnNumber() << "]: " <<
+                    "booster > " << xml.name();
+
+                if (xml.name() == "name") {
+                    booster->setName(xml.readElementText());
+                } else if (xml.name() == "position") {
+                    booster->setPosition(SerializeUtils::getVec3Attributes(xml.attributes()));
+                } else if (xml.name() == "rotation") {
+                    booster->setRotation(MathUtils::degreesToRadians(SerializeUtils::getVec3Attributes(xml.attributes())));
+                } else {
+                    qWarning().noquote() << "Unrecognised tag: booster >" << xml.name();
+                }
+            }
+
+            id++;
+
+            return booster;
+        }
+
+        Scene::GolfHoleSceneNode *XMLConfigParser::parseGolfHole(QXmlStreamReader &xml)
+        {
+
+            //Default name is "GolfHole x", translated
+            static unsigned int id = 0;
+            Scene::GolfHoleSceneNode *golfHole = new Scene::GolfHoleSceneNode(QCoreApplication::translate("XMLConfigParser", "GolfHole %1").arg(id));
+
+            while (!(xml.isEndElement() && xml.name() == "golfHole")) {
+                xml.readNext();
+                if (!xml.isStartElement()) continue; //Ignore all end elements
+
+                qDebug().nospace() << "XML config parsing [Line: " << xml.lineNumber() << ", Col: " << xml.columnNumber() << "]: " <<
+                    "golfHole > " << xml.name();
+
+                if (xml.name() == "name") {
+                    golfHole->setName(xml.readElementText());
+                } else if (xml.name() == "position") {
+                    golfHole->setPosition(SerializeUtils::getVec3Attributes(xml.attributes()));
+                } else if (xml.name() == "rotation") {
+                    golfHole->setRotation(MathUtils::degreesToRadians(SerializeUtils::getVec3Attributes(xml.attributes())));
+                } else {
+                    qWarning().noquote() << "Unrecognised tag: golfHole >" << xml.name();
+                }
+            }
+
+            id++;
+
+            return golfHole;
+        }
+
+       Scene::RaceTrackPathSceneNode* XMLConfigParser::parseTrackPath(QXmlStreamReader &xml)
+        {
+
+            static unsigned int id = 0;
+            Scene::RaceTrackPathSceneNode *node = new Scene::RaceTrackPathSceneNode(QCoreApplication::translate("XMLConfigParser", "RaceTrackPath %1").arg(id));
+            while (!(xml.isEndElement() && xml.name() == "trackPath")) {
+                xml.readNext();
+                if (!xml.isStartElement()) continue; //Ignore all end elements
+
+                qDebug().nospace() << "XML config parsing [Line: " << xml.lineNumber() << ", Col: " << xml.columnNumber() << "]: " <<
+                    "trackPath > " << xml.name();
+
+                if (xml.name() == "posX") {
+                    parseKeyframes(xml, node->getTrackPath()->getPosXKeyframes());
+                } else if (xml.name() == "posY") {
+                    parseKeyframes(xml, node->getTrackPath()->getPosYKeyframes());
+                } else if (xml.name() == "posZ") {
+                    parseKeyframes(xml, node->getTrackPath()->getPosZKeyframes());
+                } else if (xml.name() == "playerID") {
+                    node->getTrackPath()->setPlayerID(xml.readElementText().toUInt());
+                } else {
+                    qWarning().noquote() << "Unrecognised tag: trackPath >" << xml.name();
+                }
+            }
+
+            id++;
+            return node;
         }
 
         void XMLConfigParser::parseKeyframes(

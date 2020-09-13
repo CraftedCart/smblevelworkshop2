@@ -7,6 +7,16 @@ namespace WS2Common {
         const QString StartSceneNode::getSerializableName() const {
             return "startSceneNode";
         }
+
+        unsigned int StartSceneNode::getPlayerID() const
+        {
+            return playerID;
+        }
+
+        void StartSceneNode::setPlayerID(unsigned int value)
+        {
+            playerID = value;
+        }
     }
 }
 

@@ -69,6 +69,9 @@ set(SOURCE_FILES
     ./src/ws2common/scene/WormholeSceneNode.cpp
     ./src/ws2common/scene/CollisionSceneNode.cpp
     ./src/ws2common/scene/MeshCollisionSceneNode.cpp
+    ./src/ws2common/scene/BoosterSceneNode.cpp
+    ./src/ws2common/scene/GolfHoleSceneNode.cpp
+    ./src/ws2common/scene/RaceTrackPathSceneNode.cpp
     ./src/ws2common/config/XMLConfigParser.cpp
     ./src/ws2common/model/MeshSegment.cpp
     ./src/ws2common/model/ModelLoader.cpp
@@ -83,6 +86,7 @@ set(SOURCE_FILES
     ./src/ws2common/animation/EnumLoopType.cpp
     ./src/ws2common/animation/TransformAnimation.cpp
     ./src/ws2common/animation/FogAnimation.cpp
+    ./src/ws2common/animation/RaceTrackPath.cpp
     )
 
 set(HEADER_FILES
@@ -124,6 +128,9 @@ set(HEADER_FILES
     ./include/ws2common/scene/WormholeSceneNode.hpp
     ./include/ws2common/scene/CollisionSceneNode.hpp
     ./include/ws2common/scene/MeshCollisionSceneNode.hpp
+    ./include/ws2common/scene/BoosterSceneNode.hpp
+    ./include/ws2common/scene/GolfHoleSceneNode.hpp
+    ./include/ws2common/scene/RaceTrackPathSceneNode.hpp
     ./include/ws2common/config/XMLConfigParser.hpp
     ./include/ws2common/model/Vertex.hpp
     ./include/ws2common/model/MeshSegment.hpp
@@ -142,6 +149,7 @@ set(HEADER_FILES
     ./include/ws2common/animation/Keyframe.ipp
     ./include/ws2common/animation/TransformAnimation.hpp
     ./include/ws2common/animation/FogAnimation.hpp
+    ./include/ws2common/animation/RaceTrackPath.hpp
     )
 
 set(RESOURCE_FILES

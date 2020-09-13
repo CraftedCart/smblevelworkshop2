@@ -3,12 +3,9 @@
 #include <QCoreApplication>
 
 namespace WS2Common {
-
-
-
-Stage::Stage() {
-    rootNode = new Scene::SceneNode("root");
-    rootNode->addChild(new Scene::BackgroundGroupSceneNode(QCoreApplication::translate("Stage", "Background Group")));
+    Stage::Stage() {
+        rootNode = new Scene::SceneNode("root");
+        rootNode->addChild(new Scene::BackgroundGroupSceneNode(QCoreApplication::translate("Stage", "Background Group")));
         rootNode->addChild(new Scene::ForegroundGroupSceneNode(QCoreApplication::translate("Stage", "Foreground Group")));
     }
 

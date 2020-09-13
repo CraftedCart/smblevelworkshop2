@@ -22,6 +22,11 @@
 #include "ws2common/scene/SwitchSceneNode.hpp"
 #include "ws2common/scene/WormholeSceneNode.hpp"
 #include "ws2common/scene/MeshCollisionSceneNode.hpp"
+#include "ws2common/scene/RaceTrackPathSceneNode.hpp"
+#include "ws2common/scene/BoosterSceneNode.hpp"
+#include "ws2common/scene/GolfHoleSceneNode.hpp"
+#include "ws2common/animation/RaceTrackPath.hpp"
+#include "ws2common/scene/GoalSceneNode.hpp"
 #include "ws2common/EnumAnimationSeesawType.hpp"
 #include "ws2common/CollisionGrid.hpp"
 #include <QXmlStreamAttributes>
@@ -304,6 +309,10 @@ namespace WS2Common {
                  * @return
                  */
                 Animation::FogAnimation* parseFogAnimation(QXmlStreamReader &xml);
+
+                Scene::BoosterSceneNode* parseBooster(QXmlStreamReader &xml);
+                Scene::GolfHoleSceneNode* parseGolfHole(QXmlStreamReader &xml);
+                Scene::RaceTrackPathSceneNode* parseTrackPath(QXmlStreamReader &xml);
 
                 /**
                  * @brief Populates the keyframe set with parsed keyframes

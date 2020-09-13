@@ -13,6 +13,7 @@
 #include "ws2common/EnumStageType.hpp"
 #include "ws2common/Fog.hpp"
 #include "ws2common/animation/FogAnimation.hpp"
+#include "ws2common/animation/RaceTrackPath.hpp"
 #include <glm/glm.hpp>
 #include <QVector>
 #include <QUrl>

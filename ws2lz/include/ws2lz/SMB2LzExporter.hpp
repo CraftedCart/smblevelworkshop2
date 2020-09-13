@@ -22,6 +22,9 @@
 #include "ws2common/scene/CylinderCollisionObjectSceneNode.hpp"
 #include "ws2common/scene/MeshSceneNode.hpp"
 #include "ws2common/resource/ResourceMesh.hpp"
+#include "ws2common/scene/BoosterSceneNode.hpp"
+#include "ws2common/scene/GolfHoleSceneNode.hpp"
+#include "ws2common/scene/RaceTrackPathSceneNode.hpp"
 #include <QDataStream>
 #include <QMap>
 #include <QHash>
@@ -90,6 +93,11 @@ namespace WS2Lz {
             const unsigned int TEXTURE_SCROLL_LENGTH = 8;
             const unsigned int FOG_LENGTH = 36;
             const unsigned int FOG_ANIMATION_HEADER_LENGTH = 48;
+            const unsigned int GOLF_HOLE_LENGTH = 18;
+            const unsigned int BOOSTER_LENGTH = 18;
+            const unsigned int MONKEY_RACE_HEADER_LENGTH = 40;
+            const unsigned int CPU_TRACK_PATH_HEADER_LENGTH = 168;
+
 
             //Other guff
             /**
@@ -163,6 +171,17 @@ namespace WS2Lz {
             QMultiMap<quint32, const WS2Common::Animation::FogAnimation*> fogAnimStartKeyframesOffsetMap;
             QMultiMap<quint32, const WS2Common::Animation::FogAnimation*> fogAnimEndKeyframesOffsetMap;
             QMultiMap<quint32, const WS2Common::Animation::FogAnimation*> fogAnimUnknownKeyframesOffsetMap;
+            quint32 monkeyRaceHeaderOffset;
+            quint32 cpuTrackPathHeaderOffset;
+            QMultiMap<quint32, const WS2Common::Animation::RaceTrackPath*> raceTrackPathPosXKeyframesOffsetMap;
+            QMultiMap<quint32, const WS2Common::Animation::RaceTrackPath*> raceTrackPathPosYKeyframesOffsetMap;
+            QMultiMap<quint32, const WS2Common::Animation::RaceTrackPath*> raceTrackPathPosZKeyframesOffsetMap;
+            QMultiMap<quint32, const WS2Common::Scene::BoosterSceneNode*> boosterOffsetMap;
+            QMap<const WS2Common::Scene::BoosterSceneNode*, quint32> boosterCountMap;
+            quint32 golfHoleOffset;
+            // Not sure if multiple golf holes are possible..??
+            //QMultiMap<quint32, const WS2Common::Scene::MonkeyGolfGroupSceneNode*> golfHoleOffsetMap;
+            //QMap<const WS2Common::Scene::MonkeyGolfGroupSceneNode*, quint32> golfHoleCountMap;
             //TODO: Mystery 3
 
             //All 3D models for mesh collision
@@ -235,7 +254,10 @@ namespace WS2Lz {
             void writeFalloutVolume(QDataStream &dev, const WS2Common::Scene::FalloutVolumeSceneNode *node);
             void writeFog(QDataStream &dev, const WS2Common::Fog *fog);
             void writeFogAnimationHeader(QDataStream &dev, const WS2Common::Animation::FogAnimation *anim);
-
+            void writeRaceHeader(QDataStream &dev, const WS2Common::Stage &stage);
+            void writeCPUTrackPathHeaders(QDataStream &dev, const WS2Common::Stage &stage);
+            void writeBooster(QDataStream &dev, const WS2Common::Scene::BoosterSceneNode *node);
+            void writeGolfHole(QDataStream &dev, const WS2Common::Scene::GolfHoleSceneNode *node);
             /**
              * @brief Recursive function - Searches through the node's children, and their children, and their children, etc
              *        for MeshCollisionSceneNodes, and writes them
@@ -244,7 +266,6 @@ namespace WS2Lz {
              * @param node The node to recursively search
              */
             void writeCollisionTriangles(QDataStream &dev, const WS2Common::Scene::SceneNode *node);
-
             void writeLevelModelPointerAList(QDataStream &dev, const WS2Common::Scene::GroupSceneNode *node);
             void writeLevelModelPointerBList(QDataStream &dev, const WS2Common::Scene::GroupSceneNode *node);
             void writeLevelModelList(QDataStream &dev, const WS2Common::Scene::GroupSceneNode *node);
@@ -259,6 +280,7 @@ namespace WS2Lz {
             void writeTextureScroll(QDataStream &dev, const WS2Common::Scene::SceneNode *node);
             void writeTransformAnimation(QDataStream &dev, const WS2Common::Animation::TransformAnimation *anim, bool scale);
             void writeFogAnimation(QDataStream &dev, const WS2Common::Animation::FogAnimation *anim);
+            void writeRaceTrackPath(QDataStream &dev, const WS2Common::Scene::RaceTrackPathSceneNode *anim);
             void writeRuntimeReflectiveModelList(QDataStream &dev, const WS2Common::Scene::GroupSceneNode *node);
             void writeKeyframeF(QDataStream &dev, const WS2Common::Animation::KeyframeF *k);
 

@@ -14,10 +14,13 @@ namespace WS2Common {
         class WS2COMMON_EXPORT StartSceneNode : public SceneNode {
             protected:
                 virtual const QString getSerializableName() const;
+                unsigned int playerID = 0;
 
             public:
                 StartSceneNode() = default;
                 StartSceneNode(const QString name);
+                unsigned int getPlayerID() const;
+                void setPlayerID(unsigned int value);
         };
     }
 }
