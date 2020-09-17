@@ -11,7 +11,7 @@ namespace WS2Common {
             protected:
                 virtual const QString getSerializableName() const;
 
-                Animation::RaceTrackPath* trackPath;
+                Animation::RaceTrackPath *trackPath = nullptr;
 
             public:
                 RaceTrackPathSceneNode() = default;

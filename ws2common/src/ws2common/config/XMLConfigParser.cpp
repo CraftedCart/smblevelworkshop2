@@ -945,9 +945,11 @@ namespace WS2Common {
 
        Scene::RaceTrackPathSceneNode* XMLConfigParser::parseTrackPath(QXmlStreamReader &xml)
         {
-
             static unsigned int id = 0;
             Scene::RaceTrackPathSceneNode *node = new Scene::RaceTrackPathSceneNode(QCoreApplication::translate("XMLConfigParser", "RaceTrackPath %1").arg(id));
+            Animation::RaceTrackPath *trackPath = new Animation::RaceTrackPath();
+            node->setTrackPath(trackPath);
+
             while (!(xml.isEndElement() && xml.name() == "trackPath")) {
                 xml.readNext();
                 if (!xml.isStartElement()) continue; //Ignore all end elements
