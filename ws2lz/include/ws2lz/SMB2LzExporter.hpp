@@ -93,9 +93,9 @@ namespace WS2Lz {
             const unsigned int TEXTURE_SCROLL_LENGTH = 8;
             const unsigned int FOG_LENGTH = 36;
             const unsigned int FOG_ANIMATION_HEADER_LENGTH = 48;
-            const unsigned int GOLF_HOLE_LENGTH = 18;
-            const unsigned int BOOSTER_LENGTH = 18;
-            const unsigned int MONKEY_RACE_HEADER_LENGTH = 40;
+            const unsigned int GOLF_HOLE_LENGTH = 20;
+            const unsigned int BOOSTER_LENGTH = 20;
+            const unsigned int MONKEY_RACE_HEADER_LENGTH = 232;
             const unsigned int CPU_TRACK_PATH_HEADER_LENGTH = 168;
 
 
@@ -177,7 +177,6 @@ namespace WS2Lz {
             QMultiMap<quint32, const WS2Common::Animation::RaceTrackPath*> raceTrackPathPosYKeyframesOffsetMap;
             QMultiMap<quint32, const WS2Common::Animation::RaceTrackPath*> raceTrackPathPosZKeyframesOffsetMap;
             QMultiMap<quint32, const WS2Common::Scene::BoosterSceneNode*> boosterOffsetMap;
-            QMap<const WS2Common::Scene::BoosterSceneNode*, quint32> boosterCountMap;
             quint32 golfHoleOffset;
             // Not sure if multiple golf holes are possible..??
             //QMultiMap<quint32, const WS2Common::Scene::MonkeyGolfGroupSceneNode*> golfHoleOffsetMap;

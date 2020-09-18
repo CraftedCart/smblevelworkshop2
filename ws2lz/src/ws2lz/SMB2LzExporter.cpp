@@ -236,16 +236,20 @@ namespace WS2Lz {
         falloutOffset = nextOffset;
         nextOffset += FALLOUT_LENGTH;
 
-        // This is for the fog header
-        fogOffset = nextOffset;
-        nextOffset += FOG_LENGTH;
+        // This is for the fog header (if the stage has custom fog)
+        Fog *fog = stage.getFog();
+        if (fog != nullptr) {
+            fogOffset = nextOffset;
+            nextOffset += FOG_LENGTH;
+        }
+        else fogOffset = 0;
 
         // This is for the fog animation header and keyframe list (if it exists)
-        fogAnimationHeaderOffset = nextOffset;
-        nextOffset += FOG_ANIMATION_HEADER_LENGTH;
-
         Animation::FogAnimation *fogAnim = stage.getFogAnimation();
         if (fogAnim != nullptr) {
+            fogAnimationHeaderOffset = nextOffset;
+            nextOffset += FOG_ANIMATION_HEADER_LENGTH;
+
             fogAnimStartKeyframesOffsetMap.insert(nextOffset, fogAnim);
             nextOffset += ANIMATION_KEYFRAME_LENGTH * fogAnim->getStartDistanceKeyframes().size();
             fogAnimEndKeyframesOffsetMap.insert(nextOffset, fogAnim);
@@ -259,13 +263,16 @@ namespace WS2Lz {
             fogAnimUnknownKeyframesOffsetMap.insert(nextOffset, fogAnim);
             nextOffset += ANIMATION_KEYFRAME_LENGTH * fogAnim->getUnknownKeyframes().size();
         }
+        else fogAnimationHeaderOffset = 0;
 
+        // This is for Monkey Race-specific offsets
         if (stage.getStageType() == EnumStageType::MONKEY_RACE_2) {
             monkeyRaceHeaderOffset = nextOffset;
             nextOffset += MONKEY_RACE_HEADER_LENGTH;
             cpuTrackPathHeaderOffset = nextOffset;
             nextOffset += CPU_TRACK_PATH_HEADER_LENGTH;
 
+            // Track path offsets
             foreach(Scene::SceneNode *node, stage.getRootNode()->getChildren()) {
                 if (Scene::RaceTrackPathSceneNode *path = dynamic_cast<Scene::RaceTrackPathSceneNode*>(node)) {
                     //PosX
@@ -280,21 +287,17 @@ namespace WS2Lz {
                 }
             }
 
+            // Booster offsets
             foreach(Scene::SceneNode *node, stage.getRootNode()->getChildren()) {
                 if (Scene::BoosterSceneNode *group = dynamic_cast<Scene::BoosterSceneNode*>(node)) {
                     boosterOffsetMap.insert(nextOffset, group);
-                    quint32 boosterCount = 0; //Number of boosters in this header
-
-                    forEachChildType(group, Scene::BumperSceneNode*, node) {
-                        nextOffset += BOOSTER_LENGTH;
-                        boosterCount++;
-                    }
-
-                    boosterCountMap[group] = boosterCount;
+                    nextOffset += BOOSTER_LENGTH;
                 }
             }
         }
+        else monkeyRaceHeaderOffset = 0;
 
+        // This is for Monkey Golf-specific offsets
         if (stage.getStageType() == EnumStageType::MONKEY_GOLF_2) {
             golfHoleOffset = nextOffset;
             nextOffset += GOLF_HOLE_LENGTH;
@@ -874,7 +877,7 @@ namespace WS2Lz {
         dev << (quint32) (bgOffsetMap.size() > 0 ? bgOffsetMap.firstKey() : 0); //Background list offset
         dev << (quint32) fgOffsetMap.size();
         dev << (quint32) (fgOffsetMap.size() > 0 ? fgOffsetMap.firstKey() : 0); //Foreground list offset
-        writeNull(dev, 4);
+        dev << (quint32) monkeyRaceHeaderOffset;
         dev << (quint32) stageType;
         dev << wormholeCount;
         //We have to write 0 here if we want wormhole surfaces to work
@@ -1107,7 +1110,7 @@ namespace WS2Lz {
     }
 
     void SMB2LzExporter::writeRaceHeader(QDataStream &dev, const Stage &stage)
-    {
+    { 
         foreach(Scene::SceneNode *node, stage.getRootNode()->getChildren()) {
             if (Scene::RaceTrackPathSceneNode *pathNode = dynamic_cast<Scene::RaceTrackPathSceneNode*>(node)) {
                 if (pathNode->getTrackPath()->getPlayerID() == 0) {
@@ -1124,7 +1127,9 @@ namespace WS2Lz {
         dev << (quint32) 0x7;
         dev << (quint32) cpuTrackPathHeaderOffset;
         dev << (quint32) boosterOffsetMap.size();
-        dev << (quint32) boosterOffsetMap.key(0);
+        dev << (quint32) boosterOffsetMap.firstKey();
+        // There's extra stuff after the header here, not sure what it's for
+        writeNull(dev, 192);
 
     }
 
@@ -1491,12 +1496,12 @@ namespace WS2Lz {
         QMultiMap<quint32, Animation::RaceTrackPath*> trackPaths;
         foreach(Scene::SceneNode *node, stage.getRootNode()->getChildren()) {
             if (dynamic_cast<Scene::RaceTrackPathSceneNode*>(node)) {
-                Scene::RaceTrackPathSceneNode *node = static_cast<Scene::RaceTrackPathSceneNode*>(node);
-                trackPaths.insert(node->getTrackPath()->getPlayerID(), node->getTrackPath());
+                Scene::RaceTrackPathSceneNode *path = static_cast<Scene::RaceTrackPathSceneNode*>(node);
+                trackPaths.insert(path->getTrackPath()->getPlayerID(), path->getTrackPath());
             }
         }
 
-        for (quint32 cpuId = 1; cpuId < 7; cpuId++) {
+        for (quint32 cpuId = 1; cpuId < 8; cpuId++) {
             dev << (quint32) trackPaths.value(cpuId)->getPosXKeyframes().size();
             dev << (quint32) raceTrackPathPosXKeyframesOffsetMap.key(trackPaths.value(cpuId));
             dev << (quint32) trackPaths.value(cpuId)->getPosYKeyframes().size();
