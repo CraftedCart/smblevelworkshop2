@@ -1524,14 +1524,16 @@ namespace WS2Lz {
         dev << (quint32) k->getEasing(); //Easing
         dev << k->getValue().first;
         dev << k->getValue().second;
-        writeNull(dev, 8);
+        dev << k->getHandleAValue();
+        dev << k->getHandleBValue();
     }
 
     void SMB2LzExporter::writeKeyframeAngleF(QDataStream &dev, const Animation::KeyframeF *k) {
         dev << (quint32) k->getEasing(); //Easing
         dev << k->getValue().first;
         dev << qRadiansToDegrees(k->getValue().second);
-        writeNull(dev, 8);
+        dev << k->getHandleAValue();
+        dev << k->getHandleBValue();
     }
 
     void SMB2LzExporter::writeNull(QDataStream &dev, const unsigned int count) {

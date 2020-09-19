@@ -17,8 +17,8 @@ namespace WS2Common {
             protected:
                 //float: Time, T: Value
                 QPair<float, T> value;
-                QPair<float, T> handleAValue;
-                QPair<float, T> handleBValue;
+                float handleAValue;
+                float handleBValue;
                 EnumEasing easing;
 
             public:
@@ -26,10 +26,10 @@ namespace WS2Common {
 
                 void setValue(QPair<float, T> value);
                 const QPair<float, T> getValue() const;
-                void setHandleAValue(QPair<float, T> value);
-                const QPair<float, T> getHandleAValue() const;
-                void setHandleBValue(QPair<float, T> value);
-                const QPair<float, T> getHandleBValue() const;
+                void setHandleAValue(float value);
+                float getHandleAValue() const;
+                void setHandleBValue(float value);
+                float getHandleBValue() const;
                 void setEasing(EnumEasing easing);
                 EnumEasing getEasing() const;
         };

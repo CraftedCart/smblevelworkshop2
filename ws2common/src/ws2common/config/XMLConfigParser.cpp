@@ -993,6 +993,8 @@ namespace WS2Common {
                 if (xml.name() == "keyframe") {
                     float time;
                     float value;
+                    float handleA = 0.0;
+                    float handleB = 0.0;
                     EnumEasing easing;
 
                     //Search through the attributes for time, value, and easing
@@ -1005,14 +1007,20 @@ namespace WS2Common {
                             if (convertToRadians) value = qDegreesToRadians(value);
                         } else if (attr.name() == "easing") {
                             easing = Easing::fromString(attr.value().toString());
+                        } else if (attr.name() == "handleA") {
+                            handleA = attr.value().toFloat();
+                        } else if (attr.name() == "handleB") {
+                            handleB = attr.value().toFloat();
                         }
                     }
 
                     //Create the keyframe
                     KeyframeF *k = new KeyframeF(time, value, easing);
+                    k->setHandleAValue(handleA);
+                    k->setHandleBValue(handleB);
                     keyframes.insert(k);
                 } else {
-                    qWarning().noquote() << "Unrecognised tag: [keyframeIdentier] >" << xml.name();
+                    qWarning().noquote() << "Unrecognised tag: keyframe >" << xml.name();
                 }
             }
         }
