@@ -230,8 +230,13 @@ namespace WS2Lz {
     void SMB2LzExporter::calculateOffsets(const Stage &stage) {
         quint32 nextOffset = FILE_HEADER_LENGTH;
 
+        // This is for start position(s) (party games can have multiple start positions)
         startOffset = nextOffset;
-        nextOffset += START_LENGTH;
+        foreach(Scene::SceneNode *node, stage.getRootNode()->getChildren()) {
+            if (Scene::StartSceneNode *start = dynamic_cast<Scene::StartSceneNode*>(node)) {
+                nextOffset += START_LENGTH;
+            }
+        }
 
         falloutOffset = nextOffset;
         nextOffset += FALLOUT_LENGTH;
@@ -902,18 +907,24 @@ namespace WS2Lz {
     }
 
     void SMB2LzExporter::writeStart(QDataStream &dev, const Stage &stage) {
-        Scene::StartSceneNode *start;
+        QMultiMap<quint32, Scene::StartSceneNode*> startPositions;
 
-        //Find the start
+        //Find the start position(s)
         forEachChildType(stage.getRootNode(), Scene::StartSceneNode*, node) {
-            start = static_cast<Scene::StartSceneNode*>(node);
-            break;
+            if (dynamic_cast<Scene::StartSceneNode*>(node)) {
+                Scene::StartSceneNode* startPos = static_cast<Scene::StartSceneNode*>(node);
+                startPositions.insert(startPos->getPlayerID(), startPos);
+            }
         }
 
         //Write the bytes
-        dev << start->getPosition();
-        dev << convertRotation(start->getRotation());
-        writeNull(dev, 2);
+        for (int playerId = startPositions.size()-1; playerId >= 0; playerId--) {
+            Scene::StartSceneNode *start = startPositions.value(playerId);
+            dev << start->getPosition();
+            dev << convertRotation(start->getRotation());
+            writeNull(dev, 2);
+        }
+
     }
 
     void SMB2LzExporter::writeFallout(QDataStream &dev, const Stage &stage) {
@@ -1499,6 +1510,10 @@ namespace WS2Lz {
                 Scene::RaceTrackPathSceneNode *path = static_cast<Scene::RaceTrackPathSceneNode*>(node);
                 trackPaths.insert(path->getTrackPath()->getPlayerID(), path->getTrackPath());
             }
+        }
+
+        if (trackPaths.size() < 8) {
+            qCritical() << "Less than the required 8 track paths found";
         }
 
         for (quint32 cpuId = 1; cpuId < 8; cpuId++) {
