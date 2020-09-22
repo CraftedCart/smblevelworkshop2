@@ -870,11 +870,11 @@ namespace WS2Common {
                 } else if (xml.name() == "blue") {
                     parseKeyframes(xml, anim->getBlueKeyframes());
                 } else if (xml.name() == "start") {
-                    parseKeyframes(xml, anim->getStartDistanceKeyframes(), true);
+                    parseKeyframes(xml, anim->getStartDistanceKeyframes());
                 } else if (xml.name() == "end") {
-                    parseKeyframes(xml, anim->getEndDistanceKeyframes(), true);
+                    parseKeyframes(xml, anim->getEndDistanceKeyframes());
                 } else if (xml.name() == "unknown") {
-                    parseKeyframes(xml, anim->getUnknownKeyframes(), true);
+                    parseKeyframes(xml, anim->getUnknownKeyframes());
                 } else {
                     qWarning().noquote() << "Unrecognised tag: fogAnimationKeyframes >" << xml.name();
                 }

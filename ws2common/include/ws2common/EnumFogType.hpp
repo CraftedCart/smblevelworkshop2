@@ -10,12 +10,12 @@ namespace WS2Common {
      * @brief An enum to differentiate fog types
      */
     enum EnumFogType {
-        GX_FOG_NONE,
-        GX_FOG_LIN,
-        GX_FOG_EXP,
-        GX_FOG_EXP2,
-        GX_FOG_REVEXP,
-        GX_FOG_REVEXP2
+        GX_FOG_NONE = 0,
+        GX_FOG_LIN = 2,
+        GX_FOG_EXP = 4,
+        GX_FOG_EXP2 = 5,
+        GX_FOG_REVEXP = 6,
+        GX_FOG_REVEXP2 = 7
     };
 
     namespace FogType {

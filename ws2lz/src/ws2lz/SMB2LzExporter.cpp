@@ -1117,7 +1117,6 @@ namespace WS2Lz {
         dev << (quint32) fogAnimBlueKeyframesOffsetMap.key(anim);
         dev << (quint32) anim->getUnknownKeyframes().size();
         dev << (quint32) fogAnimUnknownKeyframesOffsetMap.key(anim);
-        writeNull(dev, 16);
     }
 
     void SMB2LzExporter::writeRaceHeader(QDataStream &dev, const Stage &stage)
@@ -1138,7 +1137,7 @@ namespace WS2Lz {
         dev << (quint32) 0x7;
         dev << (quint32) cpuTrackPathHeaderOffset;
         dev << (quint32) boosterOffsetMap.size();
-        dev << (quint32) boosterOffsetMap.firstKey();
+        dev << (quint32) (boosterOffsetMap.size() > 0 ? boosterOffsetMap.firstKey() : 0);
         // There's extra stuff after the header here, not sure what it's for
         writeNull(dev, 192);
 
