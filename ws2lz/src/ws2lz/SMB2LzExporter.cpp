@@ -307,6 +307,7 @@ namespace WS2Lz {
             golfHoleOffset = nextOffset;
             nextOffset += GOLF_HOLE_LENGTH;
         }
+        else golfHoleOffset = 0;
 
         //Find all GroupSceneNodes/Collision headers
         foreach(Scene::SceneNode *node, stage.getRootNode()->getChildren()) {
@@ -888,7 +889,8 @@ namespace WS2Lz {
         //We have to write 0 here if we want wormhole surfaces to work
         //This also means wormholes + reflective surfaces won't co-operate
         dev << (quint32) (wormholeCount > 0 ? runtimeReflectiveModelOffsetMap.firstKey() : 0); //Reflective model list offset
-        writeNull(dev, 12);
+        dev << (quint32) golfHoleOffset;
+        writeNull(dev, 8);
         writeNull(dev, 8); //TODO: Level model instances
         dev << addAllCounts(levelModelCountMap);
         dev << levelModelPointerAOffsetMap.firstKey();
