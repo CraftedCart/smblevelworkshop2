@@ -297,22 +297,49 @@ namespace WS2Common {
                 Animation::TransformAnimation* parseTransformAnimation(QXmlStreamReader &xml, bool supportsScale);
 
                 /**
-                 * @brief parseFog
+                 * @brief Parses static fog data in an XML config
                  * @param xml
-                 * @return
+                 * @return The fog data parsed from the config
                  */
                 Fog* parseFog(QXmlStreamReader &xml);
 
                 /**
-                 * @brief parseFogAnimation
-                 * @param xml
-                 * @return
+                 * @brief Parses animated fog data in an XML config
+                 * @param xml The QXmlStreamReader
+                 * @return The fog animation data parsed from the config
                  */
                 Animation::FogAnimation* parseFogAnimation(QXmlStreamReader &xml);
 
+                /**
+                 * @brief Parses a booster in the XML config
+                 * @param xml The QXmlStreamReader
+                 * @return The booster parsed from the config
+                 */
                 Scene::BoosterSceneNode* parseBooster(QXmlStreamReader &xml);
+
+                /**
+                 * @brief Parses a golf hole in the XML config
+                 * @param xml The QXmlStreamReader
+                 * @return The golf hole parsed from the config
+                 */
                 Scene::GolfHoleSceneNode* parseGolfHole(QXmlStreamReader &xml);
+
+                /**
+                 * @brief Parses a track path in the XML config
+                 * @param xml The QXmlStreamReader
+                 * @return The track path parsed from the config
+                 */
                 Scene::RaceTrackPathSceneNode* parseTrackPath(QXmlStreamReader &xml);
+
+                /**
+                 * @brief Parses effect animation data in an XML config
+                 * @param xml The QXmlStreamReader
+                 * @return The effect animation parsed from the config
+                 */
+                Animation::EffectAnimation* parseEffectAnimation(QXmlStreamReader &xml);
+
+                void parseEffectKeyframesType1(QXmlStreamReader &xml, QVector<Animation::KeyframeEffect1*> &keyframes);
+                void parseEffectKeyframesType2(QXmlStreamReader &xml, QVector<Animation::KeyframeEffect2*> &keyframes);
 
                 /**
                  * @brief Populates the keyframe set with parsed keyframes

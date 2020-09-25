@@ -8,6 +8,7 @@
 
 #include "ws2common_export.h"
 #include "ws2common/animation/TransformAnimation.hpp"
+#include "ws2common/animation/EffectAnimation.hpp"
 #include "ws2common/EnumAnimationSeesawType.hpp"
 #include "ws2common/Transform.hpp"
 #include <glm/glm.hpp>
@@ -54,6 +55,7 @@ namespace WS2Common {
                 float seesawSpring = 0.0f;
 
                 glm::vec2 textureScroll = glm::vec2(0.0f, 0.0f);
+                Animation::EffectAnimation *effectAnimation = nullptr;
 
             protected:
                 /**
@@ -423,6 +425,8 @@ namespace WS2Common {
                  */
                 void setTextureScroll(glm::vec2 textureScroll);
 
+                Animation::EffectAnimation *getEffectAnimation() const;
+                void setEffectAnimation(Animation::EffectAnimation *value);
         };
     }
 }

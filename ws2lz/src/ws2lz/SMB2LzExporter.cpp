@@ -109,6 +109,8 @@ namespace WS2Lz {
         forEachBg(mesh) writeTextureScroll(dev, mesh); // Background texture scroll
         forEachFg(mesh) writeTextureScroll(dev, mesh); // Foreground texture scroll
         forEachGroup(group) writeTextureScroll(dev, group); // Item group texture scroll
+        forEachBg(mesh) writeEffectAnimation(dev, mesh->getEffectAnimation());
+        forEachFg(mesh) writeEffectAnimation(dev, mesh->getEffectAnimation());
         forEachBg(mesh) writeTransformAnimation(dev, mesh->getTransformAnimation(), true); // Background object animations (scaling)
         forEachFg(mesh) writeTransformAnimation(dev, mesh->getTransformAnimation(), true); // Foreground object animations (scaling)
         forEachGroup(group) writeTransformAnimation(dev, group->getTransformAnimation(), false); // Item group animations (no scaling)
@@ -665,6 +667,28 @@ namespace WS2Lz {
             nextOffset += TEXTURE_SCROLL_LENGTH;
         }
 
+        //BG effect keyframes
+        forEachBg(node) {
+            Animation::EffectAnimation *anim = node->getEffectAnimation();
+            if (anim != nullptr) {
+                effectAnimType1KeyframesOffsetMap.insert(nextOffset, anim);
+                nextOffset += EFFECT_TYPE_1_KEYFRAME_LENGTH * anim->getEffect1Keyframes().size();
+
+                effectAnimType2KeyframesOffsetMap.insert(nextOffset, anim);
+                nextOffset += EFFECT_TYPE_2_KEYFRAME_LENGTH * anim->getEffect2Keyframes().size();
+            }
+        }
+        //FG effect keyframes
+        forEachFg(node) {
+            Animation::EffectAnimation *anim = node->getEffectAnimation();
+            if (anim != nullptr) {
+                effectAnimType1KeyframesOffsetMap.insert(nextOffset, anim);
+                nextOffset += EFFECT_TYPE_1_KEYFRAME_LENGTH * anim->getEffect1Keyframes().size();
+
+                effectAnimType2KeyframesOffsetMap.insert(nextOffset, anim);
+                nextOffset += EFFECT_TYPE_2_KEYFRAME_LENGTH * anim->getEffect2Keyframes().size();
+            }
+        }
 
         //BG animation keyframes
         forEachBg(group) {
@@ -1457,7 +1481,10 @@ namespace WS2Lz {
     }
 
     void SMB2LzExporter::writeEffectHeader(QDataStream &dev, const Scene::MeshSceneNode *node) {
-        writeNull(dev, 16); //TODO: Implement effect keyframes one they're figured out
+        dev << effectAnimType1KeyframesOffsetMap.size();
+        dev << (quint32) (effectAnimType1KeyframesOffsetMap.size() > 0 ? effectAnimType1KeyframesOffsetMap.firstKey() : 0);
+        dev << effectAnimType2KeyframesOffsetMap.size();
+        dev << (quint32) (effectAnimType2KeyframesOffsetMap.size() > 0 ? effectAnimType2KeyframesOffsetMap.firstKey() : 0);
         dev << textureScrollOffsetMap.key(node);
         writeNull(dev, 28); //TODO: Whatever this stuff is
     }
@@ -1542,6 +1569,31 @@ namespace WS2Lz {
         dev << k->getValue().second;
         dev << k->getHandleAValue();
         dev << k->getHandleBValue();
+    }
+
+    void SMB2LzExporter::writeKeyframeEffect1(QDataStream &dev, const Animation::KeyframeEffect1 *k)
+    {
+        dev << k->getPosition();
+        dev << k->getRotation();
+        dev << (quint8) k->getUnknownByte1();
+        dev << (quint8) k->getUnknownByte2();
+    }
+
+    void SMB2LzExporter::writeKeyframeEffect2(QDataStream &dev, const Animation::KeyframeEffect2 *k)
+    {
+       dev << k->getPosition();
+       dev << (quint8) k->getUnknownByte1();
+       dev << (quint8) k->getUnknownByte2();
+       dev << (quint8) k->getUnknownByte3();
+       dev << (quint8) k->getUnknownByte4();
+    }
+
+    void SMB2LzExporter::writeEffectAnimation(QDataStream &dev, const Animation::EffectAnimation *anim)
+    {
+        if (anim != nullptr) {
+            foreach(Animation::KeyframeEffect1 *k, anim->getEffect1Keyframes()) writeKeyframeEffect1(dev, k);
+            foreach(Animation::KeyframeEffect2 *k, anim->getEffect2Keyframes()) writeKeyframeEffect2(dev, k);
+        }
     }
 
     void SMB2LzExporter::writeKeyframeAngleF(QDataStream &dev, const Animation::KeyframeF *k) {

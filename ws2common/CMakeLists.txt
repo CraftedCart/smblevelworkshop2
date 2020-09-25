@@ -87,6 +87,9 @@ set(SOURCE_FILES
     ./src/ws2common/animation/TransformAnimation.cpp
     ./src/ws2common/animation/FogAnimation.cpp
     ./src/ws2common/animation/RaceTrackPath.cpp
+    ./src/ws2common/animation/KeyframeEffect1.cpp
+    ./src/ws2common/animation/KeyframeEffect2.cpp
+    ./src/ws2common/animation/EffectAnimation.cpp
     )
 
 set(HEADER_FILES
@@ -150,6 +153,9 @@ set(HEADER_FILES
     ./include/ws2common/animation/TransformAnimation.hpp
     ./include/ws2common/animation/FogAnimation.hpp
     ./include/ws2common/animation/RaceTrackPath.hpp
+    ./include/ws2common/animation/KeyframeEffect1.hpp
+    ./include/ws2common/animation/KeyframeEffect2.hpp
+    ./include/ws2common/animation/EffectAnimation.hpp
     )
 
 set(RESOURCE_FILES

@@ -97,7 +97,8 @@ namespace WS2Lz {
             const unsigned int BOOSTER_LENGTH = 20;
             const unsigned int MONKEY_RACE_HEADER_LENGTH = 232;
             const unsigned int CPU_TRACK_PATH_HEADER_LENGTH = 168;
-
+            const unsigned int EFFECT_TYPE_1_KEYFRAME_LENGTH = 20;
+            const unsigned int EFFECT_TYPE_2_KEYFRAME_LENGTH = 16;
 
             //Other guff
             /**
@@ -178,6 +179,8 @@ namespace WS2Lz {
             QMultiMap<quint32, const WS2Common::Animation::RaceTrackPath*> raceTrackPathPosZKeyframesOffsetMap;
             QMultiMap<quint32, const WS2Common::Scene::BoosterSceneNode*> boosterOffsetMap;
             quint32 golfHoleOffset;
+            QMultiMap<quint32, const WS2Common::Animation::EffectAnimation*> effectAnimType1KeyframesOffsetMap;
+            QMultiMap<quint32, const WS2Common::Animation::EffectAnimation*> effectAnimType2KeyframesOffsetMap;
             // Not sure if multiple golf holes are possible..??
             //QMultiMap<quint32, const WS2Common::Scene::MonkeyGolfGroupSceneNode*> golfHoleOffsetMap;
             //QMap<const WS2Common::Scene::MonkeyGolfGroupSceneNode*, quint32> golfHoleCountMap;
@@ -282,6 +285,9 @@ namespace WS2Lz {
             void writeRaceTrackPath(QDataStream &dev, const WS2Common::Scene::RaceTrackPathSceneNode *anim);
             void writeRuntimeReflectiveModelList(QDataStream &dev, const WS2Common::Scene::GroupSceneNode *node);
             void writeKeyframeF(QDataStream &dev, const WS2Common::Animation::KeyframeF *k);
+            void writeKeyframeEffect1(QDataStream &dev, const WS2Common::Animation::KeyframeEffect1 *k);
+            void writeKeyframeEffect2(QDataStream &dev, const WS2Common::Animation::KeyframeEffect2 *k);
+            void writeEffectAnimation(QDataStream &dev, const WS2Common::Animation::EffectAnimation *anim);
 
             /**
              * @brief Like `writeKeyframeF`, but converts the value from radians to degrees first
