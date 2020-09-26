@@ -818,6 +818,10 @@ namespace WS2Common {
                     parseKeyframes(xml, anim->getScaleYKeyframes()); 
                 } else if (xml.name() == "scaleZ" && supportsScale) {
                     parseKeyframes(xml, anim->getScaleZKeyframes()); 
+                } else if (xml.name() == "unknown1" && supportsScale) {
+                    parseKeyframes(xml, anim->getUnknown1Keyframes());
+                } else if (xml.name() == "unknown2" && supportsScale) {
+                    parseKeyframes(xml, anim->getUnknown2Keyframes());
                 } else {
                     qWarning().noquote() << "Unrecognised tag: animKeyframes >" << xml.name();
                 }

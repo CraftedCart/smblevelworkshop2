@@ -727,6 +727,12 @@ namespace WS2Lz {
                 animPosZKeyframesOffsetMap.insert(nextOffset, anim);
                 nextOffset += ANIMATION_KEYFRAME_LENGTH * anim->getPosZKeyframes().size();
 
+                //Unk1
+                animUnknown1KeyframesOffsetMap.insert(nextOffset, anim);
+                nextOffset += ANIMATION_KEYFRAME_LENGTH * anim->getUnknown1Keyframes().size();
+                //Unk2
+                animUnknown2KeyframesOffsetMap.insert(nextOffset, anim);
+                nextOffset += ANIMATION_KEYFRAME_LENGTH * anim->getUnknown2Keyframes().size();
 
             }
         }
@@ -767,6 +773,13 @@ namespace WS2Lz {
                 //PosZ
                 animPosZKeyframesOffsetMap.insert(nextOffset, anim);
                 nextOffset += ANIMATION_KEYFRAME_LENGTH * anim->getPosZKeyframes().size();
+
+                //Unk1
+                animUnknown1KeyframesOffsetMap.insert(nextOffset, anim);
+                nextOffset += ANIMATION_KEYFRAME_LENGTH * anim->getUnknown1Keyframes().size();
+                //Unk2
+                animUnknown2KeyframesOffsetMap.insert(nextOffset, anim);
+                nextOffset += ANIMATION_KEYFRAME_LENGTH * anim->getUnknown2Keyframes().size();
 
             }
         }
@@ -1477,14 +1490,18 @@ namespace WS2Lz {
         dev << (quint32) (anim->getPosYKeyframes().size() != 0 ? animPosYKeyframesOffsetMap.key(anim) : 0); //Offset to pos Y keyframes
         dev << (quint32) anim->getPosZKeyframes().size(); //Number of pos Z keyframes
         dev << (quint32) (anim->getPosZKeyframes().size() != 0 ? animPosZKeyframesOffsetMap.key(anim) : 0); //Offset to pos Z keyframes
-        writeNull(dev, 16);
+        dev << (quint32) anim->getUnknown1Keyframes().size(); //Number of unk #1 keyframes
+        dev << (quint32) (anim->getUnknown1Keyframes().size() != 0 ? animUnknown1KeyframesOffsetMap.key(anim) : 0) ; //Offset to unk #1 keyframes
+        dev << (quint32) anim->getUnknown2Keyframes().size(); //Number of unk #2 keyframes
+        dev << (quint32) (anim->getUnknown2Keyframes().size() != 0 ? animUnknown2KeyframesOffsetMap.key(anim) : 0) ; //Offset to unk #2 keyframes
     }
 
     void SMB2LzExporter::writeEffectHeader(QDataStream &dev, const Scene::MeshSceneNode *node) {
-        dev << effectAnimType1KeyframesOffsetMap.size();
-        dev << (quint32) (effectAnimType1KeyframesOffsetMap.size() > 0 ? effectAnimType1KeyframesOffsetMap.firstKey() : 0);
-        dev << effectAnimType2KeyframesOffsetMap.size();
-        dev << (quint32) (effectAnimType2KeyframesOffsetMap.size() > 0 ? effectAnimType2KeyframesOffsetMap.firstKey() : 0);
+        Animation::EffectAnimation* anim = node->getEffectAnimation();
+        dev << (anim != nullptr ? anim->getEffect1Keyframes().size() : 0);
+        dev << (anim != nullptr ? effectAnimType1KeyframesOffsetMap.key(anim) : 0);
+        dev << (anim != nullptr ? anim->getEffect2Keyframes().size() : 0);
+        dev << (anim != nullptr ? effectAnimType2KeyframesOffsetMap.key(anim) : 0);
         dev << textureScrollOffsetMap.key(node);
         writeNull(dev, 28); //TODO: Whatever this stuff is
     }
@@ -1507,6 +1524,11 @@ namespace WS2Lz {
         foreach(Animation::KeyframeF *k, anim->getPosXKeyframes()) writeKeyframeF(dev, k);
         foreach(Animation::KeyframeF *k, anim->getPosYKeyframes()) writeKeyframeF(dev, k);
         foreach(Animation::KeyframeF *k, anim->getPosZKeyframes()) writeKeyframeF(dev, k);
+
+        if (scale) {
+            foreach(Animation::KeyframeF *k, anim->getUnknown1Keyframes()) writeKeyframeF(dev, k);
+            foreach(Animation::KeyframeF *k, anim->getUnknown2Keyframes()) writeKeyframeF(dev, k);
+        }
     }
 
     void SMB2LzExporter::writeFogAnimation(QDataStream &dev, const Animation::FogAnimation *anim)
@@ -1574,7 +1596,7 @@ namespace WS2Lz {
     void SMB2LzExporter::writeKeyframeEffect1(QDataStream &dev, const Animation::KeyframeEffect1 *k)
     {
         dev << k->getPosition();
-        dev << k->getRotation();
+        dev << convertRotation(k->getRotation());
         dev << (quint8) k->getUnknownByte1();
         dev << (quint8) k->getUnknownByte2();
     }

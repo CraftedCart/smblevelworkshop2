@@ -153,6 +153,8 @@ namespace WS2Lz {
             QMultiMap<quint32, const WS2Common::Animation::TransformAnimation*> animScaleXKeyframesOffsetMap;
             QMultiMap<quint32, const WS2Common::Animation::TransformAnimation*> animScaleYKeyframesOffsetMap;
             QMultiMap<quint32, const WS2Common::Animation::TransformAnimation*> animScaleZKeyframesOffsetMap;
+            QMultiMap<quint32, const WS2Common::Animation::TransformAnimation*> animUnknown1KeyframesOffsetMap;
+            QMultiMap<quint32, const WS2Common::Animation::TransformAnimation*> animUnknown2KeyframesOffsetMap;
             QMultiMap<quint32, const WS2Common::Scene::MeshSceneNode*> bgOffsetMap;
             QMultiMap<quint32, QString> bgNameOffsetMap;
             QMultiMap<quint32, const WS2Common::Scene::MeshSceneNode*> fgOffsetMap;
