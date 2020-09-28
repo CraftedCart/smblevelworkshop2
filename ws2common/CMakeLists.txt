@@ -44,7 +44,10 @@ set(SOURCE_FILES
     ./src/ws2common/EnumBananaType.cpp
     ./src/ws2common/EnumPlaybackState.cpp
     ./src/ws2common/EnumAnimationSeesawType.cpp
+    ./src/ws2common/EnumStageType.cpp
+    ./src/ws2common/EnumFogType.cpp
     ./src/ws2common/Stage.cpp
+    ./src/ws2common/Fog.cpp
     ./src/ws2common/CollisionGrid.cpp
     ./src/ws2common/SerializeUtils.cpp
     ./src/ws2common/Transform.cpp
@@ -66,6 +69,9 @@ set(SOURCE_FILES
     ./src/ws2common/scene/WormholeSceneNode.cpp
     ./src/ws2common/scene/CollisionSceneNode.cpp
     ./src/ws2common/scene/MeshCollisionSceneNode.cpp
+    ./src/ws2common/scene/BoosterSceneNode.cpp
+    ./src/ws2common/scene/GolfHoleSceneNode.cpp
+    ./src/ws2common/scene/RaceTrackPathSceneNode.cpp
     ./src/ws2common/config/XMLConfigParser.cpp
     ./src/ws2common/model/MeshSegment.cpp
     ./src/ws2common/model/ModelLoader.cpp
@@ -79,6 +85,11 @@ set(SOURCE_FILES
     ./src/ws2common/animation/EnumEasing.cpp
     ./src/ws2common/animation/EnumLoopType.cpp
     ./src/ws2common/animation/TransformAnimation.cpp
+    ./src/ws2common/animation/FogAnimation.cpp
+    ./src/ws2common/animation/RaceTrackPath.cpp
+    ./src/ws2common/animation/KeyframeEffect1.cpp
+    ./src/ws2common/animation/KeyframeEffect2.cpp
+    ./src/ws2common/animation/EffectAnimation.cpp
     )
 
 set(HEADER_FILES
@@ -91,7 +102,10 @@ set(HEADER_FILES
     ./include/ws2common/EnumBananaType.hpp
     ./include/ws2common/EnumPlaybackState.hpp
     ./include/ws2common/EnumAnimationSeesawType.hpp
+    ./include/ws2common/EnumStageType.hpp
+    ./include/ws2common/EnumFogType.hpp
     ./include/ws2common/Stage.hpp
+    ./include/ws2common/Fog.hpp
     ./include/ws2common/CollisionGrid.hpp
     ./include/ws2common/SerializeUtils.hpp
     ./include/ws2common/Transform.hpp
@@ -117,6 +131,9 @@ set(HEADER_FILES
     ./include/ws2common/scene/WormholeSceneNode.hpp
     ./include/ws2common/scene/CollisionSceneNode.hpp
     ./include/ws2common/scene/MeshCollisionSceneNode.hpp
+    ./include/ws2common/scene/BoosterSceneNode.hpp
+    ./include/ws2common/scene/GolfHoleSceneNode.hpp
+    ./include/ws2common/scene/RaceTrackPathSceneNode.hpp
     ./include/ws2common/config/XMLConfigParser.hpp
     ./include/ws2common/model/Vertex.hpp
     ./include/ws2common/model/MeshSegment.hpp
@@ -134,6 +151,11 @@ set(HEADER_FILES
     ./include/ws2common/animation/Keyframe.hpp
     ./include/ws2common/animation/Keyframe.ipp
     ./include/ws2common/animation/TransformAnimation.hpp
+    ./include/ws2common/animation/FogAnimation.hpp
+    ./include/ws2common/animation/RaceTrackPath.hpp
+    ./include/ws2common/animation/KeyframeEffect1.hpp
+    ./include/ws2common/animation/KeyframeEffect2.hpp
+    ./include/ws2common/animation/EffectAnimation.hpp
     )
 
 set(RESOURCE_FILES

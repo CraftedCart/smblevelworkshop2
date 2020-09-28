@@ -3,6 +3,7 @@
 #include "ws2common/config/XMLConfigParser.hpp"
 #include "ws2common/model/ModelLoader.hpp"
 #include "ws2lz/SMB2LzExporter.hpp"
+#include "ws2lz/LZCompressor.hpp"
 #include <QCoreApplication>
 #include <QTranslator>
 #include <QCommandLineParser>
@@ -13,6 +14,7 @@
 #include <QDataStream>
 #include <QHash>
 #include <QDebug>
+#include <QElapsedTimer>
 
 int main(int argc, char *argv[]) {
     qInstallMessageHandler(WS2Common::messageHandler);
@@ -144,13 +146,24 @@ int main(int argc, char *argv[]) {
     buf.seek(0);
     //Write the uncompressed file if requested
     if (parser.isSet("o")) {
+        qInfo() << "Writing uncompressed file...";
         QFile o(parser.value("o"));
         o.open(QIODevice::WriteOnly);
         o.write(buf.data());
         o.close();
     }
 
-    //TODO: Compression
+    if (parser.isSet("s")) {
+        qInfo() << "Writing compressed file... This may take a while";
+        QElapsedTimer timer; //Measure how long this operation takes - probably a little while
+        timer.start();
+        QFile o(parser.value("s"));
+        WS2Lz::LZCompressor compressor;
+        o.open(QIODevice::WriteOnly);
+        o.write(compressor.compress(buf.data()));
+        o.close();
+        qInfo().noquote().nospace() << "Finished compressing file in " << timer.nsecsElapsed() / 1000000000.0f << "s";
+    }
 
     buf.close();
 

@@ -102,6 +102,21 @@ namespace WS2Common {
         const std::set<KeyframeF*, KeyframeCompare>& TransformAnimation::getScaleZKeyframes() const {
             return scaleZKeyframes;
         }
+        std::set<KeyframeF*, KeyframeCompare>& TransformAnimation::getUnknown1Keyframes() {
+            return unknown1Keyframes;
+        }
+
+        const std::set<KeyframeF*, KeyframeCompare>& TransformAnimation::getUnknown1Keyframes() const {
+            return unknown1Keyframes;
+        }
+
+        std::set<KeyframeF*, KeyframeCompare>& TransformAnimation::getUnknown2Keyframes() {
+            return unknown2Keyframes;
+        }
+
+        const std::set<KeyframeF*, KeyframeCompare>& TransformAnimation::getUnknown2Keyframes() const {
+            return unknown2Keyframes;
+        }
     }
 }
 

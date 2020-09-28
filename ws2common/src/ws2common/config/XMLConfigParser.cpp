@@ -39,11 +39,20 @@ namespace WS2Common {
                             stage->getFirstForegroundGroup(true)->addChild(parseForegroundModel(xml));
                         } else if (xml.name() == "falloutPlane") {
                             stage->setFalloutY(SerializeUtils::getAttribute(xml.attributes(), "y").toFloat());
+                        } else if (xml.name() == "stageType") {
+                            stage->setStageType(StageType::fromString(xml.readElementText()));
                         } else if (xml.name() == "fog") {
-                            qWarning() << "fog not yet implemented!";
-                            xml.skipCurrentElement();
+                            stage->setFog(parseFog(xml));
+                        } else if (xml.name() == "fogAnimationKeyframes") {
+                            stage->setFogAnimation(parseFogAnimation(xml));
                         } else if (xml.name() == "itemGroup") {
                             stage->getRootNode()->addChild(parseItemGroup(xml));
+                        } else if (xml.name() == "trackPath") {
+                            stage->getRootNode()->addChild(parseTrackPath(xml));
+                        } else if (xml.name() == "booster") {
+                            stage->getRootNode()->addChild(parseBooster(xml));
+                        } else if (xml.name() == "golfHole") {
+                            stage->getRootNode()->addChild(parseGolfHole(xml));
                         } else {
                             qWarning().noquote() << "Unrecognised tag:" << xml.name();
                         }
@@ -135,6 +144,8 @@ namespace WS2Common {
                     start->setPosition(SerializeUtils::getVec3Attributes(xml.attributes()));
                 } else if (xml.name() == "rotation") {
                     start->setRotation(MathUtils::degreesToRadians(SerializeUtils::getVec3Attributes(xml.attributes())));
+                } else if (xml.name() == "playerID") {
+                    start->setPlayerID(xml.readElementText().toUInt());
                 } else {
                     qWarning().noquote() << "Unrecognised tag: start >" << xml.name();
                 }
@@ -177,6 +188,9 @@ namespace WS2Common {
                     loopTime = (xml.readElementText().toFloat());
                 } else if (xml.name() == "textureScroll") {
                    bg->setTextureScroll(SerializeUtils::getVec2Attributes(xml.attributes()));
+                } else if (xml.name() == "effectKeyframes") {
+                    Animation::EffectAnimation *effectAnim = parseEffectAnimation(xml);
+                    bg->setEffectAnimation(effectAnim);
                 } else {
                     qWarning().noquote() << "Unrecognised tag: backgroundModel >" << xml.name();
                 }
@@ -223,6 +237,9 @@ namespace WS2Common {
                     loopTime = (xml.readElementText().toFloat());
                 } else if (xml.name() == "textureScroll") {
                    fg->setTextureScroll(SerializeUtils::getVec2Attributes(xml.attributes()));
+                } else if (xml.name() == "effectKeyframes") {
+                    Animation::EffectAnimation *effectAnim = parseEffectAnimation(xml);
+                    fg->setEffectAnimation(effectAnim);
                 } else {
                     qWarning().noquote() << "Unrecognised tag: foregroundModel >" << xml.name();
                 }
@@ -721,6 +738,8 @@ namespace WS2Common {
                     QString name = xml.readElementText();
                     node->setName(QCoreApplication::translate("XMLConfigParser", "Mesh Collision: %1").arg(name));
                     node->setMeshName(name);
+                } else if (xml.name() == "collisionFlag") {
+                    node->setCollisionTriangleFlag(xml.readElementText().toShort());
                 } else {
                     qWarning().noquote() << "Unrecognised tag: meshCollision >" << xml.name();
                 }
@@ -799,6 +818,10 @@ namespace WS2Common {
                     parseKeyframes(xml, anim->getScaleYKeyframes()); 
                 } else if (xml.name() == "scaleZ" && supportsScale) {
                     parseKeyframes(xml, anim->getScaleZKeyframes()); 
+                } else if (xml.name() == "unknown1" && supportsScale) {
+                    parseKeyframes(xml, anim->getUnknown1Keyframes());
+                } else if (xml.name() == "unknown2" && supportsScale) {
+                    parseKeyframes(xml, anim->getUnknown2Keyframes());
                 } else {
                     qWarning().noquote() << "Unrecognised tag: animKeyframes >" << xml.name();
                 }
@@ -806,6 +829,275 @@ namespace WS2Common {
 
             return anim;
         }
+
+        Fog* XMLConfigParser::parseFog(QXmlStreamReader &xml)
+        {
+            Fog* fog = new Fog();
+
+            while (!(xml.isEndElement() && xml.name() == "fog")) {
+                xml.readNext();
+                if (!xml.isStartElement()) continue; //Ignore all end elements
+
+                qDebug().nospace() << "XML config parsing [Line: " << xml.lineNumber() << ", Col: " << xml.columnNumber() << "]: " <<
+                "fog > " << xml.name();
+
+                if (xml.name() == "type") {
+                    fog->setFogType(FogType::fromString(xml.readElementText()));
+                } else if (xml.name() == "red") {
+                    fog->setRedValue(xml.readElementText().toFloat());
+                } else if (xml.name() == "green") {
+                    fog->setGreenValue(xml.readElementText().toFloat());
+                } else if (xml.name() == "blue") {
+                    fog->setBlueValue(xml.readElementText().toFloat());
+                } else if (xml.name() == "start") {
+                    fog->setStartDistance(xml.readElementText().toFloat());
+                } else if (xml.name() == "end") {
+                    fog->setEndDistance(xml.readElementText().toFloat());
+                } else {
+                    qWarning().noquote() << "Unrecgonised tag: fog > " << xml.name();
+                }
+            }
+
+            return fog;
+
+        }
+
+        Animation::FogAnimation* XMLConfigParser::parseFogAnimation(QXmlStreamReader &xml)
+        {
+            Animation::FogAnimation* anim = new Animation::FogAnimation;
+
+            while (!(xml.isEndElement() && xml.name() == "fogAnimationKeyframes")) {
+                xml.readNext();
+                if (!xml.isStartElement()) continue; //Ignore all end elements
+
+                qDebug().nospace() << "XML config parsing [Line: " << xml.lineNumber() << ", Col: " << xml.columnNumber() << "]: " <<
+                    "fogAnimationKeyframes > " << xml.name();
+
+                if (xml.name() == "red") {
+                    parseKeyframes(xml, anim->getRedKeyframes());
+                } else if (xml.name() == "green") {
+                    parseKeyframes(xml, anim->getGreenKeyframes());
+                } else if (xml.name() == "blue") {
+                    parseKeyframes(xml, anim->getBlueKeyframes());
+                } else if (xml.name() == "start") {
+                    parseKeyframes(xml, anim->getStartDistanceKeyframes());
+                } else if (xml.name() == "end") {
+                    parseKeyframes(xml, anim->getEndDistanceKeyframes());
+                } else if (xml.name() == "unknown") {
+                    parseKeyframes(xml, anim->getUnknownKeyframes());
+                } else {
+                    qWarning().noquote() << "Unrecognised tag: fogAnimationKeyframes >" << xml.name();
+                }
+           }
+
+           return anim;
+
+        }
+
+        Scene::BoosterSceneNode *XMLConfigParser::parseBooster(QXmlStreamReader &xml)
+        {
+            //Default name is "Booster x", translated
+            static unsigned int id = 0;
+            Scene::BoosterSceneNode *booster = new Scene::BoosterSceneNode(QCoreApplication::translate("XMLConfigParser", "Booster %1").arg(id));
+
+            while (!(xml.isEndElement() && xml.name() == "booster")) {
+                xml.readNext();
+                if (!xml.isStartElement()) continue; //Ignore all end elements
+
+                qDebug().nospace() << "XML config parsing [Line: " << xml.lineNumber() << ", Col: " << xml.columnNumber() << "]: " <<
+                    "booster > " << xml.name();
+
+                if (xml.name() == "name") {
+                    booster->setName(xml.readElementText());
+                } else if (xml.name() == "position") {
+                    booster->setPosition(SerializeUtils::getVec3Attributes(xml.attributes()));
+                } else if (xml.name() == "rotation") {
+                    booster->setRotation(MathUtils::degreesToRadians(SerializeUtils::getVec3Attributes(xml.attributes())));
+                } else {
+                    qWarning().noquote() << "Unrecognised tag: booster >" << xml.name();
+                }
+            }
+
+            id++;
+
+            return booster;
+        }
+
+        Scene::GolfHoleSceneNode *XMLConfigParser::parseGolfHole(QXmlStreamReader &xml)
+        {
+
+            //Default name is "GolfHole x", translated
+            static unsigned int id = 0;
+            Scene::GolfHoleSceneNode *golfHole = new Scene::GolfHoleSceneNode(QCoreApplication::translate("XMLConfigParser", "GolfHole %1").arg(id));
+
+            while (!(xml.isEndElement() && xml.name() == "golfHole")) {
+                xml.readNext();
+                if (!xml.isStartElement()) continue; //Ignore all end elements
+
+                qDebug().nospace() << "XML config parsing [Line: " << xml.lineNumber() << ", Col: " << xml.columnNumber() << "]: " <<
+                    "golfHole > " << xml.name();
+
+                if (xml.name() == "name") {
+                    golfHole->setName(xml.readElementText());
+                } else if (xml.name() == "position") {
+                    golfHole->setPosition(SerializeUtils::getVec3Attributes(xml.attributes()));
+                } else if (xml.name() == "rotation") {
+                    golfHole->setRotation(MathUtils::degreesToRadians(SerializeUtils::getVec3Attributes(xml.attributes())));
+                } else {
+                    qWarning().noquote() << "Unrecognised tag: golfHole >" << xml.name();
+                }
+            }
+
+            id++;
+
+            return golfHole;
+        }
+
+       Scene::RaceTrackPathSceneNode* XMLConfigParser::parseTrackPath(QXmlStreamReader &xml)
+        {
+            static unsigned int id = 0;
+            Scene::RaceTrackPathSceneNode *node = new Scene::RaceTrackPathSceneNode(QCoreApplication::translate("XMLConfigParser", "RaceTrackPath %1").arg(id));
+            Animation::RaceTrackPath *trackPath = new Animation::RaceTrackPath();
+            node->setTrackPath(trackPath);
+
+            while (!(xml.isEndElement() && xml.name() == "trackPath")) {
+                xml.readNext();
+                if (!xml.isStartElement()) continue; //Ignore all end elements
+
+                qDebug().nospace() << "XML config parsing [Line: " << xml.lineNumber() << ", Col: " << xml.columnNumber() << "]: " <<
+                    "trackPath > " << xml.name();
+
+                if (xml.name() == "posX") {
+                    parseKeyframes(xml, node->getTrackPath()->getPosXKeyframes());
+                } else if (xml.name() == "posY") {
+                    parseKeyframes(xml, node->getTrackPath()->getPosYKeyframes());
+                } else if (xml.name() == "posZ") {
+                    parseKeyframes(xml, node->getTrackPath()->getPosZKeyframes());
+                } else if (xml.name() == "playerID") {
+                    node->getTrackPath()->setPlayerID(xml.readElementText().toUInt());
+                } else {
+                    qWarning().noquote() << "Unrecognised tag: trackPath >" << xml.name();
+                }
+            }
+
+            id++;
+            return node;
+       }
+
+       Animation::EffectAnimation *XMLConfigParser::parseEffectAnimation(QXmlStreamReader &xml)
+       {
+            Animation::EffectAnimation* anim = new Animation::EffectAnimation;
+
+            while (!(xml.isEndElement() && xml.name() == "effectKeyframes")) {
+                xml.readNext();
+                if (!xml.isStartElement()) continue; //Ignore all end elements
+
+                qDebug().nospace() << "XML config parsing [Line: " << xml.lineNumber() << ", Col: " << xml.columnNumber() << "]: " <<
+                    "effectKeyframes > " << xml.name();
+
+                if (xml.name() == "effectType1") {
+                    parseEffectKeyframesType1(xml, anim->getEffect1Keyframes());
+                } else if (xml.name() == "effectType2") {
+                    parseEffectKeyframesType2(xml, anim->getEffect2Keyframes());
+                } else {
+                    qWarning().noquote() << "Unrecognised tag: effectKeyframes >" << xml.name();
+                }
+           }
+
+            return anim;
+       }
+
+       void XMLConfigParser::parseEffectKeyframesType1(QXmlStreamReader &xml, QVector<Animation::KeyframeEffect1*> &keyframes)
+       {
+            using namespace Animation;
+
+            QStringRef parentName = xml.name();
+
+            while (!(xml.isEndElement() && xml.name() == parentName)) {
+                xml.readNext();
+                if (!xml.isStartElement()) continue; //Ignore all end elements
+
+                qDebug().nospace() << "XML config parsing [Line: " << xml.lineNumber() << ", Col: " << xml.columnNumber() << "]: " <<
+                    parentName << " > " << xml.name();
+
+                if (xml.name() == "keyframe") {
+                    glm::vec3 position;
+                    glm::vec3 rotation;
+                    char unknownByte1;
+                    char unknownByte2;
+                    foreach(const QXmlStreamAttribute &attr, xml.attributes()) {
+                        if (attr.name() == "posX") {
+                            position.x = attr.value().toFloat();
+                        } else if (attr.name() == "posY") {
+                            position.y = attr.value().toFloat();
+                        } else if (attr.name() == "posZ") {
+                            position.z = attr.value().toFloat();
+                        } else if (attr.name() == "rotX") {
+                            rotation.x = attr.value().toFloat();
+                        } else if (attr.name() == "rotY") {
+                            rotation.y = attr.value().toFloat();
+                        } else if (attr.name() == "rotZ") {
+                            rotation.z = attr.value().toFloat();
+                        } else if (attr.name() == "unknownByte1") {
+                            unknownByte1 = (char)attr.value().toUShort();
+                        } else if (attr.name() == "unknownByte2") {
+                            unknownByte2 = (char)attr.value().toUShort();
+                        }
+                    }
+                    rotation = MathUtils::degreesToRadians(rotation);
+                    KeyframeEffect1 *k = new KeyframeEffect1(position, rotation, unknownByte1, unknownByte2);
+                    keyframes.append(k);
+
+                } else {
+                    qWarning().noquote() << "Unrecognised tag: keyframe >" << xml.name();
+                }
+            }
+       }
+
+       void XMLConfigParser::parseEffectKeyframesType2(QXmlStreamReader &xml, QVector<Animation::KeyframeEffect2*> &keyframes)
+       {
+            using namespace Animation;
+
+            QStringRef parentName = xml.name();
+
+            while (!(xml.isEndElement() && xml.name() == parentName)) {
+                xml.readNext();
+                if (!xml.isStartElement()) continue; //Ignore all end elements
+
+                qDebug().nospace() << "XML config parsing [Line: " << xml.lineNumber() << ", Col: " << xml.columnNumber() << "]: " <<
+                    parentName << " > " << xml.name();
+
+                if (xml.name() == "keyframe") {
+                    glm::vec3 position;
+                    char unknownByte1;
+                    char unknownByte2;
+                    char unknownByte3;
+                    char unknownByte4;
+                    foreach(const QXmlStreamAttribute &attr, xml.attributes()) {
+                        if (attr.name() == "posX") {
+                            position.x = attr.value().toFloat();
+                        } else if (attr.name() == "posY") {
+                            position.y = attr.value().toFloat();
+                        } else if (attr.name() == "posZ") {
+                            position.z = attr.value().toFloat();
+                        } else if (attr.name() == "unknownByte1") {
+                            unknownByte1 = (char)attr.value().toUShort();
+                        } else if (attr.name() == "unknownByte2") {
+                            unknownByte2 = (char)attr.value().toUShort();
+                        } else if (attr.name() == "unknownByte3") {
+                            unknownByte3 = (char)attr.value().toUShort();
+                        } else if (attr.name() == "unknownByte4") {
+                            unknownByte4 = (char)attr.value().toUShort();
+                        }
+                    }
+                    KeyframeEffect2 *k = new KeyframeEffect2(position, unknownByte1, unknownByte2, unknownByte3, unknownByte4);
+                    keyframes.append(k);
+
+                } else {
+                    qWarning().noquote() << "Unrecognised tag: keyframe >" << xml.name();
+                }
+            }
+       }
 
         void XMLConfigParser::parseKeyframes(
                 QXmlStreamReader &xml,
@@ -826,6 +1118,8 @@ namespace WS2Common {
                 if (xml.name() == "keyframe") {
                     float time;
                     float value;
+                    float handleA = 0.0;
+                    float handleB = 0.0;
                     EnumEasing easing;
 
                     //Search through the attributes for time, value, and easing
@@ -838,14 +1132,20 @@ namespace WS2Common {
                             if (convertToRadians) value = qDegreesToRadians(value);
                         } else if (attr.name() == "easing") {
                             easing = Easing::fromString(attr.value().toString());
+                        } else if (attr.name() == "handleA") {
+                            handleA = attr.value().toFloat();
+                        } else if (attr.name() == "handleB") {
+                            handleB = attr.value().toFloat();
                         }
                     }
 
                     //Create the keyframe
                     KeyframeF *k = new KeyframeF(time, value, easing);
+                    k->setHandleAValue(handleA);
+                    k->setHandleBValue(handleB);
                     keyframes.insert(k);
                 } else {
-                    qWarning().noquote() << "Unrecognised tag: [keyframeIdentier] >" << xml.name();
+                    qWarning().noquote() << "Unrecognised tag: keyframe >" << xml.name();
                 }
             }
         }

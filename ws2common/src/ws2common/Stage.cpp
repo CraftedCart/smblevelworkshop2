@@ -45,6 +45,16 @@ namespace WS2Common {
         return models;
     }
 
+    EnumStageType Stage::getStageType() const
+    {
+        return stageType;
+    }
+
+    void Stage::setStageType(const EnumStageType &value)
+    {
+        stageType = value;
+    }
+
     Scene::BackgroundGroupSceneNode* Stage::getFirstBackgroundGroup(bool createIfNonExistent) {
         foreach(Scene::SceneNode *node, rootNode->getChildren()) {
             //TODO: Replace this with some dynamic cast thingy
@@ -75,6 +85,26 @@ namespace WS2Common {
         } else {
             return nullptr;
         }
+    }
+
+    Fog* Stage::getFog() const
+    {
+        return fog;
+    }
+
+    void Stage::setFog(Fog *value)
+    {
+        fog = value;
+    }
+
+    Animation::FogAnimation* Stage::getFogAnimation() const
+    {
+        return fogAnimation;
+    }
+
+    void Stage::setFogAnimation(Animation::FogAnimation *value)
+    {
+        fogAnimation = value;
     }
 }
 

@@ -17,6 +17,15 @@ namespace WS2Common {
             return "meshCollisionSceneNode";
         }
 
+        quint16 MeshCollisionSceneNode::getCollisionTriangleFlag() const {
+            return collisionTriangleFlag;
+        }
+
+        void MeshCollisionSceneNode::setCollisionTriangleFlag(quint16 collisionTriangleFlag) {
+            this->collisionTriangleFlag = collisionTriangleFlag;
+        }
+
+
         void MeshCollisionSceneNode::serializeNodeDataXml(QXmlStreamWriter &s) const {
             CollisionSceneNode::serializeNodeDataXml(s);
 
@@ -26,6 +35,7 @@ namespace WS2Common {
 
             s.writeEndElement();
         }
+
     }
 }
 

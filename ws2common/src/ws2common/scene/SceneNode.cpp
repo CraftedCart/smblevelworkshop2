@@ -248,9 +248,19 @@ namespace WS2Common {
             return "sceneNode";
         }
 
+        Animation::EffectAnimation *SceneNode::getEffectAnimation() const
+        {
+            return effectAnimation;
+        }
+        
+        void SceneNode::setEffectAnimation(Animation::EffectAnimation *value)
+        {
+            effectAnimation = value;
+        }
+        
         void SceneNode::serializeNodeDataXml(QXmlStreamWriter &s) const {
             s.writeStartElement("data-" + SceneNode::getSerializableName());
-
+            
             s.writeTextElement("name", name);
             s.writeTextElement("uuid", uuid.toString());
 

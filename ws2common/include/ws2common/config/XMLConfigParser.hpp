@@ -22,6 +22,11 @@
 #include "ws2common/scene/SwitchSceneNode.hpp"
 #include "ws2common/scene/WormholeSceneNode.hpp"
 #include "ws2common/scene/MeshCollisionSceneNode.hpp"
+#include "ws2common/scene/RaceTrackPathSceneNode.hpp"
+#include "ws2common/scene/BoosterSceneNode.hpp"
+#include "ws2common/scene/GolfHoleSceneNode.hpp"
+#include "ws2common/animation/RaceTrackPath.hpp"
+#include "ws2common/scene/GoalSceneNode.hpp"
 #include "ws2common/EnumAnimationSeesawType.hpp"
 #include "ws2common/CollisionGrid.hpp"
 #include <QXmlStreamAttributes>
@@ -290,6 +295,51 @@ namespace WS2Common {
                  * @return The TransformAnimation parsed from the config
                  */
                 Animation::TransformAnimation* parseTransformAnimation(QXmlStreamReader &xml, bool supportsScale);
+
+                /**
+                 * @brief Parses static fog data in an XML config
+                 * @param xml
+                 * @return The fog data parsed from the config
+                 */
+                Fog* parseFog(QXmlStreamReader &xml);
+
+                /**
+                 * @brief Parses animated fog data in an XML config
+                 * @param xml The QXmlStreamReader
+                 * @return The fog animation data parsed from the config
+                 */
+                Animation::FogAnimation* parseFogAnimation(QXmlStreamReader &xml);
+
+                /**
+                 * @brief Parses a booster in the XML config
+                 * @param xml The QXmlStreamReader
+                 * @return The booster parsed from the config
+                 */
+                Scene::BoosterSceneNode* parseBooster(QXmlStreamReader &xml);
+
+                /**
+                 * @brief Parses a golf hole in the XML config
+                 * @param xml The QXmlStreamReader
+                 * @return The golf hole parsed from the config
+                 */
+                Scene::GolfHoleSceneNode* parseGolfHole(QXmlStreamReader &xml);
+
+                /**
+                 * @brief Parses a track path in the XML config
+                 * @param xml The QXmlStreamReader
+                 * @return The track path parsed from the config
+                 */
+                Scene::RaceTrackPathSceneNode* parseTrackPath(QXmlStreamReader &xml);
+
+                /**
+                 * @brief Parses effect animation data in an XML config
+                 * @param xml The QXmlStreamReader
+                 * @return The effect animation parsed from the config
+                 */
+                Animation::EffectAnimation* parseEffectAnimation(QXmlStreamReader &xml);
+
+                void parseEffectKeyframesType1(QXmlStreamReader &xml, QVector<Animation::KeyframeEffect1*> &keyframes);
+                void parseEffectKeyframesType2(QXmlStreamReader &xml, QVector<Animation::KeyframeEffect2*> &keyframes);
 
                 /**
                  * @brief Populates the keyframe set with parsed keyframes

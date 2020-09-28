@@ -3,6 +3,9 @@
 #include "ws2common/WS2Common.hpp"
 #include "ws2common/scene/StartSceneNode.hpp"
 #include "ws2common/scene/MeshCollisionSceneNode.hpp"
+#include "ws2common/scene/RaceTrackPathSceneNode.hpp"
+#include "ws2common/scene/BoosterSceneNode.hpp"
+#include "ws2common/scene/GolfHoleSceneNode.hpp"
 #include <QElapsedTimer>
 #include <QThreadPool>
 #include <QDebug>
@@ -59,10 +62,24 @@ namespace WS2Lz {
         optimizeCollision(stage);
         calculateOffsets(stage);
 
+        stageType = StageType::toStageTypeFlag(stage.getStageType());
+
         //Write the data
         writeFileHeader(dev);
         writeStart(dev, stage);
         writeFallout(dev, stage);
+        writeFog(dev, stage.getFog());
+        writeFogAnimationHeader(dev, stage.getFogAnimation());
+        writeFogAnimation(dev, stage.getFogAnimation());
+        if (stage.getStageType() == EnumStageType::MONKEY_RACE_2) {
+            writeRaceHeader(dev, stage);
+            writeCPUTrackPathHeaders(dev, stage);
+            forEachChildType(stage.getRootNode(), Scene::RaceTrackPathSceneNode*, node) writeRaceTrackPath(dev, node);
+            forEachChildType(stage.getRootNode(), Scene::BoosterSceneNode*, node) writeBooster(dev, node);
+        }
+        if (stage.getStageType() == EnumStageType::MONKEY_GOLF_2) {
+            forEachChildType(stage.getRootNode(), Scene::GolfHoleSceneNode*, node) writeGolfHole(dev, node);
+        }
         forEachGroup(group) writeCollisionHeader(dev, group); //Collision Headers
         forEachGroup(group) writeCollisionTriangles(dev, group); //Collision triangles
         forEachGroup(group) writeCollisionTriangleIndexListPointers(dev, group); //Collision triangle pointer
@@ -92,10 +109,11 @@ namespace WS2Lz {
         forEachBg(mesh) writeTextureScroll(dev, mesh); // Background texture scroll
         forEachFg(mesh) writeTextureScroll(dev, mesh); // Foreground texture scroll
         forEachGroup(group) writeTextureScroll(dev, group); // Item group texture scroll
+        forEachBg(mesh) writeEffectAnimation(dev, mesh->getEffectAnimation());
+        forEachFg(mesh) writeEffectAnimation(dev, mesh->getEffectAnimation());
         forEachBg(mesh) writeTransformAnimation(dev, mesh->getTransformAnimation(), true); // Background object animations (scaling)
         forEachFg(mesh) writeTransformAnimation(dev, mesh->getTransformAnimation(), true); // Foreground object animations (scaling)
         forEachGroup(group) writeTransformAnimation(dev, group->getTransformAnimation(), false); // Item group animations (no scaling)
-
         forEachGroup(group) writeRuntimeReflectiveModelList(dev, group); //Runtime reflective models
         forEachGroupChildType(const Scene::FalloutVolumeSceneNode*, node) writeFalloutVolume(dev, node); //Fallout volumes
         writeNull(dev, 64); // Taking a page out of Deluxe's book - having extra null padding at the end of the file can prevent weird crashes
@@ -214,11 +232,84 @@ namespace WS2Lz {
     void SMB2LzExporter::calculateOffsets(const Stage &stage) {
         quint32 nextOffset = FILE_HEADER_LENGTH;
 
+        // This is for start position(s) (party games can have multiple start positions)
         startOffset = nextOffset;
-        nextOffset += START_LENGTH;
+        foreach(Scene::SceneNode *node, stage.getRootNode()->getChildren()) {
+            if (Scene::StartSceneNode *start = dynamic_cast<Scene::StartSceneNode*>(node)) {
+                nextOffset += START_LENGTH;
+            }
+        }
 
         falloutOffset = nextOffset;
         nextOffset += FALLOUT_LENGTH;
+
+        // This is for the fog header (if the stage has custom fog)
+        Fog *fog = stage.getFog();
+        if (fog != nullptr) {
+            fogOffset = nextOffset;
+            nextOffset += FOG_LENGTH;
+        }
+        else fogOffset = 0;
+
+        // This is for the fog animation header and keyframe list (if it exists)
+        Animation::FogAnimation *fogAnim = stage.getFogAnimation();
+        if (fogAnim != nullptr) {
+            fogAnimationHeaderOffset = nextOffset;
+            nextOffset += FOG_ANIMATION_HEADER_LENGTH;
+
+            fogAnimStartKeyframesOffsetMap.insert(nextOffset, fogAnim);
+            nextOffset += ANIMATION_KEYFRAME_LENGTH * fogAnim->getStartDistanceKeyframes().size();
+            fogAnimEndKeyframesOffsetMap.insert(nextOffset, fogAnim);
+            nextOffset += ANIMATION_KEYFRAME_LENGTH * fogAnim->getEndDistanceKeyframes().size();
+            fogAnimRedKeyframesOffsetMap.insert(nextOffset, fogAnim);
+            nextOffset += ANIMATION_KEYFRAME_LENGTH * fogAnim->getRedKeyframes().size();
+            fogAnimGreenKeyframesOffsetMap.insert(nextOffset, fogAnim);
+            nextOffset += ANIMATION_KEYFRAME_LENGTH * fogAnim->getGreenKeyframes().size();
+            fogAnimBlueKeyframesOffsetMap.insert(nextOffset, fogAnim);
+            nextOffset += ANIMATION_KEYFRAME_LENGTH * fogAnim->getBlueKeyframes().size();
+            fogAnimUnknownKeyframesOffsetMap.insert(nextOffset, fogAnim);
+            nextOffset += ANIMATION_KEYFRAME_LENGTH * fogAnim->getUnknownKeyframes().size();
+        }
+        else fogAnimationHeaderOffset = 0;
+
+        // This is for Monkey Race-specific offsets
+        if (stage.getStageType() == EnumStageType::MONKEY_RACE_2) {
+            monkeyRaceHeaderOffset = nextOffset;
+            nextOffset += MONKEY_RACE_HEADER_LENGTH;
+            cpuTrackPathHeaderOffset = nextOffset;
+            nextOffset += CPU_TRACK_PATH_HEADER_LENGTH;
+
+            // Track path offsets
+            foreach(Scene::SceneNode *node, stage.getRootNode()->getChildren()) {
+                if (Scene::RaceTrackPathSceneNode *path = dynamic_cast<Scene::RaceTrackPathSceneNode*>(node)) {
+                    //PosX
+                    raceTrackPathPosXKeyframesOffsetMap.insert(nextOffset, path->getTrackPath());
+                    nextOffset += ANIMATION_KEYFRAME_LENGTH * path->getTrackPath()->getPosXKeyframes().size();
+                    //PosY
+                    raceTrackPathPosYKeyframesOffsetMap.insert(nextOffset, path->getTrackPath());
+                    nextOffset += ANIMATION_KEYFRAME_LENGTH * path->getTrackPath()->getPosYKeyframes().size();
+                    //PosZ
+                    raceTrackPathPosZKeyframesOffsetMap.insert(nextOffset, path->getTrackPath());
+                    nextOffset += ANIMATION_KEYFRAME_LENGTH * path->getTrackPath()->getPosZKeyframes().size();
+                }
+            }
+
+            // Booster offsets
+            foreach(Scene::SceneNode *node, stage.getRootNode()->getChildren()) {
+                if (Scene::BoosterSceneNode *group = dynamic_cast<Scene::BoosterSceneNode*>(node)) {
+                    boosterOffsetMap.insert(nextOffset, group);
+                    nextOffset += BOOSTER_LENGTH;
+                }
+            }
+        }
+        else monkeyRaceHeaderOffset = 0;
+
+        // This is for Monkey Golf-specific offsets
+        if (stage.getStageType() == EnumStageType::MONKEY_GOLF_2) {
+            golfHoleOffset = nextOffset;
+            nextOffset += GOLF_HOLE_LENGTH;
+        }
+        else golfHoleOffset = 0;
 
         //Find all GroupSceneNodes/Collision headers
         foreach(Scene::SceneNode *node, stage.getRootNode()->getChildren()) {
@@ -576,6 +667,28 @@ namespace WS2Lz {
             nextOffset += TEXTURE_SCROLL_LENGTH;
         }
 
+        //BG effect keyframes
+        forEachBg(node) {
+            Animation::EffectAnimation *anim = node->getEffectAnimation();
+            if (anim != nullptr) {
+                effectAnimType1KeyframesOffsetMap.insert(nextOffset, anim);
+                nextOffset += EFFECT_TYPE_1_KEYFRAME_LENGTH * anim->getEffect1Keyframes().size();
+
+                effectAnimType2KeyframesOffsetMap.insert(nextOffset, anim);
+                nextOffset += EFFECT_TYPE_2_KEYFRAME_LENGTH * anim->getEffect2Keyframes().size();
+            }
+        }
+        //FG effect keyframes
+        forEachFg(node) {
+            Animation::EffectAnimation *anim = node->getEffectAnimation();
+            if (anim != nullptr) {
+                effectAnimType1KeyframesOffsetMap.insert(nextOffset, anim);
+                nextOffset += EFFECT_TYPE_1_KEYFRAME_LENGTH * anim->getEffect1Keyframes().size();
+
+                effectAnimType2KeyframesOffsetMap.insert(nextOffset, anim);
+                nextOffset += EFFECT_TYPE_2_KEYFRAME_LENGTH * anim->getEffect2Keyframes().size();
+            }
+        }
 
         //BG animation keyframes
         forEachBg(group) {
@@ -614,6 +727,12 @@ namespace WS2Lz {
                 animPosZKeyframesOffsetMap.insert(nextOffset, anim);
                 nextOffset += ANIMATION_KEYFRAME_LENGTH * anim->getPosZKeyframes().size();
 
+                //Unk1
+                animUnknown1KeyframesOffsetMap.insert(nextOffset, anim);
+                nextOffset += ANIMATION_KEYFRAME_LENGTH * anim->getUnknown1Keyframes().size();
+                //Unk2
+                animUnknown2KeyframesOffsetMap.insert(nextOffset, anim);
+                nextOffset += ANIMATION_KEYFRAME_LENGTH * anim->getUnknown2Keyframes().size();
 
             }
         }
@@ -654,6 +773,13 @@ namespace WS2Lz {
                 //PosZ
                 animPosZKeyframesOffsetMap.insert(nextOffset, anim);
                 nextOffset += ANIMATION_KEYFRAME_LENGTH * anim->getPosZKeyframes().size();
+
+                //Unk1
+                animUnknown1KeyframesOffsetMap.insert(nextOffset, anim);
+                nextOffset += ANIMATION_KEYFRAME_LENGTH * anim->getUnknown1Keyframes().size();
+                //Unk2
+                animUnknown2KeyframesOffsetMap.insert(nextOffset, anim);
+                nextOffset += ANIMATION_KEYFRAME_LENGTH * anim->getUnknown2Keyframes().size();
 
             }
         }
@@ -730,7 +856,6 @@ namespace WS2Lz {
 
         //TODO: Reflective level model
         //TODO: Level model instances
-        //TODO: Fog anim header
     }
 
     void SMB2LzExporter::addCollisionTriangleOffsets(const Scene::SceneNode *node, quint32 &nextOffset) {
@@ -795,13 +920,14 @@ namespace WS2Lz {
         dev << (quint32) (bgOffsetMap.size() > 0 ? bgOffsetMap.firstKey() : 0); //Background list offset
         dev << (quint32) fgOffsetMap.size();
         dev << (quint32) (fgOffsetMap.size() > 0 ? fgOffsetMap.firstKey() : 0); //Foreground list offset
-        writeNull(dev, 4);
-        dev << (quint32) 0x00000001;
+        dev << (quint32) monkeyRaceHeaderOffset;
+        dev << (quint32) stageType;
         dev << wormholeCount;
         //We have to write 0 here if we want wormhole surfaces to work
         //This also means wormholes + reflective surfaces won't co-operate
         dev << (quint32) (wormholeCount > 0 ? runtimeReflectiveModelOffsetMap.firstKey() : 0); //Reflective model list offset
-        writeNull(dev, 12);
+        dev << (quint32) golfHoleOffset;
+        writeNull(dev, 8);
         writeNull(dev, 8); //TODO: Level model instances
         dev << addAllCounts(levelModelCountMap);
         dev << levelModelPointerAOffsetMap.firstKey();
@@ -810,28 +936,34 @@ namespace WS2Lz {
         writeNull(dev, 12);
         dev << addAllCounts(switchCountMap);
         dev << (quint32) (switchOffsetMap.size() > 0 ? switchOffsetMap.firstKey() : 0); //Switch list offset
-        writeNull(dev, 4); //TODO: Fog animation header
+        dev << (quint32) fogAnimationHeaderOffset;
         dev << addAllCounts(wormholeCountMap);
         dev << (quint32) (wormholeOffsetMap.size() > 0 ? wormholeOffsetMap.firstKey() : 0); //Wormhole list offset
-        writeNull(dev, 4); //TODO: Fog
+        dev << (quint32) fogOffset;
         writeNull(dev, 20);
         writeNull(dev, 4); //TODO: Mystery 3
         writeNull(dev, 1988);
     }
 
     void SMB2LzExporter::writeStart(QDataStream &dev, const Stage &stage) {
-        Scene::StartSceneNode *start;
+        QMultiMap<quint32, Scene::StartSceneNode*> startPositions;
 
-        //Find the start
+        //Find the start position(s)
         forEachChildType(stage.getRootNode(), Scene::StartSceneNode*, node) {
-            start = static_cast<Scene::StartSceneNode*>(node);
-            break;
+            if (dynamic_cast<Scene::StartSceneNode*>(node)) {
+                Scene::StartSceneNode* startPos = static_cast<Scene::StartSceneNode*>(node);
+                startPositions.insert(startPos->getPlayerID(), startPos);
+            }
         }
 
         //Write the bytes
-        dev << start->getPosition();
-        dev << convertRotation(start->getRotation());
-        writeNull(dev, 2);
+        for (int playerId = startPositions.size()-1; playerId >= 0; playerId--) {
+            Scene::StartSceneNode *start = startPositions.value(playerId);
+            dev << start->getPosition();
+            dev << convertRotation(start->getRotation());
+            writeNull(dev, 2);
+        }
+
     }
 
     void SMB2LzExporter::writeFallout(QDataStream &dev, const Stage &stage) {
@@ -993,6 +1125,77 @@ namespace WS2Lz {
         writeNull(dev, 2);
     }
 
+    void SMB2LzExporter::writeFog(QDataStream &dev, const Fog *fog)
+    {
+        if (fog == nullptr) return;
+
+        dev << (quint8) fog->getFogType();
+        writeNull(dev, 3);
+        dev << fog->getStartDistance();
+        dev << fog->getEndDistance();
+        dev << fog->getRedValue();
+        dev << fog->getGreenValue();
+        dev << fog->getBlueValue();
+        writeNull(dev, 12);
+
+    }
+
+    void SMB2LzExporter::writeFogAnimationHeader(QDataStream &dev, const Animation::FogAnimation *anim)
+    {
+        if (anim == nullptr) return;
+
+        dev << (quint32) anim->getStartDistanceKeyframes().size();
+        dev << (quint32) fogAnimStartKeyframesOffsetMap.key(anim);
+        dev << (quint32) anim->getEndDistanceKeyframes().size();
+        dev << (quint32) fogAnimEndKeyframesOffsetMap.key(anim);
+        dev << (quint32) anim->getRedKeyframes().size();
+        dev << (quint32) fogAnimRedKeyframesOffsetMap.key(anim);
+        dev << (quint32) anim->getGreenKeyframes().size();
+        dev << (quint32) fogAnimGreenKeyframesOffsetMap.key(anim);
+        dev << (quint32) anim->getBlueKeyframes().size();
+        dev << (quint32) fogAnimBlueKeyframesOffsetMap.key(anim);
+        dev << (quint32) anim->getUnknownKeyframes().size();
+        dev << (quint32) fogAnimUnknownKeyframesOffsetMap.key(anim);
+    }
+
+    void SMB2LzExporter::writeRaceHeader(QDataStream &dev, const Stage &stage)
+    { 
+        foreach(Scene::SceneNode *node, stage.getRootNode()->getChildren()) {
+            if (Scene::RaceTrackPathSceneNode *pathNode = dynamic_cast<Scene::RaceTrackPathSceneNode*>(node)) {
+                if (pathNode->getTrackPath()->getPlayerID() == 0) {
+                    dev << (quint32) pathNode->getTrackPath()->getPosXKeyframes().size();
+                    dev << (quint32) raceTrackPathPosXKeyframesOffsetMap.key(pathNode->getTrackPath());
+                    dev << (quint32) pathNode->getTrackPath()->getPosYKeyframes().size();
+                    dev << (quint32) raceTrackPathPosYKeyframesOffsetMap.key(pathNode->getTrackPath());
+                    dev << (quint32) pathNode->getTrackPath()->getPosZKeyframes().size();
+                    dev << (quint32) raceTrackPathPosZKeyframesOffsetMap.key(pathNode->getTrackPath());
+                }
+            }
+        }
+        // We are making the assumption that there will *always* be 7 CPU track paths - this seems to be a requirement of the game
+        dev << (quint32) 0x7;
+        dev << (quint32) cpuTrackPathHeaderOffset;
+        dev << (quint32) boosterOffsetMap.size();
+        dev << (quint32) (boosterOffsetMap.size() > 0 ? boosterOffsetMap.firstKey() : 0);
+        // There's extra stuff after the header here, not sure what it's for
+        writeNull(dev, 192);
+
+    }
+
+    void SMB2LzExporter::writeBooster(QDataStream &dev, const Scene::BoosterSceneNode *node)
+    {
+        dev << node->getPosition();
+        dev << convertRotation(node->getRotation());
+        writeNull(dev, 2);
+    }
+
+    void SMB2LzExporter::writeGolfHole(QDataStream &dev, const Scene::GolfHoleSceneNode *node)
+    {
+        dev << node->getPosition();
+        dev << convertRotation(node->getRotation());
+        writeNull(dev, 2);
+    }
+
     void SMB2LzExporter::writeConeCollisionObject(QDataStream &dev, const Scene::ConeCollisionObjectSceneNode *node) {
         dev << node->getPosition();
         dev << convertRotation(node->getRotation());
@@ -1123,7 +1326,7 @@ namespace WS2Lz {
                         dev << normal.y; //Y normal
                         dev << normal.z; //Z normal
                         dev << convertRotation(glm::vec3(rotX, rotY, rotZ)); //XYZ rotation from the XZ plane
-                        writeNull(dev, 2);
+                        dev << coli->getCollisionTriangleFlag();
                         dev << deltaPosB.x; //DX2X1
                         dev << deltaPosB.y; //DY2X1
                         dev << deltaPosC.x; //DX3X1
@@ -1287,11 +1490,18 @@ namespace WS2Lz {
         dev << (quint32) (anim->getPosYKeyframes().size() != 0 ? animPosYKeyframesOffsetMap.key(anim) : 0); //Offset to pos Y keyframes
         dev << (quint32) anim->getPosZKeyframes().size(); //Number of pos Z keyframes
         dev << (quint32) (anim->getPosZKeyframes().size() != 0 ? animPosZKeyframesOffsetMap.key(anim) : 0); //Offset to pos Z keyframes
-        writeNull(dev, 16);
+        dev << (quint32) anim->getUnknown1Keyframes().size(); //Number of unk #1 keyframes
+        dev << (quint32) (anim->getUnknown1Keyframes().size() != 0 ? animUnknown1KeyframesOffsetMap.key(anim) : 0) ; //Offset to unk #1 keyframes
+        dev << (quint32) anim->getUnknown2Keyframes().size(); //Number of unk #2 keyframes
+        dev << (quint32) (anim->getUnknown2Keyframes().size() != 0 ? animUnknown2KeyframesOffsetMap.key(anim) : 0) ; //Offset to unk #2 keyframes
     }
 
     void SMB2LzExporter::writeEffectHeader(QDataStream &dev, const Scene::MeshSceneNode *node) {
-        writeNull(dev, 16); //TODO: Implement effect keyframes one they're figured out
+        Animation::EffectAnimation* anim = node->getEffectAnimation();
+        dev << (anim != nullptr ? anim->getEffect1Keyframes().size() : 0);
+        dev << (anim != nullptr ? effectAnimType1KeyframesOffsetMap.key(anim) : 0);
+        dev << (anim != nullptr ? anim->getEffect2Keyframes().size() : 0);
+        dev << (anim != nullptr ? effectAnimType2KeyframesOffsetMap.key(anim) : 0);
         dev << textureScrollOffsetMap.key(node);
         writeNull(dev, 28); //TODO: Whatever this stuff is
     }
@@ -1314,6 +1524,56 @@ namespace WS2Lz {
         foreach(Animation::KeyframeF *k, anim->getPosXKeyframes()) writeKeyframeF(dev, k);
         foreach(Animation::KeyframeF *k, anim->getPosYKeyframes()) writeKeyframeF(dev, k);
         foreach(Animation::KeyframeF *k, anim->getPosZKeyframes()) writeKeyframeF(dev, k);
+
+        if (scale) {
+            foreach(Animation::KeyframeF *k, anim->getUnknown1Keyframes()) writeKeyframeF(dev, k);
+            foreach(Animation::KeyframeF *k, anim->getUnknown2Keyframes()) writeKeyframeF(dev, k);
+        }
+    }
+
+    void SMB2LzExporter::writeFogAnimation(QDataStream &dev, const Animation::FogAnimation *anim)
+    {
+        if (anim == nullptr) return;
+
+        foreach(Animation::KeyframeF *k, anim->getStartDistanceKeyframes()) writeKeyframeF(dev, k);
+        foreach(Animation::KeyframeF *k, anim->getEndDistanceKeyframes()) writeKeyframeF(dev, k);
+        foreach(Animation::KeyframeF *k, anim->getRedKeyframes()) writeKeyframeF(dev, k);
+        foreach(Animation::KeyframeF *k, anim->getGreenKeyframes()) writeKeyframeF(dev, k);
+        foreach(Animation::KeyframeF *k, anim->getBlueKeyframes()) writeKeyframeF(dev, k);
+        foreach(Animation::KeyframeF *k, anim->getUnknownKeyframes()) writeKeyframeF(dev, k);
+    }
+
+    void SMB2LzExporter::writeRaceTrackPath(QDataStream &dev, const Scene::RaceTrackPathSceneNode *node)
+    {
+        foreach(Animation::KeyframeF *k, node->getTrackPath()->getPosXKeyframes()) writeKeyframeF(dev, k);
+        foreach(Animation::KeyframeF *k, node->getTrackPath()->getPosYKeyframes()) writeKeyframeF(dev, k);
+        foreach(Animation::KeyframeF *k, node->getTrackPath()->getPosZKeyframes()) writeKeyframeF(dev, k);
+    }
+
+    void SMB2LzExporter::writeCPUTrackPathHeaders(QDataStream &dev, const Stage &stage)
+    {
+        // Again, assuming there are always 7 CPU players
+
+        QMultiMap<quint32, Animation::RaceTrackPath*> trackPaths;
+        foreach(Scene::SceneNode *node, stage.getRootNode()->getChildren()) {
+            if (dynamic_cast<Scene::RaceTrackPathSceneNode*>(node)) {
+                Scene::RaceTrackPathSceneNode *path = static_cast<Scene::RaceTrackPathSceneNode*>(node);
+                trackPaths.insert(path->getTrackPath()->getPlayerID(), path->getTrackPath());
+            }
+        }
+
+        if (trackPaths.size() < 8) {
+            qCritical() << "Less than the required 8 track paths found";
+        }
+
+        for (quint32 cpuId = 1; cpuId < 8; cpuId++) {
+            dev << (quint32) trackPaths.value(cpuId)->getPosXKeyframes().size();
+            dev << (quint32) raceTrackPathPosXKeyframesOffsetMap.key(trackPaths.value(cpuId));
+            dev << (quint32) trackPaths.value(cpuId)->getPosYKeyframes().size();
+            dev << (quint32) raceTrackPathPosYKeyframesOffsetMap.key(trackPaths.value(cpuId));
+            dev << (quint32) trackPaths.value(cpuId)->getPosZKeyframes().size();
+            dev << (quint32) raceTrackPathPosZKeyframesOffsetMap.key(trackPaths.value(cpuId));
+       }
     }
 
     void SMB2LzExporter::writeRuntimeReflectiveModelList(QDataStream &dev, const Scene::GroupSceneNode *node) {
@@ -1329,14 +1589,41 @@ namespace WS2Lz {
         dev << (quint32) k->getEasing(); //Easing
         dev << k->getValue().first;
         dev << k->getValue().second;
-        writeNull(dev, 8);
+        dev << k->getHandleAValue();
+        dev << k->getHandleBValue();
+    }
+
+    void SMB2LzExporter::writeKeyframeEffect1(QDataStream &dev, const Animation::KeyframeEffect1 *k)
+    {
+        dev << k->getPosition();
+        dev << convertRotation(k->getRotation());
+        dev << (quint8) k->getUnknownByte1();
+        dev << (quint8) k->getUnknownByte2();
+    }
+
+    void SMB2LzExporter::writeKeyframeEffect2(QDataStream &dev, const Animation::KeyframeEffect2 *k)
+    {
+       dev << k->getPosition();
+       dev << (quint8) k->getUnknownByte1();
+       dev << (quint8) k->getUnknownByte2();
+       dev << (quint8) k->getUnknownByte3();
+       dev << (quint8) k->getUnknownByte4();
+    }
+
+    void SMB2LzExporter::writeEffectAnimation(QDataStream &dev, const Animation::EffectAnimation *anim)
+    {
+        if (anim != nullptr) {
+            foreach(Animation::KeyframeEffect1 *k, anim->getEffect1Keyframes()) writeKeyframeEffect1(dev, k);
+            foreach(Animation::KeyframeEffect2 *k, anim->getEffect2Keyframes()) writeKeyframeEffect2(dev, k);
+        }
     }
 
     void SMB2LzExporter::writeKeyframeAngleF(QDataStream &dev, const Animation::KeyframeF *k) {
         dev << (quint32) k->getEasing(); //Easing
         dev << k->getValue().first;
         dev << qRadiansToDegrees(k->getValue().second);
-        writeNull(dev, 8);
+        dev << k->getHandleAValue();
+        dev << k->getHandleBValue();
     }
 
     void SMB2LzExporter::writeNull(QDataStream &dev, const unsigned int count) {
