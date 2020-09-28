@@ -1,4 +1,4 @@
-# The VS2019 image has a newer version os MSYS2 instealled
+# The VS2019 image has a newer version of MSYS2 instealled
 image: Visual Studio 2019
 
 environment:
