@@ -1,3 +1,6 @@
+# The VS2019 image has a newer version of MSYS2 instealled
+image: Visual Studio 2019
+
 environment:
   matrix:
     - compiler: msys2
