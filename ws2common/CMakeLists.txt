@@ -110,8 +110,6 @@ set(HEADER_FILES
     ./include/ws2common/SerializeUtils.hpp
     ./include/ws2common/Transform.hpp
     ./include/ws2common/Result.hpp
-    ./include/ws2common/Result.ipp
-    ./include/ws2common/EnumStatus.hpp
     ./include/ws2common/scene/SceneNode.hpp
     ./include/ws2common/scene/StartSceneNode.hpp
     ./include/ws2common/scene/GroupSceneNode.hpp

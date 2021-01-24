@@ -17,7 +17,7 @@ namespace WS2EditorPlugins {
             public:
                 virtual QString getTranslatedTypeName() override;
                 virtual QVector<QPair<QString, QString>> getNameFilters() override;
-                virtual WS2Common::Result<> checkProject(WS2Editor::Project::Project *project) override;
+                virtual WS2Common::Result<void, QString> checkProject(WS2Editor::Project::Project *project) override;
                 virtual void exportFiles(QStringList targetFiles, WS2Editor::Project::Project *project) override;
         };
     }

@@ -225,10 +225,10 @@ namespace WS2Editor {
 
         void StageEditorWindow::askExportFiles(IExportProvider *provider) {
             //First check if the export provider will allow us
-            Result<> r = provider->checkProject(ProjectManager::getActiveProject());
+            Result<void, QString> r = provider->checkProject(ProjectManager::getActiveProject());
 
-            if (r.getStatus() != EnumStatus::SUCCESS) {
-                QString message = r.getMessage();
+            if (r.isErr()) {
+                QString message = r.unwrapErr();
                 if (message.isEmpty()) message = tr("Project check failed - no message provided");
 
                 StatusPopupWidget *w = new StatusPopupWidget(QCursor::pos(), message, "statusMessageFailed", this);
