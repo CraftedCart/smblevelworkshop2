@@ -57,9 +57,9 @@ namespace WS2Editor {
              *
              * @param project The project to check
              *
-             * @return A result value containing a status and optional error message
+             * @return A result value with an optional error message
              */
-            virtual WS2Common::Result<> checkProject(Project::Project *project);
+            virtual WS2Common::Result<void, QString> checkProject(Project::Project *project);
 
             /**
              * @brief Generates export data and writes it to each target file

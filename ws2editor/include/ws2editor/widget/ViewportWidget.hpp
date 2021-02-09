@@ -209,6 +209,8 @@ namespace WS2Editor {
                  *
                  * Elements are not directly sorted in the rayCallback. Rather, an indices vector is created, sorted based on the fractions in the ray callback, and returned
                  *
+                 * @todo Move into a helper namespace instead of duplicating it in StageEditorWindow
+                 *
                  * @param rayCallback The ray callback result to sort the returned indices vector
                  *
                  * @return An indices array sorted based on distance

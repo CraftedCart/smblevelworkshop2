@@ -12,7 +12,7 @@ before_install:
   - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then docker build -t ws2 .; fi
 
 script:
-  - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then docker run --name ws2 ws2; fi
+  - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then docker run --name ws2 --security-opt seccomp:unconfined ws2; fi
   - mkdir -p $TRAVIS_BUILD_DIR/ws2install/deploy
 
   - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then export CC=clang; fi

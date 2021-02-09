@@ -1,3 +1,6 @@
+<!-- -*- mode: xml -*- -->
+<!-- vim: set syntax=xml: -->
+
 <RCC>
     <qresource prefix="/Workshop2">
         <file>Icons/Paste.png</file>
@@ -32,6 +35,7 @@
         <file>Icons/PluginFail.png</file>
         <file>Icons/ArrowsUpDown.png</file>
         <file>Icons/Alert.png</file>
+        <file>Icons/DropToGround.png</file>
         <file>Shaders/stage.vert</file>
         <file>Shaders/stage.frag</file>
         <file>Shaders/unlit.vert</file>
@@ -55,6 +59,4 @@
         <file>Models/wormhole.fbx</file>
     </qresource>
 </RCC>
-
-<!-- vim: set syntax=xml: -->
 

@@ -29,6 +29,7 @@ The original SMB Level Workshop has been quite the learning experience for me, i
 - GLM
 - Assimp
 - Bullet Physics
+- oktal/Result (bundled in the code)
 
 ### Fetching dependencies
 

@@ -20,6 +20,22 @@ namespace WS2Common {
             return runtimeReflective;
         }
 
+        void MeshSceneNode::setBitflag(unsigned int bitflag) {
+            this->bitflag = bitflag;
+        }
+
+        unsigned int MeshSceneNode::getBitflag() const {
+            return bitflag;
+        }
+
+        void MeshSceneNode::setMeshType(unsigned int meshType) {
+            this->meshType = meshType;
+        }
+
+        unsigned int MeshSceneNode::getMeshType() const {
+            return meshType;
+        }
+
         const QString MeshSceneNode::getSerializableName() const {
             return "meshSceneNode";
         }

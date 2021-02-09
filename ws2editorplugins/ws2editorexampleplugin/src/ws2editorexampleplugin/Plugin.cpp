@@ -7,7 +7,7 @@ namespace WS2EditorExamplePlugin {
     using namespace WS2Editor;
 
     bool Plugin::init() {
-        qDebug() << "Hello, world! - From ws2editorexampleplugin";
+        qInfo() << "Hello, world! - From ws2editorexampleplugin";
 
         //Hook into the stage editor window by calling onStageEditorWindowConstructed after it's been created
         connect(WS2EditorInstance::getInstance(), &WS2EditorInstance::onStageEditorWindowConstructed,
@@ -20,7 +20,7 @@ namespace WS2EditorExamplePlugin {
     void Plugin::onStageEditorWindowConstructed(UI::StageEditorWindow &w) {
         Q_UNUSED(w); //Tell the compiler to stop yelling at me for unused parameters
 
-        qDebug() << "ws2editorexampleplugin: Window consructed!";
+        qInfo() << "ws2editorexampleplugin: Window consructed!";
 
         //We can whatever we want with the window now that we have a pointer to it
         //For example, show a message whenever Ctrl-P is pressed

@@ -68,6 +68,7 @@ namespace WS2Editor {
             connect(ui->actionRunCommand, &QAction::triggered, this, &StageEditorWindow::showCommandLine);
             connect(ui->actionNewNode, &QAction::triggered, this, &StageEditorWindow::addSceneNode);
             connect(ui->actionNewBackgroundGroupNode, &QAction::triggered, this, &StageEditorWindow::addBackgroundNode);
+            connect(ui->actionDropToGround, &QAction::triggered, this, &StageEditorWindow::dropToGroundSelected);
             connect(ui->actionDelete, &QAction::triggered, this, &StageEditorWindow::deleteSelected);
             connect(ui->actionSettings, &QAction::triggered, this, &StageEditorWindow::showSettings);
             connect(ui->actionAbout, &QAction::triggered, this, &StageEditorWindow::showAbout);
@@ -84,7 +85,7 @@ namespace WS2Editor {
             connect(ui->actionAddJamabar, &QAction::triggered, this, &StageEditorWindow::addJamabar);
             connect(ui->actionAddWormhole, &QAction::triggered, this, &StageEditorWindow::addWormhole);
 
-            ////Debug menu
+            //Debug menu
             connect(ui->actionClearAllRenderManagerCaches, &QAction::triggered, [this]() {
                     ui->viewportWidget->makeCurrentContext();
                     ui->viewportWidget->getRenderManager()->clearAllCaches();
@@ -224,10 +225,10 @@ namespace WS2Editor {
 
         void StageEditorWindow::askExportFiles(IExportProvider *provider) {
             //First check if the export provider will allow us
-            Result<> r = provider->checkProject(ProjectManager::getActiveProject());
+            Result<void, QString> r = provider->checkProject(ProjectManager::getActiveProject());
 
-            if (r.getStatus() != EnumStatus::SUCCESS) {
-                QString message = r.getMessage();
+            if (r.isErr()) {
+                QString message = r.unwrapErr();
                 if (message.isEmpty()) message = tr("Project check failed - no message provided");
 
                 StatusPopupWidget *w = new StatusPopupWidget(QCursor::pos(), message, "statusMessageFailed", this);
@@ -277,6 +278,33 @@ namespace WS2Editor {
         void StageEditorWindow::addBackgroundNode() {
             BackgroundGroupSceneNode *newNode = new BackgroundGroupSceneNode(tr("New Background Group"));
             ModelManager::modelOutliner->addNode(newNode, ProjectManager::getActiveProject()->getScene()->getRootNode());
+        }
+
+        void StageEditorWindow::dropToGroundSelected() {
+            QVector<SceneNode*> selected = ProjectManager::getActiveProject()->getScene()->getSelectionManager()->getSelectedObjects();
+
+            for (SceneNode *node : selected) {
+                btCollisionWorld::AllHitsRayResultCallback *rayCallback = raycastWorld(
+                        node->getPosition(),
+                        node->getPosition() + glm::vec3(0.0f, -1000.0f, 0.0f)
+                        );
+
+                if (rayCallback->hasHit()) {
+                    //Fetch the closest hit
+                    QVector<int> indices = sortAllHitsRayResultCallback(rayCallback);
+                    glm::vec3 hitPoint = MathUtils::toGlmVec3(rayCallback->m_hitPointWorld[indices.at(0)]);
+                    glm::vec3 hitNorm = MathUtils::toGlmVec3(rayCallback->m_hitNormalWorld[indices.at(0)]);
+
+                    //Some objects require an offset
+                    if (dynamic_cast<BananaSceneNode*>(node) || dynamic_cast<StartSceneNode*>(node)) {
+                        hitPoint += 0.5f * hitNorm;
+                    }
+
+                    node->setPosition(hitPoint);
+                    // node->setRotation(hitNorm);
+                    ModelManager::modelOutliner->nodeModified(node);
+                }
+            }
         }
 
         void StageEditorWindow::deleteSelected() {
@@ -336,6 +364,55 @@ namespace WS2Editor {
 
             //Select the node
             ProjectManager::getActiveProject()->getScene()->getSelectionManager()->selectOnly(node);
+        }
+
+        btCollisionWorld::AllHitsRayResultCallback* StageEditorWindow::raycastWorld(glm::vec3 startPos, glm::vec3 endPos) {
+            btCollisionWorld::AllHitsRayResultCallback *rayCallback = new btCollisionWorld::AllHitsRayResultCallback(
+                    btVector3(WS2Common::MathUtils::toBtVector3(startPos)),
+                    btVector3(WS2Common::MathUtils::toBtVector3(endPos))
+                    );
+            rayCallback->m_flags = btTriangleRaycastCallback::kF_FilterBackfaces; //Ignore back faces
+
+            WS2Editor::Project::ProjectManager::getActiveProject()->getScene()->getPhysicsManager()->getDynamicsWorld()->rayTest(
+                    btVector3(WS2Common::MathUtils::toBtVector3(startPos)),
+                    btVector3(WS2Common::MathUtils::toBtVector3(endPos)),
+                    *rayCallback
+                    );
+
+
+            if (rayCallback->hasHit()) {
+                for (int i = 0; i < rayCallback->m_collisionObjects.size(); i++) {
+                    btVector3 hitPoint = rayCallback->m_hitPointWorld[i];
+                    btVector3 hitNorm = rayCallback->m_hitNormalWorld[i];
+
+                    WS2Editor::Project::ProjectManager::getActiveProject()->getScene()->getPhysicsDebugDrawer()->drawLine(
+                            hitPoint,
+                            hitPoint + hitNorm * 10.0f,
+                            btVector3(1.0f, 0.0f, 1.0f)
+                            );
+                }
+            }
+
+            return rayCallback;
+        }
+
+        QVector<int> StageEditorWindow::sortAllHitsRayResultCallback(const btCollisionWorld::AllHitsRayResultCallback *rayCallback) {
+            //Create an indices array and fill it incrementally(0, 1, 2, 3, etc. for as many hit objects as there are)
+            QVector<int> indices(rayCallback->m_hitFractions.size());
+            std::iota(indices.begin(), indices.end(), 0);
+
+            //Sort the indices array based on the fractions
+            class SortIndices {
+                private:
+                    const btScalar *arr;
+
+                public:
+                    SortIndices(const btScalar *arr) : arr(arr) {}
+                    bool operator()(int a, int b) const { return arr[a] < arr[b]; }
+            };
+            std::sort(indices.begin(), indices.end(), SortIndices(&rayCallback->m_hitFractions[0]));
+
+            return indices;
         }
 
         void StageEditorWindow::addStart() {

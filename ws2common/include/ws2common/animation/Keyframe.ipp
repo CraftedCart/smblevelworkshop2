@@ -28,22 +28,22 @@ namespace WS2Common {
         }
 
         template<typename T>
-        void Keyframe<T>::setHandleAValue(QPair<float, T> value) {
+        void Keyframe<T>::setHandleAValue(float value) {
             this->handleAValue = value;
         }
 
         template<typename T>
-        const QPair<float, T> Keyframe<T>::getHandleAValue() const {
+        float Keyframe<T>::getHandleAValue() const {
             return handleAValue;
         }
 
         template<typename T>
-        void Keyframe<T>::setHandleBValue(QPair<float, T> value) {
+        void Keyframe<T>::setHandleBValue(float value) {
             this->handleBValue = value;
         }
 
         template<typename T>
-        const QPair<float, T> Keyframe<T>::getHandleBValue() const {
+        float Keyframe<T>::getHandleBValue() const {
             return handleBValue;
         }
 

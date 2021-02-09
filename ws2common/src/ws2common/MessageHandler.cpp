@@ -2,6 +2,8 @@
 #include <stdio.h>
 
 namespace WS2Common {
+    //Namespace variable defines
+    bool enableDebugLogging = false;
 
     /**
      * @brief Custom message handler for logging - Install it with qInstallMessageHandler(messageHandler)
@@ -19,7 +21,7 @@ namespace WS2Common {
 
         switch (type) {
             case QtDebugMsg:
-                fprintf(stdout, "%s\n", localMsg.constData());
+                if (enableDebugLogging) fprintf(stdout, "%s\n", localMsg.constData());
                 break;
             case QtInfoMsg:
                 fprintf(stdout, "%s\n", localMsg.constData());
@@ -46,6 +48,10 @@ namespace WS2Common {
 #endif
                 abort();
         }
+    }
+
+    void setDebugLoggingEnabled(bool enable) {
+        enableDebugLogging = enable;
     }
 }
 
@@ -94,4 +100,3 @@ QDebug operator<<(QDebug debug, const WS2Common::Scene::SceneNode *node) {
 
     return debug;
 }
-

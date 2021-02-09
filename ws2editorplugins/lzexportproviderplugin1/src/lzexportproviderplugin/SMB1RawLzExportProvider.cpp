@@ -25,7 +25,7 @@ namespace WS2EditorPlugins {
             return vec;
         }
 
-        Result<> SMB1RawLzExportProvider::checkProject(Project *project) {
+        Result<void, QString> SMB1RawLzExportProvider::checkProject(Project *project) {
             //Check if we have a start node
             bool hasStart = false;
 
@@ -53,12 +53,12 @@ namespace WS2EditorPlugins {
 
                 if (ok) {
                     project->getScene()->getStage()->setFalloutY(fallout);
-                    return Result<>(EnumStatus::SUCCESS);
+                    return Ok();
                 } else {
-                    return Result<>(EnumStatus::FAILURE, tr("No fallout Y provided"));
+                    return Err(tr("No fallout Y provided"));
                 }
             } else {
-                return Result<>(EnumStatus::FAILURE, tr("No player start found in the scene root"));
+                return Err(tr("No player start found in the scene root"));
             }
         }
 

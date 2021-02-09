@@ -4,6 +4,7 @@
 #include "ws2common/model/ModelLoader.hpp"
 #include "ws2lz/SMB2LzExporter.hpp"
 #include "ws2lz/SMB1LzExporter.hpp"
+#include "ws2lz/LZCompressor.hpp"
 #include <QCoreApplication>
 #include <QTranslator>
 #include <QCommandLineParser>
@@ -14,6 +15,7 @@
 #include <QDataStream>
 #include <QHash>
 #include <QDebug>
+#include <QElapsedTimer>
 
 int main(int argc, char *argv[]) {
     qInstallMessageHandler(WS2Common::messageHandler);
@@ -44,7 +46,8 @@ int main(int argc, char *argv[]) {
             {{"c", "config"}, QCoreApplication::translate("main", "Input path to the XML configuration file."), QCoreApplication::translate("main", "configuration file")},
             {{"o", "output"}, QCoreApplication::translate("main", "Output path to an uncompressed LZ file."), QCoreApplication::translate("main", "uncompressed output file")},
             {{"s", "compressed-output"}, QCoreApplication::translate("main", "Output path to a compressed LZ file."), QCoreApplication::translate("main", "output file")},
-            {{"g", "game-version"}, QCoreApplication::translate("main", "The version of SMB to generate an LZ file for (1/2/deluxe)."), QCoreApplication::translate("main", "version")}
+            {{"g", "game-version"}, QCoreApplication::translate("main", "The version of SMB to generate an LZ file for (1/2/deluxe)."), QCoreApplication::translate("main", "version")},
+            {{"v", "verbose"}, QCoreApplication::translate("main", "Enable verbose logging")}
             });
 
     parser.process(app);
@@ -62,6 +65,9 @@ int main(int argc, char *argv[]) {
         qCritical().noquote() << err;
         return EXIT_FAILURE;
     }
+
+    //Check for verbose logging
+    WS2Common::setDebugLoggingEnabled(parser.isSet("v"));
 
     //Check for a valid input
     if (!parser.isSet("c")) {
@@ -143,13 +149,24 @@ int main(int argc, char *argv[]) {
     buf.seek(0);
     //Write the uncompressed file if requested
     if (parser.isSet("o")) {
+        qInfo() << "Writing uncompressed file...";
         QFile o(parser.value("o"));
         o.open(QIODevice::WriteOnly);
         o.write(buf.data());
         o.close();
     }
 
-    //TODO: Compression
+    if (parser.isSet("s")) {
+        qInfo() << "Writing compressed file... This may take a while";
+        QElapsedTimer timer; //Measure how long this operation takes - probably a little while
+        timer.start();
+        QFile o(parser.value("s"));
+        WS2Lz::LZCompressor compressor;
+        o.open(QIODevice::WriteOnly);
+        o.write(compressor.compress(buf.data()));
+        o.close();
+        qInfo().noquote().nospace() << "Finished compressing file in " << timer.nsecsElapsed() / 1000000000.0f << "s";
+    }
 
     buf.close();
 

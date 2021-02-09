@@ -17,9 +17,9 @@ namespace WS2Common {
      * @note The values given for the goals here are for SMB 2 - SMB 1 uses different values in the LZ
      */
     enum EnumGoalType {
-        BLUE = 0x0001,
-        GREEN = 0x0101,
-        RED = 0x0201
+        BLUE = 0x00,
+        GREEN = 0x01,
+        RED = 0x02
     };
 
     namespace GoalType {

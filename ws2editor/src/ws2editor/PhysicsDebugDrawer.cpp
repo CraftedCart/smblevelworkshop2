@@ -34,7 +34,7 @@ namespace WS2Editor {
         Q_UNUSED(radius);
         Q_UNUSED(color);
 
-        qDebug() << "PhysicsDebugDrawer: drawSphere not yet implemented!";
+        qInfo() << "PhysicsDebugDrawer: drawSphere not yet implemented!";
     }
 
     void PhysicsDebugDrawer::drawTriangle(const btVector3& a, const btVector3& b, const btVector3& c, const btVector3& color, btScalar alpha) {
@@ -45,7 +45,7 @@ namespace WS2Editor {
         Q_UNUSED(color);
         Q_UNUSED(alpha);
 
-        qDebug() << "PhysicsDebugDrawer: drawTriangle not yet implemented!";
+        qInfo() << "PhysicsDebugDrawer: drawTriangle not yet implemented!";
     }
 
     void PhysicsDebugDrawer::drawContactPoint(const btVector3& pointOnB, const btVector3& normalOnB, btScalar distance, int lifeTime, const btVector3& color) {
@@ -56,11 +56,11 @@ namespace WS2Editor {
         Q_UNUSED(lifeTime);
         Q_UNUSED(color);
 
-        qDebug() << "PhysicsDebugDrawer: drawContactPoint not yet implemented!";
+        qInfo() << "PhysicsDebugDrawer: drawContactPoint not yet implemented!";
     }
 
     void PhysicsDebugDrawer::reportErrorWarning(const char* warningString) {
-        qDebug() << warningString;
+        qInfo() << warningString;
         //TODO: Show onscreen maybe?
     }
 
@@ -69,7 +69,7 @@ namespace WS2Editor {
         Q_UNUSED(location);
         Q_UNUSED(textString);
 
-        qDebug() << "PhysicsDebugDrawer: draw3dText not yet implemented!";
+        qInfo() << "PhysicsDebugDrawer: draw3dText not yet implemented!";
     }
 
     void PhysicsDebugDrawer::setDebugMode(int debugMode) {

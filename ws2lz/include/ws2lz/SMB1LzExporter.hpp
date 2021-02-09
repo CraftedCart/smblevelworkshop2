@@ -67,8 +67,8 @@ namespace WS2Lz {
             const unsigned int ANIMATION_HEADER_LENGTH = 64;
             const unsigned int ANIMATION_KEYFRAME_LENGTH = 20;
             const unsigned int RUNTIME_REFLECTIVE_MODEL_LENGTH = 8;
-			//Used to convert EnumGoalType to required value
-			const char GOAL_TYPE_LUT[3] = {'B','G','R'};
+            //Used to convert EnumGoalType to required value
+            const char GOAL_TYPE_LUT[3] = {'B', 'G', 'R'};
 
             //Other guff
             /**

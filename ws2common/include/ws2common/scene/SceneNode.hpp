@@ -8,6 +8,7 @@
 
 #include "ws2common_export.h"
 #include "ws2common/animation/TransformAnimation.hpp"
+#include "ws2common/animation/EffectAnimation.hpp"
 #include "ws2common/EnumAnimationSeesawType.hpp"
 #include "ws2common/Transform.hpp"
 #include <glm/glm.hpp>
@@ -52,6 +53,9 @@ namespace WS2Common {
                 float seesawSensitivity = 0.0f;
                 float seesawFriction = 0.0f;
                 float seesawSpring = 0.0f;
+
+                glm::vec2 textureScroll = glm::vec2(0.0f, 0.0f);
+                Animation::EffectAnimation *effectAnimation = nullptr;
 
             protected:
                 /**
@@ -404,9 +408,27 @@ namespace WS2Common {
                  * @param value The new seesaw spring (0 prevents the seesaw from resetting)
                  */
                 void setSeesawSpring(float value);
+
+
+                /**
+                 * @brief Getter for textureScroll
+                 *
+                 * @param The texture scroll as a vector2 representing U and V scroll speed
+                 */
+                glm::vec2 getTextureScroll() const;
+
+
+                /**
+                 * @brief Setter for textureScroll
+                 *
+                 * @param value The new texture scroll as a vector2 representing U and V scroll spee
+                 */
+                void setTextureScroll(glm::vec2 textureScroll);
+
+                Animation::EffectAnimation *getEffectAnimation() const;
+                void setEffectAnimation(Animation::EffectAnimation *value);
         };
     }
 }
 
 #endif
-

@@ -34,6 +34,13 @@ namespace WS2Common {
                 std::set<KeyframeF*, KeyframeCompare> rotYKeyframes;
                 std::set<KeyframeF*, KeyframeCompare> rotZKeyframes;
 
+                std::set<KeyframeF*, KeyframeCompare> scaleXKeyframes;
+                std::set<KeyframeF*, KeyframeCompare> scaleYKeyframes;
+                std::set<KeyframeF*, KeyframeCompare> scaleZKeyframes;
+
+                std::set<KeyframeF*, KeyframeCompare> unknown1Keyframes;
+                std::set<KeyframeF*, KeyframeCompare> unknown2Keyframes;
+
             public:
                 EnumPlaybackState getInitialState() const;
                 void setInitialState(EnumPlaybackState state);
@@ -57,6 +64,18 @@ namespace WS2Common {
                 const std::set<KeyframeF*, KeyframeCompare>& getRotYKeyframes() const;
                 std::set<KeyframeF*, KeyframeCompare>& getRotZKeyframes();
                 const std::set<KeyframeF*, KeyframeCompare>& getRotZKeyframes() const;
+
+                std::set<KeyframeF*, KeyframeCompare>& getScaleXKeyframes();
+                const std::set<KeyframeF*, KeyframeCompare>& getScaleXKeyframes() const;
+                std::set<KeyframeF*, KeyframeCompare>& getScaleYKeyframes();
+                const std::set<KeyframeF*, KeyframeCompare>& getScaleYKeyframes() const;
+                std::set<KeyframeF*, KeyframeCompare>& getScaleZKeyframes();
+                const std::set<KeyframeF*, KeyframeCompare>& getScaleZKeyframes() const;
+
+                std::set<KeyframeF*, KeyframeCompare>& getUnknown1Keyframes();
+                const std::set<KeyframeF*, KeyframeCompare>& getUnknown1Keyframes() const;
+                std::set<KeyframeF*, KeyframeCompare>& getUnknown2Keyframes();
+                const std::set<KeyframeF*, KeyframeCompare>& getUnknown2Keyframes() const;
         };
     }
 }

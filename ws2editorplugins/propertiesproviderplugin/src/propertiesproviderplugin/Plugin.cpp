@@ -21,7 +21,7 @@ namespace WS2EditorPlugins {
                     Qt::DirectConnection);
 
             //The plugin initialized successfully, return true
-            qDebug() << "WS2Editor PropertiesProviderPlugin successfully initialized";
+            qInfo() << "WS2Editor PropertiesProviderPlugin successfully initialized";
             return true;
         }
 

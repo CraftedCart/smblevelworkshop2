@@ -6,6 +6,7 @@ namespace WS2Common {
     Stage::Stage() {
         rootNode = new Scene::SceneNode("root");
         rootNode->addChild(new Scene::BackgroundGroupSceneNode(QCoreApplication::translate("Stage", "Background Group")));
+        rootNode->addChild(new Scene::ForegroundGroupSceneNode(QCoreApplication::translate("Stage", "Foreground Group")));
     }
 
     Stage::~Stage() {
@@ -44,6 +45,16 @@ namespace WS2Common {
         return models;
     }
 
+    EnumStageType Stage::getStageType() const
+    {
+        return stageType;
+    }
+
+    void Stage::setStageType(const EnumStageType &value)
+    {
+        stageType = value;
+    }
+
     Scene::BackgroundGroupSceneNode* Stage::getFirstBackgroundGroup(bool createIfNonExistent) {
         foreach(Scene::SceneNode *node, rootNode->getChildren()) {
             //TODO: Replace this with some dynamic cast thingy
@@ -58,6 +69,42 @@ namespace WS2Common {
         } else {
             return nullptr;
         }
+    }
+
+    Scene::ForegroundGroupSceneNode* Stage::getFirstForegroundGroup(bool createIfNonExistent) {
+        foreach(Scene::SceneNode *node, rootNode->getChildren()) {
+            //TODO: Replace this with some dynamic cast thingy
+            if (Scene::ForegroundGroupSceneNode *fg = dynamic_cast<Scene::ForegroundGroupSceneNode*>(node)) return fg;
+        }
+
+        //No foreground nodes found
+        if (createIfNonExistent) {
+            Scene::ForegroundGroupSceneNode *node = new Scene::ForegroundGroupSceneNode(QCoreApplication::translate("Stage", "Foreground Group"));
+            rootNode->addChild(node);
+            return node;
+        } else {
+            return nullptr;
+        }
+    }
+
+    Fog* Stage::getFog() const
+    {
+        return fog;
+    }
+
+    void Stage::setFog(Fog *value)
+    {
+        fog = value;
+    }
+
+    Animation::FogAnimation* Stage::getFogAnimation() const
+    {
+        return fogAnimation;
+    }
+
+    void Stage::setFogAnimation(Animation::FogAnimation *value)
+    {
+        fogAnimation = value;
     }
 }
 

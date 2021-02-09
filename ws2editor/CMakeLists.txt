@@ -184,7 +184,7 @@ target_link_libraries(${PROJECT_NAME}
     Qt5::Core
     Qt5::Widgets
     ${OPENGL_LIBRARIES}
-    ${GLEW_LIBRARIES}
+    GLEW::GLEW #Whyyyyyy... so ${GLEW_LIBRARIES} stopped working for whatever reason so we have to use GLEW::GLEW now
     ${BULLET_LIBRARIES}
     ws2common
     )

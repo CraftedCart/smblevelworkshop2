@@ -49,7 +49,7 @@ namespace WS2Editor {
         }
 
         CommandReply CommandInterpreter::runCommand(QString command) {
-            qDebug().noquote() << QString("Command: %1").arg(command);
+            qInfo().noquote() << QString("Command: %1").arg(command);
 
             QString first = command.split(" ").at(0); //Get the first word
 
