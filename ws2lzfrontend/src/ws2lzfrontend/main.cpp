@@ -3,6 +3,7 @@
 #include "ws2common/config/XMLConfigParser.hpp"
 #include "ws2common/model/ModelLoader.hpp"
 #include "ws2lz/SMB2LzExporter.hpp"
+#include "ws2lz/SMB1LzExporter.hpp"
 #include <QCoreApplication>
 #include <QTranslator>
 #include <QCommandLineParser>
@@ -128,8 +129,10 @@ int main(int argc, char *argv[]) {
     QDataStream dStream(&buf);
 
     if (gameVersion == WS2Common::EnumGameVersion::SUPER_MONKEY_BALL_1) {
-        qCritical() << "SMB 1 export not yet implemented";
-        return EXIT_FAILURE;
+        WS2Lz::SMB1LzExporter exporter;
+
+        exporter.setModels(models);
+        exporter.generate(dStream, *stage);
     } else if (gameVersion == WS2Common::EnumGameVersion::SUPER_MONKEY_BALL_2) {
         WS2Lz::SMB2LzExporter exporter;
 
