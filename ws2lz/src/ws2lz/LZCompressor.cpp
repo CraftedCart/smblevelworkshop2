@@ -5,6 +5,7 @@
 #include <cstdio>
 #include <cstdlib>
 #include <cstring>
+#include <memory>
 
 namespace {
 
@@ -144,8 +145,10 @@ class Compressor {
 
  public:
     void encode(const QByteArray& in, QByteArray& out) {
-        int i, c, len, r, s, last_match_length, code_buf_ptr;
+        int i, len, r, s, last_match_length, code_buf_ptr;
         unsigned char code_buf[17], mask;
+
+        auto inputIterator = in.constBegin();
 
         initTree();      /* initialize trees */
         code_buf[0] = 0; /* code_buf[1..16] saves eight units of code, and
@@ -158,8 +161,8 @@ class Compressor {
         for (i = s; i < r; i++)
             text_buf[i] = 0; /* Clear the buffer with
     any character that will appear often. */
-        for (len = 0; len < F && (c = getc(infile)) != EOF; len++)
-            text_buf[r + len] = c;         /* Read F bytes into the last F bytes of
+        for (len = 0; len < F && inputIterator != in.constEnd(); len++, ++inputIterator)
+            text_buf[r + len] = *inputIterator;         /* Read F bytes into the last F bytes of
                            the buffer */
         if ((textsize = len) == 0) return; /* text of size zero */
         for (i = 1; i <= F; i++)
@@ -186,17 +189,17 @@ class Compressor {
             }
             if ((mask <<= 1) == 0) {               /* Shift mask left one bit. */
                 for (i = 0; i < code_buf_ptr; i++) /* Send at most 8 units of */
-                    putc(code_buf[i], outfile);    /* code together */
+                    out.append(code_buf[i]); /* code together */
                 codesize += code_buf_ptr;
                 code_buf[0] = 0;
                 code_buf_ptr = mask = 1;
             }
             last_match_length = match_length;
-            for (i = 0; i < last_match_length && (c = getc(infile)) != EOF; i++) {
+            for (i = 0; i < last_match_length && inputIterator != in.constEnd(); i++, ++inputIterator) {
                 deleteNode(s);   /* Delete old strings and */
-                text_buf[s] = c; /* read new bytes */
+                text_buf[s] = *inputIterator; /* read new bytes */
                 if (s < F - 1)
-                    text_buf[s + N] = c; /* If the position is
+                    text_buf[s + N] = *inputIterator; /* If the position is
             near the end of buffer, extend the buffer to make
             string comparison easier. */
                 s = (s + 1) & (N - 1);
@@ -213,7 +216,9 @@ class Compressor {
             }
         } while (len > 0);      /* until length of string to be processed is zero */
         if (code_buf_ptr > 1) { /* Send remaining code. */
-            for (i = 0; i < code_buf_ptr; i++) putc(code_buf[i], outfile);
+            for (i = 0; i < code_buf_ptr; i++) {
+                out.append(code_buf[i]);
+            }
             codesize += code_buf_ptr;
         }
     }
@@ -228,8 +233,8 @@ QByteArray LZCompressor::compress(QByteArray data) {
     QByteArray outBuf(HEADER_SIZE, '\0');
 
     // Compress into buffer
-    Compressor compressor;
-    compressor.encode(data, outBuf);
+    std::unique_ptr<Compressor> compressor(new Compressor());
+    compressor->encode(data, outBuf);
 
     // Write header
     size_t compressedSize = outBuf.size() - HEADER_SIZE;
