@@ -1,5 +1,4 @@
 #include "ws2lz/LZCompressor.hpp"
-#include "ws2lz/LZSSDictionary.hpp"
 
 #include <cctype>
 #include <cstdio>
@@ -19,9 +18,13 @@ namespace {
                 NIFTY-Serve	PAF01022
                 CompuServe	74050,1022
 **************************************************************
-    12/13/2021 camthesaxman
-    Changed filler byte to 0 and added header containing sizes
+        12/13/2021 camthesaxman
+        Changed filler byte to 0 and added header containing sizes
+**************************************************************
+        08/19/2022 ComplexPlane
+        Adapt to ws2lzfrontend
 **************************************************************/
+
 #define N 4096 /* size of ring buffer */
 #define F 18   /* upper limit for match_length */
 #define THRESHOLD                                       \
@@ -309,87 +312,27 @@ int main(int argc, char* argv[]) {
     return EXIT_SUCCESS;
 }
 
-}
+}  // namespace
 
 namespace WS2Lz {
-    QByteArray LZCompressor::compress(QByteArray data) {
-        LZSSDictionary dict;
 
-        // Prime the dictionary
-        dict.ptr = dict.WINDOW_SIZE-2*dict.MAX_REF_LEN;
+QByteArray LZCompressor::compress(QByteArray data) {
+    // Allocate output buffer (preallocate 2 words for header)
+    constexpr int HEADER_SIZE = 8;
+    QByteArray outBuf(HEADER_SIZE, '\0');
 
-        for (unsigned int i=0; i<dict.MAX_REF_LEN; i++) {
-            QByteArray zeroByteList((dict.MAX_REF_LEN-i), '\0');
-            QByteArray dataByteList = data.left(i);
+    // Compress into buffer
 
-            QByteArray byteList(zeroByteList);
-            byteList.append(dataByteList);
-
-            dict.add(byteList);
-        }
-
-        // Output data
-        QByteArray output;
-        unsigned int dataSize = data.length();
-
-        unsigned int i = 0;
-        while (i < dataSize) {
-            QByteArray chunk;
-            int flags = 0;
-
-            for (int bit = 0; bit < 8; bit++) {
-                if (i >= dataSize) break;
-
-                QByteArray subStr = data.mid(i, qMin(i+dict.MAX_REF_LEN, dataSize));
-                offsetLength* ol = dict.find(subStr);
-
-                // Yes, append dictionary reference
-                if (ol != nullptr) {
-                    chunk.append((char) (ol->first) & 0xFF);
-                    chunk.append((char) (((ol->first >> 4) & 0xF0) | (ol->second - dict.MIN_REF_LEN)));
-
-                    for (unsigned int j = 0; j < ol->second; j++) {
-                        dict.add(data.mid(i+j, qMin(i+j+dict.MAX_REF_LEN, dataSize)));
-                    }
-
-                    i += ol->second;
-                }
-
-                // Not in dictionray, append literal
-                else {
-                    // Append literal value
-                    char v = data[i];
-                    chunk.append(v);
-
-                    flags |= (1 << bit);
-
-                    // Update dictionary
-                    dict.add(data.mid(i, qMin(i+dict.MAX_REF_LEN, dataSize)));
-                    i += 1;
-
-
-                }
-            }
-
-            // Chunk complete, add to output
-            output.append((char)flags);
-            output.append(chunk);
-        }
-
-        // Add uncompressed size to the beginning (int, little endian)
-        unsigned int uncompressedSize = dataSize;
-        output.insert(0, (char) ((uncompressedSize >> 0) & 0xFF));
-        output.insert(1, (char) ((uncompressedSize >> 8) & 0xFF));
-        output.insert(2, (char) ((uncompressedSize >> 16) & 0xFF));
-        output.insert(3, (char) ((uncompressedSize >> 24) & 0xFF));
-
-        // Add compressed size to the beginning (int, little endian - including these new 4 bytes)
-        unsigned int compressedSize = output.size() + 4;
-        output.insert(0, (char) ((compressedSize >> 0) & 0xFF));
-        output.insert(1, (char) ((compressedSize >> 8) & 0xFF));
-        output.insert(2, (char) ((compressedSize >> 16) & 0xFF));
-        output.insert(3, (char) ((compressedSize >> 24) & 0xFF));
-
-        return output;
+    // Write header
+    size_t compressedSize = outBuf.size() - HEADER_SIZE;
+    for (int i = 0; i < 4; i++) {
+        outBuf[i] = (compressedSize >> (8 * i)) & 0xFF;
     }
+    for (int i = 0; i < 4; i++) {
+        outBuf[i + 4] = (data.size() >> (8 * i)) & 0xFF;
+    }
+
+    return outBuf;
 }
+
+}  // namespace WS2Lz
