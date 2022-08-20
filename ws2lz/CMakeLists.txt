@@ -32,7 +32,6 @@ set(SOURCE_FILES
     ./src/ws2lz/WS2Lz.cpp
     ./src/ws2lz/SMB2LzExporter.cpp
     ./src/ws2lz/TriangleIntersectionGrid.cpp
-    ./src/ws2lz/LZSSDictionary.cpp
     ./src/ws2lz/LZCompressor.cpp
     )
 
@@ -40,7 +39,6 @@ set(HEADER_FILES
     ./include/ws2lz/WS2Lz.hpp
     ./include/ws2lz/SMB2LzExporter.hpp
     ./include/ws2lz/TriangleIntersectionGrid.hpp
-    ./include/ws2lz/LZSSDictionary.hpp
     ./include/ws2lz/LZCompressor.hpp
     )
 
