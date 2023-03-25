@@ -108,9 +108,11 @@ Replace the 4 in `-j 4` with however many threads you want Make to use
 ```shell
 mkdir build
 cd build
-cmake -DCMAKE_BUILD_TYPE="RelWithDebInfo" ..
+cmake -DCMAKE_BUILD_TYPE="RelWithDebInfo" -DCMAKE_INSTALL_PREFIX="install" ..
 make -j 4
 ```
+
+(Note that setting the install prefix is only needed if you want to package the project - it's not needed if you're just building it for yourself)
 
 #### macOS issues
 
@@ -163,4 +165,17 @@ mkdir build
 cd build
 cmake -G "Visual Studio 10" ..
 ```
+
+## Packaging
+
+Packaging the project is done with two more commands
+
+```shell
+make install
+make installprerequisites
+```
+
+- `install` will copy the built files into a packageable directory tree, in `CMAKE_INSTALL_PREFIX`, and patch up rpath for platforms Linux/macOS
+- `installprerequisites` will copy third party DLLs/DYLIBs/SOs that Workshop 2 depends on into the install directory
+    - Make sure you're not installing system-wide if you're running this! `CMAKE_INSTALL_PREFIX` should have been set earlier
 
