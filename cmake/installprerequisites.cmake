@@ -47,6 +47,12 @@ else(WIN32)
     set(LIBPATH "${CMAKE_INSTALL_PREFIX}/lib")
 endif(WIN32)
 
+if(WIN32)
+	set(EXCLUDE_SYSTEM_LIBS 1)
+else(WIN32)
+	set(EXCLUDE_SYSTEM_LIBS 0)
+endif(WIN32)
+
 message(STATUS "Finding installed files")
 file(GLOB INSTALL_FILES ${BIN_FILES_PATH} ${LIB_FILES_PATH})
 
@@ -55,7 +61,7 @@ foreach(installedFile ${INSTALL_FILES})
         continue()
     endif(IS_DIRECTORY ${installedFile})
 
-    get_prerequisites(${installedFile} WS2EDITOR_PREREQS 1 1 "" "")
+    get_prerequisites(${installedFile} WS2EDITOR_PREREQS ${EXCLUDE_SYSTEM_LIBS} 1 "" "")
     resolve_windows_prereqs(WS2EDITOR_PREREQS)
 
     #Resolve symlinks
@@ -91,7 +97,7 @@ foreach(plugin ${QT_PLATFORM_PLUGINS})
     message(STATUS "Installing Qt platform plugin " ${plugin})
     file(COPY ${plugin} DESTINATION ${CMAKE_INSTALL_PREFIX}/bin/platforms)
 
-    get_prerequisites(${plugin} PLUGIN_PREREQS 1 1 "" "")
+    get_prerequisites(${plugin} PLUGIN_PREREQS ${EXCLUDE_SYSTEM_LIBS} 1 "" "")
     resolve_windows_prereqs(PLUGIN_PREREQS)
 
     #Resolve symlinks
