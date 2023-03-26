@@ -29,6 +29,18 @@ function(resolve_windows_prereqs var)
 endfunction(resolve_windows_prereqs)
 
 if(WIN32)
+	set(BIN_FILES_PATH "${CMAKE_INSTALL_PREFIX}/bin/*.exe")
+else(WIN32)
+	set(BIN_FILES_PATH "${CMAKE_INSTALL_PREFIX}/bin/*")
+endif(WIN32)
+
+if(WIN32)
+	set(LIB_FILES_PATH "${CMAKE_INSTALL_PREFIX}/bin/*.dll")
+else(WIN32)
+	set(LIB_FILES_PATH "${CMAKE_INSTALL_PREFIX}/lib")
+endif(WIN32)
+
+if(WIN32)
     #Windows has no concept of rpath, so just group all the exes/dlls in one big mess of a bin directory
     set(LIBPATH "${CMAKE_INSTALL_PREFIX}/bin")
 else(WIN32)
@@ -36,14 +48,14 @@ else(WIN32)
 endif(WIN32)
 
 message(STATUS "Finding installed files")
-file(GLOB INSTALL_FILES "${CMAKE_INSTALL_PREFIX}/bin/*" ${LIBPATH})
+file(GLOB INSTALL_FILES ${BIN_FILES_PATH} ${LIB_FILES_PATH})
 
 foreach(installedFile ${INSTALL_FILES})
     if(IS_DIRECTORY ${installedFile})
         continue()
     endif(IS_DIRECTORY ${installedFile})
 
-    get_prerequisites(${installedFile} WS2EDITOR_PREREQS 0 1 "" "")
+    get_prerequisites(${installedFile} WS2EDITOR_PREREQS 1 1 "" "")
     resolve_windows_prereqs(WS2EDITOR_PREREQS)
 
     #Resolve symlinks
@@ -79,7 +91,7 @@ foreach(plugin ${QT_PLATFORM_PLUGINS})
     message(STATUS "Installing Qt platform plugin " ${plugin})
     file(COPY ${plugin} DESTINATION ${CMAKE_INSTALL_PREFIX}/bin/platforms)
 
-    get_prerequisites(${plugin} PLUGIN_PREREQS 0 1 "" "")
+    get_prerequisites(${plugin} PLUGIN_PREREQS 1 1 "" "")
     resolve_windows_prereqs(PLUGIN_PREREQS)
 
     #Resolve symlinks
