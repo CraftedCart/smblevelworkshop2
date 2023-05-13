@@ -64,10 +64,12 @@ foreach(installedFile ${INSTALL_FILES})
     get_prerequisites(${installedFile} WS2EDITOR_PREREQS ${EXCLUDE_SYSTEM_LIBS} 1 "" "")
     resolve_windows_prereqs(WS2EDITOR_PREREQS)
 
+    message(STATUS "Installing prerequisites for " ${installedFile})
+
     #Resolve symlinks
-    set(resolvedFiles "")
     set(origFiles "")
     foreach(file ${WS2EDITOR_PREREQS})
+        message("Copying: " ${file})
         #Drop paths w/ "@rpath" (A macOS thing)
         #I can't be bothered to resolve them and most of the time it shouldn't matter
         if(${file} MATCHES "^@rpath.*")
@@ -75,17 +77,21 @@ foreach(installedFile ${INSTALL_FILES})
             continue()
         endif()
 
+        # Resolve symlink
         get_filename_component(resolvedFile "${file}" REALPATH)
-        list(APPEND resolvedFiles "${resolvedFile}")
-        list(APPEND origFiles "${file}")
+        # Name of resolved symlink file
+        get_filename_component(resolvedFileName "${resolvedFile}" NAME)
+        # Name of original file
+        get_filename_component(origFileName "${file}" NAME)
+        # This nonsense is for copying the underlying library while giving it the name of its symlink
+        # Why? Well, we want to package this with BlendToSMBStage2, but Blender plugins must be packaged as .ZIP files
+        # .ZIP archives don't preserve symlinks, so this hacky nonsense avoids using them
+        # Effectively, this should do nothing on platforms like Windows where symlinks aren't an issue
+        string(CONCAT expectedFileName ${LIBPATH} "/" ${origFileName})
+        string(CONCAT currentFileName ${LIBPATH} "/" ${resolvedFileName})
+        file(COPY ${resolvedFile} DESTINATION ${LIBPATH})
+        file(RENAME ${currentFileName} ${expectedFileName})
     endforeach(file)
-
-    message(STATUS "Installing prerequisites for " ${installedFile})
-
-    #Copy non-symlinked files
-    file(COPY ${resolvedFiles} DESTINATION ${LIBPATH})
-    #Also copy the symlinks (The original files)
-    file(COPY ${origFiles} DESTINATION ${LIBPATH})
 endforeach(installedFile)
 
 #Also fetch the Qt platform plugins
@@ -100,18 +106,25 @@ foreach(plugin ${QT_PLATFORM_PLUGINS})
     get_prerequisites(${plugin} PLUGIN_PREREQS ${EXCLUDE_SYSTEM_LIBS} 1 "" "")
     resolve_windows_prereqs(PLUGIN_PREREQS)
 
+    message(STATUS "Installing prerequisites for " ${plugin})
+
     #Resolve symlinks
     set(resolvedFiles "")
     foreach(file ${PLUGIN_PREREQS})
+        # Resolve symlink
         get_filename_component(resolvedFile "${file}" REALPATH)
-        list(APPEND resolvedFiles "${resolvedFile}")
+        # Name of resolved symlink file
+        get_filename_component(resolvedFileName "${resolvedFile}" NAME)
+        # Name of original file
+        get_filename_component(origFileName "${file}" NAME)
+        # This nonsense is for copying the underlying library while giving it the name of its symlink
+        # Why? Well, we want to package this with BlendToSMBStage2, but Blender plugins must be packaged as .ZIP files
+        # .ZIP archives don't preserve symlinks, so this hacky nonsense avoids using them
+        # Effectively, this should do nothing on platforms like Windows where symlinks aren't an issue
+        string(CONCAT expectedFileName ${LIBPATH} "/" ${origFileName})
+        string(CONCAT currentFileName ${LIBPATH} "/" ${resolvedFileName})
+        file(COPY ${resolvedFile} DESTINATION ${LIBPATH})
+        file(RENAME ${currentFileName} ${expectedFileName})
     endforeach(file)
-
-    message(STATUS "Installing prerequisites for " ${plugin})
-
-    #Copy non-symlinked files
-    file(COPY ${resolvedFiles} DESTINATION ${LIBPATH})
-    #Also copy the symlinks (The original files)
-    file(COPY ${PLUGIN_PREREQS} DESTINATION ${LIBPATH})
 endforeach()
 
