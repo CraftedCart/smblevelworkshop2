@@ -29,13 +29,6 @@ endif(WIN32)
 #Export compile commands for editor autocomplete
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
-set(CMAKE_INSTALL_RPATH_USE_LINK_PATH TRUE)
-if(APPLE)
-    set(CMAKE_INSTALL_RPATH "@loader_path/../lib;@loader_path")
-else(APPLE)
-    set(CMAKE_INSTALL_RPATH "$ORIGIN/../lib:$ORIGIN")
-endif(APPLE)
-
 #Add uninstall target
 configure_file("cmake/uninstall.cmake" "cmake/uninstall.cmake" COPYONLY)
 add_custom_target(uninstall "${CMAKE_COMMAND}" -P "cmake/uninstall.cmake")
@@ -63,10 +56,26 @@ foreach(val ${TRANSLATIONS})
     message(STATUS "Translation: " ${val})
 endforeach(val ${TRANSLATIONS})
 
+set(CMAKE_INSTALL_RPATH_USE_LINK_PATH TRUE)
+
+#Set rpath for stuff that gets installed in `lib`
+if(APPLE)
+    set(CMAKE_INSTALL_RPATH "@loader_path/../lib;@loader_path")
+else(APPLE)
+    set(CMAKE_INSTALL_RPATH "$ORIGIN/../lib:$ORIGIN")
+endif(APPLE)
+
 add_subdirectory(./ws2common)
 add_subdirectory(./ws2lz)
 add_subdirectory(./ws2lzfrontend)
 add_subdirectory(./ws2editor)
+
+#Set rpath for stuff that gets installed in `share/ws2editor/plugins`
+if(APPLE)
+    set(CMAKE_INSTALL_RPATH "@loader_path/../../../lib;@loader_path")
+else(APPLE)
+    set(CMAKE_INSTALL_RPATH "$ORIGIN/../../../lib:$ORIGIN")
+endif(APPLE)
 
 #Editor plugins
 add_subdirectory(./ws2editorplugins/ws2editorexampleplugin)
