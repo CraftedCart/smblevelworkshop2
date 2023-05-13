@@ -36,6 +36,12 @@ else(APPLE)
     set(CMAKE_INSTALL_RPATH "$ORIGIN/../lib:$ORIGIN")
 endif(APPLE)
 
+#Fix some issues with dependencies ignoring rpaths on Linux
+if(UNIX)
+    set(CMAKE_EXE_LINKER_FLAGS ${CMAKE_EXE_LINKER_FLAGS} "-Wl,--disable-new-dtags")
+    set(CMAKE_SHARED_LINKER_FLAGS ${CMAKE_SHARED_LINKER_FLAGS} "-Wl,--disable-new-dtags")
+endif(UNIX)
+
 #Add uninstall target
 configure_file("cmake/uninstall.cmake" "cmake/uninstall.cmake" COPYONLY)
 add_custom_target(uninstall "${CMAKE_COMMAND}" -P "cmake/uninstall.cmake")
