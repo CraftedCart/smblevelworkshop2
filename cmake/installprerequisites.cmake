@@ -36,9 +36,13 @@ endif(WIN32)
 
 if(WIN32)
     set(LIB_FILES_PATH "${CMAKE_INSTALL_PREFIX}/bin/*.dll")
-else(WIN32)
-    set(LIB_FILES_PATH "${CMAKE_INSTALL_PREFIX}/lib")
-endif(WIN32)
+elseif(APPLE)
+    set(LIB_FILES_PATH "${CMAKE_INSTALL_PREFIX}/lib/*.so")
+elseif(UNIX)
+    set(LIB_FILES_PATH "${CMAKE_INSTALL_PREFIX}/lib/*.so")
+else()
+    set(LIB_FILES_PATH "${CMAKE_INSTALL_PREFIX}/lib/*")
+endif()
 
 if(WIN32)
     #Windows has no concept of rpath, so just group all the exes/dlls in one big mess of a bin directory
@@ -47,11 +51,18 @@ else(WIN32)
     set(LIBPATH "${CMAKE_INSTALL_PREFIX}/lib")
 endif(WIN32)
 
+#Search vcpkg dirs for third party libraries (This is passed to `get_dependencies()`)
 if(WIN32)
-    set(EXCLUDE_SYSTEM_LIBS 1)
-else(WIN32)
-    set(EXCLUDE_SYSTEM_LIBS 0)
-endif(WIN32)
+    set(THIRD_PARTY_LIBS_DIRS "${CMAKE_BINARY_DIR}/vcpkg_installed/x64-mingw-dynamic/lib;${CMAKE_BINARY_DIR}/vcpkg_installed/x86-mingw-dynamic/lib")
+elseif(APPLE)
+    set(THIRD_PARTY_LIBS_DIRS "${CMAKE_BINARY_DIR}/vcpkg_installed/x64-osx-dynamic/lib")
+elseif(UNIX)
+    #Assume Linux
+    set(THIRD_PARTY_LIBS_DIRS "${CMAKE_BINARY_DIR}/vcpkg_installed/x64-linux-dynamic/lib;${CMAKE_BINARY_DIR}/vcpkg_installed/x86-linux-dynamic/lib")
+else()
+    message(WARNING "Unknown platform for THIRD_PARTY_LIBS_DIRS")
+    set(THIRD_PARTY_LIBS_DIRS "")
+endif()
 
 message(STATUS "Finding installed files")
 file(GLOB INSTALL_FILES ${BIN_FILES_PATH} ${LIB_FILES_PATH})
@@ -61,7 +72,15 @@ foreach(installedFile ${INSTALL_FILES})
         continue()
     endif(IS_DIRECTORY ${installedFile})
 
-    get_prerequisites(${installedFile} WS2EDITOR_PREREQS ${EXCLUDE_SYSTEM_LIBS} 1 "" "")
+    get_prerequisites(
+        ${installedFile} #target
+        WS2EDITOR_PREREQS #prerequisites_var
+        1 #exclude_system (Assume dependencies on Linux are installed via vcpkg - therefore dependeicies like Qt, GLEW,
+          #                etc. don't count as system libraries and will be discovered here)
+        1 #recurse
+        "" #exepath
+        ${THIRD_PARTY_LIBS_DIRS} #dirs
+        )
     resolve_windows_prereqs(WS2EDITOR_PREREQS)
 
     message(STATUS "Installing prerequisites for " ${installedFile})
@@ -69,13 +88,14 @@ foreach(installedFile ${INSTALL_FILES})
     #Resolve symlinks
     set(origFiles "")
     foreach(file ${WS2EDITOR_PREREQS})
-        message("Copying: " ${file})
         #Drop paths w/ "@rpath" (A macOS thing)
         #I can't be bothered to resolve them and most of the time it shouldn't matter
         if(${file} MATCHES "^@rpath.*")
             message(STATUS "Dropping file " ${file})
             continue()
         endif()
+
+        message("Copying: " ${file})
 
         # Resolve symlink
         get_filename_component(resolvedFile "${file}" REALPATH)
@@ -87,10 +107,7 @@ foreach(installedFile ${INSTALL_FILES})
         # Why? Well, we want to package this with BlendToSMBStage2, but Blender plugins must be packaged as .ZIP files
         # .ZIP archives don't preserve symlinks, so this hacky nonsense avoids using them
         # Effectively, this should do nothing on platforms like Windows where symlinks aren't an issue
-        string(CONCAT expectedFileName ${LIBPATH} "/" ${origFileName})
-        string(CONCAT currentFileName ${LIBPATH} "/" ${resolvedFileName})
-        file(COPY ${resolvedFile} DESTINATION ${LIBPATH})
-        file(RENAME ${currentFileName} ${expectedFileName})
+        file(COPY_FILE ${resolvedFile} "${LIBPATH}/${origFileName}")
     endforeach(file)
 endforeach(installedFile)
 
@@ -103,7 +120,14 @@ foreach(plugin ${QT_PLATFORM_PLUGINS})
     message(STATUS "Installing Qt platform plugin " ${plugin})
     file(COPY ${plugin} DESTINATION ${CMAKE_INSTALL_PREFIX}/bin/platforms)
 
-    get_prerequisites(${plugin} PLUGIN_PREREQS ${EXCLUDE_SYSTEM_LIBS} 1 "" "")
+    get_prerequisites(
+        ${plugin} #target
+        PLUGIN_PREREQS #prerequisites_var
+        1 #exclude_system
+        1 #recurse
+        "" #exepath
+        ${THIRD_PARTY_LIBS_DIRS} #dirs
+        )
     resolve_windows_prereqs(PLUGIN_PREREQS)
 
     message(STATUS "Installing prerequisites for " ${plugin})
@@ -111,6 +135,8 @@ foreach(plugin ${QT_PLATFORM_PLUGINS})
     #Resolve symlinks
     set(resolvedFiles "")
     foreach(file ${PLUGIN_PREREQS})
+        message("Copying: " ${file})
+
         # Resolve symlink
         get_filename_component(resolvedFile "${file}" REALPATH)
         # Name of resolved symlink file
@@ -121,10 +147,7 @@ foreach(plugin ${QT_PLATFORM_PLUGINS})
         # Why? Well, we want to package this with BlendToSMBStage2, but Blender plugins must be packaged as .ZIP files
         # .ZIP archives don't preserve symlinks, so this hacky nonsense avoids using them
         # Effectively, this should do nothing on platforms like Windows where symlinks aren't an issue
-        string(CONCAT expectedFileName ${LIBPATH} "/" ${origFileName})
-        string(CONCAT currentFileName ${LIBPATH} "/" ${resolvedFileName})
-        file(COPY ${resolvedFile} DESTINATION ${LIBPATH})
-        file(RENAME ${currentFileName} ${expectedFileName})
+        file(COPY_FILE ${resolvedFile} "${LIBPATH}/${origFileName}")
     endforeach(file)
 endforeach()
 
