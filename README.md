@@ -76,10 +76,6 @@ Then proceed to the "Building: With Make, Unix Makefiles" section
 
 #### Arch Linux (Or Arch based)
 
-```shell
-sudo pacman -S cmake qt5 glew glm assimp bullet
-```
-
 If you haven't installed `base-devel`, fetch that:
 
 ```shell
@@ -90,6 +86,18 @@ If you need Git to clone the repo:
 
 ```shell
 sudo pacman -S git
+```
+
+And now build tools:
+
+```shell
+# Install CMake
+sudo pacman -S cmake
+
+# Install vcpkg
+git clone https://github.com/microsoft/vcpkg.git
+cd vcpkg
+./bootstrap-vcpkg.sh -disableMetrics
 ```
 
 Then proceed to the "Building: With Make, Unix Makefiles" section
@@ -108,11 +116,12 @@ Replace the 4 in `-j 4` with however many threads you want Make to use
 ```shell
 mkdir build
 cd build
-cmake -DCMAKE_BUILD_TYPE="RelWithDebInfo" -DCMAKE_INSTALL_PREFIX="install" ..
+cmake -DCMAKE_BUILD_TYPE="RelWithDebInfo" -DCMAKE_INSTALL_PREFIX="install" -DCMAKE_TOOLCHAIN_FILE="path/to/vcpkg/scripts/buildsystems/vcpkg.cmake" -DVCPKG_TARGET_TRIPLET=x64-linux-dynamic ..
 make -j 4
 ```
 
-(Note that setting the install prefix is only needed if you want to package the project - it's not needed if you're just building it for yourself)
+(Note that setting the install prefix is only needed if you want to package the project - it's not needed if you're just building it for yourself)  
+(`CMAKE_TOOLCHAIN_FILE` and `VCPKG_TARGET_TRIPLET` can be omitted if not using vcpkg - note that you must use gcc on Linux, not clang, otherwise Qt5 will fail to build)
 
 #### macOS issues
 

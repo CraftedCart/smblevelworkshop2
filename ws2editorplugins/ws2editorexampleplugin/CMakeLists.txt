@@ -40,7 +40,7 @@ target_link_libraries(${PROJECT_NAME}
     Qt5::Core
     ws2editor
     ${BULLET_LIBRARIES}
-    ${GLEW_LIBRARIES}
+    GLEW::GLEW
     )
 
 #Export headers
